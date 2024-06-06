@@ -1,0 +1,33 @@
+{
+  "generator-ngx-rocket": {
+    "version": "11.0.0",
+    "props": {
+      "location": "path",
+      "strict": true,
+      "skipInstall": false,
+      "skipQuickstart": false,
+      "initGit": true,
+      "usePrefix": true,
+      "appName": "tirtajaya",
+      "target": ["web"],
+      "ui": "bootstrap",
+      "features": ["pwa", "auth", "lazy", "cypress", "angulartics"],
+      "languages": ["en-US", "it-IT"],
+      "analyticsProvider": "ga",
+      "googleAnalyticsAccount": "G-1E0WB521NZ",
+      "tools": ["prettier", "hads", "compodoc"],
+      "utility": ["lodash", "moment"],
+      "deploy": "none",
+      "projectName": "tirtajaya",
+      "packageManager": "npm",
+      "mobile": [],
+      "desktop": [],
+      "pwa": true,
+      "auth": true,
+      "lazy": true,
+      "e2e": false,
+      "cypress": true,
+      "angulartics": true
+    }
+  }
+}
