@@ -12,7 +12,7 @@
       "target": ["web"],
       "ui": "bootstrap",
       "features": ["pwa", "auth", "lazy", "cypress", "angulartics"],
-      "languages": ["en-US", "it-IT"],
+      "languages": ["en-US", "id-ID"],
       "analyticsProvider": "ga",
       "googleAnalyticsAccount": "G-1E0WB521NZ",
       "tools": ["prettier", "hads", "compodoc"],

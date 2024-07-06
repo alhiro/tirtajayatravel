@@ -3,9 +3,25 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { Shell } from '@app/shell/shell.service';
 
 const routes: Routes = [
-  Shell.childRoutes([{ path: 'about', loadChildren: () => import('./about/about.module').then((m) => m.AboutModule) }]),
+  {
+    path: 'auth',
+    loadChildren: () => import('./modules/auth/auth.module').then((m) => m.AuthModule),
+  },
+  {
+    path: 'error',
+    loadChildren: () => import('./modules/errors/errors.module').then((m) => m.ErrorsModule),
+  },
+
+  Shell.childRoutes([
+    {
+      path: '',
+      loadChildren: () => import('./_metronic/layout/layout.module').then((m) => m.LayoutModule),
+    },
+  ]),
+
   // Fallback when no prior route is matched
-  { path: '**', redirectTo: '', pathMatch: 'full' },
+  { path: '**', redirectTo: 'error/404' },
+  // { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
 @NgModule({

@@ -4,8 +4,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { I18nModule } from '@app/i18n';
-import { AuthModule } from '@app/auth';
+import { I18nModule } from '@app/modules/i18n';
+import { AuthModule } from '@app/modules/auth';
 import { ShellComponent } from './shell.component';
 import { HeaderComponent } from './header/header.component';
 

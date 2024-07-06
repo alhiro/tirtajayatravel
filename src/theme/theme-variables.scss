@@ -49,7 +49,9 @@ $theme-colors: (
   dark: $gray-800,
 );
 
+$spacer: 0.75rem !default;
+
 // Use Bootstrap defaults for other variables, imported here so we can access all app variables in one place when used
 // in components.
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
+// @import "bootstrap/scss/functions";
+// @import "bootstrap/scss/variables";

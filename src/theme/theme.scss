@@ -2,3 +2,13 @@
  * Global application theme.
  * Framework overrides and customization goes here.
  */
+
+.snackbar-error {
+  .mdc-snackbar__surface {
+    background-color: red !important;
+  }
+
+  .mdc-snackbar__label {
+    color: white !important;
+  }
+}

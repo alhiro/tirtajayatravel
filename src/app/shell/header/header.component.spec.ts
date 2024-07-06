@@ -3,10 +3,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { AuthenticationService, CredentialsService } from '@app/auth';
-import { MockAuthenticationService } from '@app/auth/authentication.service.mock';
-import { MockCredentialsService } from '@app/auth/credentials.service.mock';
-import { I18nModule } from '@app/i18n';
+import { AuthenticationService, CredentialsService } from '@app/modules/auth';
+import { MockAuthenticationService } from '@app/modules/auth/authentication.service.mock';
+import { MockCredentialsService } from '@app/modules/auth/credentials.service.mock';
+import { I18nModule } from '@app/modules/i18n';
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {

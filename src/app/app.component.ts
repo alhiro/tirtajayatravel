@@ -8,7 +8,7 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2';
 
 import { environment } from '@env/environment';
 import { Logger, UntilDestroy, untilDestroyed } from '@shared';
-import { I18nService } from '@app/i18n';
+import { I18nService } from '@app/modules/i18n';
 
 const log = new Logger('App');
 

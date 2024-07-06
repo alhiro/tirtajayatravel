@@ -1,6 +1,6 @@
 import { Routes, Route } from '@angular/router';
 
-import { AuthenticationGuard } from '@app/auth';
+import { AuthenticationGuard } from '@app/modules/auth';
 import { ShellComponent } from './shell.component';
 
 /**

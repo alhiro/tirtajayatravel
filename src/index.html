@@ -34,6 +34,26 @@
       ga('create', 'G-1E0WB521NZ', 'auto');
     </script>
     <!-- End Google Analytics -->
+
+    <script>
+      if (document.documentElement) {
+        var defaultThemeMode = 'system';
+
+        var hasKTName = document.body.hasAttribute('data-kt-name');
+        var lsKey = 'kt_' + (hasKTName ? name + '_' : '') + 'theme_mode_value';
+        var themeMode = localStorage.getItem(lsKey);
+        if (!themeMode) {
+          if (defaultThemeMode === 'system') {
+            themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          } else {
+            themeMode = defaultThemeMode;
+          }
+        }
+
+        document.documentElement.setAttribute('data-bs-theme', themeMode);
+      }
+    </script>
+
     <!--[if lte IE 11]>
       <p>
         You are using an <strong>outdated</strong> browser. Please

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthenticationService, CredentialsService } from '@app/auth';
+import { AuthenticationService, CredentialsService } from '@app/modules/auth';
 
 @Component({
   selector: 'app-header',
@@ -29,6 +29,6 @@ export class HeaderComponent implements OnInit {
 
   get username(): string | null {
     const credentials = this.credentialsService.credentials;
-    return credentials ? credentials.username : null;
+    return credentials ? credentials.userName : null;
   }
 }
