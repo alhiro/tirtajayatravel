@@ -26,7 +26,7 @@ export class HandlerResponseService {
     switch (error.status) {
       case StatusCode.UNAUTHORIZED:
         // go to login
-        this.snackbar.open(error.error.message, 'Info', {
+        this.snackbar.open(error.error.message, '', {
           panelClass: 'snackbar-error',
         });
         this.utils.clearAllLocalstorage();
@@ -46,7 +46,7 @@ export class HandlerResponseService {
         // show dialog
         // this.utils.showNotification('GENERAL', 'BAD_REQUEST');
         if (error) {
-          this.snackbar.open(error.error.message, 'Info', {
+          this.snackbar.open(error.error.message, '', {
             panelClass: 'snackbar-error',
             duration: 10000,
           });
@@ -65,7 +65,7 @@ export class HandlerResponseService {
       case StatusCode.NOT_FOUND:
         // show dialog
         if (error) {
-          this.snackbar.open(error.error.message, 'Info', {
+          this.snackbar.open(error.error.message, '', {
             panelClass: 'snackbar-error',
             duration: 10000,
           });
@@ -74,7 +74,7 @@ export class HandlerResponseService {
 
       case StatusCode.METHOD_NOT_ALLOWED:
         // show dialog
-        this.snackbar.open('Method not allowed', 'ERROR', {
+        this.snackbar.open('Method not allowed', '', {
           panelClass: 'snackbar-error',
           duration: 10000,
         });
@@ -83,11 +83,15 @@ export class HandlerResponseService {
       case StatusCode.SERVER_ERROR:
         // show dialog
         // this.utils.showNotification('GENERAL', 'SERVER_ERROR');
+        this.snackbar.open('Internal Server Error ', '', {
+          panelClass: 'snackbar-error',
+          duration: 10000,
+        });
         break;
 
       case StatusCode.ERR_INTERNET_DISCONNECTED:
         // show dialog
-        this.snackbar.open('Disconnection from server ', 'OK', {
+        this.snackbar.open('Disconnection from server ', '', {
           panelClass: 'snackbar-error',
           duration: 10000,
         });

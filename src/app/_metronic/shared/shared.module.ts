@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-import { KeeniconComponent } from './keenicon/keenicon.component';
 import { CommonModule } from '@angular/common';
+import { KeeniconComponent } from './keenicon/keenicon.component';
 
 @NgModule({
   declarations: [KeeniconComponent],

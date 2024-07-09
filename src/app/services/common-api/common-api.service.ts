@@ -18,7 +18,7 @@ export class CommonApiService {
 
   getHeaders(headers?: any): HttpHeaders {
     const headerObj: any = {
-      Authorization: 'Bearer ' + this.utils.getToken(),
+      Authorization: this.utils.getToken(),
     };
     if (headers) {
       headers.forEach((value: string, key: string) => {
@@ -74,10 +74,11 @@ export class CommonApiService {
       }
 
       if (this.utils.getToken()) {
-        reqOpts.headers = this.getHeaders();
+        reqOpts.headers = this.getHeaders(reqOpts.headers);
       }
 
-      reqOpts.withCredentials = true;
+      // console.log("reqOpts")
+      // console.log(reqOpts)
 
       return this.http.get<any>(this.setConnection() + url, reqOpts).pipe(
         timeout(reqTimeout ? reqTimeout : 300000),
@@ -91,7 +92,7 @@ export class CommonApiService {
 
           throw error;
         })
-      );
+      ) as Observable<any>;
     } else {
       return false;
     }
@@ -108,17 +109,16 @@ export class CommonApiService {
     reqTimeout?: number
   ): boolean | Observable<any> {
     if (this.checkConnection()) {
-      if (reqOpts) {
-        reqOpts.withCredentials = true;
-      } else {
+      if (!reqOpts) {
         reqOpts = {
-          withCredentials: true,
+          params: new HttpParams(),
         };
       }
 
       if (this.utils.getToken()) {
         reqOpts.headers = this.getHeaders(reqOpts.headers);
       }
+      console.log(reqOpts);
 
       if (searchParam) {
         const bodyUrl = this.getSearchParams(searchParam).toString();
@@ -158,16 +158,10 @@ export class CommonApiService {
     reqTimeout?: number
   ): boolean | Observable<any> {
     if (this.checkConnection()) {
-      if (reqOpts) {
-        reqOpts.withCredentials = true;
-      } else {
+      if (!reqOpts) {
         reqOpts = {
-          withCredentials: true,
+          params: new HttpParams(),
         };
-      }
-
-      if (this.utils.getToken()) {
-        reqOpts.headers = this.getHeaders(reqOpts.headers);
       }
 
       if (params) {
@@ -177,6 +171,11 @@ export class CommonApiService {
           reqOpts.params = reqOpts.params.set(reqParams, params[reqParams]);
         }
       }
+
+      if (this.utils.getToken()) {
+        reqOpts.headers = this.getHeaders(reqOpts.headers);
+      }
+      console.log(reqOpts);
 
       return this.http.patch<any>(this.setConnection() + url, body, reqOpts).pipe(
         timeout(reqTimeout ? reqTimeout : 300000),

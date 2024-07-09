@@ -4,6 +4,12 @@
  */
 
 .snackbar-error {
+  margin: 0 !important;
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 20px;
+
   .mdc-snackbar__surface {
     background-color: red !important;
   }
@@ -11,4 +17,24 @@
   .mdc-snackbar__label {
     color: white !important;
   }
+}
+
+.snackbar-success {
+  margin: 0 !important;
+  position: fixed;
+  right: 0;
+  left: 0;
+  bottom: 20px;
+
+  .mdc-snackbar__surface {
+    background-color: green !important;
+  }
+
+  .mdc-snackbar__label {
+    color: white !important;
+  }
+}
+
+.ngx-table {
+  font-family: inherit !important;
 }

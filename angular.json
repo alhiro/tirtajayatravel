@@ -33,8 +33,8 @@
               "src/manifest.webmanifest",
               "src/assets"
             ],
-            "styles": ["src/main.scss"],
-            "scripts": []
+            "styles": ["src/main.scss", "src/assets/sass/style.scss", "node_modules/ngx-easy-table/style.css"],
+            "scripts": ["node_modules/jquery/dist/jquery.min.js"]
           },
           "configurations": {
             "production": {

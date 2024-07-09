@@ -4,48 +4,63 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class LocalService {
-  membership = [
+  city = [
     {
-      id: 0,
-      name: 'Unverified',
+      city_id: 1,
+      name: 'Malang',
     },
     {
-      id: 1,
-      name: 'Rakyat Baru',
+      city_id: 2,
+      name: 'Surabaya',
+    },
+  ];
+
+  position = [
+    {
+      level_id: 1,
+      name: 'Supervisor',
     },
     {
-      id: 2,
-      name: 'Rakyat Lama',
+      level_id: 2,
+      name: 'Front Office',
     },
     {
-      id: 3,
-      name: 'Sultan Baru',
+      level_id: 3,
+      name: 'Kasir',
     },
     {
-      id: 4,
-      name: 'Sultan Lama',
+      level_id: 4,
+      name: 'Keuangan',
     },
     {
-      id: 5,
-      name: 'Saudagar Baru',
+      level_id: 5,
+      name: 'Sopir',
     },
     {
-      id: 6,
-      name: 'Saudagar Lama',
+      level_id: 6,
+      name: 'Bengkel',
     },
     {
-      id: 7,
-      name: 'Kaisar Baru',
+      level_id: 7,
+      name: 'Owner',
     },
     {
-      id: 8,
-      name: 'Kaisar Lama',
+      level_id: 8,
+      name: 'Administrator',
+    },
+    {
+      level_id: 9,
+      name: 'Kurir',
     },
   ];
 
   constructor() {}
 
-  getMembership() {
-    return this.membership;
+  getCity() {
+    return this.city;
+  }
+
+  getPosition() {
+    return this.position;
   }
 }

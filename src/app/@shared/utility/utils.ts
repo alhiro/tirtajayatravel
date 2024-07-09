@@ -20,7 +20,7 @@ export class Utils {
   getToken(): string {
     const credentials =
       JSON.parse(localStorage.getItem('credentials')!) || JSON.parse(sessionStorage.getItem('credentials')!);
-    return credentials?.token;
+    return credentials?.authToken;
   }
 
   getUid(): string {

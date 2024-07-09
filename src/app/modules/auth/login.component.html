@@ -62,7 +62,16 @@
             </div>
             <div class="mt-10">
               <button class="btn btn-primary w-100" type="submit" [disabled]="loginForm.invalid || isLoading">
-                <i class="fas fa-cog fa-spin" [hidden]="!isLoading"></i>
+                <!-- <i class="fas fa-cog fa-spin" [hidden]="!isLoading"></i> -->
+                <!--begin::Spinner-->
+                <span
+                  class="translate-middle-y lh-0 me-1"
+                  data-kt-search-element="spinner"
+                  [ngClass]="isLoading ? '' : 'd-none'"
+                >
+                  <span class="spinner-border h-15px w-15px align-middle text-gray-500"></span>
+                </span>
+                <!--end::Spinner-->
                 <span translate>Login</span>
               </button>
             </div>

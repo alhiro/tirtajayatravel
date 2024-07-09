@@ -1,0 +1,118 @@
+<!-- begin::Header -->
+<div class="card">
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Sub Category Table</span>
+      <span class="text-muted mt-1 fw-bold fs-7">Have {{ dataLength | number }} items</span>
+    </h3>
+    <div class="card-toolbar">
+      <!-- begin::Menu -->
+      <div class="menu-item px-3">
+        <div class="menu-content px-3 py-3">
+          <a class="btn btn-primary btn-sm px-4 cursor-pointer" (click)="openModalNew()"> Create </a>
+        </div>
+      </div>
+      <!-- end::Menu -->
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <ngx-table
+        #table
+        [configuration]="configuration"
+        [data]="data"
+        [columns]="columns"
+        [pagination]="pagination"
+        (event)="eventEmitted($event)"
+        tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+      >
+        <ng-template let-row let-index="index">
+          <!-- <td>
+            <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
+          </td> -->
+          <td>
+            <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
+              {{ row.name }}
+            </span>
+          </td>
+          <td>
+            <span class="text-gray-900 d-block">{{ row.category.name }}</span>
+          </td>
+          <td>
+            <span class="text-gray-900 d-block">{{ row.createdAt | date : 'yyyy/MM/dd hh:mm:ss' }}</span>
+          </td>
+          <td>
+            <span class="text-gray-900 d-block">{{ row.updatedAt | date : 'yyyy/MM/dd hh:mm:ss' }}</span>
+          </td>
+          <td class="text-end">
+            <div class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+              <app-keenicon name="pencil" class="fs-3" (click)="openModalEdit(row)"></app-keenicon>
+            </div>
+            <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+              <app-keenicon name="trash" class="fs-3"></app-keenicon>
+            </a>
+          </td>
+        </ng-template>
+      </ngx-table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+</div>
+<!-- begin::Body -->
+
+<!-- begin:: Modal Edit -->
+<app-modal #modal [modalConfig]="isCreate ? modalConfigCreate : modalConfigEdit">
+  <form (ngSubmit)="isCreate ? dataCreate() : dataEdit()" [formGroup]="form" novalidate>
+    <div class="m-3">
+      <label class="d-block mb-4">
+        <select
+          class="form-select form-control"
+          data-kt-select2="true"
+          data-placeholder="Select category"
+          data-allow-clear="true"
+          formControlName="category_id"
+        >
+          <option value="" disabled selected>Select category</option>
+          @for (value of category; track value) {
+          <option [value]="value.category_id">{{ value.name }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="d-block mb-8">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="name"
+          autocomplete="name"
+          [placeholder]="'Sub Category name' | translate"
+        />
+        <span hidden translate>Sub Category Name</span>
+        <small *ngIf="f['name'].errors?.['maxlength']" class="text-danger" translate>
+          Sub category name maximum 100 characters</small
+        >
+      </label>
+    </div>
+    <div class="mt-10">
+      <button class="btn btn-primary w-100" type="submit" [disabled]="form.invalid || isLoading">
+        <!--begin::Spinner-->
+        <span
+          class="translate-middle-y lh-0 me-1"
+          data-kt-search-element="spinner"
+          [ngClass]="isLoading ? '' : 'd-none'"
+        >
+          <span class="spinner-border h-15px w-15px align-middle text-gray-500"></span>
+        </span>
+        <!--end::Spinner-->
+        <span translate>Submit</span>
+      </button>
+    </div>
+  </form>
+</app-modal>
+<!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
+<!-- end:: Modal category -->
