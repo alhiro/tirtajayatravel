@@ -1,7 +1,7 @@
 export class CustomerModel {
   customer_id!: number;
-  business_id!: string;
-  company_id!: string;
+  business_id!: number;
+  company_id!: number;
   name!: string;
   telp!: string;
   admin!: string;
@@ -13,8 +13,8 @@ export class CustomerModel {
   setCustomer(_category: unknown) {
     const car = _category as CustomerModel;
     this.customer_id = car.customer_id;
-    this.business_id = car.business_id || '';
-    this.company_id = car.company_id || '';
+    this.business_id = car.business_id;
+    this.company_id = car.company_id;
     this.name = car.name || '';
     this.telp = car.telp || '';
     this.admin = car.admin || '';

@@ -28,6 +28,10 @@ const Routing: Routes = [
     loadChildren: () => import('./master/employee/employee.module').then((m) => m.EmployeeModule),
   },
   {
+    path: 'master/customer',
+    loadChildren: () => import('./master/customer/customer.module').then((m) => m.CustomerModule),
+  },
+  {
     path: 'master/car',
     loadChildren: () => import('./master/car/car.module').then((m) => m.CarModule),
   },

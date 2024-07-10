@@ -9,13 +9,16 @@ import { SubCategoryModel } from '@app/pages/master/sub-category/models/subcateg
 import { EmployeeyModel } from '@app/pages/master/employee/models/employee.model';
 import { CarModel } from '@app/pages/master/car/models/car.model';
 import { CustomerModel } from '@app/pages/master/customer/models/customer.model';
+import { AddressModel } from '@app/pages/master/customer/models/address.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
-  constructor(private commonApi: CommonApiService, private http: HttpClient) // private utils: Utility
-  {}
+  constructor(
+    private commonApi: CommonApiService,
+    private http: HttpClient // private utils: Utility
+  ) {}
 
   public apiUrl: string = environment.serverUrl;
 
@@ -177,23 +180,35 @@ export class HttpService {
     return this.commonApi.post('/customer/create', body) as Observable<any>;
   }
 
-  customerAddressEdit(param: CarModel): Observable<any> {
+  customerEditAddress(param: AddressModel): Observable<any> {
     const body = {
-      car_id: param.car_id,
-      number_plat: param.number_plat,
-      car_number: param.car_number,
+      address_id: param.address_id,
+      customer_id: param.customer_id,
       name: param.name,
-      photo: param.photo,
+      address: param.address,
+      telp: param.telp,
+      default: param.default,
+      longitude: param.longitude,
+      latitude: param.latitude,
+      zoom: param.zoom,
+      description: param.description,
+      used: param.used,
     };
     return this.commonApi.put('/address/update', body) as Observable<any>;
   }
 
-  customerAddressCreate(param: CarModel): Observable<any> {
+  customerCreateAddress(param: AddressModel): Observable<any> {
     const body = {
-      number_plat: param.number_plat,
-      car_number: param.car_number,
+      customer_id: param.customer_id,
       name: param.name,
-      photo: param.photo,
+      address: param.address,
+      telp: param.telp,
+      default: param.default,
+      longitude: param.longitude,
+      latitude: param.latitude,
+      zoom: param.zoom,
+      description: param.description,
+      used: param.used,
     };
     return this.commonApi.post('/address/create', body) as Observable<any>;
   }

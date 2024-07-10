@@ -54,6 +54,36 @@ export class LocalService {
     },
   ];
 
+  company = [
+    {
+      company_id: 1,
+      name: 'Perseorangan',
+    },
+    {
+      company_id: 2,
+      name: 'Perusahaan',
+    },
+  ];
+
+  business = [
+    {
+      business_id: 1,
+      name: 'Makanan',
+    },
+    {
+      business_id: 2,
+      name: 'Minuman',
+    },
+    {
+      business_id: 3,
+      name: 'Elektronik',
+    },
+    {
+      business_id: 4,
+      name: 'Dokumen',
+    },
+  ];
+
   constructor() {}
 
   getCity() {
@@ -62,5 +92,13 @@ export class LocalService {
 
   getPosition() {
     return this.position;
+  }
+
+  getCompany() {
+    return this.company;
+  }
+
+  getBusiness() {
+    return this.business;
   }
 }
