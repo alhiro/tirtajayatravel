@@ -11,8 +11,8 @@ export class AddressModel {
   description!: string;
   used!: string;
 
-  setAddress(_category: unknown) {
-    const address = _category as AddressModel;
+  setAddress(_address: unknown) {
+    const address = _address as AddressModel;
     this.address_id = address.address_id;
     this.customer_id = address.customer_id;
     this.name = address.name || '';

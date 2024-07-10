@@ -1,0 +1,66 @@
+export class PackageModel {
+  package_id!: number;
+  sender_id!: number;
+  recipient_id!: number;
+  city_id!: number;
+  employee_id!: number;
+  category_id!: number;
+  go_send_id!: number;
+  description!: string;
+  cost!: number;
+  discount!: number;
+  payment!: number;
+  origin_form!: string;
+  level!: string;
+  request!: string;
+  request_description!: string;
+  note!: string;
+  status!: string;
+  resi_number!: string;
+  photo!: string;
+  print!: number;
+  move_time!: Date;
+  book_date!: Date;
+  send_date!: Date;
+  check_payment!: string;
+  check_sp!: string;
+  check_date_sp!: Date;
+  taking_time!: Date;
+  taking_by!: string;
+  taking_status!: boolean;
+  office!: string;
+
+  setPackage(_packages: unknown) {
+    const packages = _packages as PackageModel;
+    this.package_id = packages.package_id;
+    this.sender_id = packages.sender_id;
+    this.recipient_id = packages.recipient_id;
+    this.city_id = packages.city_id;
+    this.employee_id = packages.employee_id;
+    this.category_id = packages.category_id;
+    this.go_send_id = packages.go_send_id;
+    this.description = packages.description || '';
+    this.cost = packages.cost;
+    this.discount = packages.discount;
+    this.payment = packages.payment;
+    this.origin_form = packages.origin_form || '';
+    this.level = packages.level || '';
+    this.request = packages.request || '';
+    this.request_description = packages.request_description || '';
+    this.note = packages.note;
+    this.status = packages.status || '';
+    this.resi_number = packages.resi_number || '';
+    this.photo = packages.photo || '';
+    this.print = packages.print;
+    this.move_time = packages.move_time;
+    this.book_date = packages.book_date || '';
+    this.send_date = packages.send_date || '';
+    this.check_payment = packages.check_payment || '';
+    this.check_sp = packages.check_sp || '';
+    this.check_date_sp = packages.check_date_sp || '';
+    this.taking_time = packages.taking_time || '';
+    this.taking_by = packages.taking_by || '';
+    this.taking_status = packages.taking_status;
+    this.office = packages.office || '';
+  }
+}

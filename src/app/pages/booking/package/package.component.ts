@@ -1,18 +1,20 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { API, APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { Subject, Subscription, finalize, takeUntil } from 'rxjs';
-import { CustomerService } from './customer.service';
+import { PackageService } from './package.service';
 import { PaginationContext } from '@app/@shared/interfaces/pagination';
 import { HttpService } from '@app/services/http.service';
 import { ModalComponent, ModalConfig } from '@app/_metronic/partials';
 
-import { CustomerModel } from './models/customer.model';
+import { PackageModel } from './models/package.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { untilDestroyed } from '@ngneat/until-destroy';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HandlerResponseService } from '@app/services/handler-response/handler-response.service';
 import { LocalService } from '@app/services/local.service';
-import { AddressModel } from './models/address.model';
+import { AddressModel } from '@app/pages/master/customer/models/address.model';
+import { CustomerModel } from '@app/pages/master/customer/models/customer.model';
+import { CustomerService } from '@app/pages/master/customer/customer.service';
 
 interface EventObject {
   event: string;
@@ -23,11 +25,11 @@ interface EventObject {
 }
 
 @Component({
-  selector: 'app-customer',
-  templateUrl: './customer.component.html',
-  styleUrls: ['./customer.component.scss'],
+  selector: 'app-package',
+  templateUrl: './package.component.html',
+  styleUrls: ['./package.component.scss'],
 })
-export class CustomerComponent implements OnInit {
+export class PackageComponent implements OnInit {
   @ViewChild('table') table!: APIDefinition;
   public columns!: Columns[];
   public data: any;
@@ -62,12 +64,12 @@ export class CustomerComponent implements OnInit {
   }
 
   modalConfigCreate: ModalConfig = {
-    modalTitle: 'Create Customer',
+    modalTitle: 'Create Package',
     dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
   modalConfigEdit: ModalConfig = {
-    modalTitle: 'Edit Customer',
+    modalTitle: 'Edit Package',
     dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
@@ -89,6 +91,7 @@ export class CustomerComponent implements OnInit {
 
   constructor(
     private readonly cdr: ChangeDetectorRef,
+    private PackageService: PackageService,
     private customerService: CustomerService,
     private formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
@@ -109,25 +112,51 @@ export class CustomerComponent implements OnInit {
     this.configuration.detailsTemplate = true;
 
     this.columns = [
-      // { key: 'customer_id', title: 'No' },
-      { key: 'name', title: 'Name' },
-      { key: 'telp', title: 'Telp' },
-      { key: 'address', title: 'Address' },
-      { key: 'created_by', title: 'Created  By' },
+      // { key: 'package_id', title: 'No' },
+      { key: 'resi_number', title: 'Number Resi' },
+      { key: 'level', title: 'Level' },
+      { key: 'book_date', title: 'Send Date' },
+      { key: 'sender_id', title: 'Sender' },
+      { key: 'recipient_id', title: 'Recipient' },
+      { key: 'recipient.customer_id', title: 'Address' },
+      { key: 'cost', title: 'Cost' },
+      { key: 'admin', title: 'Admin' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
   }
 
   private initForm() {
     this.form = this.formBuilder.group({
-      customer_id: [''],
-      business_id: [''],
-      company_id: [''],
-      name: ['', Validators.compose([Validators.maxLength(100)])],
-      telp: ['', Validators.compose([Validators.maxLength(255)])],
-      admin: ['', Validators.compose([Validators.maxLength(100)])],
-      address: ['', Validators.compose([Validators.maxLength(255)])],
-      status: ['', Validators.compose([Validators.maxLength(10)])],
+      package_id: [''],
+      sender_id: [''],
+      recipient_id: [''],
+      city_id: [''],
+      employee_id: [''],
+      category_id: [''],
+      go_send_id: [''],
+      description: [''],
+      cost: [''],
+      discount: [''],
+      payment: [''],
+      origin_form: [''],
+      level: [''],
+      request: [''],
+      request_description: [''],
+      note: [''],
+      status: [''],
+      resi_number: [''],
+      photo: [''],
+      print: [''],
+      move_time: [''],
+      book_date: [''],
+      send_date: [''],
+      check_payment: [''],
+      check_sp: [''],
+      check_date_sp: [''],
+      taking_time: [''],
+      taking_by: [''],
+      taking_status: [''],
+      office: [''],
     });
 
     this.formAddress = this.formBuilder.group({
@@ -172,8 +201,7 @@ export class CustomerComponent implements OnInit {
 
   private dataList(params: PaginationContext): void {
     this.configuration.isLoading = true;
-    this.customerService
-      .list(params)
+    this.PackageService.list(params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
         this.dataLength = response.length;
@@ -200,8 +228,7 @@ export class CustomerComponent implements OnInit {
   dataCreate() {
     console.log(this.form.value);
     this.isLoading = true;
-    const catSubscr = this.customerService
-      .create(this.form.value)
+    const catSubscr = this.PackageService.create(this.form.value)
       .pipe(
         finalize(() => {
           this.form.markAsPristine();
@@ -231,18 +258,40 @@ export class CustomerComponent implements OnInit {
     this.unsubscribe.push(catSubscr);
   }
 
-  async openModalEdit(event: CustomerModel) {
+  async openModalEdit(event: PackageModel) {
     this.isCreate = false;
 
     this.form.patchValue({
-      customer_id: event.customer_id,
-      business_id: event.business_id,
-      company_id: event.company_id,
-      name: event.name,
-      telp: event.telp,
-      admin: event.admin,
-      address: event.address,
+      package_id: event.package_id,
+      sender_id: event.sender_id,
+      recipient_id: event.recipient_id,
+      city_id: event.city_id,
+      employee_id: event.employee_id,
+      category_id: event.category_id,
+      go_send_id: event.go_send_id,
+      description: event.description,
+      cost: event.cost,
+      discount: event.discount,
+      payment: event.payment,
+      origin_form: event.origin_form,
+      level: event.level,
+      request: event.request,
+      request_description: event.request_description,
+      note: event.note,
       status: event.status,
+      resi_number: event.resi_number,
+      photo: event.photo,
+      print: event.print,
+      move_time: event.move_time,
+      book_date: event.book_date,
+      send_date: event.send_date,
+      check_payment: event.check_payment,
+      check_sp: event.check_sp,
+      check_date_sp: event.check_date_sp,
+      taking_time: event.taking_time,
+      taking_by: event.taking_by,
+      taking_status: event.taking_status,
+      office: event.office,
     });
 
     return await this.modalComponent.open();
@@ -251,8 +300,7 @@ export class CustomerComponent implements OnInit {
   dataEdit() {
     console.log(this.form.value);
     this.isLoading = true;
-    const catSubscr = this.customerService
-      .edit(this.form.value)
+    const catSubscr = this.PackageService.edit(this.form.value)
       .pipe(
         finalize(() => {
           this.form.markAsPristine();

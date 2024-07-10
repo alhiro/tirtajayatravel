@@ -10,6 +10,7 @@ import { EmployeeyModel } from '@app/pages/master/employee/models/employee.model
 import { CarModel } from '@app/pages/master/car/models/car.model';
 import { CustomerModel } from '@app/pages/master/customer/models/customer.model';
 import { AddressModel } from '@app/pages/master/customer/models/address.model';
+import { PackageModel } from '@app/pages/booking/package/models/package.model';
 
 @Injectable({
   providedIn: 'root',
@@ -65,7 +66,84 @@ export class HttpService {
     return this.commonApi.post('/auth/register-user', body) as Observable<any>;
   }
 
-  // MATER
+  // BOOKING
+  // Packager
+  packageList(param: PaginationContext): Observable<any> {
+    return this.commonApi.get('/package/list?limit=' + param.limit + '&page=' + param.page) as Observable<any>;
+  }
+
+  packageEdit(param: PackageModel): Observable<any> {
+    const body = {
+      package_id: param.package_id,
+      sender_id: param.sender_id,
+      recipient_id: param.recipient_id,
+      city_id: param.city_id,
+      employee_id: param.employee_id,
+      category_id: param.category_id,
+      go_send_id: param.go_send_id,
+      description: param.description,
+      cost: param.cost,
+      discount: param.discount,
+      payment: param.payment,
+      origin_form: param.origin_form,
+      level: param.level,
+      request: param.request,
+      request_description: param.request_description,
+      note: param.note,
+      status: param.status,
+      resi_number: param.resi_number,
+      photo: param.photo,
+      print: param.print,
+      move_time: param.move_time,
+      book_date: param.book_date,
+      send_date: param.send_date,
+      check_payment: param.check_payment,
+      check_sp: param.check_sp,
+      check_date_sp: param.check_date_sp,
+      taking_time: param.taking_time,
+      taking_by: param.taking_by,
+      taking_status: param.taking_status,
+      office: param.office,
+    };
+    return this.commonApi.put('/package/update', body) as Observable<any>;
+  }
+
+  packageCreate(param: PackageModel): Observable<any> {
+    const body = {
+      sender_id: param.sender_id,
+      recipient_id: param.recipient_id,
+      city_id: param.city_id,
+      employee_id: param.employee_id,
+      category_id: param.category_id,
+      go_send_id: param.go_send_id,
+      description: param.description,
+      cost: param.cost,
+      discount: param.discount,
+      payment: param.payment,
+      origin_form: param.origin_form,
+      level: param.level,
+      request: param.request,
+      request_description: param.request_description,
+      note: param.note,
+      status: param.status,
+      resi_number: param.resi_number,
+      photo: param.photo,
+      print: param.print,
+      move_time: param.move_time,
+      book_date: param.book_date,
+      send_date: param.send_date,
+      check_payment: param.check_payment,
+      check_sp: param.check_sp,
+      check_date_sp: param.check_date_sp,
+      taking_time: param.taking_time,
+      taking_by: param.taking_by,
+      taking_status: param.taking_status,
+      office: param.office,
+    };
+    return this.commonApi.post('/package/create', body) as Observable<any>;
+  }
+
+  // MASTER
   // Category
   categoryAll(): Observable<any> {
     return this.commonApi.get('/category/list') as Observable<any>;
