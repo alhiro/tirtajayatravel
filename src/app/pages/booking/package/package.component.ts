@@ -15,6 +15,7 @@ import { LocalService } from '@app/services/local.service';
 import { AddressModel } from '@app/pages/master/customer/models/address.model';
 import { CustomerModel } from '@app/pages/master/customer/models/customer.model';
 import { CustomerService } from '@app/pages/master/customer/customer.service';
+import { CategoryService } from '@app/pages/master/category/category.service';
 
 interface EventObject {
   event: string;
@@ -35,10 +36,14 @@ export class PackageComponent implements OnInit {
   public data: any;
   public company: any;
   public business: any;
+  public category: any;
+  public request: any;
+  public status: any;
   public dataLength!: number;
   public toggledRows = new Set<number>();
   public isCreate = false;
   public isCreateAddress = false;
+  public isRequest = false;
 
   public configuration: Config = { ...DefaultConfig };
 
@@ -93,6 +98,7 @@ export class PackageComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private PackageService: PackageService,
     private customerService: CustomerService,
+    private categoryService: CategoryService,
     private formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
@@ -103,8 +109,11 @@ export class PackageComponent implements OnInit {
 
   ngOnInit() {
     this.dataList(this.params);
+    this.dataCategory();
     this.company = this.localService.getCompany();
     this.business = this.localService.getBusiness();
+    this.request = this.localService.getRequest();
+    this.status = this.localService.getStatus();
 
     this.configuration.resizeColumn = true;
     this.configuration.fixedColumnWidth = false;
@@ -125,6 +134,11 @@ export class PackageComponent implements OnInit {
     ];
   }
 
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+
   private initForm() {
     this.form = this.formBuilder.group({
       package_id: [''],
@@ -138,6 +152,7 @@ export class PackageComponent implements OnInit {
       cost: [''],
       discount: [''],
       payment: [''],
+      koli: [''],
       origin_form: [''],
       level: [''],
       request: [''],
@@ -174,9 +189,18 @@ export class PackageComponent implements OnInit {
     });
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+  checkRequest(event: any) {
+    console.log(event);
+  }
+
+  private dataCategory(): void {
+    this.configuration.isLoading = true;
+    this.categoryService
+      .all()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((response: any) => {
+        this.category = response.data;
+      });
   }
 
   eventEmitted($event: { event: string; value: any }): void {

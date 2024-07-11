@@ -14,6 +14,12 @@ const Routing: Routes = [
     loadChildren: () => import('./builder/builder.module').then((m) => m.BuilderModule),
   },
 
+  // Booking
+  {
+    path: 'package/transaction',
+    loadChildren: () => import('./booking/package/package.module').then((m) => m.PackageModule),
+  },
+
   // Master
   {
     path: 'master/category',
