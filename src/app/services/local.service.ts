@@ -84,6 +84,96 @@ export class LocalService {
     },
   ];
 
+  request = [
+    {
+      request_id: 1,
+      name: '03.00 WIB',
+    },
+    {
+      request_id: 2,
+      name: '04.00 WIB',
+    },
+    {
+      request_id: 3,
+      name: '05.00 WIB',
+    },
+    {
+      request_id: 4,
+      name: '06.00 WIB',
+    },
+    {
+      request_id: 5,
+      name: '07.00 WIB',
+    },
+    {
+      request_id: 6,
+      name: '08.00 WIB',
+    },
+    {
+      request_id: 7,
+      name: '09.00 WIB',
+    },
+    {
+      request_id: 8,
+      name: '10.00 WIB',
+    },
+    {
+      request_id: 9,
+      name: '11.00 WIB',
+    },
+    {
+      request_id: 10,
+      name: '12.00 WIB',
+    },
+    {
+      request_id: 11,
+      name: '13.00 WIB',
+    },
+    {
+      request_id: 12,
+      name: '14.00 WIB',
+    },
+    {
+      request_id: 13,
+      name: '15.00 WIB',
+    },
+    {
+      request_id: 14,
+      name: '16.00 WIB',
+    },
+    {
+      request_id: 15,
+      name: '17.00 WIB',
+    },
+    {
+      request_id: 16,
+      name: '18.00 WIB',
+    },
+  ];
+
+  status = [
+    {
+      status_id: 1,
+      name: 'Lunas (Kantor)',
+    },
+    {
+      status_id: 2,
+      name: 'Lunas (Transfer)',
+    },
+    {
+      status_id: 3,
+      name: 'Bayar Tujuan (COD)',
+    },
+    {
+      status_id: 4,
+      name: 'Piutang',
+    },
+    {
+      status_id: 5,
+      name: 'Customer (Bulanan)',
+    },
+  ];
+
   constructor() {}
 
   getCity() {
@@ -100,5 +190,13 @@ export class LocalService {
 
   getBusiness() {
     return this.business;
+  }
+
+  getRequest() {
+    return this.request;
+  }
+
+  getStatus() {
+    return this.status;
   }
 }

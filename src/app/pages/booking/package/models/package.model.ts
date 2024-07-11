@@ -10,6 +10,7 @@ export class PackageModel {
   cost!: number;
   discount!: number;
   payment!: number;
+  koli!: number;
   origin_form!: string;
   level!: string;
   request!: string;
@@ -43,6 +44,7 @@ export class PackageModel {
     this.cost = packages.cost;
     this.discount = packages.discount;
     this.payment = packages.payment;
+    this.koli = packages.koli;
     this.origin_form = packages.origin_form || '';
     this.level = packages.level || '';
     this.request = packages.request || '';
