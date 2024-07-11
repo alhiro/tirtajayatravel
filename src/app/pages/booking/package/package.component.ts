@@ -43,7 +43,7 @@ export class PackageComponent implements OnInit {
   public toggledRows = new Set<number>();
   public isCreate = false;
   public isCreateAddress = false;
-  public isRequest = false;
+  public isRequest!: boolean;
 
   public configuration: Config = { ...DefaultConfig };
 
@@ -108,8 +108,8 @@ export class PackageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataList(this.params);
     this.dataCategory();
+    this.dataList(this.params);
     this.company = this.localService.getCompany();
     this.business = this.localService.getBusiness();
     this.request = this.localService.getRequest();
@@ -141,8 +141,7 @@ export class PackageComponent implements OnInit {
 
   private initForm() {
     this.form = this.formBuilder.group({
-      package_id: [''],
-      sender_id: [''],
+      package_id: ['', Validators.compose([Validators.required])],
       recipient_id: [''],
       city_id: [''],
       employee_id: [''],
@@ -189,8 +188,16 @@ export class PackageComponent implements OnInit {
     });
   }
 
-  checkRequest(event: any) {
-    console.log(event);
+  checkRequest() {
+    this.isRequest = !this.isRequest;
+    this.form.patchValue({
+      request: '',
+      request_description: '',
+    });
+  }
+
+  checkLevel(event: Event) {
+    console.log(event.target);
   }
 
   private dataCategory(): void {
@@ -246,6 +253,13 @@ export class PackageComponent implements OnInit {
   async openModalNew() {
     this.isCreate = true;
     this.clearForm();
+
+    this.form.patchValue({
+      category_id: '',
+      request: '',
+      status: '',
+    });
+
     return await this.modalComponent.open();
   }
 
@@ -291,7 +305,7 @@ export class PackageComponent implements OnInit {
       recipient_id: event.recipient_id,
       city_id: event.city_id,
       employee_id: event.employee_id,
-      category_id: event.category_id,
+      category_id: event.category_id ? event.category_id : '',
       go_send_id: event.go_send_id,
       description: event.description,
       cost: event.cost,
@@ -299,10 +313,10 @@ export class PackageComponent implements OnInit {
       payment: event.payment,
       origin_form: event.origin_form,
       level: event.level,
-      request: event.request,
+      request: event.request ? event.request : '',
       request_description: event.request_description,
       note: event.note,
-      status: event.status,
+      status: event.status ? event.status : '',
       resi_number: event.resi_number,
       photo: event.photo,
       print: event.print,

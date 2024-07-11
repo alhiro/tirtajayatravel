@@ -44,7 +44,7 @@
             <span class="text-gray-900 d-block">{{ row.level }}</span>
           </td>
           <td>
-            <span class="text-gray-900 d-block">{{ row.book_date }}</span>
+            <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd hh:mm:ss' }}</span>
           </td>
           <td>
             <span class="text-gray-900 d-block">{{ row.sender?.customer_id }}</span>
@@ -157,9 +157,9 @@
 
       <div class="mb-2">
         <div class="d-flex">
-          <label class="form-label fw-bold">Special Request:</label>
-          <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-            <input class="form-check-input" type="checkbox" (click)="checkRequest($event)" />
+          <label class="form-label fw-bold" [attr.for]="request">Special Request </label>
+          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+            <input class="form-check-input" type="checkbox" [attr.id]="request" (change)="checkRequest()" />
           </label>
         </div>
       </div>
@@ -220,11 +220,11 @@
         <div class="d-flex">
           <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
             <input class="form-check-input" type="radio" value="1" formControlName="origin_form" />
-            <span class="form-check-label">Kantor</span>
+            <span class="form-check-label text-gray-900">Kantor</span>
           </label>
           <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
             <input class="form-check-input" type="radio" value="2" formControlName="origin_form" />
-            <span class="form-check-label">Ambil</span>
+            <span class="form-check-label text-gray-900">Ambil</span>
           </label>
         </div>
       </div>
@@ -233,11 +233,11 @@
         <div class="d-flex">
           <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
             <input class="form-check-input" type="radio" value="1" formControlName="level" />
-            <span class="form-check-label">Normal</span>
+            <span class="form-check-label text-gray-900">Normal</span>
           </label>
           <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
             <input class="form-check-input" type="radio" value="2" formControlName="level" />
-            <span class="form-check-label">Urgent</span>
+            <span class="form-check-label text-gray-900">Urgent</span>
           </label>
         </div>
       </div>

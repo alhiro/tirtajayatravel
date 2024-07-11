@@ -8,13 +8,14 @@ import { PackageComponent } from './package.component';
 import { SharedModule } from '../../../_metronic/shared/shared.module';
 import { DropdownMenusModule } from '../../../_metronic/partials/content/dropdown-menus/dropdown-menus.module';
 import { ModalsModule } from '@app/_metronic/partials';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [PackageComponent],
   imports: [
     // Common modules
     CommonModule,
+    FormsModule,
     TranslateModule,
     // Lazy loading
     PackageRoutingModule,

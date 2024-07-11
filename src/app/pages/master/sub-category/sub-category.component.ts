@@ -158,10 +158,14 @@ export class SubCategoryComponent implements OnInit, OnDestroy {
       });
   }
 
+  clearForm() {
+    this.form.reset();
+  }
+
   async openModalNew() {
     this.dataCategory();
     this.isCreate = true;
-
+    this.clearForm();
     return await this.modalComponent.open();
   }
 
