@@ -219,11 +219,11 @@
         <label class="form-label fw-bold">Origin From:</label>
         <div class="d-flex">
           <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-            <input class="form-check-input" type="radio" value="1" formControlName="origin_form" />
+            <input class="form-check-input" type="radio" [value]="1" \ formControlName="origin_form" />
             <span class="form-check-label text-gray-900">Kantor</span>
           </label>
           <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-            <input class="form-check-input" type="radio" value="2" formControlName="origin_form" />
+            <input class="form-check-input" type="radio" [value]="2" formControlName="origin_form" />
             <span class="form-check-label text-gray-900">Ambil</span>
           </label>
         </div>
@@ -232,11 +232,11 @@
         <label class="form-label fw-bold">Level:</label>
         <div class="d-flex">
           <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-            <input class="form-check-input" type="radio" value="1" formControlName="level" />
+            <input class="form-check-input" type="radio" [value]="1" name="level" formControlName="level" />
             <span class="form-check-label text-gray-900">Normal</span>
           </label>
           <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-            <input class="form-check-input" type="radio" value="2" formControlName="level" />
+            <input class="form-check-input" type="radio" [value]="2" name="level" formControlName="level" />
             <span class="form-check-label text-gray-900">Urgent</span>
           </label>
         </div>

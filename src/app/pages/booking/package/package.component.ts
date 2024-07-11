@@ -299,6 +299,12 @@ export class PackageComponent implements OnInit {
   async openModalEdit(event: PackageModel) {
     this.isCreate = false;
 
+    if (event.request !== null || event.request_description !== null) {
+      this.isRequest = true;
+    } else {
+      this.isRequest = false;
+    }
+
     this.form.patchValue({
       package_id: event.package_id,
       sender_id: event.sender_id,
