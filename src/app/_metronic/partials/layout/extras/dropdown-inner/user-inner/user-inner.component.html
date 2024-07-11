@@ -1,9 +1,7 @@
 <ng-container>
   <div class="menu-item px-3">
     <div class="menu-content d-flex align-items-center px-3">
-      <div class="symbol symbol-50px me-5">
-        <img alt="Logo" />
-      </div>
+      <div class="symbol symbol-50px me-5">Logo</div>
 
       <div class="d-flex flex-column">
         <div class="fw-bolder d-flex align-items-center fs-5">
@@ -23,7 +21,7 @@
 
   <div class="menu-item px-5">
     <a class="menu-link px-5 cursor-pointer" placement="top-start" ngbTooltip="Coming soon">
-      <span class="menu-text">My Projects</span>
+      <span class="menu-text">My Trip</span>
       <span class="menu-badge">
         <span class="badge badge-light-danger badge-circle fw-bolder fs-7">3</span>
       </span>
@@ -96,13 +94,14 @@
       <span class="menu-title position-relative">
         Language
         <span class="fs-8 rounded bg-light px-3 py-2 position-absolute translate-middle-y top-50 end-0">
-          language{{ ' ' }}
-          <img class="w-15px h-15px rounded-1 ms-2" alt="metronic" />
+          <!-- language{{ ' ' }}
+          <img class="w-15px h-15px rounded-1 ms-2" alt="metronic" /> -->
+          <app-language-selector></app-language-selector>
         </span>
       </span>
     </a>
 
-    <div class="menu-sub menu-sub-dropdown w-175px py-4">
+    <!-- <div class="menu-sub menu-sub-dropdown w-175px py-4">
       <div *ngFor="let l of langs" class="menu-item px-3 cursor-pointer" (click)="selectLanguage(l.lang)">
         <a class="menu-link d-flex px-5">
           <span class="symbol symbol-20px me-4">
@@ -111,7 +110,7 @@
           language name
         </a>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <div class="menu-item px-5 my-1">

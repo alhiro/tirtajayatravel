@@ -10,6 +10,8 @@ import { SearchResultInnerComponent } from './dropdown-inner/search-result-inner
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
+import { TranslateModule } from '@ngx-translate/core';
+import { I18nModule } from '@app/modules/i18n';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,16 @@ import { SharedModule } from '../../../shared/shared.module';
     UserInnerComponent,
     LayoutScrollTopComponent,
   ],
-  imports: [CommonModule, FormsModule, InlineSVGModule, RouterModule, NgbTooltipModule, SharedModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    InlineSVGModule,
+    RouterModule,
+    NgbTooltipModule,
+    SharedModule,
+    TranslateModule,
+    I18nModule,
+  ],
   exports: [
     NotificationsInnerComponent,
     QuickLinksInnerComponent,
