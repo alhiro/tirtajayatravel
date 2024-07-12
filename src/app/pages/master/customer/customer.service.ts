@@ -11,6 +11,17 @@ import { AddressModel } from './models/address.model';
 export class CustomerService {
   constructor(private httpService: HttpService) {}
 
+  get(context: CustomerModel): Observable<CustomerModel> {
+    return this.httpService.customerGet(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   list(context: PaginationContext): Observable<CustomerModel> {
     return this.httpService.customerList(context).pipe(
       map((result) => {

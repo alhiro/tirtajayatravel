@@ -16,6 +16,7 @@ import { AddressModel } from '@app/pages/master/customer/models/address.model';
 import { CustomerModel } from '@app/pages/master/customer/models/customer.model';
 import { CustomerService } from '@app/pages/master/customer/customer.service';
 import { CategoryService } from '@app/pages/master/category/category.service';
+import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 
 interface EventObject {
   event: string;
@@ -29,17 +30,29 @@ interface EventObject {
   selector: 'app-package',
   templateUrl: './package.component.html',
   styleUrls: ['./package.component.scss'],
+  providers: [NgbDropdown],
 })
 export class PackageComponent implements OnInit {
   @ViewChild('table') table!: APIDefinition;
   public columns!: Columns[];
+  public otherAddressRecipient: any;
   public data: any;
+  public dataSurabaya: any;
+  public dataMove: any;
+  public dataCancel: any;
+  public dataHistory: any;
   public company: any;
   public business: any;
   public category: any;
   public request: any;
   public status: any;
-  public dataLength!: number;
+  public statusPackage: any;
+  public city: any;
+  public dataLengthMalang!: number;
+  public dataLengthSurabaya!: number;
+  public dataLengthMove!: number;
+  public dataLengthCancel!: number;
+  public dataLengthHistory!: number;
   public toggledRows = new Set<number>();
   public isCreate = false;
   public isCreateAddress = false;
@@ -91,6 +104,9 @@ export class PackageComponent implements OnInit {
   @ViewChild('modal') private modalComponent!: ModalComponent;
   @ViewChild('modalAddress') private modalComponentAddress!: ModalComponent;
 
+  @Input() cssClass!: '';
+  currentTab = 'Malang';
+
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
 
@@ -114,22 +130,26 @@ export class PackageComponent implements OnInit {
     this.business = this.localService.getBusiness();
     this.request = this.localService.getRequest();
     this.status = this.localService.getStatus();
+    this.statusPackage = this.localService.getStatusPackage();
+    this.city = this.localService.getCity();
 
-    this.configuration.resizeColumn = true;
-    this.configuration.fixedColumnWidth = false;
+    // this.configuration.resizeColumn = true;
+    // this.configuration.fixedColumnWidth = false;
     this.configuration.showDetailsArrow = true;
     this.configuration.detailsTemplate = true;
+    this.configuration.horizontalScroll = true;
 
     this.columns = [
       // { key: 'package_id', title: 'No' },
       { key: 'resi_number', title: 'Number Resi' },
       { key: 'level', title: 'Level' },
-      { key: 'book_date', title: 'Send Date' },
+      { key: 'book_date', title: 'Book Date' },
       { key: 'sender_id', title: 'Sender' },
       { key: 'recipient_id', title: 'Recipient' },
       { key: 'recipient.customer_id', title: 'Address' },
       { key: 'cost', title: 'Cost' },
       { key: 'admin', title: 'Admin' },
+      { key: '', title: 'Status' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
   }
@@ -141,7 +161,7 @@ export class PackageComponent implements OnInit {
 
   private initForm() {
     this.form = this.formBuilder.group({
-      package_id: ['', Validators.compose([Validators.required])],
+      package_id: [''],
       recipient_id: [''],
       city_id: [''],
       employee_id: [''],
@@ -152,12 +172,13 @@ export class PackageComponent implements OnInit {
       discount: [''],
       payment: [''],
       koli: [''],
-      origin_form: [''],
+      origin_from: [''],
       level: [''],
       request: [''],
       request_description: [''],
       note: [''],
       status: [''],
+      status_package: [''],
       resi_number: [''],
       photo: [''],
       print: [''],
@@ -186,6 +207,10 @@ export class PackageComponent implements OnInit {
       description: ['', Validators.compose([Validators.maxLength(255)])],
       used: ['', Validators.compose([Validators.maxLength(255)])],
     });
+  }
+
+  setCurrentTab(tab: string) {
+    this.currentTab = tab;
   }
 
   checkRequest() {
@@ -235,8 +260,44 @@ export class PackageComponent implements OnInit {
     this.PackageService.list(params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
-        this.dataLength = response.length;
-        this.data = response.data;
+        // count malang or surabaya
+        const malangData = response.data.filter(
+          (data: PackageModel) =>
+            data.city_id === 1 &&
+            data.status_package !== 'Move' &&
+            data.status_package !== 'Cancel' &&
+            data.status_package !== 'Complete'
+        );
+        const surabayaData = response.data.filter(
+          (data: PackageModel) =>
+            data.city_id === 2 &&
+            data.status_package !== 'Move' &&
+            data.status_package !== 'Cancel' &&
+            data.status_package !== 'Complete'
+        );
+        const moveData = response.data.filter((data: PackageModel) => data.status_package === 'Move');
+        const cancelData = response.data.filter((data: PackageModel) => data.status_package === 'Cancel');
+        const historyData = response.data.filter((data: PackageModel) => data.status_package === 'Complete');
+
+        this.dataLengthMalang = malangData.length;
+        this.dataLengthSurabaya = surabayaData.length;
+        this.dataLengthMove = moveData.length;
+        this.dataLengthCancel = cancelData.length;
+        this.dataLengthHistory = historyData.length;
+
+        this.data = malangData;
+        this.dataSurabaya = surabayaData;
+        this.dataMove = moveData;
+        this.dataCancel = cancelData;
+        this.dataHistory = historyData;
+
+        // check other address
+        if (this.data.recipient?.customer?.addresses.length > 0) {
+          this.otherAddressRecipient = this.data.recipient.customer.addresses.find(
+            (val: AddressModel) => val.default === true
+          );
+        }
+
         // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
         this.pagination.count =
           this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
@@ -252,12 +313,22 @@ export class PackageComponent implements OnInit {
 
   async openModalNew() {
     this.isCreate = true;
+    this.isRequest = false;
     this.clearForm();
 
+    let city: any = '';
+    if (this.currentTab === 'Malang') {
+      city = 1;
+    } else if (this.currentTab === 'Surabaya') {
+      city = 2;
+    }
+
     this.form.patchValue({
+      city_id: city,
       category_id: '',
       request: '',
       status: '',
+      status_package: '',
     });
 
     return await this.modalComponent.open();
@@ -299,7 +370,7 @@ export class PackageComponent implements OnInit {
   async openModalEdit(event: PackageModel) {
     this.isCreate = false;
 
-    if (event.request !== null || event.request_description !== null) {
+    if (event.request || event.request_description) {
       this.isRequest = true;
     } else {
       this.isRequest = false;
@@ -317,12 +388,13 @@ export class PackageComponent implements OnInit {
       cost: event.cost,
       discount: event.discount,
       payment: event.payment,
-      origin_form: event.origin_form,
+      origin_from: event.origin_from,
       level: event.level,
       request: event.request ? event.request : '',
       request_description: event.request_description,
       note: event.note,
       status: event.status ? event.status : '',
+      status_package: event.status_package ? event.status_package : '',
       resi_number: event.resi_number,
       photo: event.photo,
       print: event.print,

@@ -85,12 +85,13 @@ export class HttpService {
       cost: param.cost,
       discount: param.discount,
       payment: param.payment,
-      origin_form: param.origin_form,
+      origin_from: param.origin_from,
       level: param.level,
       request: param.request,
       request_description: param.request_description,
       note: param.note,
       status: param.status,
+      status_package: param.status_package,
       resi_number: param.resi_number,
       photo: param.photo,
       print: param.print,
@@ -120,12 +121,13 @@ export class HttpService {
       cost: param.cost,
       discount: param.discount,
       payment: param.payment,
-      origin_form: param.origin_form,
+      origin_from: param.origin_from,
       level: param.level,
       request: param.request,
       request_description: param.request_description,
       note: param.note,
       status: param.status,
+      status_package: param.status_package,
       resi_number: param.resi_number,
       photo: param.photo,
       print: param.print,
@@ -227,6 +229,10 @@ export class HttpService {
   }
 
   // Customer
+  customerGet(param: CustomerModel): Observable<any> {
+    return this.commonApi.get('/customer/get?customer_id=' + param.customer_id) as Observable<any>;
+  }
+
   customerList(param: PaginationContext): Observable<any> {
     return this.commonApi.get('/customer/list?limit=' + param.limit + '&page=' + param.page) as Observable<any>;
   }

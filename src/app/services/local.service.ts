@@ -174,6 +174,25 @@ export class LocalService {
     },
   ];
 
+  statusPackage = [
+    {
+      status_package_id: 1,
+      name: 'Progress',
+    },
+    {
+      status_package_id: 2,
+      name: 'Move',
+    },
+    {
+      status_package_id: 3,
+      name: 'Cancel',
+    },
+    {
+      status_package_id: 4,
+      name: 'Complete',
+    },
+  ];
+
   constructor() {}
 
   getCity() {
@@ -198,5 +217,9 @@ export class LocalService {
 
   getStatus() {
     return this.status;
+  }
+
+  getStatusPackage() {
+    return this.statusPackage;
   }
 }
