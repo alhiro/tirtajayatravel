@@ -10,7 +10,7 @@ import { SharedModule } from '../../../_metronic/shared/shared.module';
 import { DropdownMenusModule } from '../../../_metronic/partials/content/dropdown-menus/dropdown-menus.module';
 import { ModalsModule } from '@app/_metronic/partials';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepicker, NgbDropdownModule, NgbTimepickerModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [PackageComponent],
@@ -21,6 +21,9 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
     TranslateModule,
     InlineSVGModule,
     NgbDropdownModule,
+    NgbDatepicker,
+    NgbTimepickerModule,
+    NgbTooltipModule,
     // Lazy loading
     PackageRoutingModule,
     // Custom modules

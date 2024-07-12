@@ -125,10 +125,37 @@
                 <span class="badge badge-light-primary">{{ row.status_package }}</span>
               </td>
               <td class="text-end">
-                <a class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3 cursor-pointer">
-                  <app-keenicon name="pencil" class="fs-md-3 text-primary" (click)="openModalEdit(row)"></app-keenicon>
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Edit"
+                  (click)="openModalEdit(row)"
+                >
+                  <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Generate SP"
+                  (click)="generateSP(row)"
+                >
+                  <app-keenicon name="document" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+                <a
+                  href="#"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Delete"
+                >
                   <app-keenicon name="trash" class="fs-3"></app-keenicon>
                 </a>
               </td>
@@ -231,10 +258,37 @@
                 <span class="badge badge-light-primary">{{ row.status_package }}</span>
               </td>
               <td class="text-end">
-                <a class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3 cursor-pointer">
-                  <app-keenicon name="pencil" class="fs-md-3 text-primary" (click)="openModalEdit(row)"></app-keenicon>
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Edit"
+                  (click)="openModalEdit(row)"
+                >
+                  <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Generate SP"
+                  (click)="generateSP(row)"
+                >
+                  <app-keenicon name="document" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+                <a
+                  href="#"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Delete"
+                >
                   <app-keenicon name="trash" class="fs-3"></app-keenicon>
                 </a>
               </td>
@@ -507,188 +561,316 @@
 <!-- begin::Body -->
 
 <!-- begin:: Modal Edit -->
-<app-modal #modal [modalConfig]="isCreate ? modalConfigCreate : modalConfigEdit">
+<app-modal-xl #modal [modalConfig]="isCreate ? modalConfigCreate : modalConfigEdit">
   <form (ngSubmit)="isCreate ? dataCreate() : dataEdit()" [formGroup]="form" novalidate>
-    <div class="m-3">
-      <label class="d-block mb-4">
-        <select
-          class="form-select form-control"
-          data-kt-select2="true"
-          data-placeholder="Select city"
-          data-allow-clear="true"
-          formControlName="city_id"
-        >
-          <option value="" disabled selected>Select city</option>
-          @for (value of city; track value) {
-          <option [value]="value.city_id">{{ value.name }}</option>
-          }
-        </select>
-      </label>
-      <label class="d-block mb-4">
-        <input
-          type="text"
-          class="form-control"
-          formControlName="cost"
-          autocomplete="cost"
-          [placeholder]="'Cost' | translate"
-        />
-        <span hidden translate>Cost</span>
-      </label>
-      <label class="d-block mb-4">
-        <input
-          type="text"
-          class="form-control"
-          formControlName="discount"
-          autocomplete="discount"
-          [placeholder]="'Discount' | translate"
-        />
-        <span hidden translate>Discount</span>
-      </label>
-      <label class="d-block mb-4">
-        <input
-          type="text"
-          class="form-control"
-          formControlName="koli"
-          autocomplete="koli"
-          [placeholder]="'Koli' | translate"
-        />
-        <span hidden translate>Amount Koli</span>
-      </label>
-      <label class="d-block mb-4">
-        <select
-          class="form-select form-control"
-          data-kt-select2="true"
-          data-placeholder="Select category"
-          data-allow-clear="true"
-          formControlName="category_id"
-        >
-          <option value="" disabled selected>Select category</option>
-          @for (value of category; track value) {
-          <option [value]="value.category_id">{{ value.name }}</option>
-          }
-        </select>
-      </label>
+    <div class="d-flex flex-column flex-lg-row">
+      <!--begin::Sidebar-->
+      <div class="flex-column flex-lg-row-auto w-lg-250px w-xl-350px">
+        <!--begin::Card-->
+        <div class="card">
+          <!--begin::Card body-->
+          <div class="card-body">
+            <div class="card-body">
+              <!--begin::Summary-->
+              <!--end::Book Date Info-->
+              <!--begin::Sender Info-->
+              <div class="d-flex flex-center flex-column py-5">
+                <!--begin::Name-->
+                <h4 class="card-title">Choose Sender:</h4>
+                <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3"> Emma Smith </a>
+                <!--end::Name-->
 
-      <div class="mb-2">
-        <div class="d-flex">
-          <label class="form-label fw-bold" [attr.for]="request">Special Request </label>
-          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              [attr.id]="request"
-              [checked]="isRequest"
-              (change)="checkRequest()"
-            />
-          </label>
-        </div>
-      </div>
+                <!--begin::Position-->
+                <div class="mb-9">
+                  <!--begin::Badge-->
+                  <div class="badge badge-lg badge-light-primary d-inline">Perseorangan</div>
+                  <!--begin::Badge-->
+                </div>
+                <!--end::Position-->
 
-      @if (isRequest) {
-      <label class="d-block mb-4">
-        <select
-          class="form-select form-control"
-          data-kt-select2="true"
-          data-placeholder="Select request"
-          data-allow-clear="true"
-          formControlName="request"
-        >
-          <option value="" disabled selected>Select request</option>
-          @for (value of request; track value) {
-          <option [value]="value.name">{{ value.name }}</option>
-          }
-        </select>
-      </label>
-      <label class="d-block mb-4">
-        <input
-          type="text"
-          class="form-control"
-          formControlName="request_description"
-          autocomplete="request_description"
-          [placeholder]="'Request Description' | translate"
-        />
-        <span hidden translate>Request Description</span>
-      </label>
-      }
+                <!--begin::Info-->
+                <!--begin::Info heading-->
+                <div class="fw-bold mb-3">Add address & select</div>
+                <!--end::Info heading-->
+                <!--end::Info-->
+              </div>
+              <!--end::Sender Info-->
+              <!--end::Summary-->
 
-      <label class="d-block mb-4">
-        <input
-          type="text"
-          class="form-control"
-          formControlName="description"
-          autocomplete="description"
-          [placeholder]="'Description' | translate"
-        />
-        <span hidden translate>Description</span>
-      </label>
-      <label class="d-block mb-4">
-        <select
-          class="form-select form-control"
-          data-kt-select2="true"
-          data-placeholder="Select payment status"
-          data-allow-clear="true"
-          formControlName="status"
-        >
-          <option value="" disabled selected>Select payment status</option>
-          @for (value of status; track value) {
-          <option [value]="value.name">{{ value.name }}</option>
-          }
-        </select>
-      </label>
-      <div class="mb-4">
-        <label class="form-label fw-bold">Origin From:</label>
-        <div class="d-flex">
-          <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-            <input
-              class="form-check-input"
-              type="radio"
-              value="Kantor"
-              name="origin_from"
-              formControlName="origin_from"
-            />
-            <span class="form-check-label text-gray-900">Kantor</span>
-          </label>
-          <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-            <input
-              class="form-check-input"
-              type="radio"
-              value="Ambil"
-              name="origin_from"
-              formControlName="origin_from"
-            />
-            <span class="form-check-label text-gray-900">Ambil</span>
-          </label>
+              <div class="d-flex flex-center flex-column py-5">
+                <!--begin::Book Date Info-->
+                <div class="d-flex flex-column flex-lg-row">
+                  <div class="flex-column flex-lg-row-auto">
+                    <ngb-datepicker
+                      formControlName="book_date"
+                      [minDate]="{ year: 2010, month: 1, day: 1 }"
+                      [maxDate]="{ year: 2048, month: 12, day: 31 }"
+                    >
+                    </ngb-datepicker>
+                  </div>
+                  <div class="flex-lg-row-fluid ms-lg-5">
+                    <ngb-timepicker [seconds]="false" [spinners]="false" formControlName="book_date" />
+                  </div>
+                </div>
+              </div>
+
+              <!--begin::Summary-->
+              <!--begin::Recipient Info-->
+              <div class="d-flex flex-center flex-column py-5">
+                <!--begin::Name-->
+                <h4 class="card-title">Choose Recipient:</h4>
+                <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3"> Emma Smith </a>
+                <!--end::Name-->
+
+                <!--begin::Position-->
+                <div class="mb-9">
+                  <!--begin::Badge-->
+                  <div class="badge badge-lg badge-light-primary d-inline">Perseorangan</div>
+                  <!--begin::Badge-->
+                </div>
+                <!--end::Position-->
+
+                <!--begin::Info-->
+                <!--begin::Info heading-->
+                <div class="fw-bold mb-3">Add address & select</div>
+                <!--end::Info heading-->
+                <!--end::Info-->
+              </div>
+              <!--end::Recipient Info-->
+              <!--end::Summary-->
+
+              <!--begin::Details toggle-->
+              <!-- <div class="d-flex flex-stack fs-4 py-3">
+                          <div class="fw-bold rotate collapsible" data-bs-toggle="collapse" href="#kt_user_view_details" role="button"
+                            aria-expanded="false" aria-controls="kt_user_view_details">
+                            Details
+                            <span class="ms-2 rotate-180">
+                              <i class="ki-duotone ki-down fs-3"></i> </span>
+                          </div>
+                        
+                          <span data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-original-title="Edit customer details"
+                            data-kt-initialized="1">
+                            <a href="#" class="btn btn-sm btn-light-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_update_details">
+                              Edit
+                            </a>
+                          </span>
+                        </div> -->
+              <!--end::Details toggle-->
+
+              <!-- <div class="separator"></div> -->
+
+              <!--begin::Details content-->
+              <!-- <div id="kt_user_view_details" class="collapse show">
+                          <div class="pb-5 fs-6">
+                            <div class="fw-bold mt-5">Account ID</div>
+                            <div class="text-gray-600">ID-45453423</div>
+                            <div class="fw-bold mt-5">Address</div>
+                            <div class="text-gray-600">101 Collin Street, <br>Melbourne 3000 VIC<br>Australia</div>
+                          </div>
+                        </div> -->
+              <!--end::Details content-->
+            </div>
+          </div>
+          <!--end::Card body-->
         </div>
+        <!--end::Card-->
       </div>
-      <div class="mb-4">
-        <label class="form-label fw-bold">Level:</label>
-        <div class="d-flex">
-          <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-            <input class="form-check-input" type="radio" [value]="1" name="level" formControlName="level" />
-            <span class="form-check-label text-gray-900">Normal</span>
-          </label>
-          <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-            <input class="form-check-input" type="radio" [value]="2" name="level" formControlName="level" />
-            <span class="form-check-label text-gray-900">Urgent</span>
-          </label>
+      <!--end::Sidebar-->
+
+      <!--begin::Content-->
+      <div class="flex-lg-row-fluid ms-lg-15">
+        <!--begin::Card-->
+        <div class="card card-flush mb-6 mb-xl-9">
+          <!--begin::Card body-->
+          <div class="card-body p-9 pt-4">
+            <div class="m-3">
+              <label class="d-block mb-4">
+                <select
+                  class="form-select form-control"
+                  data-kt-select2="true"
+                  data-placeholder="Select city"
+                  data-allow-clear="true"
+                  formControlName="city_id"
+                >
+                  <option value="" disabled selected>Select city</option>
+                  @for (value of city; track value) {
+                  <option [value]="value.city_id">{{ value.name }}</option>
+                  }
+                </select>
+              </label>
+              <label class="d-block mb-4">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="cost"
+                  autocomplete="cost"
+                  [placeholder]="'Cost' | translate"
+                />
+                <span hidden translate>Cost</span>
+              </label>
+              <label class="d-block mb-4">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="discount"
+                  autocomplete="discount"
+                  [placeholder]="'Discount' | translate"
+                />
+                <span hidden translate>Discount</span>
+              </label>
+              <label class="d-block mb-4">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="koli"
+                  autocomplete="koli"
+                  [placeholder]="'Koli' | translate"
+                />
+                <span hidden translate>Amount Koli</span>
+              </label>
+              <label class="d-block mb-4">
+                <select
+                  class="form-select form-control"
+                  data-kt-select2="true"
+                  data-placeholder="Select category"
+                  data-allow-clear="true"
+                  formControlName="category_id"
+                >
+                  <option value="" disabled selected>Select category</option>
+                  @for (value of category; track value) {
+                  <option [value]="value.category_id">{{ value.name }}</option>
+                  }
+                </select>
+              </label>
+
+              <div class="mb-2">
+                <div class="d-flex">
+                  <label class="form-label fw-bold" [attr.for]="request">Special Request </label>
+                  <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [attr.id]="request"
+                      [checked]="isRequest"
+                      (change)="checkRequest()"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              @if (isRequest) {
+              <label class="d-block mb-4">
+                <select
+                  class="form-select form-control"
+                  data-kt-select2="true"
+                  data-placeholder="Select request"
+                  data-allow-clear="true"
+                  formControlName="request"
+                >
+                  <option value="" disabled selected>Select request</option>
+                  @for (value of request; track value) {
+                  <option [value]="value.name">{{ value.name }}</option>
+                  }
+                </select>
+              </label>
+              <label class="d-block mb-4">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="request_description"
+                  autocomplete="request_description"
+                  [placeholder]="'Request Description' | translate"
+                />
+                <span hidden translate>Request Description</span>
+              </label>
+              }
+
+              <label class="d-block mb-4">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="description"
+                  autocomplete="description"
+                  [placeholder]="'Description' | translate"
+                />
+                <span hidden translate>Description</span>
+              </label>
+              <label class="d-block mb-4">
+                <select
+                  class="form-select form-control"
+                  data-kt-select2="true"
+                  data-placeholder="Select payment status"
+                  data-allow-clear="true"
+                  formControlName="status"
+                >
+                  <option value="" disabled selected>Select payment status</option>
+                  @for (value of status; track value) {
+                  <option [value]="value.name">{{ value.name }}</option>
+                  }
+                </select>
+              </label>
+              <div class="mb-4">
+                <label class="form-label fw-bold">Origin From:</label>
+                <div class="d-flex">
+                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      value="Kantor"
+                      name="origin_from"
+                      formControlName="origin_from"
+                    />
+                    <span class="form-check-label text-gray-900">Kantor</span>
+                  </label>
+                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      value="Ambil"
+                      name="origin_from"
+                      formControlName="origin_from"
+                    />
+                    <span class="form-check-label text-gray-900">Ambil</span>
+                  </label>
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="form-label fw-bold">Level:</label>
+                <div class="d-flex">
+                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                    <input class="form-check-input" type="radio" [value]="1" name="level" formControlName="level" />
+                    <span class="form-check-label text-gray-900">Normal</span>
+                  </label>
+                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                    <input class="form-check-input" type="radio" [value]="2" name="level" formControlName="level" />
+                    <span class="form-check-label text-gray-900">Urgent</span>
+                  </label>
+                </div>
+              </div>
+              <label class="d-block mb-8">
+                <select
+                  class="form-select form-control"
+                  data-kt-select2="true"
+                  data-placeholder="Select status package"
+                  data-allow-clear="true"
+                  formControlName="status_package"
+                >
+                  <option value="" disabled selected>Select status package</option>
+                  @for (value of statusPackage; track value) {
+                  <option [value]="value.name">{{ value.name }}</option>
+                  }
+                </select>
+              </label>
+            </div>
+          </div>
+          <!--end::Card body-->
         </div>
+        <!--end::Card-->
       </div>
-      <label class="d-block mb-8">
-        <select
-          class="form-select form-control"
-          data-kt-select2="true"
-          data-placeholder="Select status package"
-          data-allow-clear="true"
-          formControlName="status_package"
-        >
-          <option value="" disabled selected>Select status package</option>
-          @for (value of statusPackage; track value) {
-          <option [value]="value.name">{{ value.name }}</option>
-          }
-        </select>
-      </label>
+      <!--end::Content-->
     </div>
-    <div class="mt-10">
+
+    <div>
       <button class="btn btn-primary w-100" type="submit" [disabled]="form.invalid || isLoading">
         <!--begin::Spinner-->
         <span
@@ -703,7 +885,7 @@
       </button>
     </div>
   </form>
-</app-modal>
+</app-modal-xl>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
 <!-- end:: Modal customer -->
 

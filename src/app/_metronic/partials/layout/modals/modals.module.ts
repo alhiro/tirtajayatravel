@@ -8,10 +8,17 @@ import { UpgradePlanModalComponent } from './upgrade-plan-modal/upgrade-plan-mod
 import { ModalComponent } from './modal/modal.component';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '../../../shared/shared.module';
+import { ModalXlComponent } from './modal-xl/modal-xl.component';
 
 @NgModule({
-  declarations: [InviteUsersModalComponent, MainModalComponent, UpgradePlanModalComponent, ModalComponent],
+  declarations: [
+    InviteUsersModalComponent,
+    MainModalComponent,
+    UpgradePlanModalComponent,
+    ModalComponent,
+    ModalXlComponent,
+  ],
   imports: [CommonModule, InlineSVGModule, RouterModule, NgbModalModule, SharedModule],
-  exports: [InviteUsersModalComponent, MainModalComponent, UpgradePlanModalComponent, ModalComponent],
+  exports: [InviteUsersModalComponent, MainModalComponent, UpgradePlanModalComponent, ModalComponent, ModalXlComponent],
 })
 export class ModalsModule {}

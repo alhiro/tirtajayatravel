@@ -4,7 +4,7 @@ import { Subject, Subscription, finalize, takeUntil } from 'rxjs';
 import { PackageService } from './package.service';
 import { PaginationContext } from '@app/@shared/interfaces/pagination';
 import { HttpService } from '@app/services/http.service';
-import { ModalComponent, ModalConfig } from '@app/_metronic/partials';
+import { ModalComponent, ModalConfig, ModalXlComponent } from '@app/_metronic/partials';
 
 import { PackageModel } from './models/package.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -101,7 +101,7 @@ export class PackageComponent implements OnInit {
     dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
-  @ViewChild('modal') private modalComponent!: ModalComponent;
+  @ViewChild('modal') private modalComponent!: ModalXlComponent;
   @ViewChild('modalAddress') private modalComponentAddress!: ModalComponent;
 
   @Input() cssClass!: '';
@@ -305,6 +305,10 @@ export class PackageComponent implements OnInit {
         this.configuration.isLoading = false;
         this.cdr.detectChanges();
       });
+  }
+
+  generateSP(event: PackageModel) {
+    console.log(event);
   }
 
   clearForm() {
