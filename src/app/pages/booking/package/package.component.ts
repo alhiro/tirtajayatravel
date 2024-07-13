@@ -107,6 +107,8 @@ export class PackageComponent implements OnInit {
   @Input() cssClass!: '';
   currentTab = 'Malang';
 
+  placeholderTime: any = 'yyyy/MM/dd hh:mm';
+
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
 

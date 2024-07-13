@@ -601,16 +601,30 @@
                 <!--begin::Book Date Info-->
                 <div class="d-flex flex-column flex-lg-row">
                   <div class="flex-column flex-lg-row-auto">
-                    <ngb-datepicker
+                    <!-- <ngb-datepicker
                       formControlName="book_date"
                       [minDate]="{ year: 2010, month: 1, day: 1 }"
                       [maxDate]="{ year: 2048, month: 12, day: 31 }"
                     >
-                    </ngb-datepicker>
+                    </ngb-datepicker> -->
+
+                    <date-time-picker-custom
+                      [class.is-invalid]="
+                        this.form.controls['book_date'].touched && this.form.controls['book_date'].invalid
+                      "
+                      class="form-control p-0"
+                      formControlName="book_date"
+                      [meridian]="true"
+                      [hourStep]="1"
+                      [minuteStep]="5"
+                      [spinners]="false"
+                      [placeholder]="placeholderTime"
+                    >
+                    </date-time-picker-custom>
                   </div>
-                  <div class="flex-lg-row-fluid ms-lg-5">
+                  <!-- <div class="flex-lg-row-fluid ms-lg-5">
                     <ngb-timepicker [seconds]="false" [spinners]="false" formControlName="book_date" />
-                  </div>
+                  </div> -->
                 </div>
               </div>
 
