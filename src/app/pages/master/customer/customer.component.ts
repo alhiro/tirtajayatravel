@@ -44,10 +44,12 @@ export class CustomerComponent implements OnInit {
     limit: 10,
     offset: 1,
     count: -1,
+    search: '',
   };
   public params = {
     limit: 10,
     page: 1,
+    search: '',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -166,6 +168,7 @@ export class CustomerComponent implements OnInit {
     const params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
+      search: this.pagination.search,
     }; // see https://github.com/typicode/json-server
     this.dataList(params);
   }

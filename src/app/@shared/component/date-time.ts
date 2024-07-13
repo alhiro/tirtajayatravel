@@ -10,6 +10,7 @@ import { NgControl, FormGroupDirective, ControlValueAccessor, NG_VALUE_ACCESSOR 
       <div ngbDropdownMenu style="padding: 15px;">
         <ngb-datepicker #dp [(ngModel)]="date" [minDate]="minDate" (dateSelect)="getDatetime()"></ngb-datepicker>
         <ngb-timepicker
+          class="custom-datetime"
           [hourStep]="hourStep"
           [minuteStep]="minuteStep"
           [meridian]="meridian"
@@ -31,17 +32,28 @@ import { NgControl, FormGroupDirective, ControlValueAccessor, NG_VALUE_ACCESSOR 
       //   z-index: 11;
       // }
 
-      .custom-datetime button {
-        width: 100%;
-        display: block;
-        text-align: left;
-        background: transparent;
-        box-shadow: none;
-        border: 0;
-      }
+      .custom-datetime {
+        button {
+          width: 100%;
+          display: block;
+          text-align: left;
+          background: transparent;
+          box-shadow: none;
+          border: 0;
+          padding: 0 !important;
+          color: #9198ab;
+          font-size: 1.1rem;
+          font-weight: 500;
+          line-height: 1.5;
 
-      .custom-datetime button:after {
-        display: none;
+          &:after {
+            display: none;
+          }
+        }
+
+        .ngb-tp-input input {
+          padding: 0.25rem !important;
+        }
       }
     `,
   ],
@@ -56,7 +68,7 @@ import { NgControl, FormGroupDirective, ControlValueAccessor, NG_VALUE_ACCESSOR 
 export class DateTimePickerComponent implements ControlValueAccessor {
   @Input() mask = 'medium';
   @Input() meridian: boolean = true;
-  @Input() placeholder: string = 'yyyy/MM/dd hh:mm am/pm';
+  @Input() placeholder: string = 'yyyy/MM/dd hh:mm';
   @Input() hourStep = 1;
   @Input() minuteStep = 1;
   @Input() spinners: boolean = false;

@@ -42,10 +42,12 @@ export class SubCategoryComponent implements OnInit, OnDestroy {
     limit: 10,
     offset: 0,
     count: -1,
+    search: '',
   };
   public params = {
     limit: 10,
     page: 1,
+    search: '',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -123,6 +125,7 @@ export class SubCategoryComponent implements OnInit, OnDestroy {
     const params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
+      search: this.pagination.search,
     }; // see https://github.com/typicode/json-server
     this.dataList(params);
   }

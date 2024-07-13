@@ -44,10 +44,12 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     limit: 10,
     offset: 0,
     count: -1,
+    search: '',
   };
   public params = {
     limit: 10,
     page: 1,
+    search: '',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -136,23 +138,24 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     const params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
+      search: this.pagination.search,
     }; // see https://github.com/typicode/json-server
     this.dataList(params);
   }
 
-  private dataCategory(): void {
-    this.categoryService
-      .all()
-      .pipe(
-        finalize(() => {
-          console.log('get category');
-        }),
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe((response: any) => {
-        this.category = response.data;
-      });
-  }
+  // private dataCategory(): void {
+  //   this.categoryService
+  //     .all()
+  //     .pipe(
+  //       finalize(() => {
+  //         console.log('get category');
+  //       }),
+  //       takeUntil(this.ngUnsubscribe)
+  //     )
+  //     .subscribe((response: any) => {
+  //       this.category = response.data;
+  //     });
+  // }
 
   private dataList(params: PaginationContext): void {
     this.configuration.isLoading = true;

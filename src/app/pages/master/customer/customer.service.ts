@@ -22,7 +22,7 @@ export class CustomerService {
     );
   }
 
-  list(context: PaginationContext): Observable<CustomerModel> {
+  list(context: PaginationContext): Observable<any> {
     return this.httpService.customerList(context).pipe(
       map((result) => {
         if (!result) {

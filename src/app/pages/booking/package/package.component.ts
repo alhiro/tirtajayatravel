@@ -1,6 +1,20 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { API, APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
-import { Subject, Subscription, finalize, takeUntil } from 'rxjs';
+import {
+  Observable,
+  OperatorFunction,
+  Subject,
+  Subscription,
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  finalize,
+  map,
+  of,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { PackageService } from './package.service';
 import { PaginationContext } from '@app/@shared/interfaces/pagination';
 import { HttpService } from '@app/services/http.service';
@@ -26,6 +40,68 @@ interface EventObject {
   };
 }
 
+const states = [
+  'Alabama',
+  'Alaska',
+  'American Samoa',
+  'Arizona',
+  'Arkansas',
+  'California',
+  'Colorado',
+  'Connecticut',
+  'Delaware',
+  'District Of Columbia',
+  'Federated States Of Micronesia',
+  'Florida',
+  'Georgia',
+  'Guam',
+  'Hawaii',
+  'Idaho',
+  'Illinois',
+  'Indiana',
+  'Iowa',
+  'Kansas',
+  'Kentucky',
+  'Louisiana',
+  'Maine',
+  'Marshall Islands',
+  'Maryland',
+  'Massachusetts',
+  'Michigan',
+  'Minnesota',
+  'Mississippi',
+  'Missouri',
+  'Montana',
+  'Nebraska',
+  'Nevada',
+  'New Hampshire',
+  'New Jersey',
+  'New Mexico',
+  'New York',
+  'North Carolina',
+  'North Dakota',
+  'Northern Mariana Islands',
+  'Ohio',
+  'Oklahoma',
+  'Oregon',
+  'Palau',
+  'Pennsylvania',
+  'Puerto Rico',
+  'Rhode Island',
+  'South Carolina',
+  'South Dakota',
+  'Tennessee',
+  'Texas',
+  'Utah',
+  'Vermont',
+  'Virgin Islands',
+  'Virginia',
+  'Washington',
+  'West Virginia',
+  'Wisconsin',
+  'Wyoming',
+];
+
 @Component({
   selector: 'app-package',
   templateUrl: './package.component.html',
@@ -37,6 +113,7 @@ export class PackageComponent implements OnInit {
   public columns!: Columns[];
   public otherAddressRecipient: any;
   public data: any;
+  public dataCustomer: any;
   public dataSurabaya: any;
   public dataMove: any;
   public dataCancel: any;
@@ -48,15 +125,22 @@ export class PackageComponent implements OnInit {
   public status: any;
   public statusPackage: any;
   public city: any;
+  public selectedAddress: any;
   public dataLengthMalang!: number;
   public dataLengthSurabaya!: number;
   public dataLengthMove!: number;
   public dataLengthCancel!: number;
   public dataLengthHistory!: number;
+  public dataLengthCustomer!: number;
   public toggledRows = new Set<number>();
   public isCreate = false;
   public isCreateAddress = false;
   public isRequest!: boolean;
+  public searchCustomer!: string;
+  public modelCustomer: any;
+  public modelAddress: any;
+  public searching = false;
+  public searchFailed = false;
 
   public configuration: Config = { ...DefaultConfig };
 
@@ -64,16 +148,20 @@ export class PackageComponent implements OnInit {
     limit: 10,
     offset: 1,
     count: -1,
+    search: '',
   };
   public params = {
     limit: 10,
     page: 1,
+    search: '',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   form!: FormGroup;
   formAddress!: FormGroup;
   isLoading = false;
+  isLoadingCustomer = false;
+
   get f() {
     return this.form.controls;
   }
@@ -107,7 +195,7 @@ export class PackageComponent implements OnInit {
   @Input() cssClass!: '';
   currentTab = 'Malang';
 
-  placeholderTime: any = 'yyyy/MM/dd hh:mm';
+  placeholderTime: any = 'Select Book Date';
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -164,6 +252,7 @@ export class PackageComponent implements OnInit {
   private initForm() {
     this.form = this.formBuilder.group({
       package_id: [''],
+      sender_id: [''],
       recipient_id: [''],
       city_id: [''],
       employee_id: [''],
@@ -253,6 +342,7 @@ export class PackageComponent implements OnInit {
     const params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
+      search: this.pagination.search,
     }; // see https://github.com/typicode/json-server
     this.dataList(params);
   }
@@ -307,6 +397,84 @@ export class PackageComponent implements OnInit {
         this.configuration.isLoading = false;
         this.cdr.detectChanges();
       });
+  }
+
+  private dataListCustomer(params: PaginationContext, search: string) {
+    this.isLoadingCustomer = true;
+
+    params.search = search;
+
+    this.customerService
+      .list(params)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((response: any) => {
+        this.dataLengthCustomer = response.length;
+        this.dataCustomer = response.data;
+        // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
+        this.pagination.count =
+          this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
+        this.pagination = { ...this.pagination };
+        this.isLoadingCustomer = false;
+        this.cdr.detectChanges();
+      });
+  }
+
+  // search2 = (text$: Observable<string>) =>
+  //   text$.pipe(
+  //       debounceTime(200),
+  //       distinctUntilChanged(),
+  //       tap(() => (this.searchFailed = true)),
+  //       map((term: any) => {
+  //         term.length < 2 ? [] : this.dataListCustomer(this.params, term);
+
+  //         // return this.dataCustomer.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1)
+  //       }),
+  //       switchMap(() => this.dataCustomer),
+  //       catchError((err) => {
+  //         console.error('err', err);
+  //         return of(undefined);
+  //       }),
+  //       tap(() => (this.searchFailed = false)),
+  //   );
+
+  searchDataCustomer = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(() => (this.searching = true)),
+      switchMap((term) =>
+        this.customerService
+          .list({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+          })
+          .pipe(
+            tap(() => (this.searchFailed = false)),
+            map((response: any) => {
+              if (response) {
+                tap(() => (this.searching = false));
+                return response.data.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+              }
+            }),
+            catchError(() => {
+              this.searchFailed = true;
+              return of([]);
+            })
+          )
+      ),
+      tap(() => ((this.searching = false), (this.modelAddress = '')))
+    );
+
+  formatter = (result: { name: string }) => result.name;
+  selectAddress() {
+    if (this.modelCustomer) {
+      const getdAddress = this.modelCustomer?.addresses.find(
+        (val: AddressModel) => val.address_id === Number(this.modelAddress)
+      );
+      this.selectedAddress = getdAddress;
+      console.log(this.selectedAddress);
+    }
   }
 
   generateSP(event: PackageModel) {
@@ -457,7 +625,8 @@ export class PackageComponent implements OnInit {
     this.formAddress.reset();
   }
 
-  async openModalNewAddress(event: CustomerModel) {
+  async openModalNewAddress(event: AddressModel) {
+    console.log(event);
     this.isCreateAddress = true;
     this.clearFormAddress();
 
@@ -472,7 +641,7 @@ export class PackageComponent implements OnInit {
     console.log(this.formAddress.value);
     this.isLoading = true;
     const catSubscr = this.customerService
-      .createAddress(this.form.value)
+      .createAddress(this.formAddress.value)
       .pipe(
         finalize(() => {
           this.form.markAsPristine();
@@ -526,7 +695,7 @@ export class PackageComponent implements OnInit {
     console.log(this.formAddress.value);
     this.isLoading = true;
     const catSubscr = this.customerService
-      .editAddress(this.form.value)
+      .editAddress(this.formAddress.value)
       .pipe(
         finalize(() => {
           this.form.markAsPristine();

@@ -234,7 +234,9 @@ export class HttpService {
   }
 
   customerList(param: PaginationContext): Observable<any> {
-    return this.commonApi.get('/customer/list?limit=' + param.limit + '&page=' + param.page) as Observable<any>;
+    return this.commonApi.get(
+      '/customer/list?limit=' + param.limit + '&page=' + param.page + '&search=' + param.search
+    ) as Observable<any>;
   }
 
   customerEdit(param: CustomerModel): Observable<any> {

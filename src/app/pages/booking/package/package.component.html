@@ -570,87 +570,197 @@
         <div class="card">
           <!--begin::Card body-->
           <div class="card-body">
-            <div class="card-body">
-              <!--begin::Summary-->
-              <!--end::Book Date Info-->
-              <!--begin::Sender Info-->
-              <div class="d-flex flex-center flex-column py-5">
-                <!--begin::Name-->
-                <h4 class="card-title">Choose Sender:</h4>
-                <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3"> Emma Smith </a>
-                <!--end::Name-->
+            <div class="p-0">
+              <div class="d-flex flex-center flex-column pb-2">
+                <!--begin::Book Date Info-->
+                <date-time-picker-custom
+                  [class.is-invalid]="
+                    this.form.controls['book_date'].touched && this.form.controls['book_date'].invalid
+                  "
+                  class="form-control p-1 px-3 full-vh"
+                  formControlName="book_date"
+                  [meridian]="false"
+                  [hourStep]="1"
+                  [minuteStep]="5"
+                  [spinners]="false"
+                  [placeholder]="placeholderTime"
+                >
+                </date-time-picker-custom>
+              </div>
+              <div class="d-flex flex-center flex-column py-2">
+                <input
+                  id="select-customer"
+                  type="text"
+                  class="form-control p-1 px-3 full-vh"
+                  [class.is-invalid]="searchFailed"
+                  [ngModelOptions]="{ standalone: true }"
+                  [(ngModel)]="modelCustomer"
+                  [ngbTypeahead]="searchDataCustomer"
+                  [resultTemplate]="rt"
+                  [inputFormatter]="formatter"
+                  placeholder="Customer search"
+                />
+                <ng-template #rt let-r="result" let-t="term">
+                  {{ r.name }}
+                </ng-template>
 
-                <!--begin::Position-->
-                <div class="mb-9">
-                  <!--begin::Badge-->
-                  <div class="badge badge-lg badge-light-primary d-inline">Perseorangan</div>
-                  <!--begin::Badge-->
-                </div>
-                <!--end::Position-->
+                @if (searching || modelCustomer == '') {
+                <small class="form-text text-muted">Searching. Please wait...</small>
+                } @if (searchFailed) {
+                <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+                }
+              </div>
 
+              @if (modelCustomer) {
+              <div class="d-flex flex-center flex-column py-5 pt-2">
                 <!--begin::Info-->
                 <!--begin::Info heading-->
-                <div class="fw-bold mb-3">Add address & select</div>
+                @if (modelCustomer.addresses) {
+                <label class="d-block">
+                  <select
+                    class="form-select form-control p-1 px-3 full-vh"
+                    data-kt-select2="true"
+                    data-placeholder="Select address"
+                    data-allow-clear="true"
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="modelAddress"
+                    (change)="selectAddress()"
+                  >
+                    <option value="" disabled selected>Select address</option>
+                    @for (value of modelCustomer.addresses; track value) {
+                    <option [value]="value.address_id">{{ value.address }}</option>
+                    }
+                  </select>
+                </label>
+
+                <div
+                  class="btn btn-primary btn-sm py-1 fs-8 cursor-pointer my-3"
+                  (click)="openModalNewAddress(modelCustomer)"
+                >
+                  Add New Address
+                </div>
+                }
                 <!--end::Info heading-->
                 <!--end::Info-->
               </div>
+              }
+
+              <!--begin::Summary-->
+              <!--begin::Sender Info-->
+              @if (modelCustomer) {
+              <div class="d-flex flex-center flex-column py-5 pt-0">
+                <!--begin::Name-->
+                <h4 class="card-title">Choose Sender:</h4>
+                <!--begin::Position-->
+                <div class="mb-4">
+                  <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{{ modelCustomer?.name }} </a>
+                  @if (modelCustomer.business) {
+                  <div class="badge badge-lg badge-light-primary d-inline">
+                    {{ modelCustomer.business.name }}
+                  </div>
+                  }
+                </div>
+                @if (selectedAddress) {
+                <div class="mb-9">
+                  <div>Address:</div>
+                  <div>{{ selectedAddress.address }}</div>
+                </div>
+                }
+                <!--end::Position-->
+                <!--end::Name-->
+              </div>
+              }
               <!--end::Sender Info-->
               <!--end::Summary-->
 
-              <div class="d-flex flex-center flex-column py-5">
-                <!--begin::Book Date Info-->
-                <div class="d-flex flex-column flex-lg-row">
-                  <div class="flex-column flex-lg-row-auto">
-                    <!-- <ngb-datepicker
-                      formControlName="book_date"
-                      [minDate]="{ year: 2010, month: 1, day: 1 }"
-                      [maxDate]="{ year: 2048, month: 12, day: 31 }"
-                    >
-                    </ngb-datepicker> -->
+              <div class="separator"></div>
+              <hr />
 
-                    <date-time-picker-custom
-                      [class.is-invalid]="
-                        this.form.controls['book_date'].touched && this.form.controls['book_date'].invalid
-                      "
-                      class="form-control p-0"
-                      formControlName="book_date"
-                      [meridian]="true"
-                      [hourStep]="1"
-                      [minuteStep]="5"
-                      [spinners]="false"
-                      [placeholder]="placeholderTime"
-                    >
-                    </date-time-picker-custom>
-                  </div>
-                  <!-- <div class="flex-lg-row-fluid ms-lg-5">
-                    <ngb-timepicker [seconds]="false" [spinners]="false" formControlName="book_date" />
-                  </div> -->
-                </div>
+              <!--begin::Recipient-->
+              <div class="d-flex flex-center flex-column py-2">
+                <input
+                  id="select-recipient"
+                  type="text"
+                  class="form-control p-1 px-3 full-vh"
+                  [class.is-invalid]="searchFailed"
+                  [ngModelOptions]="{ standalone: true }"
+                  [(ngModel)]="modelCustomer"
+                  [ngbTypeahead]="searchDataCustomer"
+                  [resultTemplate]="rt"
+                  [inputFormatter]="formatter"
+                  placeholder="Recipient search"
+                />
+                <ng-template #rt let-r="result" let-t="term">
+                  {{ r.name }}
+                </ng-template>
+
+                @if (searching || modelCustomer == '') {
+                <small class="form-text text-muted">Searching. Please wait...</small>
+                } @if (searchFailed) {
+                <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+                }
               </div>
 
-              <!--begin::Summary-->
-              <!--begin::Recipient Info-->
-              <div class="d-flex flex-center flex-column py-5">
-                <!--begin::Name-->
-                <h4 class="card-title">Choose Recipient:</h4>
-                <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3"> Emma Smith </a>
-                <!--end::Name-->
-
-                <!--begin::Position-->
-                <div class="mb-9">
-                  <!--begin::Badge-->
-                  <div class="badge badge-lg badge-light-primary d-inline">Perseorangan</div>
-                  <!--begin::Badge-->
-                </div>
-                <!--end::Position-->
-
+              @if (modelCustomer) {
+              <div class="d-flex flex-center flex-column py-5 pt-2">
                 <!--begin::Info-->
                 <!--begin::Info heading-->
-                <div class="fw-bold mb-3">Add address & select</div>
+                @if (modelCustomer.addresses) {
+                <label class="d-block">
+                  <select
+                    class="form-select form-control p-1 px-3 full-vh"
+                    data-kt-select2="true"
+                    data-placeholder="Select address"
+                    data-allow-clear="true"
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="modelAddress"
+                    (change)="selectAddress()"
+                  >
+                    <option value="" disabled selected>Select address</option>
+                    @for (value of modelCustomer.addresses; track value) {
+                    <option [value]="value.address_id">{{ value.address }}</option>
+                    }
+                  </select>
+                </label>
+
+                <div
+                  class="btn btn-primary btn-sm py-1 fs-8 cursor-pointer my-3"
+                  (click)="openModalNewAddress(modelCustomer)"
+                >
+                  Add New Address
+                </div>
+                }
                 <!--end::Info heading-->
                 <!--end::Info-->
               </div>
-              <!--end::Recipient Info-->
+              }
+
+              <!--begin::Summary-->
+              <!--begin::Sender Info-->
+              @if (modelCustomer) {
+              <div class="d-flex flex-center flex-column py-5 pt-0">
+                <!--begin::Name-->
+                <h4 class="card-title">Choose Sender:</h4>
+                <!--begin::Position-->
+                <div class="mb-4">
+                  <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{{ modelCustomer?.name }} </a>
+                  @if (modelCustomer.business) {
+                  <div class="badge badge-lg badge-light-primary d-inline">
+                    {{ modelCustomer.business.name }}
+                  </div>
+                  }
+                </div>
+                @if (selectedAddress) {
+                <div class="mb-9">
+                  <div>Address:</div>
+                  <div>{{ selectedAddress.address }}</div>
+                </div>
+                }
+                <!--end::Position-->
+                <!--end::Name-->
+              </div>
+              }
+              <!--end::Sender Info-->
               <!--end::Summary-->
 
               <!--begin::Details toggle-->
