@@ -17,10 +17,10 @@ import {
   NgbTooltipModule,
   NgbModule,
 } from '@ng-bootstrap/ng-bootstrap';
-import { DateTimePickerComponent } from '@app/@shared/component/date-time';
+import { DateTimeModule } from '@app/@shared/component/date-time.module';
 
 @NgModule({
-  declarations: [PackageComponent, DateTimePickerComponent],
+  declarations: [PackageComponent],
   imports: [
     // Common modules
     CommonModule,
@@ -40,6 +40,7 @@ import { DateTimePickerComponent } from '@app/@shared/component/date-time';
     DropdownMenusModule,
     TableModule,
     ModalsModule,
+    DateTimeModule,
   ],
 })
 export class PackageModule {}

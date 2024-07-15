@@ -30,7 +30,8 @@ import { AddressModel } from '@app/pages/master/customer/models/address.model';
 import { CustomerModel } from '@app/pages/master/customer/models/customer.model';
 import { CustomerService } from '@app/pages/master/customer/customer.service';
 import { CategoryService } from '@app/pages/master/category/category.service';
-import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbDropdown, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import { RecipientModel } from './models/recipient.model';
 
 interface EventObject {
   event: string;
@@ -39,68 +40,6 @@ interface EventObject {
     page: number;
   };
 }
-
-const states = [
-  'Alabama',
-  'Alaska',
-  'American Samoa',
-  'Arizona',
-  'Arkansas',
-  'California',
-  'Colorado',
-  'Connecticut',
-  'Delaware',
-  'District Of Columbia',
-  'Federated States Of Micronesia',
-  'Florida',
-  'Georgia',
-  'Guam',
-  'Hawaii',
-  'Idaho',
-  'Illinois',
-  'Indiana',
-  'Iowa',
-  'Kansas',
-  'Kentucky',
-  'Louisiana',
-  'Maine',
-  'Marshall Islands',
-  'Maryland',
-  'Massachusetts',
-  'Michigan',
-  'Minnesota',
-  'Mississippi',
-  'Missouri',
-  'Montana',
-  'Nebraska',
-  'Nevada',
-  'New Hampshire',
-  'New Jersey',
-  'New Mexico',
-  'New York',
-  'North Carolina',
-  'North Dakota',
-  'Northern Mariana Islands',
-  'Ohio',
-  'Oklahoma',
-  'Oregon',
-  'Palau',
-  'Pennsylvania',
-  'Puerto Rico',
-  'Rhode Island',
-  'South Carolina',
-  'South Dakota',
-  'Tennessee',
-  'Texas',
-  'Utah',
-  'Vermont',
-  'Virgin Islands',
-  'Virginia',
-  'Washington',
-  'West Virginia',
-  'Wisconsin',
-  'Wyoming',
-];
 
 @Component({
   selector: 'app-package',
@@ -111,7 +50,8 @@ const states = [
 export class PackageComponent implements OnInit {
   @ViewChild('table') table!: APIDefinition;
   public columns!: Columns[];
-  public otherAddressRecipient: any;
+  public defaultAddressCustomer: any;
+  public defaultAddressRecipient: any;
   public data: any;
   public dataCustomer: any;
   public dataSurabaya: any;
@@ -125,7 +65,6 @@ export class PackageComponent implements OnInit {
   public status: any;
   public statusPackage: any;
   public city: any;
-  public selectedAddress: any;
   public dataLengthMalang!: number;
   public dataLengthSurabaya!: number;
   public dataLengthMove!: number;
@@ -136,11 +75,19 @@ export class PackageComponent implements OnInit {
   public isCreate = false;
   public isCreateAddress = false;
   public isRequest!: boolean;
+  public selectedAddress: any;
+  public selectedAddressRecipient: any;
   public searchCustomer!: string;
   public modelCustomer: any;
+  public modelRecipient: any;
   public modelAddress: any;
+  public modelAddressId: any;
+  public modelAddressRecipient: any;
+  public modelAddressIdRecipient: any;
   public searching = false;
+  public searchingRecipient = false;
   public searchFailed = false;
+  public searchFailedRecipient = false;
 
   public configuration: Config = { ...DefaultConfig };
 
@@ -195,14 +142,16 @@ export class PackageComponent implements OnInit {
   @Input() cssClass!: '';
   currentTab = 'Malang';
 
-  placeholderTime: any = 'Select Book Date';
+  minDate: any;
+  bookdate!: NgbDateStruct;
+  booktime: NgbTimeStruct = { hour: 0, minute: 0, second: 0 };
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
 
   constructor(
     private readonly cdr: ChangeDetectorRef,
-    private PackageService: PackageService,
+    private packageService: PackageService,
     private customerService: CustomerService,
     private categoryService: CategoryService,
     private formBuilder: FormBuilder,
@@ -211,6 +160,30 @@ export class PackageComponent implements OnInit {
     private localService: LocalService
   ) {
     this.initForm();
+
+    // Get the current date and time in UTC format
+    const currentDate = new Date();
+    // Convert the UTC date to a string in the format "YYYY-MM-DDTHH:mm:ssZ"
+    const currentDateUTCString = currentDate.toUTCString();
+    const globalTimezone = 'Asia/Jakarta';
+    const globalDate = new Date(currentDateUTCString).toLocaleString('en-US', {
+      timeZone: globalTimezone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+    console.log('globalDate ' + globalDate);
+    var getDate = new Date(globalDate);
+    this.minDate = {
+      year: getDate.getFullYear(),
+      month: getDate.getMonth() + 1,
+      day: getDate.getDate(),
+    };
+
+    this.formatDateNow(getDate);
   }
 
   ngOnInit() {
@@ -292,12 +265,30 @@ export class PackageComponent implements OnInit {
       address: ['', Validators.compose([Validators.maxLength(255)])],
       telp: ['', Validators.compose([Validators.maxLength(255)])],
       default: [''],
-      longitude: ['', Validators.compose([Validators.maxLength(100)])],
-      latitude: ['', Validators.compose([Validators.maxLength(100)])],
-      zoom: ['', Validators.compose([Validators.maxLength(5)])],
+      longitude: [null, Validators.compose([Validators.maxLength(100)])],
+      latitude: [null, Validators.compose([Validators.maxLength(100)])],
+      zoom: [7, Validators.compose([Validators.maxLength(5)])],
       description: ['', Validators.compose([Validators.maxLength(255)])],
       used: ['', Validators.compose([Validators.maxLength(255)])],
     });
+  }
+
+  formatDateNow(event: any) {
+    const valDate = {
+      year: event.getFullYear(),
+      month: event.getMonth() + 1,
+      day: event.getDate(),
+    };
+    this.bookdate = { year: valDate.year, month: valDate.month, day: valDate.day };
+    console.log(this.bookdate);
+
+    const valTime = {
+      hour: event.getHours(),
+      minute: event.getMinutes(),
+      second: event.getSeconds(),
+    };
+    this.booktime = { hour: valTime.hour, minute: valTime.minute, second: valTime.second };
+    console.log(this.booktime);
   }
 
   setCurrentTab(tab: string) {
@@ -349,73 +340,64 @@ export class PackageComponent implements OnInit {
 
   private dataList(params: PaginationContext): void {
     this.configuration.isLoading = true;
-    this.PackageService.list(params)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((response: any) => {
-        // count malang or surabaya
-        const malangData = response.data.filter(
-          (data: PackageModel) =>
-            data.city_id === 1 &&
-            data.status_package !== 'Move' &&
-            data.status_package !== 'Cancel' &&
-            data.status_package !== 'Complete'
-        );
-        const surabayaData = response.data.filter(
-          (data: PackageModel) =>
-            data.city_id === 2 &&
-            data.status_package !== 'Move' &&
-            data.status_package !== 'Cancel' &&
-            data.status_package !== 'Complete'
-        );
-        const moveData = response.data.filter((data: PackageModel) => data.status_package === 'Move');
-        const cancelData = response.data.filter((data: PackageModel) => data.status_package === 'Cancel');
-        const historyData = response.data.filter((data: PackageModel) => data.status_package === 'Complete');
-
-        this.dataLengthMalang = malangData.length;
-        this.dataLengthSurabaya = surabayaData.length;
-        this.dataLengthMove = moveData.length;
-        this.dataLengthCancel = cancelData.length;
-        this.dataLengthHistory = historyData.length;
-
-        this.data = malangData;
-        this.dataSurabaya = surabayaData;
-        this.dataMove = moveData;
-        this.dataCancel = cancelData;
-        this.dataHistory = historyData;
-
-        // check other address
-        if (this.data.recipient?.customer?.addresses.length > 0) {
-          this.otherAddressRecipient = this.data.recipient.customer.addresses.find(
-            (val: AddressModel) => val.default === true
-          );
-        }
-
-        // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-        this.pagination.count =
-          this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
-        this.pagination = { ...this.pagination };
-        this.configuration.isLoading = false;
-        this.cdr.detectChanges();
-      });
-  }
-
-  private dataListCustomer(params: PaginationContext, search: string) {
-    this.isLoadingCustomer = true;
-
-    params.search = search;
-
-    this.customerService
+    this.packageService
       .list(params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
-        this.dataLengthCustomer = response.length;
-        this.dataCustomer = response.data;
-        // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-        this.pagination.count =
-          this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
-        this.pagination = { ...this.pagination };
-        this.isLoadingCustomer = false;
-        this.cdr.detectChanges();
+        // count malang or surabaya
+        if (response) {
+          const malangData = response.data.filter(
+            (data: PackageModel) =>
+              data.city_id === 1 &&
+              data.status_package !== 'Move' &&
+              data.status_package !== 'Cancel' &&
+              data.status_package !== 'Complete'
+          );
+          const surabayaData = response.data.filter(
+            (data: PackageModel) =>
+              data.city_id === 2 &&
+              data.status_package !== 'Move' &&
+              data.status_package !== 'Cancel' &&
+              data.status_package !== 'Complete'
+          );
+          const moveData = response.data.filter((data: PackageModel) => data.status_package === 'Move');
+          const cancelData = response.data.filter((data: PackageModel) => data.status_package === 'Cancel');
+          const historyData = response.data.filter((data: PackageModel) => data.status_package === 'Complete');
+
+          this.dataLengthMalang = malangData.length;
+          this.dataLengthSurabaya = surabayaData.length;
+          this.dataLengthMove = moveData.length;
+          this.dataLengthCancel = cancelData.length;
+          this.dataLengthHistory = historyData.length;
+
+          this.data = malangData;
+          this.dataSurabaya = surabayaData;
+          this.dataMove = moveData;
+          this.dataCancel = cancelData;
+          this.dataHistory = historyData;
+
+          console.log(response.data);
+
+          // check default address sender
+          if (response.data?.sender?.customer?.addresses.length > 0) {
+            this.defaultAddressCustomer = response.data.sender.customer.addresses.find(
+              (val: AddressModel) => val.default === true
+            );
+          }
+          console.log(response.data?.recipient?.customer?.addresses);
+          // check default address recipient
+          this.defaultAddressRecipient = response.data?.recipient?.customer?.addresses.find(
+            (val: AddressModel) => val.default === true
+          );
+          console.log(this.defaultAddressRecipient);
+
+          // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
+          this.pagination.count =
+            this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
+          this.pagination = { ...this.pagination };
+          this.configuration.isLoading = false;
+          this.cdr.detectChanges();
+        }
       });
   }
 
@@ -439,7 +421,7 @@ export class PackageComponent implements OnInit {
 
   searchDataCustomer = (text$: Observable<string>) =>
     text$.pipe(
-      debounceTime(200),
+      debounceTime(500),
       distinctUntilChanged(),
       tap(() => (this.searching = true)),
       switchMap((term) =>
@@ -463,22 +445,119 @@ export class PackageComponent implements OnInit {
             })
           )
       ),
-      tap(() => ((this.searching = false), (this.modelAddress = '')))
+      tap(() => ((this.searching = false), (this.modelAddressId = '')))
     );
 
-  formatter = (result: { name: string }) => result.name;
   selectAddress() {
     if (this.modelCustomer) {
       const getdAddress = this.modelCustomer?.addresses.find(
-        (val: AddressModel) => val.address_id === Number(this.modelAddress)
+        (val: AddressModel) => val.address_id === Number(this.modelAddressId)
       );
       this.selectedAddress = getdAddress;
       console.log(this.selectedAddress);
     }
   }
 
+  searchDataRecipient = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => (this.searchingRecipient = true)),
+      switchMap((term) =>
+        this.customerService
+          .list({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+          })
+          .pipe(
+            tap(() => (this.searchFailedRecipient = false)),
+            map((response: any) => {
+              if (response) {
+                tap(() => (this.searchingRecipient = false));
+                return response.data.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+              }
+            }),
+            catchError(() => {
+              this.searchFailedRecipient = true;
+              return of([]);
+            })
+          )
+      ),
+      tap(() => ((this.searchingRecipient = false), (this.modelAddressIdRecipient = '')))
+    );
+
+  setDefaultSelectionRecipient(value: any) {
+    this.modelRecipient?.addresses.forEach((item: AddressModel) => {
+      console.log(item.address_id);
+      console.log(value);
+      item.default = item.address_id === Number(value);
+    });
+    console.log(this.modelRecipient?.addresses);
+  }
+
+  findDataRecipientByValue(value: any) {
+    return this.modelRecipient?.addresses.find((val: AddressModel) => val.address_id === Number(value));
+  }
+
+  selectAddressRecipient() {
+    this.setDefaultSelectionRecipient(this.modelAddressIdRecipient);
+    const getdAddress = this.findDataRecipientByValue(this.modelAddressIdRecipient);
+    this.selectedAddressRecipient = getdAddress;
+    console.log(this.selectedAddressRecipient);
+
+    if (this.selectedAddressRecipient) {
+      console.log('prosess update address recipient');
+      const dataAddress = {
+        address_id: this.selectedAddressRecipient.address_id,
+        customer_id: this.selectedAddressRecipient.customer_id,
+        default: this.selectedAddressRecipient.default,
+      };
+      console.log(this.formAddress.value);
+
+      this.isLoading = true;
+      this.packageService
+        .updateAddressDefault(dataAddress)
+        .pipe(
+          finalize(() => {
+            this.form.markAsPristine();
+            this.isLoading = false;
+          }),
+          catchError(() => {
+            this.isLoading = false;
+            this.handlerResponseService.failedResponse('Failed selected address');
+            return of([]);
+          })
+        )
+        .subscribe((response: any) => {
+          console.log('response address');
+          console.log(response);
+          if (response) {
+            this.snackbar.open('Success selected address be default', '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+          }
+        });
+    }
+  }
+
+  formatter = (result: { name: string }) => result.name;
+
   generateSP(event: PackageModel) {
     console.log(event);
+  }
+
+  onDateChange(date: NgbDateStruct): void {
+    this.bookdate = date;
+  }
+
+  onTimehange(time: NgbTimeStruct): void {
+    this.booktime = time;
+  }
+
+  format(date: NgbDateStruct): string {
+    return date ? `${date.day}/${date.month}/${date.year}` : '';
   }
 
   clearForm() {
@@ -497,6 +576,9 @@ export class PackageComponent implements OnInit {
       city = 2;
     }
 
+    const getDate = new Date();
+    this.formatDateNow(getDate);
+
     this.form.patchValue({
       city_id: city,
       category_id: '',
@@ -509,10 +591,52 @@ export class PackageComponent implements OnInit {
   }
 
   dataCreate() {
-    console.log(this.form.value);
+    const valueBookDate = new Date(
+      Date.UTC(
+        this.bookdate.year,
+        this.bookdate.month - 1,
+        this.bookdate.day,
+        this.booktime ? this.booktime.hour : 0,
+        this.booktime ? this.booktime.minute : 0
+      )
+    ).toISOString();
+    console.log(valueBookDate);
+
+    this.form.patchValue({
+      book_date: valueBookDate,
+    });
+
+    const dataCustomert: any = {
+      customer_id: this.modelCustomer?.customer_id,
+    };
+    console.log(dataCustomert);
+
+    const dataReceipt: any = {
+      customer_id: this.modelRecipient?.customer_id,
+    };
+    console.log(dataReceipt);
+
+    // send data to sender, recipient, package
     this.isLoading = true;
-    const catSubscr = this.PackageService.create(this.form.value)
+    this.packageService
+      .senderRecipient(dataCustomert)
       .pipe(
+        switchMap((respCustomer: any) => {
+          console.log('Response from respCustomer:', respCustomer);
+          this.form.patchValue({
+            sender_id: respCustomer.data.sender_id,
+          });
+          return this.packageService.createRecipient(dataReceipt);
+        }),
+        switchMap((respRecipient: any) => {
+          console.log('Response from respRecipient:');
+          console.log(respRecipient);
+          this.form.patchValue({
+            recipient_id: respRecipient.data.recipient_id,
+          });
+          console.log(this.form.value);
+          return this.packageService.edit(this.form.value);
+        }),
         finalize(() => {
           this.form.markAsPristine();
           this.isLoading = false;
@@ -538,10 +662,10 @@ export class PackageComponent implements OnInit {
           this.handlerResponseService.failedResponse(error);
         }
       );
-    this.unsubscribe.push(catSubscr);
   }
 
   async openModalEdit(event: PackageModel) {
+    console.log(event);
     this.isCreate = false;
 
     if (event.request || event.request_description) {
@@ -550,10 +674,41 @@ export class PackageComponent implements OnInit {
       this.isRequest = false;
     }
 
+    const getDate = new Date(event?.book_date);
+    this.formatDateNow(getDate);
+
+    const valueBookDate = new Date(
+      Date.UTC(
+        this.bookdate.year,
+        this.bookdate.month + 1,
+        this.bookdate.day,
+        this.booktime ? this.booktime.hour : 0,
+        this.booktime ? this.booktime.minute : 0
+      )
+    ).toISOString();
+    console.log(valueBookDate);
+
+    this.modelCustomer = event.sender?.customer;
+    const getdAddressCustomer = this.modelCustomer?.addresses.find(
+      (val: AddressModel) => val.customer_id === Number(this.modelCustomer?.customer_id)
+    );
+    this.modelAddressId = getdAddressCustomer?.address_id;
+    console.log(this.modelAddressId);
+
+    this.modelRecipient = event.recipient?.customer;
+    const getdAddressRecipient = this.modelRecipient?.addresses.find(
+      (val: AddressModel) => val.customer_id === Number(this.modelRecipient?.customer_id)
+    );
+    this.modelAddressIdRecipient = getdAddressRecipient?.address_id;
+    console.log(this.modelAddressIdRecipient);
+
+    console.log(this.modelCustomer);
+    console.log(this.modelRecipient);
+
     this.form.patchValue({
       package_id: event.package_id,
-      sender_id: event.sender_id,
-      recipient_id: event.recipient_id,
+      sender_id: event.sender_id ? event.sender_id : this.modelCustomer?.customer_id,
+      recipient_id: event.recipient_id ? event.recipient_id : this.modelRecipient?.customer_id,
       city_id: event.city_id,
       employee_id: event.employee_id,
       category_id: event.category_id ? event.category_id : '',
@@ -573,7 +728,7 @@ export class PackageComponent implements OnInit {
       photo: event.photo,
       print: event.print,
       move_time: event.move_time,
-      book_date: event.book_date,
+      book_date: event.book_date ? event.book_date : valueBookDate,
       send_date: event.send_date,
       check_payment: event.check_payment,
       check_sp: event.check_sp,
@@ -588,10 +743,42 @@ export class PackageComponent implements OnInit {
   }
 
   dataEdit() {
-    console.log(this.form.value);
+    this.form.patchValue({
+      sender_id: this.modelCustomer?.customer_id,
+      recipient_id: this.modelRecipient?.customer_id,
+    });
+
+    const dataCustomert: any = {
+      customer_id: this.modelCustomer?.customer_id,
+    };
+    console.log(dataCustomert);
+
+    const dataReceipt: any = {
+      customer_id: this.modelRecipient?.customer_id,
+    };
+    console.log(dataReceipt);
+
+    // send data to sender, recipient, package
     this.isLoading = true;
-    const catSubscr = this.PackageService.edit(this.form.value)
+    this.packageService
+      .senderRecipient(dataCustomert)
       .pipe(
+        switchMap((respCustomer: any) => {
+          console.log('Response from respCustomer:', respCustomer);
+          this.form.patchValue({
+            sender_id: respCustomer.data.sender_id,
+          });
+          return this.packageService.createRecipient(dataReceipt);
+        }),
+        switchMap((respRecipient: any) => {
+          console.log('Response from respRecipient:');
+          console.log(respRecipient);
+          this.form.patchValue({
+            recipient_id: respRecipient.data.recipient_id,
+          });
+          console.log(this.form.value);
+          return this.packageService.edit(this.form.value);
+        }),
         finalize(() => {
           this.form.markAsPristine();
           this.isLoading = false;
@@ -617,7 +804,37 @@ export class PackageComponent implements OnInit {
           this.handlerResponseService.failedResponse(error);
         }
       );
-    this.unsubscribe.push(catSubscr);
+
+    // console.log(this.form.value);
+    // this.isLoading = true;
+    // const catSubscr = this.packageService.edit(this.form.value)
+    //   .pipe(
+    //     finalize(() => {
+    //       this.form.markAsPristine();
+    //       this.isLoading = false;
+    //     })
+    //   )
+    //   .subscribe(
+    //     async (resp: any) => {
+    //       if (resp) {
+    //         this.snackbar.open(resp.message, '', {
+    //           panelClass: 'snackbar-success',
+    //           duration: 10000,
+    //         });
+
+    //         this.dataList(this.params);
+    //         await this.modalComponent.dismiss();
+    //       } else {
+    //         this.isLoading = false;
+    //       }
+    //     },
+    //     (error: any) => {
+    //       console.log(error);
+    //       this.isLoading = false;
+    //       this.handlerResponseService.failedResponse(error);
+    //     }
+    //   );
+    // this.unsubscribe.push(catSubscr);
   }
 
   // Address
@@ -672,7 +889,7 @@ export class PackageComponent implements OnInit {
   }
 
   async openModalEditAddress(event: AddressModel) {
-    this.isCreate = false;
+    this.isCreateAddress = false;
 
     this.formAddress.patchValue({
       address_id: event.address_id,

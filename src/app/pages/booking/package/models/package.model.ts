@@ -1,7 +1,9 @@
 export class PackageModel {
   package_id!: number;
   sender_id!: number;
+  sender: any;
   recipient_id!: number;
+  recipient: any;
   city_id!: number;
   employee_id!: number;
   category_id!: number;

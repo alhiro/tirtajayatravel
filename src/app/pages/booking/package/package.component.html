@@ -96,7 +96,7 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd hh:mm:ss' }}</span>
+                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss' }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.sender?.customer?.name }}</span>
@@ -108,8 +108,8 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (otherAddressRecipient) {
-                  {{ otherAddressRecipient.address }}
+                  @if (defaultAddressRecipient) {
+                  {{ defaultAddressRecipient.address }}
                   } @else {
                   {{ row.recipient?.customer?.address }}
                   }
@@ -229,7 +229,7 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd hh:mm:ss' }}</span>
+                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss' }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.sender?.customer?.name }}</span>
@@ -241,8 +241,8 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (otherAddressRecipient) {
-                  {{ otherAddressRecipient.address }}
+                  @if ( defaultAddressRecipient) {
+                  {{ defaultAddressRecipient.address }}
                   } @else {
                   {{ row.recipient?.customer?.address }}
                   }
@@ -361,7 +361,7 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd hh:mm:ss' }}</span>
+                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss' }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.sender?.customer?.name }}</span>
@@ -373,8 +373,8 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (otherAddressRecipient) {
-                  {{ otherAddressRecipient.address }}
+                  @if ( defaultAddressRecipient) {
+                  {{ defaultAddressRecipient.address }}
                   } @else {
                   {{ row.recipient?.customer?.address }}
                   }
@@ -438,7 +438,7 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd hh:mm:ss' }}</span>
+                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss' }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.sender?.customer?.name }}</span>
@@ -450,8 +450,8 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (otherAddressRecipient) {
-                  {{ otherAddressRecipient.address }}
+                  @if ( defaultAddressRecipient) {
+                  {{ defaultAddressRecipient.address }}
                   } @else {
                   {{ row.recipient?.customer?.address }}
                   }
@@ -515,7 +515,7 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd hh:mm:ss' }}</span>
+                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss' }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.sender?.customer?.name }}</span>
@@ -527,8 +527,8 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (otherAddressRecipient) {
-                  {{ otherAddressRecipient.address }}
+                  @if ( defaultAddressRecipient) {
+                  {{ defaultAddressRecipient.address }}
                   } @else {
                   {{ row.recipient?.customer?.address }}
                   }
@@ -565,7 +565,7 @@
   <form (ngSubmit)="isCreate ? dataCreate() : dataEdit()" [formGroup]="form" novalidate>
     <div class="d-flex flex-column flex-lg-row">
       <!--begin::Sidebar-->
-      <div class="flex-column flex-lg-row-auto w-lg-250px w-xl-350px">
+      <div class="flex-column flex-lg-row-auto w-lg-350px w-xl-450px">
         <!--begin::Card-->
         <div class="card">
           <!--begin::Card body-->
@@ -573,11 +573,8 @@
             <div class="p-0">
               <div class="d-flex flex-center flex-column pb-2">
                 <!--begin::Book Date Info-->
-                <date-time-picker-custom
-                  [class.is-invalid]="
-                    this.form.controls['book_date'].touched && this.form.controls['book_date'].invalid
-                  "
-                  class="form-control p-1 px-3 full-vh"
+                <!-- <date-time-picker-custom
+                  class="form-control"
                   formControlName="book_date"
                   [meridian]="false"
                   [hourStep]="1"
@@ -585,13 +582,40 @@
                   [spinners]="false"
                   [placeholder]="placeholderTime"
                 >
-                </date-time-picker-custom>
+                </date-time-picker-custom> -->
+
+                <div class="custom-datetime input-group">
+                  <input
+                    readonly
+                    class="form-control"
+                    placeholder="Select book date"
+                    name="dp"
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="bookdate"
+                    ngbDatepicker
+                    [minDate]="minDate"
+                    (click)="datePicker.toggle()"
+                    #datePicker="ngbDatepicker"
+                    (ngModelChange)="onDateChange($event)"
+                  />
+                  <ngb-timepicker
+                    class="custom-datetime"
+                    [hourStep]="1"
+                    [minuteStep]="1"
+                    [meridian]="false"
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="booktime"
+                    [seconds]="false"
+                    [spinners]="false"
+                    (ngModelChange)="onTimehange($event)"
+                  ></ngb-timepicker>
+                </div>
               </div>
               <div class="d-flex flex-center flex-column py-2">
                 <input
                   id="select-customer"
                   type="text"
-                  class="form-control p-1 px-3 full-vh"
+                  class="form-control"
                   [class.is-invalid]="searchFailed"
                   [ngModelOptions]="{ standalone: true }"
                   [(ngModel)]="modelCustomer"
@@ -616,14 +640,14 @@
                 <!--begin::Info-->
                 <!--begin::Info heading-->
                 @if (modelCustomer.addresses) {
-                <label class="d-block">
+                <label class="d-block full-width">
                   <select
-                    class="form-select form-control p-1 px-3 full-vh"
+                    class="form-select form-control"
                     data-kt-select2="true"
                     data-placeholder="Select address"
                     data-allow-clear="true"
                     [ngModelOptions]="{ standalone: true }"
-                    [(ngModel)]="modelAddress"
+                    [(ngModel)]="modelAddressId"
                     (change)="selectAddress()"
                   >
                     <option value="" disabled selected>Select address</option>
@@ -652,20 +676,25 @@
                 <!--begin::Name-->
                 <h4 class="card-title">Choose Sender:</h4>
                 <!--begin::Position-->
-                <div class="mb-4">
+                <div class="mb-1">
                   <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{{ modelCustomer?.name }} </a>
-                  @if (modelCustomer.business) {
-                  <div class="badge badge-lg badge-light-primary d-inline">
-                    {{ modelCustomer.business.name }}
-                  </div>
-                  }
                 </div>
-                @if (selectedAddress) {
-                <div class="mb-9">
-                  <div>Address:</div>
-                  <div>{{ selectedAddress.address }}</div>
+                @if (modelCustomer.company) {
+                <div class="badge badge-lg badge-light-primary d-inline mb-4">
+                  {{ modelCustomer.company?.name }}
                 </div>
                 }
+
+                <div class="mb-9">
+                  <div>Address:</div>
+                  @if (selectedAddress) {
+                  <div>{{ selectedAddress.address }}</div>
+                  } @else if(defaultAddressCustomer) {
+                  <div>{{ defaultAddressCustomer.address }}</div>
+                  } @else {
+                  <div>{{ modelCustomer?.address }}</div>
+                  }
+                </div>
                 <!--end::Position-->
                 <!--end::Name-->
               </div>
@@ -673,19 +702,18 @@
               <!--end::Sender Info-->
               <!--end::Summary-->
 
-              <div class="separator"></div>
-              <hr />
+              <hr class="separator py-2" />
 
               <!--begin::Recipient-->
               <div class="d-flex flex-center flex-column py-2">
                 <input
                   id="select-recipient"
                   type="text"
-                  class="form-control p-1 px-3 full-vh"
-                  [class.is-invalid]="searchFailed"
+                  class="form-control"
+                  [class.is-invalid]="searchFailedRecipient"
                   [ngModelOptions]="{ standalone: true }"
-                  [(ngModel)]="modelCustomer"
-                  [ngbTypeahead]="searchDataCustomer"
+                  [(ngModel)]="modelRecipient"
+                  [ngbTypeahead]="searchDataRecipient"
                   [resultTemplate]="rt"
                   [inputFormatter]="formatter"
                   placeholder="Recipient search"
@@ -694,38 +722,37 @@
                   {{ r.name }}
                 </ng-template>
 
-                @if (searching || modelCustomer == '') {
+                @if (searchingRecipient || modelRecipient == '') {
                 <small class="form-text text-muted">Searching. Please wait...</small>
-                } @if (searchFailed) {
+                } @if (searchFailedRecipient) {
                 <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
                 }
               </div>
 
-              @if (modelCustomer) {
+              @if (modelRecipient) {
               <div class="d-flex flex-center flex-column py-5 pt-2">
                 <!--begin::Info-->
                 <!--begin::Info heading-->
-                @if (modelCustomer.addresses) {
-                <label class="d-block">
+                @if (modelRecipient.addresses) {
+                <label class="d-block full-width">
                   <select
-                    class="form-select form-control p-1 px-3 full-vh"
+                    class="form-select form-control"
                     data-kt-select2="true"
                     data-placeholder="Select address"
                     data-allow-clear="true"
                     [ngModelOptions]="{ standalone: true }"
-                    [(ngModel)]="modelAddress"
-                    (change)="selectAddress()"
+                    [(ngModel)]="modelAddressIdRecipient"
+                    (change)="selectAddressRecipient()"
                   >
                     <option value="" disabled selected>Select address</option>
-                    @for (value of modelCustomer.addresses; track value) {
+                    @for (value of modelRecipient.addresses; track value) {
                     <option [value]="value.address_id">{{ value.address }}</option>
                     }
                   </select>
                 </label>
-
                 <div
                   class="btn btn-primary btn-sm py-1 fs-8 cursor-pointer my-3"
-                  (click)="openModalNewAddress(modelCustomer)"
+                  (click)="openModalNewAddress(modelRecipient)"
                 >
                   Add New Address
                 </div>
@@ -737,25 +764,30 @@
 
               <!--begin::Summary-->
               <!--begin::Sender Info-->
-              @if (modelCustomer) {
+              @if (modelRecipient) {
               <div class="d-flex flex-center flex-column py-5 pt-0">
                 <!--begin::Name-->
-                <h4 class="card-title">Choose Sender:</h4>
+                <h4 class="card-title">Choose Recipient:</h4>
                 <!--begin::Position-->
-                <div class="mb-4">
-                  <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{{ modelCustomer?.name }} </a>
-                  @if (modelCustomer.business) {
-                  <div class="badge badge-lg badge-light-primary d-inline">
-                    {{ modelCustomer.business.name }}
-                  </div>
-                  }
+                <div class="mb-1">
+                  <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{{ modelRecipient?.name }} </a>
                 </div>
-                @if (selectedAddress) {
-                <div class="mb-9">
-                  <div>Address:</div>
-                  <div>{{ selectedAddress.address }}</div>
+                @if (modelRecipient.company) {
+                <div class="badge badge-lg badge-light-primary d-inline mb-4">
+                  {{ modelRecipient.company?.name }}
                 </div>
                 }
+
+                <div>Address:</div>
+                <div class="mb-9">
+                  @if (selectedAddressRecipient) {
+                  <div>{{ selectedAddressRecipient.address }}</div>
+                  } @else if(defaultAddressRecipient) {
+                  <div>{{ defaultAddressRecipient.address }}</div>
+                  } @else {
+                  <div>{{ modelRecipient?.address }}</div>
+                  }
+                </div>
                 <!--end::Position-->
                 <!--end::Name-->
               </div>

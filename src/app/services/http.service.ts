@@ -11,6 +11,8 @@ import { CarModel } from '@app/pages/master/car/models/car.model';
 import { CustomerModel } from '@app/pages/master/customer/models/customer.model';
 import { AddressModel } from '@app/pages/master/customer/models/address.model';
 import { PackageModel } from '@app/pages/booking/package/models/package.model';
+import { RecipientModel } from '@app/pages/booking/package/models/recipient.model';
+import { SenderModel } from '@app/pages/booking/package/models/sender.model';
 
 @Injectable({
   providedIn: 'root',
@@ -143,6 +145,30 @@ export class HttpService {
       office: param.office,
     };
     return this.commonApi.post('/package/create', body) as Observable<any>;
+  }
+
+  senderCreate(param: SenderModel): Observable<any> {
+    const body = {
+      customer_id: param.customer_id,
+      package_id: param.package_id,
+      date: param.date,
+      time: param.time,
+    };
+    return this.commonApi.post('/sender/create', body) as Observable<any>;
+  }
+
+  recipientCreate(param: RecipientModel): Observable<any> {
+    const body = {
+      customer_id: param.customer_id,
+      package_id: param.package_id,
+      date: param.date,
+      time: param.time,
+      sign: param.sign,
+      user_payment: param.user_payment,
+      date_payment: param.date_payment,
+      received_by: param.received_by,
+    };
+    return this.commonApi.post('/recipient/create', body) as Observable<any>;
   }
 
   // MASTER
@@ -280,6 +306,16 @@ export class HttpService {
       description: param.description,
       used: param.used,
     };
+    return this.commonApi.put('/address/update', body) as Observable<any>;
+  }
+
+  customerEditAddresDefault(param: any): Observable<any> {
+    const body = {
+      address_id: param.address_id,
+      customer_id: param.customer_id,
+      default: param.default,
+    };
+
     return this.commonApi.put('/address/update', body) as Observable<any>;
   }
 
