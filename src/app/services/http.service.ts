@@ -13,6 +13,7 @@ import { AddressModel } from '@app/pages/master/customer/models/address.model';
 import { PackageModel } from '@app/pages/booking/package/models/package.model';
 import { RecipientModel } from '@app/pages/booking/package/models/recipient.model';
 import { SenderModel } from '@app/pages/booking/package/models/sender.model';
+import { GoSendModel } from '@app/pages/booking/package/models/gosend';
 
 @Injectable({
   providedIn: 'root',
@@ -171,6 +172,47 @@ export class HttpService {
     return this.commonApi.post('/recipient/create', body) as Observable<any>;
   }
 
+  SpEdit(param: GoSendModel): Observable<any> {
+    const body = {
+      go_send_id: param.go_send_id,
+      employee_id: param.employee_id,
+      car_id: param.car_id,
+      city_id: param.city_id,
+      package_id: param.package_id,
+      telp: param.telp,
+      send_time: param.send_time,
+      send_date: param.send_date,
+      sp_number: param.sp_number,
+      sp_package: param.sp_package,
+      sp_passenger: param.sp_passenger,
+      bsd: param.bsd,
+      bsd_passenger: param.bsd_passenger,
+      box: param.box,
+      bsd_box: param.bsd_box,
+    };
+    return this.commonApi.put('/go-send/update', body) as Observable<any>;
+  }
+
+  spCreate(param: GoSendModel): Observable<any> {
+    const body = {
+      employee_id: param.employee_id,
+      car_id: param.car_id,
+      city_id: param.city_id,
+      package_id: param.package_id,
+      telp: param.telp,
+      send_time: param.send_time,
+      send_date: param.send_date,
+      sp_number: param.sp_number,
+      sp_package: param.sp_package,
+      sp_passenger: param.sp_passenger,
+      bsd: param.bsd,
+      bsd_passenger: param.bsd_passenger,
+      box: param.box,
+      bsd_box: param.bsd_box,
+    };
+    return this.commonApi.post('/go-send/create', body) as Observable<any>;
+  }
+
   // MASTER
   // Category
   categoryAll(): Observable<any> {
@@ -220,7 +262,9 @@ export class HttpService {
 
   // Employee
   employeeList(param: PaginationContext): Observable<any> {
-    return this.commonApi.get('/employee/list?limit=' + param.limit + '&page=' + param.page) as Observable<any>;
+    return this.commonApi.get(
+      '/employee/list?limit=' + param.limit + '&page=' + param.page + '&search=' + param.search
+    ) as Observable<any>;
   }
 
   employeeEdit(param: EmployeeyModel): Observable<any> {
@@ -337,7 +381,9 @@ export class HttpService {
 
   // Car
   carList(param: PaginationContext): Observable<any> {
-    return this.commonApi.get('/car/list?limit=' + param.limit + '&page=' + param.page) as Observable<any>;
+    return this.commonApi.get(
+      '/car/list?limit=' + param.limit + '&page=' + param.page + '&search=' + param.search
+    ) as Observable<any>;
   }
 
   carEdit(param: CarModel): Observable<any> {

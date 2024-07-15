@@ -108,11 +108,9 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (defaultAddressRecipient) {
-                  {{ defaultAddressRecipient.address }}
-                  } @else {
-                  {{ row.recipient?.customer?.address }}
-                  }
+                  @for (value of row.recipient?.customer?.addresses; track value) { @if (value.default == true) {
+                  {{ value.address }}
+                  } }
                 </span>
               </td>
               <td>
@@ -143,7 +141,7 @@
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
                   title="Generate SP"
-                  (click)="generateSP(row)"
+                  (click)="isCreateSP ? openModalNewSP(row) : openModalEditSP(row)"
                 >
                   <app-keenicon name="document" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
@@ -276,7 +274,7 @@
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
                   title="Generate SP"
-                  (click)="generateSP(row)"
+                  (click)="isCreateSP ? openModalNewSP(row) : openModalEditSP(row)"
                 >
                   <app-keenicon name="document" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
@@ -560,7 +558,7 @@
 </div>
 <!-- begin::Body -->
 
-<!-- begin:: Modal Edit -->
+<!-- begin:: Modal Package -->
 <app-modal-xl #modal [modalConfig]="isCreate ? modalConfigCreate : modalConfigEdit">
   <form (ngSubmit)="isCreate ? dataCreate() : dataEdit()" [formGroup]="form" novalidate>
     <div class="d-flex flex-column flex-lg-row">
@@ -628,7 +626,7 @@
                   {{ r.name }}
                 </ng-template>
 
-                @if (searching || modelCustomer == '') {
+                @if (searching) {
                 <small class="form-text text-muted">Searching. Please wait...</small>
                 } @if (searchFailed) {
                 <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
@@ -683,10 +681,10 @@
                 <div class="badge badge-lg badge-light-primary d-inline mb-4">
                   {{ modelCustomer.company?.name }}
                 </div>
-                }
+                } @else { }
 
+                <div>Address:</div>
                 <div class="mb-9">
-                  <div>Address:</div>
                   @if (selectedAddress) {
                   <div>{{ selectedAddress.address }}</div>
                   } @else if(defaultAddressCustomer) {
@@ -722,7 +720,7 @@
                   {{ r.name }}
                 </ng-template>
 
-                @if (searchingRecipient || modelRecipient == '') {
+                @if (searchingRecipient) {
                 <small class="form-text text-muted">Searching. Please wait...</small>
                 } @if (searchFailedRecipient) {
                 <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
@@ -1157,3 +1155,135 @@
 </app-modal>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
 <!-- end:: Modal address -->
+
+<!-- begin:: Modal SP -->
+<app-modal #modalSP [modalConfig]="isCreateSP ? modalConfigCreateSP : modalConfigEditSP">
+  <form (ngSubmit)="isCreateSP ? dataCreateSP() : dataEditSP()" [formGroup]="formSP" novalidate>
+    <div class="m-3">
+      <label class="d-block mb-4">
+        <input
+          id="select-employee"
+          type="text"
+          class="form-control"
+          [class.is-invalid]="searchFailed"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="modelEmployee"
+          [ngbTypeahead]="searchDataEmployee"
+          [resultTemplate]="rt"
+          [inputFormatter]="formatter"
+          placeholder="Employee search"
+        />
+        <ng-template #rt let-r="result" let-t="term">
+          {{ r.name }}
+        </ng-template>
+
+        @if (searchingEmployee || modelEmployee == '') {
+        <small class="form-text text-muted">Searching. Please wait...</small>
+        } @if (searchFailedEmployee) {
+        <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+        } @if (modelEmployee) {
+        <!--begin::Details toggle-->
+        <div class="d-flex flex-stack fs-4 py-3">
+          <div
+            class="fw-bold rotate collapsible"
+            role="button"
+            aria-expanded="false"
+            aria-controls="kt_user_view_details"
+          >
+            Details
+          </div>
+        </div>
+        <!--end::Details toggle-->
+
+        <div class="separator"></div>
+
+        <!--begin::Details content-->
+        <div id="kt_user_view_details" class="collapse show">
+          <div class="pb-5 fs-6">
+            <div class="fw-bold mt-5">Name</div>
+            <div class="text-gray-600">{{ modelEmployee?.name }}</div>
+            <div class="fw-bold mt-5">Telp</div>
+            <div class="text-gray-600">{{ modelEmployee?.telp }}</div>
+            <div class="fw-bold mt-5">Photo</div>
+            <!-- <div class="text-gray-600">
+                  <img class="full-width" src="../../../../assets/media/avatars/300-1.jpg"/>
+                </div> -->
+          </div>
+        </div>
+        }
+        <!--end::Details content-->
+      </label>
+      <label class="d-block mb-4">
+        <input
+          id="select-car"
+          type="text"
+          class="form-control"
+          [class.is-invalid]="searchFailed"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="modelCar"
+          [ngbTypeahead]="searchDataCar"
+          [resultTemplate]="rt"
+          [inputFormatter]="formatter"
+          placeholder="Car search"
+        />
+        <ng-template #rt let-r="result" let-t="term">
+          {{ r.name }}
+        </ng-template>
+
+        @if (searchingCar || modelCar == '') {
+        <small class="form-text text-muted">Searching. Please wait...</small>
+        } @if (searchFailedCar) {
+        <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+        } @if (modelCar) {
+        <!--begin::Details toggle-->
+        <div class="d-flex flex-stack fs-4 py-3">
+          <div
+            class="fw-bold rotate collapsible"
+            role="button"
+            aria-expanded="false"
+            aria-controls="kt_user_view_details"
+          >
+            Details
+          </div>
+        </div>
+        <!--end::Details toggle-->
+
+        <div class="separator"></div>
+
+        <!--begin::Details content-->
+        <div id="kt_user_view_details" class="collapse show">
+          <div class="pb-5 fs-6">
+            <div class="fw-bold mt-5">Name</div>
+            <div class="text-gray-600">{{ this.modelCar?.name }}</div>
+            <div class="fw-bold mt-5">Plat Number</div>
+            <div class="text-gray-600">{{ this.modelCar?.number_plat }}</div>
+            <div class="fw-bold mt-5">Car Number</div>
+            <div class="text-gray-600">{{ this.modelCar?.car_number }}</div>
+            <div class="fw-bold mt-5">Photo</div>
+            <!-- <div class="text-gray-600">
+                  <img class="full-width" src="../../../../assets/media/stock/600x400/img-10.jpg"/>
+                </div> -->
+          </div>
+        </div>
+        }
+        <!--end::Details content-->
+      </label>
+    </div>
+    <div class="mt-10">
+      <button class="btn btn-primary w-100" type="submit" [disabled]="form.invalid || isLoading">
+        <!--begin::Spinner-->
+        <span
+          class="translate-middle-y lh-0 me-1"
+          data-kt-search-element="spinner"
+          [ngClass]="isLoading ? '' : 'd-none'"
+        >
+          <span class="spinner-border h-15px w-15px align-middle text-gray-500"></span>
+        </span>
+        <!--end::Spinner-->
+        <span translate>Submit</span>
+      </button>
+    </div>
+  </form>
+</app-modal>
+<!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
+<!-- end:: Modal sp -->

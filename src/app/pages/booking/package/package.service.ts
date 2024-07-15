@@ -6,6 +6,7 @@ import { PackageModel } from './models/package.model';
 import { RecipientModel } from './models/recipient.model';
 import { SenderModel } from './models/sender.model';
 import { AddressModel } from '@app/pages/master/customer/models/address.model';
+import { GoSendModel } from './models/gosend';
 
 @Injectable({
   providedIn: 'root',
@@ -81,6 +82,28 @@ export class PackageService {
 
   updateAddressDefault(context: any): Observable<any> {
     return this.httpService.customerEditAddresDefault(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
+  editSP(context: GoSendModel): Observable<RecipientModel> {
+    return this.httpService.SpEdit(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
+  createSP(context: any): Observable<any> {
+    return this.httpService.spCreate(context).pipe(
       map((result) => {
         if (!result) {
           return result;

@@ -5,9 +5,11 @@ export class PackageModel {
   recipient_id!: number;
   recipient: any;
   city_id!: number;
+  city: any;
   employee_id!: number;
   category_id!: number;
   go_send_id!: number;
+  go_send: any;
   description!: string;
   cost!: number;
   discount!: number;
@@ -33,6 +35,7 @@ export class PackageModel {
   taking_by!: string;
   taking_status!: boolean;
   office!: string;
+  isCreateSP!: boolean;
 
   setPackage(_packages: unknown) {
     const packages = _packages as PackageModel;
@@ -40,7 +43,7 @@ export class PackageModel {
     this.sender_id = packages.sender_id;
     this.recipient_id = packages.recipient_id;
     this.city_id = packages.city_id;
-    this.employee_id = packages.employee_id;
+    (this.city = packages.city), (this.employee_id = packages.employee_id);
     this.category_id = packages.category_id;
     this.go_send_id = packages.go_send_id;
     this.description = packages.description || '';

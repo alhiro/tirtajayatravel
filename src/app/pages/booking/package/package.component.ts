@@ -32,6 +32,9 @@ import { CustomerService } from '@app/pages/master/customer/customer.service';
 import { CategoryService } from '@app/pages/master/category/category.service';
 import { NgbDateStruct, NgbDropdown, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { RecipientModel } from './models/recipient.model';
+import { GoSendModel } from './models/gosend';
+import { EmployeeService } from '@app/pages/master/employee/employee.service';
+import { CarService } from '@app/pages/master/car/car.service';
 
 interface EventObject {
   event: string;
@@ -52,6 +55,7 @@ export class PackageComponent implements OnInit {
   public columns!: Columns[];
   public defaultAddressCustomer: any;
   public defaultAddressRecipient: any;
+  public dataRow: any;
   public data: any;
   public dataCustomer: any;
   public dataSurabaya: any;
@@ -72,8 +76,11 @@ export class PackageComponent implements OnInit {
   public dataLengthHistory!: number;
   public dataLengthCustomer!: number;
   public toggledRows = new Set<number>();
+
   public isCreate = false;
   public isCreateAddress = false;
+  public isCreateSP!: boolean;
+
   public isRequest!: boolean;
   public selectedAddress: any;
   public selectedAddressRecipient: any;
@@ -84,10 +91,16 @@ export class PackageComponent implements OnInit {
   public modelAddressId: any;
   public modelAddressRecipient: any;
   public modelAddressIdRecipient: any;
+  public modelEmployee: any;
+  public modelCar: any;
   public searching = false;
   public searchingRecipient = false;
+  public searchingEmployee = false;
+  public searchingCar = false;
   public searchFailed = false;
   public searchFailedRecipient = false;
+  public searchFailedEmployee = false;
+  public searchFailedCar = false;
 
   public configuration: Config = { ...DefaultConfig };
 
@@ -106,6 +119,7 @@ export class PackageComponent implements OnInit {
 
   form!: FormGroup;
   formAddress!: FormGroup;
+  formSP!: FormGroup;
   isLoading = false;
   isLoadingCustomer = false;
 
@@ -114,6 +128,9 @@ export class PackageComponent implements OnInit {
   }
   get fa() {
     return this.formAddress.controls;
+  }
+  get fsp() {
+    return this.formSP.controls;
   }
 
   modalConfigCreate: ModalConfig = {
@@ -132,12 +149,23 @@ export class PackageComponent implements OnInit {
     closeButtonLabel: 'Cancel',
   };
   modalConfigEditAddress: ModalConfig = {
-    modalTitle: 'Create Address',
+    modalTitle: 'Edit Address',
+    dismissButtonLabel: 'Submit',
+    closeButtonLabel: 'Cancel',
+  };
+  modalConfigCreateSP: ModalConfig = {
+    modalTitle: 'Create SP',
+    dismissButtonLabel: 'Submit',
+    closeButtonLabel: 'Cancel',
+  };
+  modalConfigEditSP: ModalConfig = {
+    modalTitle: 'Edit SP',
     dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
   @ViewChild('modal') private modalComponent!: ModalXlComponent;
   @ViewChild('modalAddress') private modalComponentAddress!: ModalComponent;
+  @ViewChild('modalSP') private modalComponentSP!: ModalComponent;
 
   @Input() cssClass!: '';
   currentTab = 'Malang';
@@ -154,6 +182,8 @@ export class PackageComponent implements OnInit {
     private packageService: PackageService,
     private customerService: CustomerService,
     private categoryService: CategoryService,
+    private employeeService: EmployeeService,
+    private carService: CarService,
     private formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
@@ -271,6 +301,24 @@ export class PackageComponent implements OnInit {
       description: ['', Validators.compose([Validators.maxLength(255)])],
       used: ['', Validators.compose([Validators.maxLength(255)])],
     });
+
+    this.formSP = this.formBuilder.group({
+      go_send_id: '',
+      employee_id: '',
+      car_id: '',
+      city_id: '',
+      package_id: '',
+      telp: '',
+      send_time: '',
+      send_date: '',
+      sp_number: '',
+      sp_package: '',
+      sp_passenger: '',
+      bsd: '',
+      bsd_passenger: '',
+      box: '',
+      bsd_box: '',
+    });
   }
 
   formatDateNow(event: any) {
@@ -321,6 +369,9 @@ export class PackageComponent implements OnInit {
     console.log('click table event');
     console.log($event.event);
     console.log($event.value);
+
+    this.dataRow = $event.value.row;
+
     if ($event.event === 'onPagination') {
       this.parseEvent($event);
     }
@@ -376,20 +427,16 @@ export class PackageComponent implements OnInit {
           this.dataCancel = cancelData;
           this.dataHistory = historyData;
 
-          console.log(response.data);
-
-          // check default address sender
-          if (response.data?.sender?.customer?.addresses.length > 0) {
-            this.defaultAddressCustomer = response.data.sender.customer.addresses.find(
-              (val: AddressModel) => val.default === true
-            );
-          }
-          console.log(response.data?.recipient?.customer?.addresses);
-          // check default address recipient
-          this.defaultAddressRecipient = response.data?.recipient?.customer?.addresses.find(
-            (val: AddressModel) => val.default === true
-          );
-          console.log(this.defaultAddressRecipient);
+          // set gosend empty or not
+          const createSP = response.data;
+          createSP.forEach((val: any) => {
+            if (val.go_send_id != null) {
+              return (val.isCreateSP = false);
+            } else {
+              return (val.isCreateSP = true);
+            }
+          });
+          console.log(createSP);
 
           // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
           this.pagination.count =
@@ -418,6 +465,65 @@ export class PackageComponent implements OnInit {
   //       }),
   //       tap(() => (this.searchFailed = false)),
   //   );
+
+  searchDataEmployee = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => (this.searchingEmployee = true)),
+      switchMap((term) =>
+        this.employeeService
+          .list({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+          })
+          .pipe(
+            tap(() => (this.searchFailedEmployee = false)),
+            map((response: any) => {
+              if (response) {
+                const kurir = response.data.filter((val: any) => val.level_id === 5);
+                tap(() => (this.searchingEmployee = false));
+                return kurir.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+              }
+            }),
+            catchError(() => {
+              this.searchFailedEmployee = true;
+              return of([]);
+            })
+          )
+      ),
+      tap(() => (this.searchingEmployee = false))
+    );
+
+  searchDataCar = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => (this.searchingCar = true)),
+      switchMap((term) =>
+        this.carService
+          .list({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+          })
+          .pipe(
+            tap(() => (this.searchFailedCar = false)),
+            map((response: any) => {
+              if (response) {
+                tap(() => (this.searchingCar = false));
+                return response.data.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+              }
+            }),
+            catchError(() => {
+              this.searchFailedCar = true;
+              return of([]);
+            })
+          )
+      ),
+      tap(() => ((this.searching = false), (this.modelAddressId = '')))
+    );
 
   searchDataCustomer = (text$: Observable<string>) =>
     text$.pipe(
@@ -520,7 +626,7 @@ export class PackageComponent implements OnInit {
         .updateAddressDefault(dataAddress)
         .pipe(
           finalize(() => {
-            this.form.markAsPristine();
+            this.formAddress.markAsPristine();
             this.isLoading = false;
           }),
           catchError(() => {
@@ -544,8 +650,10 @@ export class PackageComponent implements OnInit {
 
   formatter = (result: { name: string }) => result.name;
 
-  generateSP(event: PackageModel) {
+  async generateSP(event: PackageModel) {
     console.log(event);
+
+    return await this.modalComponentSP.open();
   }
 
   onDateChange(date: NgbDateStruct): void {
@@ -568,6 +676,10 @@ export class PackageComponent implements OnInit {
     this.isCreate = true;
     this.isRequest = false;
     this.clearForm();
+    this.modelCustomer = '';
+    this.modelAddressId = '';
+    this.modelRecipient = '';
+    this.modelAddressIdRecipient = '';
 
     let city: any = '';
     if (this.currentTab === 'Malang') {
@@ -861,7 +973,7 @@ export class PackageComponent implements OnInit {
       .createAddress(this.formAddress.value)
       .pipe(
         finalize(() => {
-          this.form.markAsPristine();
+          this.formAddress.markAsPristine();
           this.isLoading = false;
         })
       )
@@ -915,7 +1027,7 @@ export class PackageComponent implements OnInit {
       .editAddress(this.formAddress.value)
       .pipe(
         finalize(() => {
-          this.form.markAsPristine();
+          this.formAddress.markAsPristine();
           this.isLoading = false;
         })
       )
@@ -940,5 +1052,170 @@ export class PackageComponent implements OnInit {
         }
       );
     this.unsubscribe.push(catSubscr);
+  }
+
+  // SP
+  clearFormSP() {
+    this.formSP.reset();
+  }
+
+  async openModalNewSP(event: PackageModel) {
+    console.log(event);
+    // this.isCreateSP = true;
+    this.isCreateSP = event.isCreateSP;
+    console.log(this.isCreateSP);
+
+    this.clearFormSP();
+
+    let city: any = '';
+    let formatSP = '';
+    if (this.currentTab === 'Malang') {
+      city = 1;
+      formatSP = event.resi_number.replace(/[a-zA-Z]+/g, 'MPKT');
+    } else if (this.currentTab === 'Surabaya') {
+      city = 2;
+      formatSP = event.resi_number.replace(/[a-zA-Z]+/g, 'SPKT');
+    }
+    console.log(formatSP);
+
+    this.formSP.patchValue({
+      package_id: event.package_id,
+      employee_id: this.modelEmployee?.employee_id,
+      car_id: this.modelCar?.car_id,
+      city_id: city,
+      send_date: event.book_date,
+      telp: this.modelEmployee?.telp,
+      sp_package: formatSP,
+    });
+
+    return await this.modalComponentSP.open();
+  }
+
+  dataCreateSP() {
+    console.log(this.isCreateSP);
+    console.log(this.formSP.value);
+
+    // send data to gosend, package
+    this.isLoading = true;
+    this.packageService
+      .createSP(this.formSP.value)
+      .pipe(
+        switchMap((resp: any) => {
+          console.log('Response from sp:');
+          console.log(resp);
+          this.form.patchValue({
+            package_id: resp.data?.package_id,
+            go_send_id: resp.data?.go_send_id,
+          });
+          return this.packageService.edit(this.form.value);
+        }),
+        finalize(() => {
+          this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponentSP.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  async openModalEditSP(event: GoSendModel) {
+    console.log(event);
+    // this.isCreateSP = false;
+    this.isCreateSP = event.isCreateSP;
+    console.log(this.isCreateSP);
+
+    let city: any = '';
+    let formatSP = '';
+    if (this.currentTab === 'Malang') {
+      city = 1;
+      formatSP = event.resi_number.replace(/[a-zA-Z]+/g, 'MPKT');
+    } else if (this.currentTab === 'Surabaya') {
+      city = 2;
+      formatSP = event.resi_number.replace(/[a-zA-Z]+/g, 'SPKT');
+    }
+    console.log(formatSP);
+
+    this.formSP.patchValue({
+      go_send_id: event.go_send.go_send_id,
+      employee_id: this.modelEmployee?.employee_id,
+      car_id: this.modelCar?.car_id,
+      city_id: city,
+      package_id: event.go_send.package_id,
+      telp: this.modelEmployee?.telp,
+      send_time: event.go_send.send_time,
+      send_date: event.go_send.send_date,
+      sp_number: event.go_send.sp_number,
+      sp_package: formatSP,
+      sp_passenger: event.go_send.sp_passenger,
+      bsd: event.go_send.bsd,
+      bsd_passenger: event.go_send.bsd_passenger,
+      box: event.go_send.box,
+      bsd_box: event.go_send.bsd_box,
+    });
+
+    return await this.modalComponentSP.open();
+  }
+
+  dataEditSP() {
+    console.log(this.modelEmployee);
+    console.log(this.modelCar);
+    console.log(this.isCreateSP);
+    console.log(this.formSP.value);
+    // send data to gosend, package
+    this.isLoading = true;
+    this.packageService
+      .editSP(this.formSP.value)
+      .pipe(
+        switchMap((resp: any) => {
+          console.log('Response from sp:');
+          console.log(resp);
+          this.form.patchValue({
+            go_send_id: resp.data.go_send_id,
+          });
+          return this.packageService.edit(this.form.value);
+        }),
+        finalize(() => {
+          this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponentSP.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
   }
 }
