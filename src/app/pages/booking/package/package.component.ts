@@ -318,6 +318,8 @@ export class PackageComponent implements OnInit {
       bsd_passenger: '',
       box: '',
       bsd_box: '',
+      description: [''],
+      status: [''],
     });
   }
 
@@ -482,7 +484,14 @@ export class PackageComponent implements OnInit {
             tap(() => (this.searchFailedEmployee = false)),
             map((response: any) => {
               if (response) {
-                const kurir = response.data.filter((val: any) => val.level_id === 5);
+                let city: any;
+                if (this.currentTab === 'Malang') {
+                  city = 1;
+                } else if (this.currentTab === 'Surabaya') {
+                  city = 2;
+                }
+
+                const kurir = response.data.filter((val: any) => val.level_id === 5 && val.city_id === city);
                 tap(() => (this.searchingEmployee = false));
                 return kurir.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
               }
@@ -1061,6 +1070,8 @@ export class PackageComponent implements OnInit {
     console.log(this.isCreateSP);
 
     this.clearFormSP();
+    this.modelEmployee = '';
+    this.modelCar = '';
 
     let city: any = '';
     let formatSP = '';
@@ -1075,11 +1086,8 @@ export class PackageComponent implements OnInit {
 
     this.formSP.patchValue({
       package_id: event.package_id,
-      employee_id: this.modelEmployee?.employee_id,
-      car_id: this.modelCar?.car_id,
       city_id: city,
       send_date: event.book_date,
-      telp: this.modelEmployee?.telp,
       sp_package: formatSP,
     });
 
@@ -1088,6 +1096,11 @@ export class PackageComponent implements OnInit {
 
   dataCreateSP() {
     console.log(this.isCreateSP);
+
+    this.formSP.patchValue({
+      employee_id: this.modelEmployee?.employee_id,
+      car_id: this.modelCar?.car_id,
+    });
     console.log(this.formSP.value);
 
     // send data to gosend, package
@@ -1099,9 +1112,8 @@ export class PackageComponent implements OnInit {
           console.log('Response from sp:');
           console.log(resp);
           this.form.patchValue({
-            papackage_id: resp.data.package_id,
+            package_id: resp.data.package_id,
             go_send_id: resp.data.go_send_id,
-            employee_id: resp.data.employee_id,
             city_id: resp.data.city_id,
             book_date: resp.data.send_date,
             status_package: 'Delivery',
@@ -1137,35 +1149,43 @@ export class PackageComponent implements OnInit {
 
   async openModalEditSP(event: PackageModel) {
     console.log(event);
-    // this.isCreateSP = false;
-    this.isCreateSP = event.isCreateSP;
-    console.log(this.isCreateSP);
 
-    let city: any = '';
-    let formatSP = '';
-    if (this.currentTab === 'Malang') {
-      city = 1;
-      formatSP = event.resi_number.replace(/[a-zA-Z]+/g, 'MPKT');
-    } else if (this.currentTab === 'Surabaya') {
-      city = 2;
-      formatSP = event.resi_number.replace(/[a-zA-Z]+/g, 'SPKT');
+    if (event) {
+      // this.isCreateSP = false;
+      this.isCreateSP = event.isCreateSP;
+      console.log(this.isCreateSP);
+
+      let city: any = '';
+      let formatSP = '';
+      if (this.currentTab === 'Malang') {
+        city = 1;
+        formatSP = event.resi_number.replace(/[a-zA-Z]+/g, 'MPKT');
+      } else if (this.currentTab === 'Surabaya') {
+        city = 2;
+        formatSP = event.resi_number.replace(/[a-zA-Z]+/g, 'SPKT');
+      }
+      console.log(formatSP);
+
+      this.modelEmployee = event.go_send.employee;
+      this.modelCar = event.go_send.car;
+
+      this.formSP.patchValue({
+        go_send_id: event.go_send_id,
+        city_id: city,
+        package_id: event.package_id,
+        send_time: event.go_send.send_time,
+        send_date: event.book_date,
+        sp_number: event.go_send.sp_number,
+        sp_package: formatSP,
+        sp_passenger: event.go_send.sp_passenger,
+        bsd: event.go_send.bsd,
+        bsd_passenger: event.go_send.bsd_passenger,
+        box: event.go_send.box,
+        bsd_box: event.go_send.bsd_box,
+        description: event.go_send.description,
+        status: event.go_send.status,
+      });
     }
-    console.log(formatSP);
-
-    this.formSP.patchValue({
-      go_send_id: event.go_send.go_send_id,
-      city_id: city,
-      package_id: event.package_id,
-      send_time: event.go_send.send_time,
-      send_date: event.book_date,
-      sp_number: event.go_send.sp_number,
-      sp_package: formatSP,
-      sp_passenger: event.go_send.sp_passenger,
-      bsd: event.go_send.bsd,
-      bsd_passenger: event.go_send.bsd_passenger,
-      box: event.go_send.box,
-      bsd_box: event.go_send.bsd_box,
-    });
 
     return await this.modalComponentSP.open();
   }
@@ -1178,7 +1198,6 @@ export class PackageComponent implements OnInit {
     this.formSP.patchValue({
       employee_id: this.modelEmployee?.employee_id,
       car_id: this.modelCar?.car_id,
-      telp: this.modelEmployee?.telp,
     });
     console.log(this.formSP.value);
 
@@ -1193,7 +1212,6 @@ export class PackageComponent implements OnInit {
           const gosend: any = {
             package_id: resp.data.package_id,
             go_send_id: resp.data.go_send_id,
-            employee_id: resp.data.employee_id,
             city_id: resp.data.city_id,
             book_date: resp.data.send_date,
             status_package: 'Delivery',

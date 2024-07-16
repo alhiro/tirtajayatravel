@@ -102,6 +102,17 @@ export class PackageService {
     );
   }
 
+  listSP(context: PaginationContext): Observable<PackageModel> {
+    return this.httpService.SpList(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   editSP(context: GoSendModel): Observable<RecipientModel> {
     return this.httpService.SpEdit(context).pipe(
       map((result) => {

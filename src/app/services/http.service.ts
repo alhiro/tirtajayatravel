@@ -209,6 +209,12 @@ export class HttpService {
     return this.commonApi.post('/recipient/create', body) as Observable<any>;
   }
 
+  SpList(param: PaginationContext): Observable<any> {
+    return this.commonApi.get(
+      '/go-send/list?limit=' + param.limit + '&page=' + param.page + '&search=' + param.search
+    ) as Observable<any>;
+  }
+
   SpEdit(param: GoSendModel): Observable<any> {
     const body = {
       go_send_id: param.go_send_id,
@@ -226,6 +232,8 @@ export class HttpService {
       bsd_passenger: param.bsd_passenger,
       box: param.box,
       bsd_box: param.bsd_box,
+      description: param.description,
+      status: param.status,
     };
     return this.commonApi.put('/go-send/update', body) as Observable<any>;
   }
@@ -246,6 +254,8 @@ export class HttpService {
       bsd_passenger: param.bsd_passenger,
       box: param.box,
       bsd_box: param.bsd_box,
+      description: param.description,
+      status: param.status,
     };
     return this.commonApi.post('/go-send/create', body) as Observable<any>;
   }

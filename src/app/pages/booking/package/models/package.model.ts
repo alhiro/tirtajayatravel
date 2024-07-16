@@ -1,3 +1,5 @@
+import { GoSendModel } from './gosend';
+
 export class PackageModel {
   package_id!: number;
   sender_id!: number;
@@ -9,7 +11,7 @@ export class PackageModel {
   employee_id!: number;
   category_id!: number;
   go_send_id!: number;
-  go_send: any;
+  go_send!: GoSendModel;
   description!: string;
   cost!: number;
   discount!: number;

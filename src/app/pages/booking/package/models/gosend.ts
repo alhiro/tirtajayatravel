@@ -1,9 +1,16 @@
+import { CarModel } from '@app/pages/master/car/models/car.model';
+import { EmployeeyModel } from '@app/pages/master/employee/models/employee.model';
+import { PackageModel } from './package.model';
+
 export class GoSendModel {
   go_send_id!: number;
   employee_id!: number;
+  employee!: EmployeeyModel;
   car_id!: number;
+  car!: CarModel;
   city_id!: number;
   package_id!: number;
+  packages!: PackageModel;
   telp!: string;
   send_time!: any;
   send_date!: Date;
@@ -17,6 +24,8 @@ export class GoSendModel {
   isCreateSP!: boolean;
   go_send: any;
   resi_number!: string;
+  description!: string;
+  status!: string;
 
   setGoSend(_gosend: unknown) {
     const packages = _gosend as GoSendModel;
@@ -35,5 +44,7 @@ export class GoSendModel {
     this.bsd_passenger = packages.bsd_passenger || '';
     this.box = packages.box || '';
     this.bsd_box = packages.bsd_box || '';
+    this.description = packages.description || '';
+    this.status = packages.status || '';
   }
 }

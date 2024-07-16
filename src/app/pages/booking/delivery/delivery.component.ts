@@ -1,10 +1,23 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { API, APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
-import { Subject, Subscription, finalize, takeUntil } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  Subscription,
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  finalize,
+  map,
+  of,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { EmployeeService } from './delivery.service';
 import { PaginationContext } from '@app/@shared/interfaces/pagination';
 import { HttpService } from '@app/services/http.service';
-import { ModalComponent, ModalConfig } from '@app/_metronic/partials';
+import { ModalComponent, ModalConfig, ModalFullComponent } from '@app/_metronic/partials';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { untilDestroyed } from '@ngneat/until-destroy';
@@ -13,6 +26,10 @@ import { HandlerResponseService } from '@app/services/handler-response/handler-r
 import { LocalService } from '@app/services/local.service';
 import { CategoryService } from '@app/pages/master/category/category.service';
 import { EmployeeyModel } from '@app/pages/master/employee/models/employee.model';
+import { PackageModel } from '../package/models/package.model';
+import { PackageService } from '../package/package.service';
+import { CarService } from '@app/pages/master/car/car.service';
+import { GoSendModel } from '../package/models/gosend';
 
 interface EventObject {
   event: string;
@@ -30,15 +47,35 @@ interface EventObject {
 export class DeliveryComponent implements OnInit, OnDestroy {
   @ViewChild('table') table!: APIDefinition;
   public columns!: Columns[];
+  public columnsPackage!: Columns[];
   public category: any;
-  public data: any;
   public city: any;
   public level: any;
   public dataLength!: number;
   public toggledRows = new Set<number>();
   public isCreate = false;
 
+  public data: any;
+  public dataSurabaya: any;
+  public dataDetail: any;
+  public dataDetailPackages: any;
+  public dataLengthMalang!: number;
+  public dataLengthSurabaya!: number;
+
+  public modelEmployee: any;
+  public modelCar: any;
+  public searching = false;
+  public searchingRecipient = false;
+  public searchingEmployee = false;
+  public searchingCar = false;
+  public searchFailed = false;
+  public searchFailedRecipient = false;
+  public searchFailedEmployee = false;
+  public searchFailedCar = false;
+
   public configuration: Config = { ...DefaultConfig };
+  @Input() cssClass!: '';
+  currentTab = 'Malang';
 
   public pagination = {
     limit: 10,
@@ -54,9 +91,16 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   form!: FormGroup;
+  formSP!: FormGroup;
+
   isLoading = false;
+
   get f() {
     return this.form.controls;
+  }
+
+  get fsp() {
+    return this.formSP.controls;
   }
 
   modalConfigCreate: ModalConfig = {
@@ -69,7 +113,19 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
+  modalConfigEditSP: ModalConfig = {
+    modalTitle: 'Edit Driver',
+    dismissButtonLabel: 'Submit',
+    closeButtonLabel: 'Cancel',
+  };
+  modalConfigDetailSP: ModalConfig = {
+    modalTitle: 'Detail List Packages',
+    // dismissButtonLabel: 'Submit',
+    closeButtonLabel: 'Cancel',
+  };
   @ViewChild('modal') private modalComponent!: ModalComponent;
+  @ViewChild('modalDetail') private modalComponentDetail!: ModalFullComponent;
+  @ViewChild('modalSP') private modalComponentSP!: ModalComponent;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -78,6 +134,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     private readonly cdr: ChangeDetectorRef,
     private categoryService: CategoryService,
     private employeeService: EmployeeService,
+    private packageService: PackageService,
+    private carService: CarService,
     private formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
@@ -87,7 +145,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.dataList(this.params);
+    this.dataListGosend(this.params);
     this.city = this.localService.getCity();
     this.level = this.localService.getPosition();
 
@@ -99,8 +157,20 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       { key: 'name', title: 'Driver' },
       { key: 'telp', title: 'Telp' },
       { key: 'description', title: 'Description' },
-      { key: 'book_date', title: 'Packages' },
+      { key: 'packages', title: 'Packages' },
       { key: 'car', title: 'Car' },
+      { key: 'status', title: 'Status' },
+      { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
+    ];
+
+    this.columnsPackage = [
+      // { key: 'category_sub_id', title: 'No' },
+      { key: 'name', title: 'Driver' },
+      { key: 'telp', title: 'Telp' },
+      { key: 'description', title: 'Description' },
+      { key: 'packages', title: 'Packages' },
+      { key: 'car', title: 'Car' },
+      { key: 'status', title: 'Status' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
   }
@@ -118,11 +188,35 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       active: ['', Validators.compose([Validators.maxLength(5)])],
       log: ['', Validators.compose([Validators.maxLength(255)])],
     });
+
+    this.formSP = this.formBuilder.group({
+      go_send_id: '',
+      employee_id: '',
+      car_id: '',
+      city_id: '',
+      package_id: '',
+      telp: '',
+      description: '',
+      status: '',
+      send_time: '',
+      send_date: '',
+      sp_number: '',
+      sp_package: '',
+      sp_passenger: '',
+      bsd: '',
+      bsd_passenger: '',
+      box: '',
+      bsd_box: '',
+    });
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  setCurrentTab(tab: string) {
+    this.currentTab = tab;
   }
 
   eventEmitted($event: { event: string; value: any }): void {
@@ -140,45 +234,41 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       page: this.pagination.offset,
       search: this.pagination.search,
     }; // see https://github.com/typicode/json-server
-    this.dataList(params);
+    this.dataListGosend(params);
   }
 
-  // private dataCategory(): void {
-  //   this.categoryService
-  //     .all()
-  //     .pipe(
-  //       finalize(() => {
-  //         console.log('get category');
-  //       }),
-  //       takeUntil(this.ngUnsubscribe)
-  //     )
-  //     .subscribe((response: any) => {
-  //       this.category = response.data;
-  //     });
-  // }
-
-  private dataList(params: PaginationContext): void {
+  private dataListGosend(params: PaginationContext): void {
     this.configuration.isLoading = true;
-    this.employeeService
-      .driver(params)
+    this.packageService
+      .listSP(params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
-        this.dataLength = response.length;
-        this.data = response.data;
-        // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-        this.pagination.count =
-          this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
-        this.pagination = { ...this.pagination };
-        this.configuration.isLoading = false;
-        this.cdr.detectChanges();
+        if (response) {
+          const malangData = response.data.filter((data: PackageModel) => data.city_id === 1);
+          const surabayaData = response.data.filter((data: PackageModel) => data.city_id === 2);
+
+          this.dataLengthMalang = malangData.length;
+          this.dataLengthSurabaya = surabayaData.length;
+          this.data = malangData;
+          this.dataSurabaya = surabayaData;
+
+          // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
+          this.pagination.count =
+            this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
+          this.pagination = { ...this.pagination };
+          this.configuration.isLoading = false;
+          this.cdr.detectChanges();
+        }
       });
   }
 
-  print(val: any) {}
+  printSP(val: any) {}
 
-  async openModalView(val: EmployeeyModel) {
-    this.clearForm();
-    return await this.modalComponent.open();
+  async openModalView(val: GoSendModel) {
+    console.log(val);
+    this.dataDetail = val;
+    this.dataDetailPackages = val.packages;
+    return await this.modalComponentDetail.open();
   }
 
   clearForm() {
@@ -210,7 +300,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
               duration: 10000,
             });
 
-            this.dataList(this.params);
+            this.dataListGosend(this.params);
             await this.modalComponent.dismiss();
           } else {
             this.isLoading = false;
@@ -263,7 +353,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
               duration: 10000,
             });
 
-            this.dataList(this.params);
+            this.dataListGosend(this.params);
             await this.modalComponent.dismiss();
           } else {
             this.isLoading = false;
@@ -277,4 +367,152 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       );
     this.unsubscribe.push(catSubscr);
   }
+
+  async openModalEditSP(event: any) {
+    console.log(event);
+
+    this.modelEmployee = event.employee;
+    this.modelCar = event.car;
+
+    this.formSP.patchValue({
+      go_send_id: event.go_send_id,
+      city_id: event.city_id,
+      package_id: event.package_id,
+      send_time: event.send_time,
+      send_date: event.send_date,
+      sp_number: event.sp_number,
+      sp_package: event.sp_package,
+      sp_passenger: event.sp_passenger,
+      bsd: event.bsd,
+      bsd_passenger: event.bsd_passenger,
+      box: event.box,
+      bsd_box: event.bsd_box,
+      description: event.description,
+      status: event.status,
+    });
+
+    return await this.modalComponentSP.open();
+  }
+
+  dataEditSP() {
+    console.log(this.modelEmployee);
+    console.log(this.modelCar);
+
+    this.formSP.patchValue({
+      employee_id: this.modelEmployee?.employee_id,
+      car_id: this.modelCar?.car_id,
+    });
+    console.log(this.formSP.value);
+
+    // send data to gosend, package
+    this.isLoading = true;
+    this.packageService
+      .editSP(this.formSP.value)
+      .pipe(
+        // switchMap((resp: any) => {
+        //   console.log('Response from sp:');
+        //   console.log(resp);
+        //   const gosend: any = {
+        //     package_id: resp.data.package_id,
+        //     go_send_id: resp.data.go_send_id,
+        //     employee_id: resp.data.employee_id,
+        //     city_id: resp.data.city_id,
+        //     book_date: resp.data.send_date,
+        //   };
+        //   return this.packageService.patch(gosend);
+        // }),
+        finalize(() => {
+          this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataListGosend(this.params);
+            await this.modalComponentSP.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  formatter = (result: { name: string }) => result.name;
+
+  searchDataEmployee = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => (this.searchingEmployee = true)),
+      switchMap((term) =>
+        this.employeeService
+          .list({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+          })
+          .pipe(
+            tap(() => (this.searchFailedEmployee = false)),
+            map((response: any) => {
+              if (response) {
+                let city: any;
+                if (this.currentTab === 'Malang') {
+                  city = 1;
+                } else if (this.currentTab === 'Surabaya') {
+                  city = 2;
+                }
+
+                const kurir = response.data.filter((val: any) => val.level_id === 5 && val.city_id === city);
+                tap(() => (this.searchingEmployee = false));
+                return kurir.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+              }
+            }),
+            catchError(() => {
+              this.searchFailedEmployee = true;
+              return of([]);
+            })
+          )
+      ),
+      tap(() => (this.searchingEmployee = false))
+    );
+
+  searchDataCar = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => (this.searchingCar = true)),
+      switchMap((term) =>
+        this.carService
+          .list({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+          })
+          .pipe(
+            tap(() => (this.searchFailedCar = false)),
+            map((response: any) => {
+              if (response) {
+                tap(() => (this.searchingCar = false));
+                return response.data.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+              }
+            }),
+            catchError(() => {
+              this.searchFailedCar = true;
+              return of([]);
+            })
+          )
+      ),
+      tap(() => (this.searching = false))
+    );
 }
