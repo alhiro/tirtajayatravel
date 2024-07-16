@@ -36,6 +36,17 @@ export class PackageService {
     );
   }
 
+  patch(context: PackageModel): Observable<PackageModel> {
+    return this.httpService.packagePatch(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   create(context: PackageModel): Observable<PackageModel> {
     return this.httpService.packageCreate(context).pipe(
       map((result) => {

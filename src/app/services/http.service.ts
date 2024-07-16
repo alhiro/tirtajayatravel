@@ -112,6 +112,43 @@ export class HttpService {
     return this.commonApi.put('/package/update', body) as Observable<any>;
   }
 
+  packagePatch(param: PackageModel): Observable<any> {
+    const body = {
+      package_id: param.package_id,
+      sender_id: param.sender_id,
+      recipient_id: param.recipient_id,
+      city_id: param.city_id,
+      employee_id: param.employee_id,
+      category_id: param.category_id,
+      go_send_id: param.go_send_id,
+      description: param.description,
+      cost: param.cost,
+      discount: param.discount,
+      payment: param.payment,
+      origin_from: param.origin_from,
+      level: param.level,
+      request: param.request,
+      request_description: param.request_description,
+      note: param.note,
+      status: param.status,
+      status_package: param.status_package,
+      resi_number: param.resi_number,
+      photo: param.photo,
+      print: param.print,
+      move_time: param.move_time,
+      book_date: param.book_date,
+      send_date: param.send_date,
+      check_payment: param.check_payment,
+      check_sp: param.check_sp,
+      check_date_sp: param.check_date_sp,
+      taking_time: param.taking_time,
+      taking_by: param.taking_by,
+      taking_status: param.taking_status,
+      office: param.office,
+    };
+    return this.commonApi.patch('/package/update', body) as Observable<any>;
+  }
+
   packageCreate(param: PackageModel): Observable<any> {
     const body = {
       sender_id: param.sender_id,
@@ -261,6 +298,12 @@ export class HttpService {
   }
 
   // Employee
+  driverList(param: PaginationContext): Observable<any> {
+    return this.commonApi.get(
+      '/employee/driver?limit=' + param.limit + '&page=' + param.page + '&search=' + param.search
+    ) as Observable<any>;
+  }
+
   employeeList(param: PaginationContext): Observable<any> {
     return this.commonApi.get(
       '/employee/list?limit=' + param.limit + '&page=' + param.page + '&search=' + param.search

@@ -650,12 +650,6 @@ export class PackageComponent implements OnInit {
 
   formatter = (result: { name: string }) => result.name;
 
-  async generateSP(event: PackageModel) {
-    console.log(event);
-
-    return await this.modalComponentSP.open();
-  }
-
   onDateChange(date: NgbDateStruct): void {
     this.bookdate = date;
   }
@@ -789,17 +783,6 @@ export class PackageComponent implements OnInit {
     const getDate = new Date(event?.book_date);
     this.formatDateNow(getDate);
 
-    const valueBookDate = new Date(
-      Date.UTC(
-        this.bookdate.year,
-        this.bookdate.month + 1,
-        this.bookdate.day,
-        this.booktime ? this.booktime.hour : 0,
-        this.booktime ? this.booktime.minute : 0
-      )
-    ).toISOString();
-    console.log(valueBookDate);
-
     this.modelCustomer = event.sender?.customer;
     const getdAddressCustomer = this.modelCustomer?.addresses.find(
       (val: AddressModel) => val.customer_id === Number(this.modelCustomer?.customer_id)
@@ -819,8 +802,8 @@ export class PackageComponent implements OnInit {
 
     this.form.patchValue({
       package_id: event.package_id,
-      sender_id: event.sender_id ? event.sender_id : this.modelCustomer?.customer_id,
-      recipient_id: event.recipient_id ? event.recipient_id : this.modelRecipient?.customer_id,
+      sender_id: event.sender_id,
+      recipient_id: event.recipient_id,
       city_id: event.city_id,
       employee_id: event.employee_id,
       category_id: event.category_id ? event.category_id : '',
@@ -840,7 +823,7 @@ export class PackageComponent implements OnInit {
       photo: event.photo,
       print: event.print,
       move_time: event.move_time,
-      book_date: event.book_date ? event.book_date : valueBookDate,
+      book_date: event.book_date,
       send_date: event.send_date,
       check_payment: event.check_payment,
       check_sp: event.check_sp,
@@ -855,9 +838,21 @@ export class PackageComponent implements OnInit {
   }
 
   dataEdit() {
+    const valueBookDate = new Date(
+      Date.UTC(
+        this.bookdate.year,
+        this.bookdate.month - 1,
+        this.bookdate.day,
+        this.booktime ? this.booktime.hour : 0,
+        this.booktime ? this.booktime.minute : 0
+      )
+    ).toISOString();
+    console.log(valueBookDate);
+
     this.form.patchValue({
       sender_id: this.modelCustomer?.customer_id,
       recipient_id: this.modelRecipient?.customer_id,
+      book_date: valueBookDate,
     });
 
     const dataCustomert: any = {
@@ -1104,10 +1099,14 @@ export class PackageComponent implements OnInit {
           console.log('Response from sp:');
           console.log(resp);
           this.form.patchValue({
-            package_id: resp.data?.package_id,
-            go_send_id: resp.data?.go_send_id,
+            papackage_id: resp.data.package_id,
+            go_send_id: resp.data.go_send_id,
+            employee_id: resp.data.employee_id,
+            city_id: resp.data.city_id,
+            book_date: resp.data.send_date,
+            status_package: 'Delivery',
           });
-          return this.packageService.edit(this.form.value);
+          return this.packageService.patch(this.form.value);
         }),
         finalize(() => {
           this.form.markAsPristine();
@@ -1136,7 +1135,7 @@ export class PackageComponent implements OnInit {
       );
   }
 
-  async openModalEditSP(event: GoSendModel) {
+  async openModalEditSP(event: PackageModel) {
     console.log(event);
     // this.isCreateSP = false;
     this.isCreateSP = event.isCreateSP;
@@ -1155,13 +1154,10 @@ export class PackageComponent implements OnInit {
 
     this.formSP.patchValue({
       go_send_id: event.go_send.go_send_id,
-      employee_id: this.modelEmployee?.employee_id,
-      car_id: this.modelCar?.car_id,
       city_id: city,
-      package_id: event.go_send.package_id,
-      telp: this.modelEmployee?.telp,
+      package_id: event.package_id,
       send_time: event.go_send.send_time,
-      send_date: event.go_send.send_date,
+      send_date: event.book_date,
       sp_number: event.go_send.sp_number,
       sp_package: formatSP,
       sp_passenger: event.go_send.sp_passenger,
@@ -1178,7 +1174,14 @@ export class PackageComponent implements OnInit {
     console.log(this.modelEmployee);
     console.log(this.modelCar);
     console.log(this.isCreateSP);
+
+    this.formSP.patchValue({
+      employee_id: this.modelEmployee?.employee_id,
+      car_id: this.modelCar?.car_id,
+      telp: this.modelEmployee?.telp,
+    });
     console.log(this.formSP.value);
+
     // send data to gosend, package
     this.isLoading = true;
     this.packageService
@@ -1187,10 +1190,15 @@ export class PackageComponent implements OnInit {
         switchMap((resp: any) => {
           console.log('Response from sp:');
           console.log(resp);
-          this.form.patchValue({
+          const gosend: any = {
+            package_id: resp.data.package_id,
             go_send_id: resp.data.go_send_id,
-          });
-          return this.packageService.edit(this.form.value);
+            employee_id: resp.data.employee_id,
+            city_id: resp.data.city_id,
+            book_date: resp.data.send_date,
+            status_package: 'Delivery',
+          };
+          return this.packageService.patch(gosend);
         }),
         finalize(() => {
           this.form.markAsPristine();
