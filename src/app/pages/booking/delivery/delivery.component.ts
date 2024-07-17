@@ -30,6 +30,7 @@ import { PackageModel } from '../package/models/package.model';
 import { PackageService } from '../package/package.service';
 import { CarService } from '@app/pages/master/car/car.service';
 import { GoSendModel } from '../package/models/gosend';
+import { NavigationExtras, Router } from '@angular/router';
 
 interface EventObject {
   event: string;
@@ -139,7 +140,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
-    private localService: LocalService
+    private localService: LocalService,
+    private router: Router
   ) {
     this.initForm();
   }
@@ -165,13 +167,13 @@ export class DeliveryComponent implements OnInit, OnDestroy {
 
     this.columnsPackage = [
       // { key: 'category_sub_id', title: 'No' },
-      { key: 'name', title: 'Driver' },
-      { key: 'telp', title: 'Telp' },
-      { key: 'description', title: 'Description' },
-      { key: 'packages', title: 'Packages' },
-      { key: 'car', title: 'Car' },
-      { key: 'status', title: 'Status' },
-      { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
+      { key: 'resi_number', title: 'Resi Number' },
+      { key: 'level', title: 'Level' },
+      { key: 'sp_package', title: 'SP' },
+      { key: 'sender_id', title: 'Sender' },
+      { key: 'recipient_id', title: 'Recipient' },
+      { key: 'address', title: 'Address' },
+      { key: 'origin_form', title: 'From' },
     ];
   }
 
@@ -247,6 +249,11 @@ export class DeliveryComponent implements OnInit, OnDestroy {
           const malangData = response.data.filter((data: PackageModel) => data.city_id === 1);
           const surabayaData = response.data.filter((data: PackageModel) => data.city_id === 2);
 
+          // sample filter nested objects
+          // const courses = [1, 6, 3];
+          // const r = response.data.filter(d => d.courses.every(c => courses.includes(c.id)));
+          // console.log(r);
+
           this.dataLengthMalang = malangData.length;
           this.dataLengthSurabaya = surabayaData.length;
           this.data = malangData;
@@ -262,10 +269,21 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       });
   }
 
-  printSP(val: any) {}
+  async printSP(val: any) {
+    // this.router.navigate(['/departure/delivery/printsp', {printsp: JSON.stringify(val)}]);
+    const navigationExtras: NavigationExtras = {
+      state: {
+        data: val,
+      },
+    };
+    this.router.navigate(['/departure/delivery/printsp'], navigationExtras);
+    await this.modalComponentDetail.dismiss();
+    // window.open('departure/delivery/printsp', '_blank');
+  }
 
   async openModalView(val: GoSendModel) {
     console.log(val);
+    console.log(val.packages);
     this.dataDetail = val;
     this.dataDetailPackages = val.packages;
     return await this.modalComponentDetail.open();

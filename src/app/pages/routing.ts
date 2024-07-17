@@ -23,11 +23,14 @@ const Routing: Routes = [
     path: 'passenger/transaction',
     loadChildren: () => import('./booking/package/package.module').then((m) => m.PackageModule),
   },
-
   {
     path: 'departure/delivery',
     loadChildren: () => import('./booking/delivery/delivery.module').then((m) => m.DeliveryModule),
   },
+  // {
+  //   path: 'departure/delivery/printsp',
+  //   loadChildren: () => import('./booking/delivery/printsp/printsp.module').then((m) => m.PrintspModule),
+  // },
 
   // Master
   {

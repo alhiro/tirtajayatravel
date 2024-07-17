@@ -17,6 +17,7 @@ import { ShellModule } from './shell/shell.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LayoutModule } from './_metronic/layout/layout.module';
+import { TableModule } from 'ngx-easy-table';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { LayoutModule } from './_metronic/layout/layout.module';
     NgbModule,
     SharedModule,
     ShellModule,
+    TableModule,
     // HomeModule, <-- change default by metronic theme
     LayoutModule,
     AuthModule,

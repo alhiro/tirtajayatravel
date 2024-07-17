@@ -34,7 +34,7 @@ export class ModalFullComponent {
 
     if (this.modalConfig.shouldDismiss === undefined || (await this.modalConfig.shouldDismiss())) {
       const result = this.modalConfig.onDismiss === undefined || (await this.modalConfig.onDismiss());
-      this.modalRef.dismiss(result);
+      this.modalRef?.dismiss(result);
     }
   }
 }

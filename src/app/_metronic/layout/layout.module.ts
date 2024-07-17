@@ -29,12 +29,18 @@ import { ReportsComponent } from './components/toolbar/reports/reports.component
 import { SaasComponent } from './components/toolbar/saas/saas.component';
 import { SharedModule } from '../shared/shared.module';
 import { Routing } from '@app/pages/routing';
+import { PrintspComponent } from '@app/pages/booking/delivery/printsp/printsp.component';
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
     children: Routing,
+  },
+  {
+    path: 'departure/delivery/printsp',
+    component: PrintspComponent,
+    loadChildren: () => import('../../pages/booking/delivery/printsp/printsp.module').then((m) => m.PrintspModule),
   },
 ];
 
