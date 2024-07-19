@@ -399,29 +399,29 @@ export class PackageComponent implements OnInit {
       .subscribe((response: any) => {
         // count malang or surabaya
         if (response) {
-          const malangData = response.data.filter(
+          const malangData = response.data?.filter(
             (data: PackageModel) =>
               data.city_id === 1 &&
               data.status_package !== 'Move' &&
               data.status_package !== 'Cancel' &&
               data.status_package !== 'Complete'
           );
-          const surabayaData = response.data.filter(
+          const surabayaData = response.data?.filter(
             (data: PackageModel) =>
               data.city_id === 2 &&
               data.status_package !== 'Move' &&
               data.status_package !== 'Cancel' &&
               data.status_package !== 'Complete'
           );
-          const moveData = response.data.filter((data: PackageModel) => data.status_package === 'Move');
-          const cancelData = response.data.filter((data: PackageModel) => data.status_package === 'Cancel');
-          const historyData = response.data.filter((data: PackageModel) => data.status_package === 'Complete');
+          const moveData = response.data?.filter((data: PackageModel) => data.status_package === 'Move');
+          const cancelData = response.data?.filter((data: PackageModel) => data.status_package === 'Cancel');
+          const historyData = response.data?.filter((data: PackageModel) => data.status_package === 'Complete');
 
-          this.dataLengthMalang = malangData.length;
-          this.dataLengthSurabaya = surabayaData.length;
-          this.dataLengthMove = moveData.length;
-          this.dataLengthCancel = cancelData.length;
-          this.dataLengthHistory = historyData.length;
+          this.dataLengthMalang = malangData?.length;
+          this.dataLengthSurabaya = surabayaData?.length;
+          this.dataLengthMove = moveData?.length;
+          this.dataLengthCancel = cancelData?.length;
+          this.dataLengthHistory = historyData?.length;
 
           this.data = malangData;
           this.dataSurabaya = surabayaData;
@@ -431,7 +431,7 @@ export class PackageComponent implements OnInit {
 
           // set gosend empty or not
           const createSP = response.data;
-          createSP.forEach((val: any) => {
+          createSP?.forEach((val: any) => {
             if (val.go_send_id != null) {
               return (val.isCreateSP = false);
             } else {
@@ -731,10 +731,10 @@ export class PackageComponent implements OnInit {
     };
     console.log(dataReceipt);
 
-    // send data to sender, recipient, package
+    // create send data to sender, recipient, package
     this.isLoading = true;
     this.packageService
-      .senderRecipient(dataCustomert)
+      .createSender(dataCustomert)
       .pipe(
         switchMap((respCustomer: any) => {
           console.log('Response from respCustomer:', respCustomer);
@@ -874,10 +874,10 @@ export class PackageComponent implements OnInit {
     };
     console.log(dataReceipt);
 
-    // send data to sender, recipient, package
+    // edit send data to sender, recipient, package
     this.isLoading = true;
     this.packageService
-      .senderRecipient(dataCustomert)
+      .createSender(dataCustomert)
       .pipe(
         switchMap((respCustomer: any) => {
           console.log('Response from respCustomer:', respCustomer);

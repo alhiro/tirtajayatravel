@@ -246,16 +246,16 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
         if (response) {
-          const malangData = response.data.filter((data: PackageModel) => data.city_id === 1);
-          const surabayaData = response.data.filter((data: PackageModel) => data.city_id === 2);
+          const malangData = response.data?.filter((data: PackageModel) => data.city_id === 1);
+          const surabayaData = response.data?.filter((data: PackageModel) => data.city_id === 2);
 
           // sample filter nested objects
           // const courses = [1, 6, 3];
           // const r = response.data.filter(d => d.courses.every(c => courses.includes(c.id)));
           // console.log(r);
 
-          this.dataLengthMalang = malangData.length;
-          this.dataLengthSurabaya = surabayaData.length;
+          this.dataLengthMalang = malangData?.length;
+          this.dataLengthSurabaya = surabayaData?.length;
           this.data = malangData;
           this.dataSurabaya = surabayaData;
 

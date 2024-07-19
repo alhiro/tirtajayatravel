@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
+import { PaginationContext } from '@app/@shared/interfaces/pagination';
 import { HttpService } from '@app/services/http.service';
 import { Observable, map } from 'rxjs';
-import { PaginationContext } from '@app/@shared/interfaces/pagination';
-import { PackageModel } from './models/package.model';
-import { RecipientModel } from './models/recipient.model';
-import { SenderModel } from './models/sender.model';
+import { PassengerModel } from './models/passenger.model';
+import { WaybillModel } from './models/waybill.model';
+import { DestinationModel } from './models/destination';
 import { AddressModel } from '@app/pages/master/customer/models/address.model';
-import { GoSendModel } from './models/gosend';
+import { GoSendModel } from '../package/models/gosend';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PackageService {
+export class PassengerService {
   constructor(private httpService: HttpService) {}
 
-  list(context: PaginationContext): Observable<PackageModel> {
-    return this.httpService.packageList(context).pipe(
+  list(context: PaginationContext): Observable<PassengerModel> {
+    return this.httpService.passengerList(context).pipe(
       map((result) => {
         if (!result) {
           return result;
@@ -25,8 +25,8 @@ export class PackageService {
     );
   }
 
-  edit(context: PackageModel): Observable<PackageModel> {
-    return this.httpService.packageEdit(context).pipe(
+  edit(context: PassengerModel): Observable<PassengerModel> {
+    return this.httpService.passengerEdit(context).pipe(
       map((result) => {
         if (!result) {
           return result;
@@ -36,8 +36,8 @@ export class PackageService {
     );
   }
 
-  patch(context: PackageModel): Observable<PackageModel> {
-    return this.httpService.packagePatch(context).pipe(
+  patch(context: PassengerModel): Observable<PassengerModel> {
+    return this.httpService.passengerPatch(context).pipe(
       map((result) => {
         if (!result) {
           return result;
@@ -47,8 +47,8 @@ export class PackageService {
     );
   }
 
-  create(context: PackageModel): Observable<PackageModel> {
-    return this.httpService.packageCreate(context).pipe(
+  create(context: PassengerModel): Observable<PassengerModel> {
+    return this.httpService.passengerCreate(context).pipe(
       map((result) => {
         if (!result) {
           return result;
@@ -58,8 +58,8 @@ export class PackageService {
     );
   }
 
-  createSender(context: SenderModel): Observable<RecipientModel> {
-    return this.httpService.senderCreate(context).pipe(
+  createWaybill(context: WaybillModel): Observable<WaybillModel> {
+    return this.httpService.waybillCreate(context).pipe(
       map((result) => {
         if (!result) {
           return result;
@@ -69,30 +69,8 @@ export class PackageService {
     );
   }
 
-  createRecipient(context: RecipientModel): Observable<RecipientModel> {
-    return this.httpService.recipientCreate(context).pipe(
-      map((result) => {
-        if (!result) {
-          return result;
-        }
-        return result;
-      })
-    );
-  }
-
-  editSender(context: SenderModel): Observable<RecipientModel> {
-    return this.httpService.senderEdit(context).pipe(
-      map((result) => {
-        if (!result) {
-          return result;
-        }
-        return result;
-      })
-    );
-  }
-
-  editRecipient(context: RecipientModel): Observable<RecipientModel> {
-    return this.httpService.recipientEdit(context).pipe(
+  createDestinationt(context: DestinationModel): Observable<DestinationModel> {
+    return this.httpService.destinationCreate(context).pipe(
       map((result) => {
         if (!result) {
           return result;
@@ -124,7 +102,7 @@ export class PackageService {
     );
   }
 
-  listSP(context: PaginationContext): Observable<PackageModel> {
+  listSP(context: PaginationContext): Observable<PassengerModel> {
     return this.httpService.SpList(context).pipe(
       map((result) => {
         if (!result) {

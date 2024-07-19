@@ -21,7 +21,7 @@ const Routing: Routes = [
   },
   {
     path: 'passenger/transaction',
-    loadChildren: () => import('./booking/package/package.module').then((m) => m.PackageModule),
+    loadChildren: () => import('./booking/passenger/passenger.module').then((m) => m.PassengerModule),
   },
   {
     path: 'departure/delivery',

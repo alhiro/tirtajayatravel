@@ -16,6 +16,9 @@ export class PrintspComponent implements OnInit {
 
   public nowDate!: Date;
 
+  public totalCost: any;
+  public totalKoli: any;
+
   constructor(private router: Router) {}
 
   ngOnInit() {
@@ -44,6 +47,9 @@ export class PrintspComponent implements OnInit {
     const currentState = this.router.lastSuccessfulNavigation;
     this.data = currentState?.extras.state?.['data'];
     this.dataPackages = this.data['packages'];
+    this.totalCost = this.dataPackages.reduce((acc: any, item: any) => acc + item.cost, 0);
+    this.totalKoli = this.dataPackages.reduce((acc: any, item: any) => acc + item.koli, 0);
+    console.log(this.totalCost);
     console.log(this.data);
     console.log(this.dataPackages);
   }
