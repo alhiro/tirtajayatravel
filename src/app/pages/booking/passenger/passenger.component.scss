@@ -1,0 +1,28 @@
+.custom-datetime {
+  // &.input-group {
+  //     padding-left: 5px;
+  //     padding-right: 5px;
+  // }
+
+  button {
+    width: 100%;
+    display: block;
+    text-align: left;
+    background: transparent;
+    box-shadow: none;
+    border: 0;
+    padding: 0 !important;
+    color: #9198ab;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.5;
+
+    // &:after {
+    //     display: none;
+    // }
+  }
+
+  .ngb-tp-input input {
+    padding: 0.25rem !important;
+  }
+}

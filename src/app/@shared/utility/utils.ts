@@ -165,4 +165,72 @@ export class Utils {
 
     return duplicates;
   }
+
+  indonesiaDateFormat(date: Date) {
+    // Get the current date and time in UTC format
+    const currentDate = date;
+    // Convert the UTC date to a string in the format "YYYY-MM-DDTHH:mm:ssZ"
+    const currentDateUTCString = currentDate.toUTCString();
+    console.log('currentDateUTCString ' + currentDateUTCString);
+
+    const globalTimezone = 'Asia/Jakarta';
+    const globalDate = new Date(currentDateUTCString).toLocaleString('en-US', {
+      timeZone: globalTimezone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+    const getDate = new Date(globalDate);
+    console.log('globalDate', getDate);
+    return getDate;
+  }
+}
+
+export function toInteger(value: any): number {
+  return parseInt(`${value}`, 10);
+}
+
+export function toString(value: any): string {
+  return value !== undefined && value !== null ? `${value}` : '';
+}
+
+export function getValueInRange(value: number, max: number, min = 0): number {
+  return Math.max(Math.min(value, max), min);
+}
+
+export function isString(value: any): value is string {
+  return typeof value === 'string';
+}
+
+export function isNumber(value: any): value is number {
+  return !isNaN(toInteger(value));
+}
+
+export function isInteger(value: any): value is number {
+  return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
+}
+
+export function isDefined(value: any): boolean {
+  return value !== undefined && value !== null;
+}
+
+export function padNumber(value: number) {
+  if (isNumber(value)) {
+    return `0${value}`.slice(-2);
+  } else {
+    return '';
+  }
+}
+
+export function regExpEscape(text: any) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
+export function hasClassName(element: any, className: string): boolean {
+  return (
+    element && element.className && element.className.split && element.className.split(/\s+/).indexOf(className) >= 0
+  );
 }

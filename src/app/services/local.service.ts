@@ -174,6 +174,40 @@ export class LocalService {
     },
   ];
 
+  payment = [
+    {
+      status_id: 1,
+      name: 'Bayar Tujuan (CBA)',
+    },
+    {
+      status_id: 2,
+      name: 'Lunas (Kantor)',
+    },
+    {
+      status_id: 3,
+      name: 'Lunas (Transfer)',
+    },
+    {
+      status_id: 4,
+      name: 'Piutang',
+    },
+  ];
+
+  class = [
+    {
+      status_id: 1,
+      name: 'Biasa',
+    },
+    {
+      status_id: 2,
+      name: 'Executif',
+    },
+    {
+      status_id: 3,
+      name: 'Paket',
+    },
+  ];
+
   statusPackage = [
     {
       status_package_id: 1,
@@ -190,6 +224,29 @@ export class LocalService {
     {
       status_package_id: 4,
       name: 'Delivery',
+    },
+    {
+      status_package_id: 5,
+      name: 'Complete',
+    },
+  ];
+
+  statusPassenger = [
+    {
+      status_package_id: 1,
+      name: 'Progress',
+    },
+    {
+      status_package_id: 2,
+      name: 'Move',
+    },
+    {
+      status_package_id: 3,
+      name: 'Cancel',
+    },
+    {
+      status_package_id: 4,
+      name: 'Departure',
     },
     {
       status_package_id: 5,
@@ -223,7 +280,19 @@ export class LocalService {
     return this.status;
   }
 
+  getPayment() {
+    return this.payment;
+  }
+
+  getClass() {
+    return this.class;
+  }
+
   getStatusPackage() {
     return this.statusPackage;
+  }
+
+  getStatusPassenger() {
+    return this.statusPassenger;
   }
 }

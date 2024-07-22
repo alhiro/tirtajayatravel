@@ -206,7 +206,7 @@ export class HttpService {
       date: param.date,
       time: param.time,
     };
-    return this.commonApi.post('/sender/update', body) as Observable<any>;
+    return this.commonApi.put('/sender/update', body) as Observable<any>;
   }
 
   recipientCreate(param: RecipientModel): Observable<any> {
@@ -235,7 +235,7 @@ export class HttpService {
       date_payment: param.date_payment,
       received_by: param.received_by,
     };
-    return this.commonApi.post('/recipient/update', body) as Observable<any>;
+    return this.commonApi.put('/recipient/update', body) as Observable<any>;
   }
 
   SpList(param: PaginationContext): Observable<any> {
@@ -291,115 +291,93 @@ export class HttpService {
 
   // Passenger
   passengerList(param: PaginationContext): Observable<any> {
-    return this.commonApi.get('/passenger/list?limit=' + param.limit + '&page=' + param.page) as Observable<any>;
+    return this.commonApi.get(
+      '/passenger/list?limit=' + param.limit + '&page=' + param.page + '&search=' + param.search
+    ) as Observable<any>;
   }
 
   passengerEdit(param: PassengerModel): Observable<any> {
     const body = {
-      package_id: param.package_id,
-      sender_id: param.sender_id,
-      recipient_id: param.recipient_id,
+      passenger_id: param.passenger_id,
+      waybill_id: param.waybill_id,
+      destination_id: param.destination_id,
       city_id: param.city_id,
       employee_id: param.employee_id,
-      category_id: param.category_id,
       go_send_id: param.go_send_id,
-      description: param.description,
-      cost: param.cost,
+      tariff: param.tariff,
       discount: param.discount,
-      payment: param.payment,
-      origin_from: param.origin_from,
-      level: param.level,
-      request: param.request,
-      request_description: param.request_description,
-      note: param.note,
-      status: param.status,
-      status_package: param.status_package,
-      resi_number: param.resi_number,
-      photo: param.photo,
-      print: param.print,
-      move_time: param.move_time,
+      agent_commission: param.agent_commission,
+      other_fee: param.other_fee,
       book_date: param.book_date,
-      send_date: param.send_date,
+      total_passenger: param.total_passenger,
+      payment: param.payment,
+      status: param.status,
+      status_passenger: param.status_passenger,
+      note: param.note,
+      description: param.description,
+      resi_number: param.resi_number,
+      cancel: param.cancel,
+      move: param.move,
+      position: param.position,
+      charter: param.charter,
       check_payment: param.check_payment,
-      check_sp: param.check_sp,
-      check_date_sp: param.check_date_sp,
-      taking_time: param.taking_time,
-      taking_by: param.taking_by,
-      taking_status: param.taking_status,
-      office: param.office,
     };
     return this.commonApi.put('/passenger/update', body) as Observable<any>;
   }
 
   passengerPatch(param: PassengerModel): Observable<any> {
     const body = {
-      package_id: param.package_id,
-      sender_id: param.sender_id,
-      recipient_id: param.recipient_id,
+      passenger_id: param.passenger_id,
+      waybill_id: param.waybill_id,
+      destination_id: param.destination_id,
       city_id: param.city_id,
       employee_id: param.employee_id,
-      category_id: param.category_id,
       go_send_id: param.go_send_id,
-      description: param.description,
-      cost: param.cost,
+      tariff: param.tariff,
       discount: param.discount,
-      payment: param.payment,
-      origin_from: param.origin_from,
-      level: param.level,
-      request: param.request,
-      request_description: param.request_description,
-      note: param.note,
-      status: param.status,
-      status_package: param.status_package,
-      resi_number: param.resi_number,
-      photo: param.photo,
-      print: param.print,
-      move_time: param.move_time,
+      agent_commission: param.agent_commission,
+      other_fee: param.other_fee,
       book_date: param.book_date,
-      send_date: param.send_date,
+      total_passenger: param.total_passenger,
+      payment: param.payment,
+      status: param.status,
+      status_passenger: param.status_passenger,
+      note: param.note,
+      description: param.description,
+      resi_number: param.resi_number,
+      cancel: param.cancel,
+      move: param.move,
+      position: param.position,
+      charter: param.charter,
       check_payment: param.check_payment,
-      check_sp: param.check_sp,
-      check_date_sp: param.check_date_sp,
-      taking_time: param.taking_time,
-      taking_by: param.taking_by,
-      taking_status: param.taking_status,
-      office: param.office,
     };
     return this.commonApi.patch('/passenger/update', body) as Observable<any>;
   }
 
   passengerCreate(param: PassengerModel): Observable<any> {
     const body = {
-      sender_id: param.sender_id,
-      recipient_id: param.recipient_id,
+      waybill_id: param.waybill_id,
+      destination_id: param.destination_id,
       city_id: param.city_id,
       employee_id: param.employee_id,
-      category_id: param.category_id,
       go_send_id: param.go_send_id,
-      description: param.description,
-      cost: param.cost,
+      tariff: param.tariff,
       discount: param.discount,
-      payment: param.payment,
-      origin_from: param.origin_from,
-      level: param.level,
-      request: param.request,
-      request_description: param.request_description,
-      note: param.note,
-      status: param.status,
-      status_package: param.status_package,
-      resi_number: param.resi_number,
-      photo: param.photo,
-      print: param.print,
-      move_time: param.move_time,
+      agent_commission: param.agent_commission,
+      other_fee: param.other_fee,
       book_date: param.book_date,
-      send_date: param.send_date,
+      total_passenger: param.total_passenger,
+      payment: param.payment,
+      status: param.status,
+      status_passenger: param.status_passenger,
+      note: param.note,
+      description: param.description,
+      resi_number: param.resi_number,
+      cancel: param.cancel,
+      move: param.move,
+      position: param.position,
+      charter: param.charter,
       check_payment: param.check_payment,
-      check_sp: param.check_sp,
-      check_date_sp: param.check_date_sp,
-      taking_time: param.taking_time,
-      taking_by: param.taking_by,
-      taking_status: param.taking_status,
-      office: param.office,
     };
     return this.commonApi.post('/passenger/create', body) as Observable<any>;
   }
@@ -422,7 +400,7 @@ export class HttpService {
       date: param.date,
       time: param.time,
     };
-    return this.commonApi.post('/waybill/update', body) as Observable<any>;
+    return this.commonApi.put('/waybill/update', body) as Observable<any>;
   }
 
   destinationCreate(param: DestinationModel): Observable<any> {
@@ -443,7 +421,7 @@ export class HttpService {
       date: param.date,
       time: param.time,
     };
-    return this.commonApi.post('/destination/update', body) as Observable<any>;
+    return this.commonApi.put('/destination/update', body) as Observable<any>;
   }
 
   // MASTER

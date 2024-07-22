@@ -69,8 +69,30 @@ export class PassengerService {
     );
   }
 
-  createDestinationt(context: DestinationModel): Observable<DestinationModel> {
+  editWaybill(context: WaybillModel): Observable<WaybillModel> {
+    return this.httpService.waybillEdit(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
+  createDestination(context: DestinationModel): Observable<DestinationModel> {
     return this.httpService.destinationCreate(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
+  editDestination(context: DestinationModel): Observable<DestinationModel> {
+    return this.httpService.destinationEdit(context).pipe(
       map((result) => {
         if (!result) {
           return result;

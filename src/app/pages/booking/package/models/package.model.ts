@@ -37,7 +37,6 @@ export class PackageModel {
   taking_by!: string;
   taking_status!: boolean;
   office!: string;
-  isCreateSP!: boolean;
 
   setPackage(_packages: unknown) {
     const packages = _packages as PackageModel;

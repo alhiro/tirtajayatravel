@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } fro
 import { API, APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import {
   Observable,
-  OperatorFunction,
   Subject,
   Subscription,
   catchError,
@@ -17,24 +16,21 @@ import {
 } from 'rxjs';
 import { PackageService } from './package.service';
 import { PaginationContext } from '@app/@shared/interfaces/pagination';
-import { HttpService } from '@app/services/http.service';
 import { ModalComponent, ModalConfig, ModalXlComponent } from '@app/_metronic/partials';
 
 import { PackageModel } from './models/package.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { untilDestroyed } from '@ngneat/until-destroy';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HandlerResponseService } from '@app/services/handler-response/handler-response.service';
 import { LocalService } from '@app/services/local.service';
 import { AddressModel } from '@app/pages/master/customer/models/address.model';
-import { CustomerModel } from '@app/pages/master/customer/models/customer.model';
 import { CustomerService } from '@app/pages/master/customer/customer.service';
 import { CategoryService } from '@app/pages/master/category/category.service';
 import { NgbDateStruct, NgbDropdown, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
-import { RecipientModel } from './models/recipient.model';
-import { GoSendModel } from './models/gosend';
 import { EmployeeService } from '@app/pages/master/employee/employee.service';
 import { CarService } from '@app/pages/master/car/car.service';
+import * as moment from 'moment';
+import { Utils } from '@app/@shared';
 
 interface EventObject {
   event: string;
@@ -187,32 +183,19 @@ export class PackageComponent implements OnInit {
     private formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
-    private localService: LocalService
+    private localService: LocalService,
+    private utils: Utils
   ) {
     this.initForm();
 
-    // Get the current date and time in UTC format
-    const currentDate = new Date();
-    // Convert the UTC date to a string in the format "YYYY-MM-DDTHH:mm:ssZ"
-    const currentDateUTCString = currentDate.toUTCString();
-    const globalTimezone = 'Asia/Jakarta';
-    const globalDate = new Date(currentDateUTCString).toLocaleString('en-US', {
-      timeZone: globalTimezone,
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    });
-    console.log('globalDate ' + globalDate);
-    var getDate = new Date(globalDate);
+    // set min selected date
+    const minDate = this.utils.indonesiaDateFormat(new Date());
     this.minDate = {
-      year: getDate.getFullYear(),
-      month: getDate.getMonth() + 1,
-      day: getDate.getDate(),
+      year: minDate.getFullYear(),
+      month: minDate.getMonth() + 1,
+      day: minDate.getDate(),
     };
-
+    var getDate = new Date(minDate);
     this.formatDateNow(getDate);
   }
 
@@ -337,7 +320,27 @@ export class PackageComponent implements OnInit {
       minute: event.getMinutes(),
       second: event.getSeconds(),
     };
-    this.booktime = { hour: valTime.hour, minute: valTime.minute, second: valTime.second };
+    this.booktime = { hour: valTime.hour == 0 ? 1 : valTime.hour, minute: 0, second: 0 };
+    console.log(this.booktime);
+  }
+
+  formatDateValue(value: any) {
+    const eventDate = moment.utc(value);
+    console.log('event eventDate', eventDate);
+    const valDate = {
+      year: eventDate.year(),
+      month: eventDate.month() + 1,
+      day: eventDate.day(),
+    };
+    this.bookdate = { year: valDate.year, month: valDate.month, day: valDate.day };
+    console.log(this.bookdate);
+
+    const valTime = {
+      hour: eventDate.hour(),
+      minute: eventDate.minute(),
+      second: eventDate.second(),
+    };
+    this.booktime = { hour: valTime.hour == 0 ? 1 : valTime.hour, minute: 0, second: 0 };
     console.log(this.booktime);
   }
 
@@ -402,43 +405,40 @@ export class PackageComponent implements OnInit {
           const malangData = response.data?.filter(
             (data: PackageModel) =>
               data.city_id === 1 &&
-              data.status_package !== 'Move' &&
               data.status_package !== 'Cancel' &&
+              data.status_package !== 'Delivery' &&
               data.status_package !== 'Complete'
           );
           const surabayaData = response.data?.filter(
             (data: PackageModel) =>
               data.city_id === 2 &&
-              data.status_package !== 'Move' &&
               data.status_package !== 'Cancel' &&
+              data.status_package !== 'Delivery' &&
               data.status_package !== 'Complete'
           );
-          const moveData = response.data?.filter((data: PackageModel) => data.status_package === 'Move');
           const cancelData = response.data?.filter((data: PackageModel) => data.status_package === 'Cancel');
           const historyData = response.data?.filter((data: PackageModel) => data.status_package === 'Complete');
 
           this.dataLengthMalang = malangData?.length;
           this.dataLengthSurabaya = surabayaData?.length;
-          this.dataLengthMove = moveData?.length;
           this.dataLengthCancel = cancelData?.length;
           this.dataLengthHistory = historyData?.length;
 
           this.data = malangData;
           this.dataSurabaya = surabayaData;
-          this.dataMove = moveData;
           this.dataCancel = cancelData;
           this.dataHistory = historyData;
 
           // set gosend empty or not
-          const createSP = response.data;
-          createSP?.forEach((val: any) => {
-            if (val.go_send_id != null) {
-              return (val.isCreateSP = false);
-            } else {
-              return (val.isCreateSP = true);
-            }
-          });
-          console.log(createSP);
+          // const createSP = response.data;
+          // createSP?.forEach((val: any) => {
+          //   if (val.go_send_id != null) {
+          //     return (val.isCreateSP = false);
+          //   } else {
+          //     return (val.isCreateSP = true);
+          //   }
+          // });
+          // console.log(createSP);
 
           // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
           this.pagination.count =
@@ -531,7 +531,7 @@ export class PackageComponent implements OnInit {
             })
           )
       ),
-      tap(() => ((this.searching = false), (this.modelAddressId = '')))
+      tap(() => ((this.searchingCar = false), (this.modelAddressId = '')))
     );
 
   searchDataCustomer = (text$: Observable<string>) =>
@@ -611,13 +611,15 @@ export class PackageComponent implements OnInit {
     console.log(this.modelRecipient?.addresses);
   }
 
-  findDataRecipientByValue(value: any) {
-    return this.modelRecipient?.addresses.find((val: AddressModel) => val.address_id === Number(value));
-  }
+  // findDataRecipientByValue(value: any) {
+  //   return this.modelRecipient?.addresses.find((val: AddressModel) => val.address_id === Number(value));
+  // }
 
   selectAddressRecipient() {
     this.setDefaultSelectionRecipient(this.modelAddressIdRecipient);
-    const getdAddress = this.findDataRecipientByValue(this.modelAddressIdRecipient);
+    const getdAddress = this.modelRecipient?.addresses.find(
+      (val: AddressModel) => val.address_id === Number(this.modelAddressIdRecipient)
+    );
     this.selectedAddressRecipient = getdAddress;
     console.log(this.selectedAddressRecipient);
 
@@ -699,7 +701,7 @@ export class PackageComponent implements OnInit {
       category_id: '',
       request: '',
       status: '',
-      status_package: '',
+      status_package: 'Progress',
     });
 
     return await this.modalComponent.open();
@@ -750,7 +752,7 @@ export class PackageComponent implements OnInit {
             recipient_id: respRecipient.data.recipient_id,
           });
           console.log(this.form.value);
-          return this.packageService.edit(this.form.value);
+          return this.packageService.create(this.form.value);
         }),
         finalize(() => {
           this.form.markAsPristine();
@@ -783,28 +785,29 @@ export class PackageComponent implements OnInit {
     console.log(event);
     this.isCreate = false;
 
+    this.formatDateValue(event?.book_date);
+
     if (event.request || event.request_description) {
       this.isRequest = true;
     } else {
       this.isRequest = false;
     }
 
-    const getDate = new Date(event?.book_date);
-    this.formatDateNow(getDate);
-
     this.modelCustomer = event.sender?.customer;
     const getdAddressCustomer = this.modelCustomer?.addresses.find(
-      (val: AddressModel) => val.customer_id === Number(this.modelCustomer?.customer_id)
+      (val: AddressModel) => val.customer_id === Number(this.modelCustomer?.customer_id) && val.default === true
     );
     this.modelAddressId = getdAddressCustomer?.address_id;
     console.log(this.modelAddressId);
+    this.selectedAddress = getdAddressCustomer;
 
     this.modelRecipient = event.recipient?.customer;
     const getdAddressRecipient = this.modelRecipient?.addresses.find(
-      (val: AddressModel) => val.customer_id === Number(this.modelRecipient?.customer_id)
+      (val: AddressModel) => val.customer_id === Number(this.modelRecipient?.customer_id) && val.default === true
     );
     this.modelAddressIdRecipient = getdAddressRecipient?.address_id;
     console.log(this.modelAddressIdRecipient);
+    this.selectedAddressRecipient = getdAddressRecipient;
 
     console.log(this.modelCustomer);
     console.log(this.modelRecipient);
@@ -1065,9 +1068,6 @@ export class PackageComponent implements OnInit {
 
   async openModalNewSP(event: PackageModel) {
     console.log(event);
-    // this.isCreateSP = true;
-    this.isCreateSP = event.isCreateSP;
-    console.log(this.isCreateSP);
 
     this.clearFormSP();
     this.modelEmployee = '';
@@ -1151,10 +1151,6 @@ export class PackageComponent implements OnInit {
     console.log(event);
 
     if (event) {
-      // this.isCreateSP = false;
-      this.isCreateSP = event.isCreateSP;
-      console.log(this.isCreateSP);
-
       let city: any = '';
       let formatSP = '';
       if (this.currentTab === 'Malang') {
@@ -1166,24 +1162,24 @@ export class PackageComponent implements OnInit {
       }
       console.log(formatSP);
 
-      this.modelEmployee = event.go_send.employee;
-      this.modelCar = event.go_send.car;
+      this.modelEmployee = event.go_send?.employee;
+      this.modelCar = event.go_send?.car;
 
       this.formSP.patchValue({
         go_send_id: event.go_send_id,
         city_id: city,
         package_id: event.package_id,
-        send_time: event.go_send.send_time,
+        send_time: event.go_send?.send_time,
         send_date: event.book_date,
-        sp_number: event.go_send.sp_number,
+        sp_number: event.go_send?.sp_number,
         sp_package: formatSP,
-        sp_passenger: event.go_send.sp_passenger,
-        bsd: event.go_send.bsd,
-        bsd_passenger: event.go_send.bsd_passenger,
-        box: event.go_send.box,
-        bsd_box: event.go_send.bsd_box,
-        description: event.go_send.description,
-        status: event.go_send.status,
+        sp_passenger: event.go_send?.sp_passenger,
+        bsd: event.go_send?.bsd,
+        bsd_passenger: event.go_send?.bsd_passenger,
+        box: event.go_send?.box,
+        bsd_box: event.go_send?.bsd_box,
+        description: event.go_send?.description,
+        status: event.go_send?.status,
       });
     }
 

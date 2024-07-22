@@ -5,7 +5,7 @@
       <span class="card-label fw-bolder fs-3 mb-1">
         @if (currentTab === 'Malang') { Package Table Malang } @else if (currentTab === 'Surabaya') { Package Table
         Surabaya } @else if (currentTab === 'Move') { Package Table Move } @else if (currentTab === 'Cancel') { Package
-        Table Cancel } @else if (currentTab === 'History') { Package Table History }
+        Table Cancel } @else if (currentTab === 'History') { Package Table Complete }
       </span>
       <span class="text-muted mt-1 fw-bold fs-7">
         @if (currentTab === 'Malang') { Have {{ dataLengthMalang | number }} items } @else if (currentTab ===
@@ -43,14 +43,11 @@
           <button type="button" class="btn btn-sm btn-light" id="otherspackage" ngbDropdownToggle>Others Menu</button>
           <div ngbDropdownMenu aria-labelledby="otherspackage">
             <ul class="px-2 mb-0">
-              <li class="nav-item dropdown-item" (click)="setCurrentTab('Move')" [style.cursor]="'pointer'">
-                <a class="nav-link" [class.active]="currentTab === 'Move'" data-toggle="tab">Move</a>
-              </li>
               <li class="nav-item dropdown-item" (click)="setCurrentTab('Cancel')" [style.cursor]="'pointer'">
                 <a class="nav-link" [class.active]="currentTab === 'Cancel'" data-toggle="tab">Cancel</a>
               </li>
               <li class="nav-item dropdown-item" (click)="setCurrentTab('History')" [style.cursor]="'pointer'">
-                <a class="nav-link" [class.active]="currentTab === 'History'" data-toggle="tab">History</a>
+                <a class="nav-link" [class.active]="currentTab === 'History'" data-toggle="tab">Completed</a>
               </li>
             </ul>
           </div>
@@ -108,11 +105,11 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row.recipient.customer.addresses) { @for (value of row.recipient?.customer?.addresses; track
-                  value) { @if (value.default == true) {
+                  @if (row.recipient?.customer?.addresses.length > 0) { @for (value of
+                  row.recipient?.customer?.addresses; track value) { @if (value.default == true) {
                   {{ value.address }}
                   } } } @else {
-                  {{ row.recipient.customer.address }}
+                  {{ row.recipient?.customer?.address }}
                   }
                 </span>
               </td>
@@ -241,10 +238,18 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">
+                <!-- <span class="text-gray-900 d-block">
                   @if ( defaultAddressRecipient) {
                   {{ defaultAddressRecipient.address }}
                   } @else {
+                  {{ row.recipient?.customer?.address }}
+                  }
+                </span> -->
+                <span class="text-gray-900 d-block">
+                  @if (row.recipient?.customer?.addresses.length > 0) { @for (value of
+                  row.recipient?.customer?.addresses; track value) { @if (value.default == true) {
+                  {{ value.address }}
+                  } } } @else {
                   {{ row.recipient?.customer?.address }}
                   }
                 </span>
@@ -330,83 +335,6 @@
       <!--end::Tap pane-->
 
       <!--begin::Tap pane-->
-      <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Move' }">
-        <!-- begin::Table container -->
-        <div class="table-responsive">
-          <!-- begin::Table -->
-          <ngx-table
-            #table
-            [configuration]="configuration"
-            [data]="dataMove"
-            [columns]="columns"
-            [pagination]="pagination"
-            (event)="eventEmitted($event)"
-            tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
-          >
-            <ng-template let-row let-index="index">
-              <!-- <td>
-                    <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
-                  </td> -->
-              <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
-                  {{ row.resi_number }}
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">
-                  @if (row.level === 1) {
-                  <span class="badge badge-light-primary">Normal</span>
-                  } @else {
-                  <span class="badge badge-light-danger">Urgent</span>
-                  }
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.sender?.customer?.name }}</span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">
-                  {{ row.recipient?.customer?.name }}
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">
-                  @if ( defaultAddressRecipient) {
-                  {{ defaultAddressRecipient.address }}
-                  } @else {
-                  {{ row.recipient?.customer?.address }}
-                  }
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.cost }}</span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
-              </td>
-              <td>
-                <span class="badge badge-light-info">{{ row.status_package }}</span>
-              </td>
-              <td class="text-end">
-                <a class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3 cursor-pointer">
-                  <app-keenicon name="pencil" class="fs-md-3 text-primary" (click)="openModalEdit(row)"></app-keenicon>
-                </a>
-                <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
-                  <app-keenicon name="trash" class="fs-3"></app-keenicon>
-                </a>
-              </td>
-            </ng-template>
-          </ngx-table>
-          <!-- end::Table -->
-        </div>
-        <!-- end::Table container -->
-      </div>
-      <!--end::Tap pane-->
-
-      <!--begin::Tap pane-->
       <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Cancel' }">
         <!-- begin::Table container -->
         <div class="table-responsive">
@@ -451,9 +379,10 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if ( defaultAddressRecipient) {
-                  {{ defaultAddressRecipient.address }}
-                  } @else {
+                  @if (row.recipient?.customer?.addresses.length > 0) { @for (value of
+                  row.recipient?.customer?.addresses; track value) { @if (value.default == true) {
+                  {{ value.address }}
+                  } } } @else {
                   {{ row.recipient?.customer?.address }}
                   }
                 </span>
@@ -528,9 +457,10 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if ( defaultAddressRecipient) {
-                  {{ defaultAddressRecipient.address }}
-                  } @else {
+                  @if (row.recipient?.customer?.addresses.length > 0) { @for (value of
+                  row.recipient?.customer?.addresses; track value) { @if (value.default == true) {
+                  {{ value.address }}
+                  } } } @else {
                   {{ row.recipient?.customer?.address }}
                   }
                 </span>
@@ -599,7 +529,7 @@
                     #datePicker="ngbDatepicker"
                     (ngModelChange)="onDateChange($event)"
                   />
-                  <ngb-timepicker
+                  <!-- <ngb-timepicker
                     class="custom-datetime"
                     [hourStep]="1"
                     [minuteStep]="1"
@@ -609,7 +539,20 @@
                     [seconds]="false"
                     [spinners]="false"
                     (ngModelChange)="onTimehange($event)"
-                  ></ngb-timepicker>
+                  ></ngb-timepicker> -->
+
+                  <ngb-timepicker-custom
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="booktime"
+                    [hourStep]="1"
+                    [minuteStep]="30"
+                    [startHour]="1"
+                    [endHour]="23"
+                    [seconds]="false"
+                    [spinners]="false"
+                    [select]="true"
+                  >
+                  </ngb-timepicker-custom>
                 </div>
               </div>
               <div class="d-flex flex-center flex-column py-2">
@@ -688,11 +631,11 @@
 
                 <div>Address:</div>
                 <div class="mb-9">
-                  @if (selectedAddress) {
+                  @if (modelCustomer?.addresses?.length > 0) { @if (selectedAddress) {
                   <div>{{ selectedAddress.address }}</div>
-                  } @else if(defaultAddressCustomer) {
-                  <div>{{ defaultAddressCustomer.address }}</div>
                   } @else {
+                  <div>{{ modelCustomer?.address }}</div>
+                  } } @else {
                   <div>{{ modelCustomer?.address }}</div>
                   }
                 </div>
@@ -781,11 +724,11 @@
 
                 <div>Address:</div>
                 <div class="mb-9">
-                  @if (selectedAddressRecipient) {
+                  @if (modelRecipient?.addresses?.length > 0) { @if (selectedAddressRecipient) {
                   <div>{{ selectedAddressRecipient.address }}</div>
-                  } @else if(defaultAddressRecipient) {
-                  <div>{{ defaultAddressRecipient.address }}</div>
                   } @else {
+                  <div>{{ modelRecipient?.address }}</div>
+                  } } @else {
                   <div>{{ modelRecipient?.address }}</div>
                   }
                 </div>
@@ -1004,6 +947,7 @@
                   </label>
                 </div>
               </div>
+              @if (!isCreate) {
               <label class="d-block mb-8">
                 <select
                   class="form-select form-control"
@@ -1018,6 +962,7 @@
                   }
                 </select>
               </label>
+              }
             </div>
           </div>
           <!--end::Card body-->
@@ -1160,8 +1105,8 @@
 <!-- end:: Modal address -->
 
 <!-- begin:: Modal SP -->
-<app-modal #modalSP [modalConfig]="isCreateSP ? modalConfigCreateSP : modalConfigEditSP">
-  <form (ngSubmit)="isCreateSP ? dataCreateSP() : dataEditSP()" [formGroup]="formSP" novalidate>
+<app-modal #modalSP [modalConfig]="modalConfigCreateSP">
+  <form (ngSubmit)="dataCreateSP()" [formGroup]="formSP" novalidate>
     <div class="m-3">
       <label class="d-block mb-4">
         <input
@@ -1180,7 +1125,7 @@
           {{ r.name }}
         </ng-template>
 
-        @if (searchingEmployee || modelEmployee == '') {
+        @if (searchingEmployee) {
         <small class="form-text text-muted">Searching. Please wait...</small>
         } @if (searchFailedEmployee) {
         <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
@@ -1233,7 +1178,7 @@
           {{ r.name }}
         </ng-template>
 
-        @if (searchingCar || modelCar == '') {
+        @if (searchingCar) {
         <small class="form-text text-muted">Searching. Please wait...</small>
         } @if (searchFailedCar) {
         <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
