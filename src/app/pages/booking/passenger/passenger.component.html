@@ -135,6 +135,9 @@
               <td>
                 <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
               </td>
+              <td>
+                <span class="badge badge-light-primary">{{ row.status_passenger }}</span>
+              </td>
               <td class="text-end">
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
@@ -153,21 +156,22 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Generate SP"
-                  (click)="openModalNewSP(row)"
+                  title="Cancel"
+                  (click)="openModalCancel(row)"
                 >
-                  <app-keenicon name="document" class="fs-md-3 text-primary"></app-keenicon>
+                  <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
                 </a>
                 <a
-                  href="#"
+                  href="javascript:void(0)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
                   title="Delete"
+                  (click)="openModalDelete(row)"
                 >
-                  <app-keenicon name="trash" class="fs-3"></app-keenicon>
+                  <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
                 </a>
               </td>
             </ng-template>
@@ -297,21 +301,22 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Generate SP"
-                  (click)="openModalNewSP(row)"
+                  title="Cancel"
+                  (click)="openModalCancel(row)"
                 >
-                  <app-keenicon name="document" class="fs-md-3 text-primary"></app-keenicon>
+                  <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
                 </a>
                 <a
-                  href="#"
+                  href="javascript:void(0)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
                   title="Delete"
+                  (click)="openModalDelete(row)"
                 >
-                  <app-keenicon name="trash" class="fs-3"></app-keenicon>
+                  <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
                 </a>
               </td>
             </ng-template>
@@ -345,121 +350,6 @@
                   </div>
                 </div> -->
           </ng-template>
-        </div>
-        <!-- end::Table container -->
-      </div>
-      <!--end::Tap pane-->
-
-      <!--begin::Tap pane-->
-      <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Move' }">
-        <!-- begin::Table container -->
-        <div class="table-responsive">
-          <!-- begin::Table -->
-          <ngx-table
-            #table
-            [configuration]="configuration"
-            [data]="dataMove"
-            [columns]="columns"
-            [pagination]="pagination"
-            (event)="eventEmitted($event)"
-            tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
-          >
-            <ng-template let-row let-index="index">
-              <!-- <td>
-                      <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
-                    </td> -->
-              <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
-                  {{ row.resi_number }}
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.tariff | currency : 'Rp ' : true : '4.0-2' }}</span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.payment }}</span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.total_passenger }}</span>
-              </td>
-              <!-- <td>
-                    <span class="text-gray-900 d-block">
-                      {{ row.waybill?.customer?.name }}
-                    </span>
-                  </td> -->
-              <td>
-                <span class="text-gray-900 d-block">
-                  @if (row.waybill?.customer?.addresses.length > 0) { @for (value of row.waybill?.customer?.addresses;
-                  track value) { @if (value.default == true) {
-                  {{ row.waybill?.customer?.name }} <br />
-                  {{ value.address }}
-                  } } } @else {
-                  {{ row.waybill?.customer?.name }} <br />
-                  {{ row.waybill?.customer?.address }}
-                  }
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">
-                  @if (row.destination?.customer?.addresses.length > 0) { @for (value of
-                  row.destination?.customer?.addresses; track value) { @if (value.default == true) {
-                  {{ value.address }}
-                  } @else {
-                  {{ row.destination?.customer?.name }} <br />
-                  {{ row.destination?.customer?.address }}
-                  } } } @else {
-                  {{ row.destination?.customer?.name }} <br />
-                  {{ row.destination?.customer?.address }}
-                  }
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.description }}</span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
-              </td>
-              <td class="text-end">
-                <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Edit"
-                  (click)="openModalEdit(row)"
-                >
-                  <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
-                </a>
-                <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Generate SP"
-                  (click)="openModalNewSP(row)"
-                >
-                  <app-keenicon name="document" class="fs-md-3 text-primary"></app-keenicon>
-                </a>
-                <a
-                  href="#"
-                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Delete"
-                >
-                  <app-keenicon name="trash" class="fs-3"></app-keenicon>
-                </a>
-              </td>
-            </ng-template>
-          </ngx-table>
-          <!-- end::Table -->
         </div>
         <!-- end::Table container -->
       </div>
@@ -544,32 +434,22 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Edit"
-                  (click)="openModalEdit(row)"
-                >
-                  <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
-                </a>
-                <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Generate SP"
-                  (click)="openModalNewSP(row)"
+                  title="Return"
+                  (click)="openModalCancel(row)"
                 >
                   <app-keenicon name="document" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
                 <a
-                  href="#"
+                  href="javascript:void(0)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
                   title="Delete"
+                  (click)="openModalDelete(row)"
                 >
-                  <app-keenicon name="trash" class="fs-3"></app-keenicon>
+                  <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
                 </a>
               </td>
             </ng-template>
@@ -654,37 +534,15 @@
               </td>
               <td class="text-end">
                 <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Edit"
-                  (click)="openModalEdit(row)"
-                >
-                  <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
-                </a>
-                <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Generate SP"
-                  (click)="openModalNewSP(row)"
-                >
-                  <app-keenicon name="document" class="fs-md-3 text-primary"></app-keenicon>
-                </a>
-                <a
-                  href="#"
+                  href="javascript:void(0)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Delete"
+                  title="Detail"
                 >
-                  <app-keenicon name="trash" class="fs-3"></app-keenicon>
+                  <app-keenicon name="eye" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
               </td>
             </ng-template>
@@ -1013,7 +871,7 @@
                 />
                 <span hidden translate>Description</span>
               </label>
-              <label class="d-block mb-4">
+              <!-- <label class="d-block mb-4">
                 <select
                   class="form-select form-control"
                   data-kt-select2="true"
@@ -1026,8 +884,31 @@
                   <option [value]="value.name">{{ value.name }}</option>
                   }
                 </select>
-              </label>
-              <label class="d-block mb-4">
+              </label> -->
+              <div class="mb-4">
+                <label class="form-label fw-bold">Class:</label>
+                <div class="d-flex">
+                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                    <input class="form-check-input" type="radio" value="Biasa" name="status" formControlName="status" />
+                    <span class="form-check-label text-gray-900">Biasa</span>
+                  </label>
+                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      value="Executif"
+                      name="status"
+                      formControlName="status"
+                    />
+                    <span class="form-check-label text-gray-900">Executif</span>
+                  </label>
+                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                    <input class="form-check-input" type="radio" value="Paket" name="status" formControlName="status" />
+                    <span class="form-check-label text-gray-900">Paket</span>
+                  </label>
+                </div>
+              </div>
+              <!-- <label class="d-block mb-4">
                 <select
                   class="form-select form-control"
                   data-kt-select2="true"
@@ -1040,7 +921,52 @@
                   <option [value]="value.name">{{ value.name }}</option>
                   }
                 </select>
-              </label>
+              </label> -->
+              <div class="mb-4">
+                <label class="form-label fw-bold">Payment status:</label>
+                <div class="d-flex">
+                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      value="Lunas (Kantor)"
+                      name="payment"
+                      formControlName="payment"
+                    />
+                    <span class="form-check-label text-gray-900">Lunas (Kantor)</span>
+                  </label>
+                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      value="Lunas (Transfer)"
+                      name="payment"
+                      formControlName="payment"
+                    />
+                    <span class="form-check-label text-gray-900">Lunas (Transfer)</span>
+                  </label>
+                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      value="Bayar Tujuan (CBA)"
+                      name="payment"
+                      formControlName="payment"
+                    />
+                    <span class="form-check-label text-gray-900">Bayar Tujuan (CBA)</span>
+                  </label>
+                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      value="Piutang"
+                      name="payment"
+                      formControlName="payment"
+                    />
+                    <span class="form-check-label text-gray-900">Piutang</span>
+                  </label>
+                </div>
+              </div>
               <div class="mb-4">
                 <label class="form-label fw-bold">Position seat:</label>
                 <div class="d-flex">
@@ -1121,7 +1047,7 @@
                   </label>
                 </div>
               </div>
-              @if (!isCreate) {
+              <!-- @if (!isCreate) {
               <label class="d-block mb-8">
                 <select
                   class="form-select form-control"
@@ -1136,7 +1062,7 @@
                   }
                 </select>
               </label>
-              }
+              } -->
             </div>
           </div>
           <!--end::Card body-->

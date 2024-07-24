@@ -1,6 +1,7 @@
 import { CarModel } from '@app/pages/master/car/models/car.model';
 import { EmployeeyModel } from '@app/pages/master/employee/models/employee.model';
 import { PackageModel } from './package.model';
+import { PassengerModel } from '../../passenger/models/passenger.model';
 
 export class GoSendModel {
   go_send_id!: number;
@@ -11,6 +12,8 @@ export class GoSendModel {
   city_id!: number;
   package_id!: number;
   packages!: PackageModel;
+  passenger_id!: number;
+  passenger!: PassengerModel;
   telp!: string;
   send_time!: any;
   send_date!: Date;

@@ -31,6 +31,7 @@ import { PassengerService } from './passenger.service';
 import { PassengerModel } from './models/passenger.model';
 import { Utils, padNumber } from '@app/@shared';
 import * as moment from 'moment';
+import { GoSendModel } from '../package/models/gosend';
 
 interface EventObject {
   event: string;
@@ -149,7 +150,7 @@ export class PassengerComponent implements OnInit {
     closeButtonLabel: 'Cancel',
   };
   modalConfigCreateSP: ModalConfig = {
-    modalTitle: 'Create SP',
+    modalTitle: 'Process SP',
     dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
@@ -168,6 +169,8 @@ export class PassengerComponent implements OnInit {
   minDate: any;
   bookdate!: NgbDateStruct;
   booktime: NgbTimeStruct = { hour: 0, minute: 0, second: 0 };
+
+  @Input() delivery!: GoSendModel;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -227,6 +230,7 @@ export class PassengerComponent implements OnInit {
       { key: 'customer.address', title: 'Delivery Address' },
       { key: 'description', title: 'Description' },
       { key: 'created_at', title: 'Created At' },
+      { key: 'status_passenger', title: 'Status' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
   }
@@ -923,6 +927,10 @@ export class PassengerComponent implements OnInit {
     // this.unsubscribe.push(catSubscr);
   }
 
+  openModalCancel(event: PassengerModel) {}
+
+  openModalDelete(event: PassengerModel) {}
+
   // Address
   clearFormAddress() {
     this.formAddress.reset();
@@ -1182,6 +1190,92 @@ export class PassengerComponent implements OnInit {
           };
           return this.passengerService.patch(gosend);
         }),
+        finalize(() => {
+          this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponentSP.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  assignDriverSP(event: PassengerModel) {
+    console.log(this.delivery);
+
+    const updateSP: any = {
+      passenger_id: event.passenger_id,
+      employee_id: this.delivery.employee_id,
+      go_send_id: this.delivery.go_send_id,
+      status_package: 'Delivery',
+    };
+    console.log(updateSP);
+
+    // send data to package
+    this.isLoading = true;
+    this.passengerService
+      .patch(updateSP)
+      .pipe(
+        finalize(() => {
+          this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponentSP.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  removeDriverSP(event: PassengerModel) {
+    console.log(this.delivery);
+
+    const updateSP: any = {
+      passenger_id: event.passenger_id,
+      employee_id: null,
+      go_send_id: null,
+      status_package: 'Progress',
+    };
+    console.log(updateSP);
+
+    // send data to package
+    this.isLoading = true;
+    this.passengerService
+      .patch(updateSP)
+      .pipe(
         finalize(() => {
           this.form.markAsPristine();
           this.isLoading = false;

@@ -55,6 +55,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   public dataLength!: number;
   public toggledRows = new Set<number>();
   public isCreate = false;
+  public isCreateSP = false;
 
   public data: any;
   public dataSurabaya: any;
@@ -77,6 +78,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   public configuration: Config = { ...DefaultConfig };
   @Input() cssClass!: '';
   currentTab = 'Malang';
+  currentDisplay: boolean = false;
 
   public pagination = {
     limit: 10,
@@ -114,8 +116,18 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
+  modalConfigNewSP: ModalConfig = {
+    modalTitle: 'Add Schedule Driver',
+    dismissButtonLabel: 'Submit',
+    closeButtonLabel: 'Cancel',
+  };
+  modalConfigCreateSP: ModalConfig = {
+    modalTitle: 'Add Schedule Driver',
+    dismissButtonLabel: 'Submit',
+    closeButtonLabel: 'Cancel',
+  };
   modalConfigEditSP: ModalConfig = {
-    modalTitle: 'Edit Driver',
+    modalTitle: 'Edit Schedule Driver',
     dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
@@ -124,9 +136,19 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     // dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
+  modalConfigGenerateSP: ModalConfig = {
+    modalTitle: 'List Transaction',
+    // dismissButtonLabel: 'Submit',
+    // closeButtonLabel: 'Cancel',
+  };
+  addClass = 'modal-clean';
   @ViewChild('modal') private modalComponent!: ModalComponent;
   @ViewChild('modalDetail') private modalComponentDetail!: ModalFullComponent;
   @ViewChild('modalSP') private modalComponentSP!: ModalComponent;
+  @ViewChild('modalGeneratePackageSP') private modalComponentGeneratePackageSP!: ModalFullComponent;
+  @ViewChild('modalGeneratePassengerSP') private modalComponentGeneratePassengerSP!: ModalFullComponent;
+
+  dataDelivery!: GoSendModel;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -159,7 +181,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       { key: 'name', title: 'Driver' },
       { key: 'telp', title: 'Telp' },
       { key: 'description', title: 'Description' },
-      { key: 'packages', title: 'Packages' },
+      { key: 'packages', title: 'Items' },
       { key: 'car', title: 'Car' },
       { key: 'status', title: 'Status' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
@@ -219,6 +241,10 @@ export class DeliveryComponent implements OnInit, OnDestroy {
 
   setCurrentTab(tab: string) {
     this.currentTab = tab;
+  }
+
+  setCurrentDisplay() {
+    this.currentDisplay = !this.currentDisplay;
   }
 
   eventEmitted($event: { event: string; value: any }): void {
@@ -283,9 +309,9 @@ export class DeliveryComponent implements OnInit, OnDestroy {
 
   async openModalView(val: GoSendModel) {
     console.log(val);
-    console.log(val.packages);
+    console.log(val.employee?.packages);
     this.dataDetail = val;
-    this.dataDetailPackages = val.packages;
+    this.dataDetailPackages = val.employee?.packages;
     return await this.modalComponentDetail.open();
   }
 
@@ -386,7 +412,66 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.unsubscribe.push(catSubscr);
   }
 
+  // SP
+  clearFormSP() {
+    this.formSP.reset();
+  }
+
+  async openModalNewSP() {
+    this.isCreateSP = true;
+
+    this.clearFormSP();
+    this.modelEmployee = '';
+    this.modelCar = '';
+
+    this.formSP.patchValue({
+      city_id: this.currentTab === 'Malang' ? 1 : 2,
+    });
+
+    return await this.modalComponentSP.open();
+  }
+
+  dataCreateSP() {
+    this.formSP.patchValue({
+      employee_id: this.modelEmployee?.employee_id,
+      car_id: this.modelCar?.car_id,
+    });
+    console.log(this.formSP.value);
+
+    // send data to gosend, package
+    this.isLoading = true;
+    this.packageService
+      .createSP(this.formSP.value)
+      .pipe(
+        finalize(() => {
+          this.formSP.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataListGosend(this.params);
+            await this.modalComponentSP.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
   async openModalEditSP(event: any) {
+    this.isCreateSP = false;
     console.log(event);
 
     this.modelEmployee = event.employee;
@@ -427,20 +512,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.packageService
       .editSP(this.formSP.value)
       .pipe(
-        // switchMap((resp: any) => {
-        //   console.log('Response from sp:');
-        //   console.log(resp);
-        //   const gosend: any = {
-        //     package_id: resp.data.package_id,
-        //     go_send_id: resp.data.go_send_id,
-        //     employee_id: resp.data.employee_id,
-        //     city_id: resp.data.city_id,
-        //     book_date: resp.data.send_date,
-        //   };
-        //   return this.packageService.patch(gosend);
-        // }),
         finalize(() => {
-          this.form.markAsPristine();
+          this.formSP.markAsPristine();
           this.isLoading = false;
         })
       )
@@ -464,6 +537,18 @@ export class DeliveryComponent implements OnInit, OnDestroy {
           this.handlerResponseService.failedResponse(error);
         }
       );
+  }
+
+  async openModalGeneratePackageSP(event: GoSendModel) {
+    console.log(event);
+    this.dataDelivery = event;
+    return await this.modalComponentGeneratePackageSP.open();
+  }
+
+  async openModalGeneratePassengerSP(event: GoSendModel) {
+    console.log(event);
+    this.dataDelivery = event;
+    return await this.modalComponentGeneratePassengerSP.open();
   }
 
   formatter = (result: { name: string }) => result.name;
@@ -531,6 +616,6 @@ export class DeliveryComponent implements OnInit, OnDestroy {
             })
           )
       ),
-      tap(() => (this.searching = false))
+      tap(() => (this.searchingCar = false))
     );
 }

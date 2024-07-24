@@ -17,6 +17,8 @@ import {
   NgbTimepickerModule,
   NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
+import { PackageModule } from '../package/package.module';
+import { PassengerModule } from '../passenger/passenger.module';
 
 @NgModule({
   declarations: [DeliveryComponent],
@@ -39,6 +41,8 @@ import {
     DropdownMenusModule,
     TableModule,
     ModalsModule,
+    PackageModule,
+    PassengerModule,
   ],
 })
 export class DeliveryModule {}

@@ -46,7 +46,7 @@ export class PrintspComponent implements OnInit {
   getPrintSP() {
     const currentState = this.router.lastSuccessfulNavigation;
     this.data = currentState?.extras.state?.['data'];
-    this.dataPackages = this.data['packages'];
+    this.dataPackages = this.data.employee?.['packages'];
     this.totalCost = this.dataPackages.reduce((acc: any, item: any) => acc + item.cost, 0);
     this.totalKoli = this.dataPackages.reduce((acc: any, item: any) => acc + item.koli, 0);
     console.log(this.totalCost);

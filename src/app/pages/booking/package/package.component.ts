@@ -31,6 +31,7 @@ import { EmployeeService } from '@app/pages/master/employee/employee.service';
 import { CarService } from '@app/pages/master/car/car.service';
 import * as moment from 'moment';
 import { Utils } from '@app/@shared';
+import { GoSendModel } from './models/gosend';
 
 interface EventObject {
   event: string;
@@ -150,7 +151,7 @@ export class PackageComponent implements OnInit {
     closeButtonLabel: 'Cancel',
   };
   modalConfigCreateSP: ModalConfig = {
-    modalTitle: 'Create SP',
+    modalTitle: 'Process SP',
     dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
@@ -162,6 +163,7 @@ export class PackageComponent implements OnInit {
   @ViewChild('modal') private modalComponent!: ModalXlComponent;
   @ViewChild('modalAddress') private modalComponentAddress!: ModalComponent;
   @ViewChild('modalSP') private modalComponentSP!: ModalComponent;
+  @ViewChild('assignSP') private modalComponentAssignSP!: ModalComponent;
 
   @Input() cssClass!: '';
   currentTab = 'Malang';
@@ -169,6 +171,8 @@ export class PackageComponent implements OnInit {
   minDate: any;
   bookdate!: NgbDateStruct;
   booktime: NgbTimeStruct = { hour: 0, minute: 0, second: 0 };
+
+  @Input() delivery!: GoSendModel;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -406,14 +410,14 @@ export class PackageComponent implements OnInit {
             (data: PackageModel) =>
               data.city_id === 1 &&
               data.status_package !== 'Cancel' &&
-              data.status_package !== 'Delivery' &&
+              // data.status_package !== 'Delivery' &&
               data.status_package !== 'Complete'
           );
           const surabayaData = response.data?.filter(
             (data: PackageModel) =>
               data.city_id === 2 &&
               data.status_package !== 'Cancel' &&
-              data.status_package !== 'Delivery' &&
+              // data.status_package !== 'Delivery' &&
               data.status_package !== 'Complete'
           );
           const cancelData = response.data?.filter((data: PackageModel) => data.status_package === 'Cancel');
@@ -956,6 +960,10 @@ export class PackageComponent implements OnInit {
     // this.unsubscribe.push(catSubscr);
   }
 
+  openModalCancel(event: PackageModel) {}
+
+  openModalDelete(event: PackageModel) {}
+
   // Address
   clearFormAddress() {
     this.formAddress.reset();
@@ -1214,6 +1222,97 @@ export class PackageComponent implements OnInit {
           };
           return this.packageService.patch(gosend);
         }),
+        finalize(() => {
+          this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponentSP.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  // async openModalDriverSP(event: PackageModel) {
+  //   this.driverSP = event;
+  //   return await this.modalComponentAssignSP.open();
+  // }
+
+  assignDriverSP(event: PackageModel) {
+    console.log(this.delivery);
+
+    const updateSP: any = {
+      package_id: event.package_id,
+      employee_id: this.delivery.employee_id,
+      go_send_id: this.delivery.go_send_id,
+      status_package: 'Delivery',
+    };
+    console.log(updateSP);
+
+    // send data to package
+    this.isLoading = true;
+    this.packageService
+      .patch(updateSP)
+      .pipe(
+        finalize(() => {
+          this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponentSP.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  removeDriverSP(event: PackageModel) {
+    console.log(this.delivery);
+
+    const updateSP: any = {
+      package_id: event.package_id,
+      employee_id: null,
+      go_send_id: null,
+      status_package: 'Progress',
+    };
+    console.log(updateSP);
+
+    // send data to package
+    this.isLoading = true;
+    this.packageService
+      .patch(updateSP)
+      .pipe(
         finalize(() => {
           this.form.markAsPristine();
           this.isLoading = false;

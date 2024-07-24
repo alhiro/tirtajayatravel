@@ -21,13 +21,39 @@
         </li>
       </ul>
     </div>
-    <!-- <div class="card-toolbar">
-      <div class="menu-item px-3">
-        <div class="menu-content px-3 py-3">
-          <div class="btn btn-primary btn-sm px-4 cursor-pointer" (click)="printSP(data)">Booking Surabaya</div>
-        </div>
-      </div>
-    </div> -->
+    <div class="card-toolbar">
+      <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+        <li class="nav-item" (click)="openModalNewSP()" [style.cursor]="'pointer'">
+          <a class="nav-link py-2 px-4 active">New Schedule</a>
+        </li>
+        <!-- <li class="nav-item" [style.cursor]="'pointer'">
+          <a
+            class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
+            data-bs-toggle="tooltip"
+            data-bs-trigger="hover"
+            data-bs-dismiss-="click"
+            data-bs-placement="top"
+            title="Generate SP Package"
+            (click)="openModalGeneratePackageSP()"
+          >
+            <app-keenicon name="package" class="fs-md-3 text-light"></app-keenicon>
+          </a>
+        </li>
+        <li class="nav-item" [style.cursor]="'pointer'">
+          <a
+            class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
+            data-bs-toggle="tooltip"
+            data-bs-trigger="hover"
+            data-bs-dismiss-="click"
+            data-bs-placement="top"
+            title="Generate SP Passenger"
+            (click)="openModalGeneratePackageSP()"
+          >
+            <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
+          </a>
+        </li> -->
+      </ul>
+    </div>
   </div>
   <!-- end::Header -->
   <!-- begin::Body -->
@@ -64,12 +90,19 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @for (value of row?.packages; track value) {
+                  @if (row?.employee?.packages?.length > 0) {
                   <img
                     style="width: 25px"
                     src="../../../../assets/media/box.png"
-                    alt="{{ value.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}"
-                    title="{{ value.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}"
+                    alt="{{ row.sp_package }}"
+                    title="{{ row.sp_package }}"
+                  />
+                  } @if (row?.employee?.passengers?.length > 0) {
+                  <img
+                    style="width: 25px"
+                    src="../../../../assets/media/avatars/blank.png"
+                    alt="{{ row.sp_passenger }}"
+                    title="{{ row.sp_passenger }}"
                   />
                   }
                 </span>
@@ -99,6 +132,29 @@
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
                 <a
+                  class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Generate SP Package"
+                  (click)="openModalGeneratePackageSP(row)"
+                >
+                  <app-keenicon name="package" class="fs-md-3 text-light"></app-keenicon>
+                </a>
+                <a
+                  class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Generate SP Passenger"
+                  (click)="openModalGeneratePassengerSP(row)"
+                >
+                  <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
+                </a>
+                <br />
+                <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
@@ -121,7 +177,7 @@
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
                 <a
-                  href="#"
+                  href="javascript:void(0)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
@@ -129,7 +185,7 @@
                   data-bs-placement="top"
                   title="Delete"
                 >
-                  <app-keenicon name="trash" class="fs-3"></app-keenicon>
+                  <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
                 </a>
               </td>
             </ng-template>
@@ -206,6 +262,29 @@
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
                 <a
+                  class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Generate SP Package"
+                  (click)="openModalGeneratePackageSP(row)"
+                >
+                  <app-keenicon name="package" class="fs-md-3 text-light"></app-keenicon>
+                </a>
+                <a
+                  class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Generate SP Passenger"
+                  (click)="openModalGeneratePassengerSP(row)"
+                >
+                  <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
+                </a>
+                <br />
+                <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
@@ -228,7 +307,7 @@
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
                 <a
-                  href="#"
+                  href="javascript:void(0)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
@@ -236,7 +315,7 @@
                   data-bs-placement="top"
                   title="Delete"
                 >
-                  <app-keenicon name="trash" class="fs-3"></app-keenicon>
+                  <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
                 </a>
               </td>
             </ng-template>
@@ -252,8 +331,8 @@
 <!-- begin::Body -->
 
 <!-- begin:: Modal SP -->
-<app-modal #modalSP [modalConfig]="modalConfigEditSP">
-  <form (ngSubmit)="dataEditSP()" [formGroup]="formSP" novalidate>
+<app-modal #modalSP [modalConfig]="isCreateSP ? modalConfigCreateSP : modalConfigEditSP">
+  <form (ngSubmit)="isCreateSP ? dataCreateSP() : dataEditSP()" [formGroup]="formSP" novalidate>
     <div class="m-3">
       <label class="d-block mb-4">
         <input
@@ -272,7 +351,7 @@
           {{ r.name }}
         </ng-template>
 
-        @if (searchingEmployee || modelEmployee == '') {
+        @if (searchingEmployee) {
         <small class="form-text text-muted">Searching. Please wait...</small>
         } @if (searchFailedEmployee) {
         <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
@@ -325,7 +404,7 @@
           {{ r.name }}
         </ng-template>
 
-        @if (searchingCar || modelCar == '') {
+        @if (searchingCar) {
         <small class="form-text text-muted">Searching. Please wait...</small>
         } @if (searchFailedCar) {
         <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
@@ -406,7 +485,7 @@
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
 <!-- end:: Modal sp -->
 
-<!-- begin:: Modal Edit gosend -->
+<!-- begin:: Modal Edit employee -->
 <app-modal #modal [modalConfig]="isCreate ? modalConfigCreate : modalConfigEdit">
   <form (ngSubmit)="isCreate ? dataCreate() : dataEdit()" [formGroup]="form" novalidate>
     <div class="m-3">
@@ -491,9 +570,9 @@
   </form>
 </app-modal>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
-<!-- end:: Modal go send -->
+<!-- end:: Modal employee -->
 
-<!-- begin:: Modal detail go send -->
+<!-- begin:: Modal detail print sp -->
 <app-modal-full #modalDetail [modalConfig]="modalConfigDetailSP">
   <div class="card-toolbar text-end">
     <div class="menu-item">
@@ -579,4 +658,18 @@
   <!-- end::Table container -->
 </app-modal-full>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
-<!-- end:: Modal detail gosend -->
+<!-- end:: Modal detail print sp -->
+
+<!-- begin:: Modal generate SP Package-->
+<app-modal-full #modalGeneratePackageSP [modalConfig]="modalConfigGenerateSP" [modalClass]="addClass">
+  <app-package [delivery]="dataDelivery"></app-package>
+</app-modal-full>
+<!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
+<!-- end:: Modal generate sp package -->
+
+<!-- begin:: Modal generate SP Passenger -->
+<app-modal-full #modalGeneratePassengerSP [modalConfig]="modalConfigGenerateSP" [modalClass]="addClass">
+  <app-package [delivery]="dataDelivery"></app-package>
+</app-modal-full>
+<!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
+<!-- end:: Modal generate sp passenger -->

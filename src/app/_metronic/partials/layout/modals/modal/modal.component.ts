@@ -23,7 +23,7 @@ export class ModalComponent {
   async close(): Promise<void> {
     if (this.modalConfig.shouldClose === undefined || (await this.modalConfig.shouldClose())) {
       const result = this.modalConfig.onClose === undefined || (await this.modalConfig.onClose());
-      this.modalRef.close(result);
+      this.modalRef?.close(result);
     }
   }
 
@@ -34,7 +34,7 @@ export class ModalComponent {
 
     if (this.modalConfig.shouldDismiss === undefined || (await this.modalConfig.shouldDismiss())) {
       const result = this.modalConfig.onDismiss === undefined || (await this.modalConfig.onDismiss());
-      this.modalRef.dismiss(result);
+      this.modalRef?.dismiss(result);
     }
   }
 }

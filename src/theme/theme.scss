@@ -58,3 +58,25 @@ tr:hover {
 .full-width {
   width: 100% !important;
 }
+
+.modal-clean {
+  padding: 0 !important;
+
+  h2 {
+    display: none;
+  }
+
+  .modal-header,
+  .modal-body {
+    padding: 0 !important;
+
+    .card {
+      border: none;
+      box-shadow: none;
+    }
+  }
+
+  .modal-footer {
+    display: none;
+  }
+}

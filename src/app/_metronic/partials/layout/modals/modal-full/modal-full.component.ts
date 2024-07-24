@@ -8,6 +8,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ModalFullComponent {
   @Input() public modalConfig!: ModalConfig;
+  @Input() public modalClass: any;
   @ViewChild('modal') private modalContent!: TemplateRef<ModalFullComponent>;
   private modalRef!: NgbModalRef;
 
@@ -23,7 +24,7 @@ export class ModalFullComponent {
   async close(): Promise<void> {
     if (this.modalConfig.shouldClose === undefined || (await this.modalConfig.shouldClose())) {
       const result = this.modalConfig.onClose === undefined || (await this.modalConfig.onClose());
-      this.modalRef.close(result);
+      this.modalRef?.close(result);
     }
   }
 

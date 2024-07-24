@@ -215,18 +215,14 @@ export class LocalService {
     },
     {
       status_package_id: 2,
-      name: 'Move',
-    },
-    {
-      status_package_id: 3,
       name: 'Cancel',
     },
     {
-      status_package_id: 4,
+      status_package_id: 3,
       name: 'Delivery',
     },
     {
-      status_package_id: 5,
+      status_package_id: 4,
       name: 'Complete',
     },
   ];

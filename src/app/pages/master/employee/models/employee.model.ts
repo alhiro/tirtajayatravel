@@ -1,3 +1,6 @@
+import { PackageModel } from '@app/pages/booking/package/models/package.model';
+import { PassengerModel } from '@app/pages/booking/passenger/models/passenger.model';
+
 export class EmployeeyModel {
   employee_id!: number;
   car_id!: number;
@@ -9,6 +12,8 @@ export class EmployeeyModel {
   photo!: string;
   active!: string;
   log!: string;
+  packages!: PackageModel;
+  passenger!: PassengerModel;
 
   setEmployee(_category: unknown) {
     const employee = _category as EmployeeyModel;
