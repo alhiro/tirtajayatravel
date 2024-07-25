@@ -106,11 +106,15 @@ export class PackageComponent implements OnInit {
     offset: 1,
     count: -1,
     search: '',
+    startDate: '',
+    endDate: '',
   };
   public params = {
     limit: 10,
     page: 1,
     search: '',
+    startDate: '',
+    endDate: '',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -394,6 +398,8 @@ export class PackageComponent implements OnInit {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search: this.pagination.search,
+      startDate: this.pagination.startDate,
+      endDate: this.pagination.endDate,
     }; // see https://github.com/typicode/json-server
     this.dataList(params);
   }
@@ -483,6 +489,8 @@ export class PackageComponent implements OnInit {
             limit: this.params.limit,
             page: this.params.page,
             search: term,
+            startDate: this.params.startDate,
+            endDate: this.params.endDate,
           })
           .pipe(
             tap(() => (this.searchFailedEmployee = false)),
@@ -520,6 +528,8 @@ export class PackageComponent implements OnInit {
             limit: this.params.limit,
             page: this.params.page,
             search: term,
+            startDate: this.params.startDate,
+            endDate: this.params.endDate,
           })
           .pipe(
             tap(() => (this.searchFailedCar = false)),
@@ -549,6 +559,8 @@ export class PackageComponent implements OnInit {
             limit: this.params.limit,
             page: this.params.page,
             search: term,
+            startDate: this.params.startDate,
+            endDate: this.params.endDate,
           })
           .pipe(
             tap(() => (this.searchFailed = false)),
@@ -588,6 +600,8 @@ export class PackageComponent implements OnInit {
             limit: this.params.limit,
             page: this.params.page,
             search: term,
+            startDate: this.params.startDate,
+            endDate: this.params.endDate,
           })
           .pipe(
             tap(() => (this.searchFailedRecipient = false)),
@@ -1259,7 +1273,6 @@ export class PackageComponent implements OnInit {
 
     const updateSP: any = {
       package_id: event.package_id,
-      employee_id: this.delivery.employee_id,
       go_send_id: this.delivery.go_send_id,
       status_package: 'Delivery',
     };
@@ -1302,7 +1315,6 @@ export class PackageComponent implements OnInit {
 
     const updateSP: any = {
       package_id: event.package_id,
-      employee_id: null,
       go_send_id: null,
       status_package: 'Progress',
     };

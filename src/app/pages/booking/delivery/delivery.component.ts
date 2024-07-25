@@ -31,6 +31,9 @@ import { PackageService } from '../package/package.service';
 import { CarService } from '@app/pages/master/car/car.service';
 import { GoSendModel } from '../package/models/gosend';
 import { NavigationExtras, Router } from '@angular/router';
+import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
+import { Utils } from '@app/@shared';
 
 interface EventObject {
   event: string;
@@ -49,7 +52,9 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   @ViewChild('table') table!: APIDefinition;
   public columns!: Columns[];
   public columnsPackage!: Columns[];
+  public columnsPassenger!: Columns[];
   public category: any;
+
   public city: any;
   public level: any;
   public dataLength!: number;
@@ -61,6 +66,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   public dataSurabaya: any;
   public dataDetail: any;
   public dataDetailPackages: any;
+  public dataDetailPassenger: any;
   public dataLengthMalang!: number;
   public dataLengthSurabaya!: number;
 
@@ -85,11 +91,15 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     offset: 0,
     count: -1,
     search: '',
+    startDate: '',
+    endDate: '',
   };
   public params = {
     limit: 10,
     page: 1,
     search: '',
+    startDate: '',
+    endDate: '',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -105,6 +115,10 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   get fsp() {
     return this.formSP.controls;
   }
+
+  minDate: any;
+  bookdate!: NgbDateStruct;
+  booktime: NgbTimeStruct = { hour: 0, minute: 0, second: 0 };
 
   modalConfigCreate: ModalConfig = {
     modalTitle: 'Create Driver',
@@ -132,9 +146,9 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     closeButtonLabel: 'Cancel',
   };
   modalConfigDetailSP: ModalConfig = {
-    modalTitle: 'Detail List Packages',
+    modalTitle: 'Detail List SP',
     // dismissButtonLabel: 'Submit',
-    closeButtonLabel: 'Cancel',
+    // closeButtonLabel: 'Cancel',
   };
   modalConfigGenerateSP: ModalConfig = {
     modalTitle: 'List Transaction',
@@ -163,9 +177,20 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
     private localService: LocalService,
+    private utils: Utils,
     private router: Router
   ) {
     this.initForm();
+
+    // set min selected date
+    const minDate = this.utils.indonesiaDateFormat(new Date());
+    this.minDate = {
+      year: minDate.getFullYear(),
+      month: minDate.getMonth() + 1,
+      day: minDate.getDate(),
+    };
+    var getDate = new Date(minDate);
+    this.formatDateNow(getDate);
   }
 
   ngOnInit() {
@@ -173,18 +198,30 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.city = this.localService.getCity();
     this.level = this.localService.getPosition();
 
-    this.configuration.resizeColumn = false;
-    this.configuration.fixedColumnWidth = false;
+    // this.configuration.resizeColumn = true;
+    // this.configuration.fixedColumnWidth = false;
+    this.configuration.horizontalScroll = true;
 
     this.columns = [
       // { key: 'category_sub_id', title: 'No' },
+      { key: 'send_date', title: 'Departure Date' },
       { key: 'name', title: 'Driver' },
       { key: 'telp', title: 'Telp' },
       { key: 'description', title: 'Description' },
-      { key: 'packages', title: 'Items' },
+      { key: '', title: 'Items' },
       { key: 'car', title: 'Car' },
       { key: 'status', title: 'Status' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
+    ];
+
+    this.columnsPassenger = [
+      // { key: 'category_sub_id', title: 'No' },
+      { key: 'resi_number', title: 'Resi Number' },
+      { key: 'sp_package', title: 'SP' },
+      { key: 'waybill_id', title: 'Waybill' },
+      { key: 'destination_id', title: 'Destination' },
+      { key: 'status', title: 'Status' },
+      { key: 'position', title: 'Seat' },
     ];
 
     this.columnsPackage = [
@@ -194,7 +231,6 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       { key: 'sp_package', title: 'SP' },
       { key: 'sender_id', title: 'Sender' },
       { key: 'recipient_id', title: 'Recipient' },
-      { key: 'address', title: 'Address' },
       { key: 'origin_form', title: 'From' },
     ];
   }
@@ -261,6 +297,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search: this.pagination.search,
+      startDate: this.pagination.startDate,
+      endDate: this.pagination.endDate,
     }; // see https://github.com/typicode/json-server
     this.dataListGosend(params);
   }
@@ -295,23 +333,78 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       });
   }
 
-  async printSP(val: any) {
-    // this.router.navigate(['/departure/delivery/printsp', {printsp: JSON.stringify(val)}]);
-    const navigationExtras: NavigationExtras = {
-      state: {
-        data: val,
-      },
+  onDateChange(date: NgbDateStruct): void {
+    this.bookdate = date;
+  }
+
+  formatDateNow(event: any) {
+    const valDate = {
+      year: event.getFullYear(),
+      month: event.getMonth() + 1,
+      day: event.getDate(),
     };
-    this.router.navigate(['/departure/delivery/printsp'], navigationExtras);
-    await this.modalComponentDetail.dismiss();
+    this.bookdate = { year: valDate.year, month: valDate.month, day: valDate.day };
+    console.log(this.bookdate);
+
+    const valTime = {
+      hour: event.getHours(),
+      minute: event.getMinutes(),
+      second: event.getSeconds(),
+    };
+    this.booktime = { hour: valTime.hour == 0 ? 1 : valTime.hour, minute: 0, second: 0 };
+    console.log(this.booktime);
+  }
+
+  formatDateValue(value: any) {
+    const eventDate = moment.utc(value);
+    console.log('event eventDate', eventDate);
+    const valDate = {
+      year: eventDate.year(),
+      month: eventDate.month() + 1,
+      day: eventDate.day(),
+    };
+    this.bookdate = { year: valDate.year, month: valDate.month, day: valDate.day };
+    console.log(this.bookdate);
+
+    const valTime = {
+      hour: eventDate.hour(),
+      minute: eventDate.minute(),
+      second: eventDate.second(),
+    };
+    this.booktime = { hour: valTime.hour == 0 ? 1 : valTime.hour, minute: 0, second: 0 };
+    console.log(this.booktime);
+  }
+
+  async printSP(val: any, item: any) {
+    // const navigationExtras: NavigationExtras = {
+    //   state: {
+    //     data: val,
+    //   },
+    // };
+
+    // this.router.navigate(['/departure/delivery/printsp'], navigationExtras);
+    // await this.modalComponentDetail.dismiss();
     // window.open('departure/delivery/printsp', '_blank');
+
+    // const newData = val.map((data: any) => ({
+    //   ...data,
+    //   type: item
+    // }))
+    // console.log(newData);
+
+    sessionStorage.setItem('printsp', JSON.stringify(val));
+    sessionStorage.setItem('detailsp', JSON.stringify(this.dataDetail));
+    sessionStorage.setItem('type', JSON.stringify(item));
+    window.open('/departure/delivery/printsp', '_blank');
   }
 
   async openModalView(val: GoSendModel) {
     console.log(val);
-    console.log(val.employee?.packages);
+    console.log(val?.packages);
+    console.log(val?.passengers);
     this.dataDetail = val;
-    this.dataDetailPackages = val.employee?.packages;
+    this.dataDetailPackages = val?.packages;
+    this.dataDetailPassenger = val?.passengers;
     return await this.modalComponentDetail.open();
   }
 
@@ -424,6 +517,9 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.modelEmployee = '';
     this.modelCar = '';
 
+    const getDate = new Date();
+    this.formatDateNow(getDate);
+
     this.formSP.patchValue({
       city_id: this.currentTab === 'Malang' ? 1 : 2,
     });
@@ -432,7 +528,13 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   }
 
   dataCreateSP() {
+    const valueSendDate = new Date(
+      Date.UTC(this.bookdate.year, this.bookdate.month - 1, this.bookdate.day, this.booktime.hour, this.booktime.minute)
+    ).toISOString();
+    console.log(valueSendDate);
+
     this.formSP.patchValue({
+      send_date: valueSendDate,
       employee_id: this.modelEmployee?.employee_id,
       car_id: this.modelCar?.car_id,
     });
@@ -474,6 +576,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.isCreateSP = false;
     console.log(event);
 
+    this.formatDateValue(event.send_date);
+
     this.modelEmployee = event.employee;
     this.modelCar = event.car;
 
@@ -501,9 +605,15 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     console.log(this.modelEmployee);
     console.log(this.modelCar);
 
+    const valueSendDate = new Date(
+      Date.UTC(this.bookdate.year, this.bookdate.month - 1, this.bookdate.day, this.booktime.hour, this.booktime.minute)
+    ).toISOString();
+    console.log(valueSendDate);
+
     this.formSP.patchValue({
       employee_id: this.modelEmployee?.employee_id,
       car_id: this.modelCar?.car_id,
+      send_date: valueSendDate,
     });
     console.log(this.formSP.value);
 
@@ -542,16 +652,40 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   async openModalGeneratePackageSP(event: GoSendModel) {
     console.log(event);
     this.dataDelivery = event;
-    return await this.modalComponentGeneratePackageSP.open();
+    return await this.modalComponentGeneratePackageSP.open().then(
+      (resp: any) => {
+        console.log(resp);
+
+        if (resp === true || resp === 1) {
+          this.dataListGosend(this.params);
+        }
+        console.log('User closes or esc');
+      },
+      () => {
+        console.log('Backdrop click');
+      }
+    );
   }
 
   async openModalGeneratePassengerSP(event: GoSendModel) {
     console.log(event);
     this.dataDelivery = event;
-    return await this.modalComponentGeneratePassengerSP.open();
+    return await this.modalComponentGeneratePassengerSP.open().then(
+      (resp: any) => {
+        console.log(resp);
+
+        if (resp === true || resp === 1) {
+          this.dataListGosend(this.params);
+        }
+        console.log('User closes or esc');
+      },
+      () => {
+        console.log('Backdrop click');
+      }
+    );
   }
 
-  formatter = (result: { name: string }) => result.name;
+  formatter = (result: { name: string; car_number: string }) => result.car_number;
 
   searchDataEmployee = (text$: Observable<string>) =>
     text$.pipe(
@@ -564,6 +698,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
             limit: this.params.limit,
             page: this.params.page,
             search: term,
+            startDate: this.params.startDate,
+            endDate: this.params.endDate,
           })
           .pipe(
             tap(() => (this.searchFailedEmployee = false)),
@@ -601,13 +737,17 @@ export class DeliveryComponent implements OnInit, OnDestroy {
             limit: this.params.limit,
             page: this.params.page,
             search: term,
+            startDate: this.params.startDate,
+            endDate: this.params.endDate,
           })
           .pipe(
             tap(() => (this.searchFailedCar = false)),
             map((response: any) => {
               if (response) {
                 tap(() => (this.searchingCar = false));
-                return response.data.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+                return response.data.filter(
+                  (val: any) => val.car_number.toLowerCase().indexOf(term.toLowerCase()) > -1
+                );
               }
             }),
             catchError(() => {

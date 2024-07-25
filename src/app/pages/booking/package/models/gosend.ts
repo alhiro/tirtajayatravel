@@ -13,7 +13,7 @@ export class GoSendModel {
   package_id!: number;
   packages!: PackageModel;
   passenger_id!: number;
-  passenger!: PassengerModel;
+  passengers!: PassengerModel;
   telp!: string;
   send_time!: any;
   send_date!: Date;

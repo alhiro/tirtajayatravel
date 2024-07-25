@@ -13,7 +13,7 @@ export class EmployeeyModel {
   active!: string;
   log!: string;
   packages!: PackageModel;
-  passenger!: PassengerModel;
+  passengers!: PassengerModel;
 
   setEmployee(_category: unknown) {
     const employee = _category as EmployeeyModel;

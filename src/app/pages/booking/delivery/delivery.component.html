@@ -78,28 +78,33 @@
                 <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
               </td> -->
               <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalView(row)">
-                  {{ row.employee.name }}
+                <span class="text-gray-900 d-block">
+                  {{ row.send_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.employee.telp }}</span>
+                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalView(row)">
+                  {{ row.employee?.name }}
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.employee?.telp }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row?.employee?.packages?.length > 0) {
+                  @if (row?.packages?.length > 0) {
                   <img
                     style="width: 25px"
                     src="../../../../assets/media/box.png"
                     alt="{{ row.sp_package }}"
                     title="{{ row.sp_package }}"
                   />
-                  } @if (row?.employee?.passengers?.length > 0) {
+                  } @if (row?.passengers?.length > 0) {
                   <img
-                    style="width: 25px"
+                    style="width: 22px"
                     src="../../../../assets/media/avatars/blank.png"
                     alt="{{ row.sp_passenger }}"
                     title="{{ row.sp_passenger }}"
@@ -153,7 +158,6 @@
                 >
                   <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
                 </a>
-                <br />
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -165,7 +169,7 @@
                 >
                   <app-keenicon name="document" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                <a
+                <!-- <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
@@ -175,7 +179,7 @@
                   (click)="printSP(row)"
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
-                </a>
+                </a> -->
                 <a
                   href="javascript:void(0)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
@@ -215,24 +219,36 @@
                 <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
               </td> -->
               <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalView(row)">
-                  {{ row.employee.name }}
+                <span class="text-gray-900 d-block">
+                  {{ row.send_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.employee.telp }}</span>
+                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalView(row)">
+                  {{ row.employee?.name }}
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.employee?.telp }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @for (value of row?.packages; track value) {
+                  @if (row?.employee?.packages?.length > 0) {
                   <img
                     style="width: 25px"
                     src="../../../../assets/media/box.png"
-                    alt="{{ value.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}"
-                    title="{{ value.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}"
+                    alt="{{ row.sp_package }}"
+                    title="{{ row.sp_package }}"
+                  />
+                  } @if (row?.employee?.passengers?.length > 0) {
+                  <img
+                    style="width: 22px"
+                    src="../../../../assets/media/avatars/blank.png"
+                    alt="{{ row.sp_passenger }}"
+                    title="{{ row.sp_passenger }}"
                   />
                   }
                 </span>
@@ -283,7 +299,6 @@
                 >
                   <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
                 </a>
-                <br />
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -295,7 +310,7 @@
                 >
                   <app-keenicon name="document" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                <a
+                <!-- <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
@@ -305,7 +320,7 @@
                   (click)="printSP(row)"
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
-                </a>
+                </a> -->
                 <a
                   href="javascript:void(0)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
@@ -334,6 +349,35 @@
 <app-modal #modalSP [modalConfig]="isCreateSP ? modalConfigCreateSP : modalConfigEditSP">
   <form (ngSubmit)="isCreateSP ? dataCreateSP() : dataEditSP()" [formGroup]="formSP" novalidate>
     <div class="m-3">
+      <label class="d-block mb-4">
+        <div class="custom-datetime input-group">
+          <input
+            readonly
+            class="form-control"
+            placeholder="Select book date"
+            name="dp"
+            [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="bookdate"
+            ngbDatepicker
+            [minDate]="minDate"
+            (click)="datePicker.toggle()"
+            #datePicker="ngbDatepicker"
+            (ngModelChange)="onDateChange($event)"
+          />
+          <ngb-timepicker-custom
+            [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="booktime"
+            [hourStep]="1"
+            [minuteStep]="30"
+            [startHour]="1"
+            [endHour]="23"
+            [seconds]="false"
+            [spinners]="false"
+            [select]="true"
+          >
+          </ngb-timepicker-custom>
+        </div>
+      </label>
       <label class="d-block mb-4">
         <input
           id="select-employee"
@@ -401,7 +445,7 @@
           placeholder="Car search"
         />
         <ng-template #rt let-r="result" let-t="term">
-          {{ r.name }}
+          {{ r.car_number }}
         </ng-template>
 
         @if (searchingCar) {
@@ -574,20 +618,145 @@
 
 <!-- begin:: Modal detail print sp -->
 <app-modal-full #modalDetail [modalConfig]="modalConfigDetailSP">
-  <div class="card-toolbar text-end">
-    <div class="menu-item">
-      <div class="mb-7">
-        <a
-          class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
-          data-bs-toggle="tooltip"
-          data-bs-trigger="hover"
-          data-bs-dismiss-="click"
-          data-bs-placement="top"
-          title="Print SP"
-          (click)="printSP(dataDetail)"
-        >
-          <app-keenicon name="printer" class="fs-md-3 text-light"></app-keenicon>
-        </a>
+  <div class="m-0">
+    <div class="card-header border-0 pt-5" style="display: flex; justify-content: space-between">
+      <div class="card-toolbar">
+        <div class="col">
+          <!-- begin::Menu -->
+          <div class="menu-item">
+            <div class="menu-content px-0">
+              <h3 class="card-title align-items-start flex-column">
+                <span class="card-label fw-bolder fs-3 mb-1"> List Passenger </span>
+              </h3>
+            </div>
+          </div>
+          <!-- end::Menu -->
+        </div>
+      </div>
+      <div class="card-toolbar">
+        <div class="col text-end">
+          <!-- begin::Menu -->
+          <div class="menu-item px-3">
+            <div class="menu-content px-3 py-3">
+              <a
+                class="btn btn-primary btn-hover-primary btn-sm cursor-pointer p-3"
+                data-bs-toggle="tooltip"
+                data-bs-trigger="hover"
+                data-bs-dismiss-="click"
+                data-bs-placement="top"
+                title="Print SP"
+                (click)="printSP(dataDetailPassenger, 'Passenger')"
+              >
+                Print Passenger
+              </a>
+            </div>
+          </div>
+          <!-- end::Menu -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- begin::Table container -->
+  <div class="table-responsive">
+    <!-- begin::Table -->
+    <ngx-table
+      #table
+      [configuration]="configuration"
+      [data]="dataDetailPassenger"
+      [columns]="columnsPassenger"
+      [pagination]="pagination"
+      (event)="eventEmitted($event)"
+      tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+    >
+      <ng-template let-row let-index="index">
+        <!-- <td>
+          <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
+        </td> -->
+        <td>
+          <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
+            {{ row.resi_number }}
+          </span>
+        </td>
+        <td>
+          <span class="text-gray-900 d-block">
+            {{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}
+          </span>
+        </td>
+        <td>
+          <span class="text-gray-900 d-block">
+            {{ row.waybill?.customer?.name }}<br />
+            @if (row.waybill?.customer?.addresses.length > 0) { @for (value of row.waybill?.customer?.addresses; track
+            value) { @if (value.default == true) {
+            {{ value.address }}
+            } } } @else {
+            {{ row.waybill?.customer?.address }}
+            }
+          </span>
+        </td>
+        <td>
+          <span class="text-gray-900 d-block">
+            {{ row.destination?.customer?.name }}<br />
+            @if (row.destination?.customer?.addresses.length > 0) { @for (value of row.destination?.customer?.addresses;
+            track value) { @if (value.default == true) {
+            {{ value.address }}
+            } } } @else {
+            {{ row.destination?.customer?.address }}
+            }
+          </span>
+        </td>
+        <td>
+          <span class="text-gray-900 d-block">
+            {{ row.status }}
+          </span>
+        </td>
+        <td>
+          <span class="text-gray-900 d-block">
+            {{ row.position }}
+          </span>
+        </td>
+      </ng-template>
+    </ngx-table>
+    <!-- end::Table -->
+  </div>
+  <!-- end::Table container -->
+
+  <div class="mt-10">
+    <div class="m-0">
+      <div class="card-header border-0 pt-5" style="display: flex; justify-content: space-between">
+        <div class="card-toolbar">
+          <div class="col">
+            <!-- begin::Menu -->
+            <div class="menu-item">
+              <div class="menu-content px-0">
+                <h3 class="card-title align-items-start flex-column">
+                  <span class="card-label fw-bolder fs-3 mb-1"> List Package </span>
+                </h3>
+              </div>
+            </div>
+            <!-- end::Menu -->
+          </div>
+        </div>
+        <div class="card-toolbar">
+          <div class="col text-end">
+            <!-- begin::Menu -->
+            <div class="menu-item px-3">
+              <div class="menu-content px-3 py-3">
+                <a
+                  class="btn btn-primary btn-hover-primary btn-sm cursor-pointer p-3"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Print SP"
+                  (click)="printSP(dataDetailPackages, 'Package')"
+                >
+                  Print Package
+                </a>
+              </div>
+            </div>
+            <!-- end::Menu -->
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -628,21 +797,17 @@
         </td>
         <td>
           <span class="text-gray-900 d-block">
-            {{ row.sender.customer.name }}
+            {{ row.sender?.customer?.name }}
           </span>
         </td>
         <td>
           <span class="text-gray-900 d-block">
-            {{ row.recipient.customer.name }}
-          </span>
-        </td>
-        <td>
-          <span class="text-gray-900 d-block">
-            @if (row.recipient.customer.addresses) { @for (value of row.recipient.customer.addresses; track value) { @if
-            (value.default == true) {
+            {{ row.recipient?.customer?.name }}<br />
+            @if (row.recipient?.customer?.addresses.length > 0) { @for (value of row.recipient?.customer?.addresses;
+            track value) { @if (value.default == true) {
             {{ value.address }}
             } } } @else {
-            {{ row.recipient.customer.address }}
+            {{ row.recipient?.customer?.address }}
             }
           </span>
         </td>
@@ -669,7 +834,7 @@
 
 <!-- begin:: Modal generate SP Passenger -->
 <app-modal-full #modalGeneratePassengerSP [modalConfig]="modalConfigGenerateSP" [modalClass]="addClass">
-  <app-package [delivery]="dataDelivery"></app-package>
+  <app-passenger [delivery]="dataDelivery"></app-passenger>
 </app-modal-full>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
 <!-- end:: Modal generate sp passenger -->

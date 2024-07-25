@@ -9,6 +9,7 @@
   right: 0;
   left: 0;
   top: 20px;
+  z-index: 9999;
 
   .mdc-snackbar__surface {
     background-color: red !important;
@@ -25,6 +26,7 @@
   right: 0;
   left: 0;
   bottom: 20px;
+  z-index: 9999;
 
   .mdc-snackbar__surface {
     background-color: green !important;
@@ -78,5 +80,13 @@ tr:hover {
 
   .modal-footer {
     display: none;
+  }
+}
+
+table {
+  thead,
+  tbody {
+    width: 100%;
+    display: table;
   }
 }

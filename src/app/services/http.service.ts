@@ -75,7 +75,18 @@ export class HttpService {
   // BOOKING
   // Packager
   packageList(param: PaginationContext): Observable<any> {
-    return this.commonApi.get('/package/list?limit=' + param.limit + '&page=' + param.page) as Observable<any>;
+    return this.commonApi.get(
+      '/package/list?limit=' +
+        param.limit +
+        '&page=' +
+        param.page +
+        '&search=' +
+        param.search +
+        '&startDate=' +
+        param.startDate +
+        '&endDate=' +
+        param.endDate
+    ) as Observable<any>;
   }
 
   packageEdit(param: PackageModel): Observable<any> {
@@ -294,7 +305,16 @@ export class HttpService {
   // Passenger
   passengerList(param: PaginationContext): Observable<any> {
     return this.commonApi.get(
-      '/passenger/list?limit=' + param.limit + '&page=' + param.page + '&search=' + param.search
+      '/passenger/list?limit=' +
+        param.limit +
+        '&page=' +
+        param.page +
+        '&search=' +
+        param.search +
+        '&startDate=' +
+        param.startDate +
+        '&endDate=' +
+        param.endDate
     ) as Observable<any>;
   }
 

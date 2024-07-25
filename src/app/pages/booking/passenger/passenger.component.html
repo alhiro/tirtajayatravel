@@ -38,6 +38,7 @@
       </div>
       <!-- end::Menu -->
 
+      @if (!delivery) {
       <div class="col text-end">
         <div ngbDropdown placement="bottom-end" class="d-inline-block">
           <button type="button" class="btn btn-sm btn-light" id="othersPassenger" ngbDropdownToggle>Others Menu</button>
@@ -56,6 +57,7 @@
           </div>
         </div>
       </div>
+      }
     </div>
   </div>
   <!-- end::Header -->
@@ -138,6 +140,7 @@
               <td>
                 <span class="badge badge-light-primary">{{ row.status_passenger }}</span>
               </td>
+              @if (!delivery) {
               <td class="text-end">
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
@@ -174,6 +177,35 @@
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
                 </a>
               </td>
+              } @else {
+              <td class="text-end">
+                @if (row.status_passenger === 'Delivery') {
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Remove Driver"
+                  (click)="removeDriverSP(row)"
+                >
+                  <app-keenicon name="minus-square" class="fs-md-3 text-danger"></app-keenicon>
+                </a>
+                } @else {
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Assign Driver"
+                  (click)="assignDriverSP(row)"
+                >
+                  <app-keenicon name="plus-square" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+                }
+              </td>
+              }
             </ng-template>
           </ngx-table>
           <!-- end::Table -->
@@ -283,6 +315,7 @@
               <td>
                 <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
               </td>
+              @if (!delivery) {
               <td class="text-end">
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
@@ -319,6 +352,35 @@
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
                 </a>
               </td>
+              } @else {
+              <td class="text-end">
+                @if (row.status_passenger === 'Delivery') {
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Remove Driver"
+                  (click)="removeDriverSP(row)"
+                >
+                  <app-keenicon name="minus-square" class="fs-md-3 text-danger"></app-keenicon>
+                </a>
+                } @else {
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Assign Driver"
+                  (click)="assignDriverSP(row)"
+                >
+                  <app-keenicon name="plus-square" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+                }
+              </td>
+              }
             </ng-template>
           </ngx-table>
           <!-- end::Table -->

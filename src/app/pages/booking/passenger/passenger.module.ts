@@ -44,5 +44,6 @@ import { NgbTimepickerModuleCustom } from '@app/@shared/component/timepicker-cus
     DateTimeModule,
     NgbTimepickerModuleCustom,
   ],
+  exports: [PassengerComponent],
 })
 export class PassengerModule {}

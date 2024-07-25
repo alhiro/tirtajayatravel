@@ -1,4 +1,5 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { AuthenticationService } from '@app/modules/auth';
 import { Observable, Subscription } from 'rxjs';
 
 @Component({
@@ -13,12 +14,13 @@ export class UserInnerComponent implements OnInit, OnDestroy {
   langs = languages;
   private unsubscribe: Subscription[] = [];
 
-  constructor() {}
+  constructor(private authenticationService: AuthenticationService) {}
 
   ngOnInit(): void {}
 
   logout() {
-    document.location.reload();
+    // document.location.reload();
+    this.authenticationService.logout();
   }
 
   selectLanguage(lang: string) {

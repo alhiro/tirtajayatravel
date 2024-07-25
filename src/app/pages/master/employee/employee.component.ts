@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } fro
 import { API, APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { Subject, Subscription, finalize, takeUntil } from 'rxjs';
 import { EmployeeService } from './employee.service';
-import { PaginationContext } from '@app/@shared/interfaces/pagination';
+import { Pagination, PaginationContext, Params } from '@app/@shared/interfaces/pagination';
 import { HttpService } from '@app/services/http.service';
 import { ModalComponent, ModalConfig } from '@app/_metronic/partials';
 
@@ -40,17 +40,8 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   public configuration: Config = { ...DefaultConfig };
 
-  public pagination = {
-    limit: 10,
-    offset: 0,
-    count: -1,
-    search: '',
-  };
-  public params = {
-    limit: 10,
-    page: 1,
-    search: '',
-  };
+  public pagination!: Pagination;
+  public params!: Params;
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   form!: FormGroup;
@@ -139,6 +130,8 @@ export class EmployeeComponent implements OnInit, OnDestroy {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search: this.pagination.search,
+      startDate: this.pagination.search,
+      endDate: this.pagination.endDate,
     }; // see https://github.com/typicode/json-server
     this.dataList(params);
   }

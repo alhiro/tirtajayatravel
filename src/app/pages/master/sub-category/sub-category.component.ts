@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } fro
 import { API, APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { Subject, Subscription, finalize, takeUntil } from 'rxjs';
 import { SubCategoryService } from './sub-category.service';
-import { PaginationContext } from '@app/@shared/interfaces/pagination';
+import { Pagination, PaginationContext, Params } from '@app/@shared/interfaces/pagination';
 import { HttpService } from '@app/services/http.service';
 import { ModalComponent, ModalConfig } from '@app/_metronic/partials';
 
@@ -38,17 +38,6 @@ export class SubCategoryComponent implements OnInit, OnDestroy {
 
   public configuration: Config = { ...DefaultConfig };
 
-  public pagination = {
-    limit: 10,
-    offset: 0,
-    count: -1,
-    search: '',
-  };
-  public params = {
-    limit: 10,
-    page: 1,
-    search: '',
-  };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   form!: FormGroup;
@@ -68,6 +57,9 @@ export class SubCategoryComponent implements OnInit, OnDestroy {
     closeButtonLabel: 'Cancel',
   };
   @ViewChild('modal') private modalComponent!: ModalComponent;
+
+  public pagination!: Pagination;
+  public params!: Params;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -126,6 +118,8 @@ export class SubCategoryComponent implements OnInit, OnDestroy {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search: this.pagination.search,
+      startDate: this.pagination.startDate,
+      endDate: this.pagination.endDate,
     }; // see https://github.com/typicode/json-server
     this.dataList(params);
   }
