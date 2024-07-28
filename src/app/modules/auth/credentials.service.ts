@@ -52,11 +52,14 @@ export class CredentialsService {
    */
   setCredentials(credentials?: Credentials, remember?: boolean) {
     this._credentials = credentials || null;
+    console.log(credentials);
 
     if (credentials) {
+      console.log('set credentials');
       const storage = remember ? localStorage : sessionStorage;
       storage.setItem(credentialsKey, JSON.stringify(credentials));
     } else {
+      console.log('remove credentials');
       sessionStorage.removeItem(credentialsKey);
       localStorage.removeItem(credentialsKey);
     }

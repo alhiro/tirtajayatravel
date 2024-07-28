@@ -35,6 +35,10 @@ export class LoginComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private handlerResponseService: HandlerResponseService
   ) {
+    const credentialsKey = 'credentials';
+    sessionStorage.removeItem(credentialsKey);
+    localStorage.removeItem(credentialsKey);
+
     this.initForm();
   }
 
