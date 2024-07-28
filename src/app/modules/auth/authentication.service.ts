@@ -14,7 +14,7 @@ export interface LoginContext {
   remember?: boolean;
 }
 
-const API_USERS_URL = `${environment.serverUrl}/auth/login`;
+// const API_USERS_URL = `${environment.serverUrl}/auth/login`;
 
 /**
  * Provides a base for authentication workflow.

@@ -28,6 +28,7 @@ export class HandlerResponseService {
         // go to login
         this.snackbar.open(error.error.message, '', {
           panelClass: 'snackbar-error',
+          duration: 50000,
         });
         this.utils.clearAllLocalstorage();
 
@@ -38,7 +39,15 @@ export class HandlerResponseService {
 
       case StatusCode.FORBIDDEN:
         // show dialog
-        this.router.navigate(['/page-not-authorized']);
+        this.snackbar.open(error.error.message, '', {
+          panelClass: 'snackbar-error',
+          duration: 50000,
+        });
+        this.utils.clearAllLocalstorage();
+
+        setTimeout(() => {
+          this.router.navigate(['/page-not-authorized']);
+        }, 3000);
         // this.utils.showNotification('GENERAL', 'FORBIDDEN');
         break;
 
@@ -48,7 +57,7 @@ export class HandlerResponseService {
         if (error) {
           this.snackbar.open(error.error.message, '', {
             panelClass: 'snackbar-error',
-            duration: 10000,
+            duration: 50000,
           });
 
           // console.log(error);
@@ -65,9 +74,19 @@ export class HandlerResponseService {
       case StatusCode.NOT_FOUND:
         // show dialog
         if (error) {
-          this.snackbar.open(error.error.message, '', {
+          this.snackbar.open(error.statusText, '', {
             panelClass: 'snackbar-error',
-            duration: 10000,
+            duration: 50000,
+          });
+        }
+        break;
+
+      case StatusCode.GATEWAY_TIMEOUT:
+        // show dialog
+        if (error) {
+          this.snackbar.open(error.statusText, '', {
+            panelClass: 'snackbar-error',
+            duration: 50000,
           });
         }
         break;
@@ -76,7 +95,7 @@ export class HandlerResponseService {
         // show dialog
         this.snackbar.open('Method not allowed', '', {
           panelClass: 'snackbar-error',
-          duration: 10000,
+          duration: 50000,
         });
         break;
 
@@ -85,7 +104,7 @@ export class HandlerResponseService {
         // this.utils.showNotification('GENERAL', 'SERVER_ERROR');
         this.snackbar.open('Internal Server Error ', '', {
           panelClass: 'snackbar-error',
-          duration: 10000,
+          duration: 50000,
         });
         break;
 
@@ -93,7 +112,7 @@ export class HandlerResponseService {
         // show dialog
         this.snackbar.open('Disconnection from server ', '', {
           panelClass: 'snackbar-error',
-          duration: 10000,
+          duration: 50000,
         });
         break;
     }
