@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { API, APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import {
   Observable,
@@ -24,7 +24,7 @@ import { LocalService } from '@app/services/local.service';
 import { AddressModel } from '@app/pages/master/customer/models/address.model';
 import { CustomerService } from '@app/pages/master/customer/customer.service';
 import { CategoryService } from '@app/pages/master/category/category.service';
-import { NgbDateStruct, NgbDropdown, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCalendar, NgbDate, NgbDateStruct, NgbDropdown, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { EmployeeService } from '@app/pages/master/employee/employee.service';
 import { CarService } from '@app/pages/master/car/car.service';
 import { PassengerService } from './passenger.service';
@@ -174,6 +174,12 @@ export class PassengerComponent implements OnInit {
   bookdate!: NgbDateStruct;
   booktime: NgbTimeStruct = { hour: 0, minute: 0, second: 0 };
 
+  calendar = inject(NgbCalendar);
+
+  hoveredDate: NgbDate | null = null;
+  fromDate: NgbDate | null = this.calendar.getToday();
+  toDate: NgbDate | null = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
+
   @Input() delivery!: GoSendModel;
 
   // private fields
@@ -203,6 +209,60 @@ export class PassengerComponent implements OnInit {
     };
     var getDate = new Date(minDate);
     this.formatDateNow(getDate);
+  }
+
+  onDateSelection(date: NgbDate, datepicker: any) {
+    if (!this.fromDate && !this.toDate) {
+      this.fromDate = date;
+    } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
+      this.toDate = date;
+      datepicker.close(); // Close datepicker popup
+
+      const valueBookFromDate = new Date(
+        Date.UTC(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day, 0, 0)
+      ).toISOString();
+
+      const valueBookToDate = new Date(
+        Date.UTC(this.toDate.year, this.toDate.month - 1, this.toDate.day, 23, 59)
+      ).toISOString();
+
+      const params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: valueBookFromDate,
+        endDate: valueBookToDate,
+      };
+      console.log(params);
+      this.dataList(params);
+    } else {
+      this.toDate = null;
+      this.fromDate = date;
+    }
+  }
+
+  resetFilterDate(datepicker: any) {
+    this.dataList(this.params);
+    datepicker.close();
+  }
+
+  isHovered(date: NgbDate) {
+    return (
+      this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate)
+    );
+  }
+
+  isInside(date: NgbDate) {
+    return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
+  }
+
+  isRange(date: NgbDate) {
+    return (
+      date.equals(this.fromDate) ||
+      (this.toDate && date.equals(this.toDate)) ||
+      this.isInside(date) ||
+      this.isHovered(date)
+    );
   }
 
   ngOnInit() {
@@ -395,7 +455,7 @@ export class PassengerComponent implements OnInit {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
         // count malang or surabaya
-        if (response) {
+        if (response.data.length > 0) {
           const malangData = response.data?.filter(
             (data: PassengerModel) =>
               data.city_id === 1 &&

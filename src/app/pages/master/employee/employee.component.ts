@@ -2,7 +2,13 @@ import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } fro
 import { API, APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { Subject, Subscription, finalize, takeUntil } from 'rxjs';
 import { EmployeeService } from './employee.service';
-import { Pagination, PaginationContext, Params } from '@app/@shared/interfaces/pagination';
+import {
+  Pagination,
+  PaginationContext,
+  Params,
+  defaultPagination,
+  defaultParams,
+} from '@app/@shared/interfaces/pagination';
 import { HttpService } from '@app/services/http.service';
 import { ModalComponent, ModalConfig } from '@app/_metronic/partials';
 
@@ -40,8 +46,8 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   public configuration: Config = { ...DefaultConfig };
 
-  public pagination!: Pagination;
-  public params!: Params;
+  public pagination: Pagination = { ...defaultPagination };
+  public params: Params = { ...defaultParams };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   form!: FormGroup;

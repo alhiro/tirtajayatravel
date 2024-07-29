@@ -6,14 +6,25 @@ export interface PaginationContext {
   endDate: any;
 }
 
-export class Pagination {
-  limit = 0;
-  offset = 0;
-  count = -1;
-  search = '';
-  startDate = '';
-  endDate = '';
+// Pagination
+export interface Pagination {
+  limit: number;
+  offset: number;
+  count: number;
+  search: string;
+  startDate: any;
+  endDate: any;
 }
+export const defaultPagination: Pagination = {
+  limit: 10,
+  offset: 1,
+  count: -1,
+  search: '',
+  startDate: '',
+  endDate: '',
+};
+
+// Param
 export class Params {
   limit = 10;
   page = 1;
@@ -21,3 +32,10 @@ export class Params {
   startDate = '';
   endDate = '';
 }
+export const defaultParams: Params = {
+  limit: 10,
+  page: 1,
+  search: '',
+  startDate: '',
+  endDate: '',
+};

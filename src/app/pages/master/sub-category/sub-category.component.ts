@@ -2,7 +2,13 @@ import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } fro
 import { API, APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { Subject, Subscription, finalize, takeUntil } from 'rxjs';
 import { SubCategoryService } from './sub-category.service';
-import { Pagination, PaginationContext, Params } from '@app/@shared/interfaces/pagination';
+import {
+  Pagination,
+  PaginationContext,
+  Params,
+  defaultPagination,
+  defaultParams,
+} from '@app/@shared/interfaces/pagination';
 import { HttpService } from '@app/services/http.service';
 import { ModalComponent, ModalConfig } from '@app/_metronic/partials';
 
@@ -58,8 +64,8 @@ export class SubCategoryComponent implements OnInit, OnDestroy {
   };
   @ViewChild('modal') private modalComponent!: ModalComponent;
 
-  public pagination!: Pagination;
-  public params!: Params;
+  public pagination: Pagination = { ...defaultPagination };
+  public params: Params = { ...defaultParams };
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
