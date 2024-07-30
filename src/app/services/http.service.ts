@@ -271,6 +271,7 @@ export class HttpService {
       sp_passenger: param.sp_passenger,
       bsd: param.bsd,
       bsd_passenger: param.bsd_passenger,
+      bsd_date: param.bsd_date,
       box: param.box,
       bsd_box: param.bsd_box,
       description: param.description,

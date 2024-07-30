@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
-import { DeliveryComponent } from './delivery.component';
+import { DepositComponent } from './deposit.component';
 
 const routes: Routes = [
   // Module is lazy loaded, see app-routing.module.ts
-  { path: '', component: DeliveryComponent, data: { title: marker('BSD') } },
+  { path: '', component: DepositComponent, data: { title: marker('Deposit Daily') } },
 ];
 
 @NgModule({
@@ -14,4 +14,4 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: [],
 })
-export class DeliveryRoutingModule {}
+export class DepositRoutingModule {}

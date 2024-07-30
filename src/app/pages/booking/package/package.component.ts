@@ -484,17 +484,17 @@ export class PackageComponent implements OnInit {
               data.city_id === 1 &&
               data.status_package !== 'Cancel' &&
               // data.status_package !== 'Delivery' &&
-              data.status_package !== 'Complete'
+              data.status_package !== 'Completed'
           );
           const surabayaData = response.data?.filter(
             (data: PackageModel) =>
               data.city_id === 2 &&
               data.status_package !== 'Cancel' &&
               // data.status_package !== 'Delivery' &&
-              data.status_package !== 'Complete'
+              data.status_package !== 'Completed'
           );
           const cancelData = response.data?.filter((data: PackageModel) => data.status_package === 'Cancel');
-          const historyData = response.data?.filter((data: PackageModel) => data.status_package === 'Complete');
+          const historyData = response.data?.filter((data: PackageModel) => data.status_package === 'Completed');
 
           this.dataLengthMalang = malangData?.length;
           this.dataLengthSurabaya = surabayaData?.length;

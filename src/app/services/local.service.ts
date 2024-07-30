@@ -223,7 +223,7 @@ export class LocalService {
     },
     {
       status_package_id: 4,
-      name: 'Complete',
+      name: 'Completed',
     },
   ];
 
@@ -246,7 +246,7 @@ export class LocalService {
     },
     {
       status_package_id: 5,
-      name: 'Complete',
+      name: 'Completed',
     },
   ];
 

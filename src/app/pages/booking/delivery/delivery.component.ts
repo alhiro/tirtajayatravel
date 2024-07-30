@@ -14,9 +14,8 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { EmployeeService } from './delivery.service';
+import { DeliveryService } from './delivery.service';
 import { PaginationContext } from '@app/@shared/interfaces/pagination';
-import { HttpService } from '@app/services/http.service';
 import { ModalComponent, ModalConfig, ModalFullComponent } from '@app/_metronic/partials';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -24,7 +23,6 @@ import { untilDestroyed } from '@ngneat/until-destroy';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HandlerResponseService } from '@app/services/handler-response/handler-response.service';
 import { LocalService } from '@app/services/local.service';
-import { CategoryService } from '@app/pages/master/category/category.service';
 import { EmployeeyModel } from '@app/pages/master/employee/models/employee.model';
 import { PackageModel } from '../package/models/package.model';
 import { PackageService } from '../package/package.service';
@@ -169,8 +167,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly cdr: ChangeDetectorRef,
-    private categoryService: CategoryService,
-    private employeeService: EmployeeService,
+    private deliveryService: DeliveryService,
     private packageService: PackageService,
     private carService: CarService,
     private formBuilder: FormBuilder,
@@ -310,8 +307,12 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
         if (response) {
-          const malangData = response.data?.filter((data: PackageModel) => data.city_id === 1);
-          const surabayaData = response.data?.filter((data: PackageModel) => data.city_id === 2);
+          const malangData = response.data?.filter(
+            (data: GoSendModel) => data.city_id === 1 && data.bsd === null && data.bsd_passenger === null
+          );
+          const surabayaData = response.data?.filter(
+            (data: GoSendModel) => data.city_id === 2 && data.bsd === null && data.bsd_passenger === null
+          );
 
           // sample filter nested objects
           // const courses = [1, 6, 3];
@@ -421,7 +422,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   dataCreate() {
     console.log(this.form.value);
     this.isLoading = true;
-    const catSubscr = this.employeeService
+    const catSubscr = this.deliveryService
       .create(this.form.value)
       .pipe(
         finalize(() => {
@@ -474,7 +475,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   dataEdit() {
     console.log(this.form.value);
     this.isLoading = true;
-    const catSubscr = this.employeeService
+    const catSubscr = this.deliveryService
       .edit(this.form.value)
       .pipe(
         finalize(() => {
@@ -693,7 +694,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       tap(() => (this.searchingEmployee = true)),
       switchMap((term) =>
-        this.employeeService
+        this.deliveryService
           .list({
             limit: this.params.limit,
             page: this.params.page,

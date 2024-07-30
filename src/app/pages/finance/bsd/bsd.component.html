@@ -1,0 +1,339 @@
+<!-- begin::Header -->
+<div class="card">
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">
+        @if (currentTab === 'Done') { BSD (Done) } @else if (currentTab === 'List') { BSD (List) }
+      </span>
+      <span class="text-muted mt-1 fw-bold fs-7">
+        @if (currentTab === 'Done') { Have {{ dataLengthBSDDone | number }} items } @else if (currentTab === 'List') {
+        Have {{ dataLengthBSDList | number }} items }
+      </span>
+    </h3>
+    <div class="card-toolbar">
+      <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+        <li class="nav-item" (click)="setCurrentTab('Done')" [style.cursor]="'pointer'">
+          <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Done'" data-toggle="tab">BSD (Done)</a>
+        </li>
+        <li class="nav-item" (click)="setCurrentTab('List')" [style.cursor]="'pointer'">
+          <a class="nav-link py-2 px-4" [class.active]="currentTab === 'List'" data-toggle="tab">BSD (List)</a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-toolbar">
+      <!-- <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+        <li class="nav-item" (click)="openModalEditSP()" [style.cursor]="'pointer'">
+          <a class="nav-link py-2 px-4 active">Add BSD</a>
+        </li>
+      </ul> -->
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <div class="tab-content mt-5" id="tabPackage">
+      <!--begin::Tap pane-->
+      <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Done' }">
+        <!-- begin::Table container -->
+        <div class="table-responsive">
+          <!-- begin::Table -->
+          <ngx-table
+            #table
+            [configuration]="configuration"
+            [data]="dataBSDDone"
+            [columns]="columnsDone"
+            [pagination]="pagination"
+            (event)="eventEmitted($event)"
+            tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+          >
+            <ng-template let-row let-index="index">
+              <!-- <td>
+                <span class="text-gray-900 d-block">{{ row.go_send_id }}</span>
+              </td> -->
+              <td>
+                <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
+                  <span class="text-gray-900 d-block">
+                    <span>{{ row.employee?.name }}</span
+                    ><br />
+                    <!-- <span>{{ row.car.name }}</span><br />
+                    <span>{{ row.car.number_plat }}</span><br /> -->
+                    <span>{{ row.car.car_number }}</span>
+                  </span>
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">
+                  {{ row.bsd_date | date : 'yyyy/MM/dd' }}
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="printBSD(row)">{{
+                  row.bsd
+                }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="printBSD(row)">{{
+                  row.bsd_passenger
+                }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.box_bsd }}</span>
+              </td>
+              <td>
+                <a
+                  href="javascript:void(0)"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Edit BSD"
+                >
+                  <app-keenicon name="document" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+              </td>
+            </ng-template>
+          </ngx-table>
+          <!-- end::Table -->
+        </div>
+        <!-- end::Table container -->
+      </div>
+      <!--end::Tap pane-->
+
+      <!--begin::Tap pane-->
+      <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'List' }">
+        <!-- begin::Table container -->
+        <div class="table-responsive">
+          <!-- begin::Table -->
+          <ngx-table
+            #table
+            [configuration]="configuration"
+            [data]="dataBSDList"
+            [columns]="columnsList"
+            [pagination]="pagination"
+            (event)="eventEmitted($event)"
+            tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+          >
+            <ng-template let-row let-index="index">
+              <!-- <td>
+                <span class="text-gray-900 d-block">{{ row.go_send_id }}</span>
+              </td> -->
+              <td>
+                <span class="text-gray-900 d-block">{{ row.sp_passenger }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.sp_package }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
+                  <span class="text-gray-900 d-block">
+                    <span>{{ row.employee?.name }}</span
+                    ><br />
+                    <!-- <span>{{ row.car.name }}</span><br />
+                    <span>{{ row.car.number_plat }}</span><br /> -->
+                    <span>{{ row.car.car_number }}</span>
+                  </span>
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">
+                  {{ row.send_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}
+                </span>
+              </td>
+              <td class="text-end">
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Add BSD"
+                  (click)="openModalEditSP(row)"
+                >
+                  <app-keenicon name="plus" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+              </td>
+            </ng-template>
+          </ngx-table>
+          <!-- end::Table -->
+        </div>
+        <!-- end::Table container -->
+      </div>
+      <!--end::Tap pane-->
+    </div>
+  </div>
+</div>
+<!-- begin::Body -->
+
+<!-- begin:: Modal BSD -->
+<app-modal #modalSP [modalConfig]="modalConfigEditSP">
+  <form (ngSubmit)="dataEditSP()" [formGroup]="formSP" novalidate>
+    <div class="m-3">
+      <!-- <label class="d-block mb-4">
+        <div class="custom-datetime input-group">
+          <input
+            readonly
+            class="form-control"
+            placeholder="Select book date"
+            name="dp"
+            [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="bookdate"
+            ngbDatepicker
+            [minDate]="minDate"
+            (click)="datePicker.toggle()"
+            #datePicker="ngbDatepicker"
+            (ngModelChange)="onDateChange($event)"
+          />
+          <ngb-timepicker-custom
+            [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="booktime"
+            [hourStep]="1"
+            [minuteStep]="30"
+            [startHour]="1"
+            [endHour]="23"
+            [seconds]="false"
+            [spinners]="false"
+            [select]="true"
+          >
+          </ngb-timepicker-custom>
+        </div>
+      </label> -->
+      <!-- <label class="d-block mb-4">
+        <input
+          id="select-employee"
+          type="text"
+          class="form-control"
+          [class.is-invalid]="searchFailed"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="modelEmployee"
+          [ngbTypeahead]="searchDataEmployee"
+          [resultTemplate]="rt"
+          [inputFormatter]="formatter"
+          placeholder="Employee search"
+        />
+        <ng-template #rt let-r="result" let-t="term">
+          {{ r.name }}
+        </ng-template>
+
+        @if (searchingEmployee) {
+        <small class="form-text text-muted">Searching. Please wait...</small>
+        } @if (searchFailedEmployee) {
+        <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+        } @if (modelEmployee) {
+          <div class="d-flex flex-stack fs-4 py-3">
+            <div
+              class="fw-bold rotate collapsible"
+              role="button"
+              aria-expanded="false"
+              aria-controls="kt_user_view_details"
+            >
+              Details
+            </div>
+          </div>
+
+          <div class="separator"></div>
+
+          <div id="kt_user_view_details" class="collapse show">
+            <div class="pb-5 fs-6">
+              <div class="fw-bold">Name</div>
+              <div class="text-gray-600">{{ modelEmployee?.name }}</div>
+              <div class="fw-bold mt-3">Telp</div>
+              <div class="text-gray-600">{{ modelEmployee?.telp }}</div>
+              <div class="fw-bold mt-3">Photo</div>
+            </div>
+          </div>
+        }
+      </label> -->
+
+      <label class="d-block mb-4">
+        <!--begin::Row-->
+        <div class="row g-5 g-xl-10">
+          <!--begin::Col-->
+          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+            <!--begin::Card body-->
+            <div class="card-body d-flex align-items-end pt-0">
+              <div id="kt_user_view_details" class="collapse show">
+                <div class="pb-5 fs-6">
+                  <div class="fw-bold">Driver</div>
+                  <div class="text-gray-600">{{ modelEmployee?.name }}</div>
+                  <div class="fw-bold mt-3">Telp</div>
+                  <div class="text-gray-600">{{ modelEmployee?.telp }}</div>
+                  <div class="fw-bold mt-3">Photo</div>
+                  <div class="text-gray-600">
+                    @if (modelEmployee?.photo) {
+                    <img style="width: 100px" src="{{ modelEmployee?.photo }}" />
+                    } @else {
+                    <img style="width: 100px" src="../../../../../../assets/media//avatars/blank.png" />
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--end::Card body-->
+          </div>
+          <!--end::Col-->
+
+          <!--begin::Col-->
+          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+            <!--begin::Card body-->
+            <div class="card-body d-flex align-items-end pt-0">
+              <div id="kt_user_view_details" class="collapse show">
+                <div class="pb-5 fs-6">
+                  <div class="fw-bold">Car</div>
+                  <div class="text-gray-600">{{ this.modelCar?.name }}</div>
+                  <div class="fw-bold mt-3">Plat Number</div>
+                  <div class="text-gray-600">{{ this.modelCar?.number_plat }}</div>
+                  <div class="fw-bold mt-3">Car Number</div>
+                  <div class="text-gray-600">{{ this.modelCar?.car_number }}</div>
+                  <div class="fw-bold mt-3">Photo</div>
+                  <div class="text-gray-600">
+                    @if (modelCar?.photo) {
+                    <img style="width: 100px" src="{{ modelCar?.photo }}" />
+                    } @else {
+                    <img style="width: 100px" src="../../../../../../assets/media//avatars/blank.png" />
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--end::Card body-->
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Row-->
+      </label>
+      <label class="d-block mb-4">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="description"
+          autocomplete="description"
+          [placeholder]="'Description' | translate"
+        />
+        <span hidden translate>Description Name</span>
+      </label>
+      <div class="mb-4">
+        <label class="form-label fw-bold">Status:</label>
+        <div class="d-flex">
+          <span class="form-check-label text-gray-900">{{ this.formSP.get('status')?.value }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="mt-10">
+      <button class="btn btn-primary w-100" type="submit" [disabled]="formSP.invalid || isLoading">
+        <!--begin::Spinner-->
+        <span
+          class="translate-middle-y lh-0 me-1"
+          data-kt-search-element="spinner"
+          [ngClass]="isLoading ? '' : 'd-none'"
+        >
+          <span class="spinner-border h-15px w-15px align-middle text-gray-500"></span>
+        </span>
+        <!--end::Spinner-->
+        <span translate>Submit</span>
+      </button>
+    </div>
+  </form>
+</app-modal>
+<!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
+<!-- end:: Modal bsd -->

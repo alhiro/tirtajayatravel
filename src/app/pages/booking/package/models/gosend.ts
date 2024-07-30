@@ -22,6 +22,7 @@ export class GoSendModel {
   sp_passenger!: string;
   bsd!: string;
   bsd_passenger!: string;
+  bsd_date!: Date;
   box!: string;
   bsd_box!: string;
   isCreateSP!: boolean;

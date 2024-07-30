@@ -7,7 +7,7 @@ import { EmployeeyModel } from '@app/pages/master/employee/models/employee.model
 @Injectable({
   providedIn: 'root',
 })
-export class EmployeeService {
+export class DeliveryService {
   constructor(private httpService: HttpService) {}
 
   driver(context: PaginationContext): Observable<EmployeeyModel> {

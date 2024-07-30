@@ -32,6 +32,16 @@ const Routing: Routes = [
   //   loadChildren: () => import('./booking/delivery/printsp/printsp.module').then((m) => m.PrintspModule),
   // },
 
+  // Finance
+  {
+    path: 'finance/bsd/tirta-jaya',
+    loadChildren: () => import('./finance/bsd/bsd.module').then((m) => m.BsdModule),
+  },
+  {
+    path: 'finance/deposit/daily',
+    loadChildren: () => import('./finance/deposit/deposit.module').then((m) => m.DepositModule),
+  },
+
   // Master
   {
     path: 'master/category',

@@ -461,17 +461,17 @@ export class PassengerComponent implements OnInit {
               data.city_id === 1 &&
               data.status_passenger !== 'Cancel' &&
               // data.status_passenger !== 'Delivery' &&
-              data.status_passenger !== 'Complete'
+              data.status_passenger !== 'Completed'
           );
           const surabayaData = response.data?.filter(
             (data: PassengerModel) =>
               data.city_id === 2 &&
               data.status_passenger !== 'Cancel' &&
               // data.status_passenger !== 'Delivery' &&
-              data.status_passenger !== 'Complete'
+              data.status_passenger !== 'Completed'
           );
           const cancelData = response.data?.filter((data: PassengerModel) => data.status_passenger === 'Cancel');
-          const historyData = response.data?.filter((data: PassengerModel) => data.status_passenger === 'Complete');
+          const historyData = response.data?.filter((data: PassengerModel) => data.status_passenger === 'Completed');
 
           this.dataLengthMalang = malangData?.length;
           this.dataLengthSurabaya = surabayaData?.length;
