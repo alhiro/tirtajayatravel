@@ -370,5 +370,9 @@ export class BsdComponent implements OnInit, OnDestroy {
 
   formatter = (result: { name: string; car_number: string }) => result.car_number;
 
-  printBSD(event: GoSendModel) {}
+  printBSD(val: GoSendModel, item: string) {
+    sessionStorage.setItem('printbsd', JSON.stringify(val));
+    sessionStorage.setItem('type', JSON.stringify(item));
+    window.open('#/finance/bsd/tirta-jaya/printbsd', '_blank');
+  }
 }

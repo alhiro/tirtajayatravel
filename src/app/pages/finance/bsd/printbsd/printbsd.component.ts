@@ -3,16 +3,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
 
 @Component({
-  selector: 'app-printsp',
-  templateUrl: './printsp.component.html',
-  styleUrls: ['./printsp.component.scss'],
+  selector: 'app-printbsd',
+  templateUrl: './printbsd.component.html',
+  styleUrls: ['./printbsd.component.scss'],
 })
-export class PrintspComponent implements OnInit, OnDestroy {
+export class PrintbsdComponent implements OnInit, OnDestroy {
   public data: any;
   public dataPackages: any;
   public dataPassengers: any;
   public type: any;
-  public detail: any;
 
   public configuration: Config = { ...DefaultConfig };
   public columnsPackage!: Columns[];
@@ -62,17 +61,13 @@ export class PrintspComponent implements OnInit, OnDestroy {
     // this.data = currentState?.extras.state?.['data'];
     // this.dataPackages = this.data.employee?.['packages'];
 
-    const getData: any = sessionStorage.getItem('printsp');
+    const getData: any = sessionStorage.getItem('printbsd');
     const getType: any = sessionStorage.getItem('type');
-    const getDetail: any = sessionStorage.getItem('detailsp');
     const objData = JSON.parse(getData);
     const objType = JSON.parse(getType);
-    const objDetail = JSON.parse(getDetail);
     console.log(objData);
     console.log(objType);
-    console.log(objDetail);
 
-    this.detail = objDetail;
     this.type = objType;
     this.data = objData;
     this.totalCost = this.data.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
@@ -82,8 +77,7 @@ export class PrintspComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    sessionStorage.removeItem('printsp');
-    sessionStorage.removeItem('detailsp');
+    sessionStorage.removeItem('printbsd');
     sessionStorage.removeItem('type');
   }
 }

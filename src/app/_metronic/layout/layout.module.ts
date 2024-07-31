@@ -38,9 +38,14 @@ const routes: Routes = [
     children: Routing,
   },
   {
-    path: 'departure/delivery/printsp',
+    path: 'booking/departure/delivery/printsp',
     component: PrintspComponent,
     loadChildren: () => import('../../pages/booking/delivery/printsp/printsp.module').then((m) => m.PrintspModule),
+  },
+  {
+    path: 'finance/bsd/tirta-jaya/printbsd',
+    component: PrintspComponent,
+    loadChildren: () => import('../../pages/finance/bsd/printbsd/printbsd.module').then((m) => m.PrintbsdModule),
   },
 ];
 

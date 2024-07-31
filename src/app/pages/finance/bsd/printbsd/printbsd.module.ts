@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { TableModule } from 'ngx-easy-table';
 
-import { PrintspRoutingModule } from './printsp-routing.module';
-import { PrintspComponent } from './printsp.component';
+import { PrintbsdRoutingModule } from './printbsd-routing.module';
+import { PrintbsdComponent } from './printbsd.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
-  declarations: [PrintspComponent],
+  declarations: [PrintbsdComponent],
   imports: [
     // Common modules
     CommonModule,
@@ -17,10 +17,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReactiveFormsModule,
     TranslateModule,
     // Lazy loading
-    PrintspRoutingModule,
+    PrintbsdRoutingModule,
     // Custom modules
     TableModule,
     NgbModule,
   ],
 })
-export class PrintspModule {}
+export class PrintbsdModule {}

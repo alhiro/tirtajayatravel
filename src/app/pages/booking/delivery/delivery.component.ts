@@ -396,7 +396,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     sessionStorage.setItem('printsp', JSON.stringify(val));
     sessionStorage.setItem('detailsp', JSON.stringify(this.dataDetail));
     sessionStorage.setItem('type', JSON.stringify(item));
-    window.open('/departure/delivery/printsp', '_blank');
+    window.open('#/booking/departure/delivery/printsp', '_blank');
   }
 
   async openModalView(val: GoSendModel) {

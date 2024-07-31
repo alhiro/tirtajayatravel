@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
-import { PrintspComponent } from './printsp.component';
+import { PrintbsdComponent } from './printbsd.component';
 
 const routes: Routes = [
   // Module is lazy loaded, see app-routing.module.ts
-  { path: '', component: PrintspComponent, data: { title: marker('Print SP') } },
+  { path: '', component: PrintbsdComponent, data: { title: marker('Print BSD') } },
 ];
 
 @NgModule({
@@ -14,4 +14,4 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: [],
 })
-export class PrintspRoutingModule {}
+export class PrintbsdRoutingModule {}
