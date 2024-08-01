@@ -11,12 +11,12 @@
           <!-- begin::Menu -->
           <div class="menu-item">
             <div class="menu-content px-0">
-              <h3 class="card-title align-items-start flex-column">
+              <h2 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">
-                  @if (data.city_id === 1) { SURAT PENGANTAR PENUMPANG MALANG } @else { SURAT PENGANTAR PENUMPANG
+                  @if (data?.city_id === 1) { SURAT PENGANTAR PENUMPANG MALANG } @else { SURAT PENGANTAR PENUMPANG
                   SURABAYA }
                 </span>
-              </h3>
+              </h2>
             </div>
           </div>
           <!-- end::Menu -->
@@ -104,7 +104,7 @@
       <!-- end::Table container -->
 
       <!-- <div class="mt-7">
-          <span>Total Cost: {{ totalCost | currency : 'Rp ' : true : '4.0-2' }}</span
+          <span>Total Cost: {{ totalCost | currency : 'Rp ' : true : '1.0-2' }}</span
           ><br />
           <span>Total Koli: {{ totalKoli | number }}</span>
         </div> -->
@@ -184,7 +184,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.cost | currency : 'Rp ' : true : '4.0-2' }}
+                {{ row.cost | currency : 'Rp ' : true : '1.0-2' }}
               </span>
             </td>
             <td>
@@ -214,7 +214,7 @@
       <!-- end::Table container -->
 
       <div class="mt-7">
-        <span>Total Cost: {{ totalCost | currency : 'Rp ' : true : '4.0-2' }}</span
+        <span>Total Cost: {{ totalCost | currency : 'Rp ' : true : '1.0-2' }}</span
         ><br />
         <span>Total Koli: {{ totalKoli | number }}</span>
       </div>

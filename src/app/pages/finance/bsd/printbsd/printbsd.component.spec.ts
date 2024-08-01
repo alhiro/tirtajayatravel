@@ -3,20 +3,20 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { PrintspComponent } from './printbsd.component';
+import { PrintbsdComponent } from './printbsd.component';
 
 describe('PrintspComponent', () => {
-  let component: PrintspComponent;
-  let fixture: ComponentFixture<PrintspComponent>;
+  let component: PrintbsdComponent;
+  let fixture: ComponentFixture<PrintbsdComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PrintspComponent],
+      declarations: [PrintbsdComponent],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PrintspComponent);
+    fixture = TestBed.createComponent(PrintbsdComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

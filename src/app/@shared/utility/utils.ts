@@ -187,6 +187,18 @@ export class Utils {
     console.log('globalDate', getDate);
     return getDate;
   }
+
+  sumTotal(data: any) {
+    // Check if all values are null
+    const allNull = data.every((item: any) => item === null);
+    // If all values are null, return 0
+    if (allNull) {
+      return 0;
+    }
+    // Use reduce to sum the data, treating null as 0
+    const total = data.reduce((acc: any, item: any) => acc + (item || 0), 0);
+    return total;
+  }
 }
 
 export function toInteger(value: any): number {

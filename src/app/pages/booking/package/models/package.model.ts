@@ -16,6 +16,7 @@ export class PackageModel {
   cost!: number;
   discount!: number;
   payment!: number;
+  agent_commission!: number;
   koli!: number;
   origin_from!: string;
   level!: string;
@@ -51,6 +52,7 @@ export class PackageModel {
     this.cost = packages.cost;
     this.discount = packages.discount;
     this.payment = packages.payment;
+    this.agent_commission = packages.agent_commission;
     this.koli = packages.koli;
     this.origin_from = packages.origin_from || '';
     this.level = packages.level || '';

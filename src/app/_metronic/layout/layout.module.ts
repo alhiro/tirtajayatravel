@@ -30,6 +30,7 @@ import { SaasComponent } from './components/toolbar/saas/saas.component';
 import { SharedModule } from '../shared/shared.module';
 import { Routing } from '@app/pages/routing';
 import { PrintspComponent } from '@app/pages/booking/delivery/printsp/printsp.component';
+import { PrintbsdComponent } from '@app/pages/finance/bsd/printbsd/printbsd.component';
 
 const routes: Routes = [
   {
@@ -44,7 +45,7 @@ const routes: Routes = [
   },
   {
     path: 'finance/bsd/tirta-jaya/printbsd',
-    component: PrintspComponent,
+    component: PrintbsdComponent,
     loadChildren: () => import('../../pages/finance/bsd/printbsd/printbsd.module').then((m) => m.PrintbsdModule),
   },
 ];

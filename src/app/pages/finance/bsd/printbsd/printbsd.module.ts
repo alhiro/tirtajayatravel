@@ -7,6 +7,7 @@ import { PrintbsdRoutingModule } from './printbsd-routing.module';
 import { PrintbsdComponent } from './printbsd.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SharedModule } from '@app/_metronic/shared/shared.module';
 
 @NgModule({
   declarations: [PrintbsdComponent],
@@ -21,6 +22,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     // Custom modules
     TableModule,
     NgbModule,
+    SharedModule,
   ],
 })
 export class PrintbsdModule {}

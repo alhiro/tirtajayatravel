@@ -75,8 +75,8 @@ export class PrintspComponent implements OnInit, OnDestroy {
     this.detail = objDetail;
     this.type = objType;
     this.data = objData;
-    this.totalCost = this.data.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
-    this.totalKoli = this.data.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
+    this.totalCost = this.data?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
+    this.totalKoli = this.data?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
     console.log(this.totalCost);
     console.log(this.data);
   }
