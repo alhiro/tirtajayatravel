@@ -32,7 +32,13 @@ export class Utils {
   getUsername(): string {
     const credentials =
       JSON.parse(localStorage.getItem('credentials')!) || JSON.parse(sessionStorage.getItem('credentials')!);
-    return credentials?.username;
+    return credentials?.userName;
+  }
+
+  getLevel(): number {
+    const credentials =
+      JSON.parse(localStorage.getItem('credentials')!) || JSON.parse(sessionStorage.getItem('credentials')!);
+    return credentials?.level;
   }
 
   getUUID(): string {

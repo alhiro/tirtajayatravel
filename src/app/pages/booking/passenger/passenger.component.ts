@@ -47,6 +47,9 @@ interface EventObject {
   styleUrls: ['./passenger.component.scss'],
 })
 export class PassengerComponent implements OnInit {
+  public levelrule!: number;
+  public username!: string;
+
   @ViewChild('table') table!: APIDefinition;
   public columns!: Columns[];
   public defaultAddressCustomer: any;
@@ -199,6 +202,14 @@ export class PassengerComponent implements OnInit {
     private utils: Utils
   ) {
     this.initForm();
+
+    this.levelrule = this.utils.getLevel();
+    this.username = this.utils.getUsername();
+    if (this.username === 'fomlg' && this.levelrule === 2) {
+      this.currentTab = 'Malang';
+    } else if (this.username === 'fosby' && this.levelrule === 2) {
+      this.currentTab = 'Surabaya';
+    }
 
     // set min selected date
     const minDate = this.utils.indonesiaDateFormat(new Date());

@@ -37,7 +37,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
   public totalRemainingPayment = 0;
   public totalCommissionPassenger = 0;
   public mandatoryDeposit = 0;
-  public driverDeposit = 0;
+  public depositDriver = 0;
   public voluntaryDeposit = 0;
   public oldFullKm = 0;
   public currentFullKm = 0;
@@ -119,7 +119,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
     this.totalCommissionPassenger = this.utils.sumTotal(
       this.data?.passengers?.map((data: PackageModel) => data.agent_commission)
     );
-    this.totalDebetPassenger = this.totalTariff + this.mandatoryDeposit + this.driverDeposit + this.voluntaryDeposit;
+    this.totalDebetPassenger = this.totalTariff + this.mandatoryDeposit + this.depositDriver + this.voluntaryDeposit;
     this.totalKreditPassenger =
       this.totalCommissionPassenger +
       this.bbm +

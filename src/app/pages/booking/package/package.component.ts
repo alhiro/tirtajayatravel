@@ -56,6 +56,9 @@ interface EventObject {
   providers: [NgbDropdown],
 })
 export class PackageComponent implements OnInit {
+  public levelrule!: number;
+  public username!: string;
+
   @ViewChild('table') table!: APIDefinition;
   public columns!: Columns[];
   public defaultAddressCustomer: any;
@@ -177,8 +180,10 @@ export class PackageComponent implements OnInit {
   @ViewChild('modalSP') private modalComponentSP!: ModalComponent;
   @ViewChild('assignSP') private modalComponentAssignSP!: ModalComponent;
 
+  @ViewChild('datepicker') datePicker!: any;
+
   @Input() cssClass!: '';
-  currentTab = 'Malang';
+  currentTab!: string;
 
   minDate: any;
   bookdate!: NgbDateStruct;
@@ -210,6 +215,14 @@ export class PackageComponent implements OnInit {
   ) {
     this.initForm();
 
+    this.levelrule = this.utils.getLevel();
+    this.username = this.utils.getUsername();
+    if (this.username === 'fomlg' && this.levelrule === 2) {
+      this.currentTab = 'Malang';
+    } else if (this.username === 'fosby' && this.levelrule === 2) {
+      this.currentTab = 'Surabaya';
+    }
+
     // set min selected date
     const minDate = this.utils.indonesiaDateFormat(new Date());
     this.minDate = {
@@ -219,6 +232,10 @@ export class PackageComponent implements OnInit {
     };
     var getDate = new Date(minDate);
     this.formatDateNow(getDate);
+  }
+
+  datepicker() {
+    this.datePicker.toggle();
   }
 
   onDateSelection(date: NgbDate, datepicker: any) {

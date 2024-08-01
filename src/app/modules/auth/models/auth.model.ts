@@ -1,5 +1,6 @@
 export class AuthModel {
   userName!: string;
+  level!: number;
   authToken!: string;
   refreshToken!: string;
   expiresIn!: string;
@@ -7,6 +8,7 @@ export class AuthModel {
 
   setAuth(auth: AuthModel) {
     this.userName = auth.userName;
+    this.level = auth.level;
     this.authToken = auth.authToken;
     this.refreshToken = auth.refreshToken;
     this.expiresIn = auth.expiresIn;
