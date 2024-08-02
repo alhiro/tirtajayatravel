@@ -1,4 +1,5 @@
 import { ElementRef, Injectable } from '@angular/core';
+import { GoSendModel } from '@app/pages/booking/package/models/gosend';
 import { jwtDecode } from 'jwt-decode';
 import * as moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
@@ -196,14 +197,44 @@ export class Utils {
 
   sumTotal(data: any) {
     // Check if all values are null
-    const allNull = data.every((item: any) => item === null);
+    const allNull = data?.every((item: any) => item === null);
     // If all values are null, return 0
     if (allNull) {
       return 0;
     }
     // Use reduce to sum the data, treating null as 0
-    const total = data.reduce((acc: any, item: any) => acc + (item || 0), 0);
+    const total = data?.reduce((acc: any, item: any) => acc + (item || 0), 0);
     return total;
+  }
+
+  sumCostPackages(array: any) {
+    let totalPackagesCost = 0;
+    let totalCommissionPackage = 0;
+
+    array.forEach((data: any) => {
+      totalPackagesCost += data.packages?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
+      totalCommissionPackage += data.packages?.reduce((sum: any, pkg: any) => sum + pkg.agent_commission, 0);
+    });
+
+    return {
+      totalPackagesCost,
+      totalCommissionPackage,
+    };
+  }
+
+  sumCostPassengers(array: any) {
+    let totalPassengerCost = 0;
+    let totalCommissionPassenger = 0;
+
+    array.forEach((data: any) => {
+      totalPassengerCost += data.passengers?.reduce((sum: any, pass: any) => sum + pass.tariff, 0);
+      totalCommissionPassenger += data.passengers?.reduce((sum: any, pass: any) => sum + pass.agent_commission, 0);
+    });
+
+    return {
+      totalPassengerCost,
+      totalCommissionPassenger,
+    };
   }
 }
 

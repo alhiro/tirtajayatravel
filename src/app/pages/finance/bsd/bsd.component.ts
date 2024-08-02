@@ -212,9 +212,18 @@ export class BsdComponent implements OnInit, OnDestroy {
     this.configuration.isLoading = true;
     this.packageService
       .listSP(params)
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        catchError((err) => {
+          this.configuration.isLoading = false;
+          this.handlerResponseService.failedResponse(err);
+          return of([]);
+        })
+      )
       .subscribe((response: any) => {
         if (response) {
+          this.configuration.isLoading = false;
+
           const dataBSDList = response.data?.filter(
             (data: any) =>
               (data.packages.length > 0 || data.passengers.length > 0) &&

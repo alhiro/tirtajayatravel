@@ -65,5 +65,24 @@
       <p>This page requires JavaScript to work properly. Please enable JavaScript in your browser.</p>
     </noscript>
     <app-root></app-root>
+
+    <script>
+      window.Userback = window.Userback || {};
+      Userback.access_token = 'P-KnlFy16k8LSlQXArJdhGuPVFx';
+      // identify your logged-in users (optional)
+      Userback.user_data = {
+        id: '123456', // example data
+        info: {
+          name: 'ali', // example data
+          email: 'mpustaka@gmail.com', // example data
+        },
+      };
+      (function (d) {
+        var s = d.createElement('script');
+        s.async = true;
+        s.src = 'https://static.userback.io/widget/v1.js';
+        (d.head || d.body).appendChild(s);
+      })(document);
+    </script>
   </body>
 </html>

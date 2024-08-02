@@ -1,6 +1,6 @@
 export interface PaginationContext {
-  limit: number;
-  page: number;
+  limit: any;
+  page: any;
   search: any;
   startDate: any;
   endDate: any;
