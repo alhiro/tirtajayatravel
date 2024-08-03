@@ -210,30 +210,82 @@ export class Utils {
   sumCostPackages(array: any) {
     let totalPackagesCost = 0;
     let totalCommissionPackage = 0;
+    let totalPackagePaidMalang = 0;
+    let totalPackagePaidSurabaya = 0;
+    let totalPackageCodMalang = 0;
+    let totalPackageCodSurabaya = 0;
+    let totalReminderPaymentPackage = 0;
+    let totalPaymentMonthly = 0;
 
     array.forEach((data: any) => {
+      const filterMalang = data.packages?.filter(
+        (data: any) => (data.city_id === 1 && data.status === 'Lunas (Transfer)') || data.status === 'Lunas (Kantor)'
+      );
+      const filterSurabaya = data.packages?.filter(
+        (data: any) => (data.city_id === 2 && data.status === 'Lunas (Transfer)') || data.status === 'Lunas (Kantor)'
+      );
+      const filterCodMalang = data.packages?.filter(
+        (data: any) => data.city_id === 1 && data.status === 'Bayar Tujuan (COD)'
+      );
+      const filterCodSurabaya = data.packages?.filter(
+        (data: any) => data.city_id === 2 && data.status === 'Bayar Tujuan (COD)'
+      );
+      const filterReminderPayment = data.packages?.filter(
+        (data: any) => data.status === 'Lunas (Transfer)' || (data.status === 'Lunas (Kantor)' && data.check_payment)
+      );
+      const filterPaymentMonthly = data.packages?.filter((data: any) => data.status === 'Customer (Bulanan)');
       totalPackagesCost += data.packages?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
       totalCommissionPackage += data.packages?.reduce((sum: any, pkg: any) => sum + pkg.agent_commission, 0);
+      totalPackagePaidMalang += filterMalang?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
+      totalPackagePaidSurabaya += filterSurabaya?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
+      totalPackageCodMalang += filterCodMalang?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
+      totalPackageCodSurabaya += filterCodSurabaya?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
+      totalReminderPaymentPackage += filterReminderPayment?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
+      totalPaymentMonthly += filterPaymentMonthly?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
     });
 
     return {
       totalPackagesCost,
       totalCommissionPackage,
+      totalPackagePaidMalang,
+      totalPackagePaidSurabaya,
+      totalPackageCodMalang,
+      totalPackageCodSurabaya,
+      totalReminderPaymentPackage,
+      totalPaymentMonthly,
     };
   }
 
   sumCostPassengers(array: any) {
     let totalPassengerCost = 0;
     let totalCommissionPassenger = 0;
+    let totalPassengerPaidMalang = 0;
+    let totalPassengerPaidSurabaya = 0;
+    let totalReminderPaymentPassenger = 0;
 
     array.forEach((data: any) => {
+      const filterMalang = data.passengers?.filter(
+        (data: any) => (data.city_id === 1 && data.payment === 'Lunas (Transfer)') || data.payment === 'Lunas (Kantor)'
+      );
+      const filterSurabaya = data.passengers?.filter(
+        (data: any) => (data.city_id === 2 && data.payment === 'Lunas (Transfer)') || data.payment === 'Lunas (Kantor)'
+      );
+      const filterReminderPayment = data.packages?.filter(
+        (data: any) => data.payment === 'Lunas (Transfer)' || (data.payment === 'Lunas (Kantor)' && data.check_payment)
+      );
       totalPassengerCost += data.passengers?.reduce((sum: any, pass: any) => sum + pass.tariff, 0);
       totalCommissionPassenger += data.passengers?.reduce((sum: any, pass: any) => sum + pass.agent_commission, 0);
+      totalPassengerPaidMalang += filterMalang?.reduce((sum: any, pkg: any) => sum + pkg.tariff, 0);
+      totalPassengerPaidSurabaya += filterSurabaya?.reduce((sum: any, pkg: any) => sum + pkg.tariff, 0);
+      totalReminderPaymentPassenger += filterReminderPayment?.reduce((sum: any, pkg: any) => sum + pkg.tariff, 0);
     });
 
     return {
       totalPassengerCost,
       totalCommissionPassenger,
+      totalPassengerPaidMalang,
+      totalPassengerPaidSurabaya,
+      totalReminderPaymentPassenger,
     };
   }
 }
