@@ -229,40 +229,41 @@ export class CommonApiService {
     }
   }
 
-  delete(
-    url: string,
-    bodyData?: any,
-    reqOpts?: any,
-    maxRetry?: number,
-    reqTimeout?: number
-  ): boolean | Observable<any> {
+  delete(url: string, body?: any, reqOpts?: any, maxRetry?: number, reqTimeout?: number): boolean | Observable<any> {
     if (this.checkConnection()) {
-      if (reqOpts) {
-        reqOpts.withCredentials = true;
-      } else {
-        reqOpts = {
-          withCredentials: true,
-        };
-      }
+      // if (reqOpts) {
+      //   reqOpts.withCredentials = true;
+      // } else {
+      //   reqOpts = {
+      //     withCredentials: true,
+      //   };
+      // }
 
+      let headers;
+      let bodyData;
       if (this.utils.getToken()) {
-        reqOpts.body = bodyData;
-        reqOpts.headers = this.getHeaders();
+        bodyData = body;
+        headers = this.getHeaders();
       }
 
-      return this.http.delete<any>(this.setConnection() + url, reqOpts).pipe(
-        timeout(reqTimeout ? reqTimeout : 300000),
-        retry(maxRetry ? maxRetry : 0),
-        catchError((error: any, caught: Observable<HttpEvent<any>>) => {
-          this.handlerResponseService.failedResponse(error);
-
-          if (error.status === 0) {
-            return of(error);
-          }
-
-          throw error;
+      return this.http
+        .request<any>('delete', this.setConnection() + url, {
+          headers: headers,
+          body: bodyData,
         })
-      );
+        .pipe(
+          timeout(reqTimeout ? reqTimeout : 300000),
+          retry(maxRetry ? maxRetry : 0),
+          catchError((error: any, caught: Observable<HttpEvent<any>>) => {
+            this.handlerResponseService.failedResponse(error);
+
+            if (error.status === 0) {
+              return of(error);
+            }
+
+            throw error;
+          })
+        );
     } else {
       return false;
     }

@@ -21,6 +21,7 @@ import { NgbCalendar, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap'
 import { Utils } from '@app/@shared';
 import * as moment from 'moment';
 import { LocalService } from '@app/services/local.service';
+import Swal from 'sweetalert2';
 
 interface EventObject {
   event: string;
@@ -78,14 +79,14 @@ export class CashoutComponent implements OnInit {
   toDate: NgbDate | null = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
 
   modalConfigCreate: ModalConfig = {
-    modalTitle: 'Create Category',
-    dismissButtonLabel: 'Submit',
-    closeButtonLabel: 'Cancel',
+    modalTitle: 'Create Cashout',
+    // dismissButtonLabel: 'Submit',
+    // closeButtonLabel: 'Cancel',
   };
   modalConfigEdit: ModalConfig = {
-    modalTitle: 'Edit Category',
-    dismissButtonLabel: 'Submit',
-    closeButtonLabel: 'Cancel',
+    modalTitle: 'Edit Cashout',
+    // dismissButtonLabel: 'Submit',
+    // closeButtonLabel: 'Cancel',
   };
   @ViewChild('modal') private modalComponent!: ModalComponent;
 
@@ -225,6 +226,7 @@ export class CashoutComponent implements OnInit {
       cashout_id: [''],
       package_id: [''],
       passenger_id: [''],
+      city_id: [''],
       date: [''],
       type: [''],
       fee: [''],
@@ -295,8 +297,16 @@ export class CashoutComponent implements OnInit {
     this.isCreate = true;
     this.clearForm();
 
+    let city: any = '';
+    if (this.currentTab === 'Malang') {
+      city = 1;
+    } else if (this.currentTab === 'Surabaya') {
+      city = 2;
+    }
+
     this.form.patchValue({
       type: '',
+      city_id: city,
     });
 
     return await this.modalComponent.open();
@@ -405,7 +415,22 @@ export class CashoutComponent implements OnInit {
 
   async openModalDelete(event: CashoutModel) {
     this.form.patchValue({
-      id: event.cashout_id,
+      cashout_id: event.cashout_id,
+    });
+    console.log(this.form.value);
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.dataDelete();
+      }
     });
   }
 

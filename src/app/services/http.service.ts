@@ -498,9 +498,9 @@ export class HttpService {
 
   cashoutDelete(param: CashoutModel): Observable<any> {
     const body = {
-      id: param.cashout_id,
+      cashout_id: param.cashout_id,
     };
-    return this.commonApi.post('/cashout/delete', body) as Observable<any>;
+    return this.commonApi.delete('/cashout/delete', body) as Observable<any>;
   }
 
   // MASTER

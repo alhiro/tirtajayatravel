@@ -14,6 +14,8 @@ import { PassengerModel } from '@app/pages/booking/passenger/models/passenger.mo
 import { HandlerResponseService } from '@app/services/handler-response/handler-response.service';
 import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { Subject, catchError, finalize, of, takeUntil } from 'rxjs';
+import { CashoutService } from '../cashout/cashout.service';
+import { CashoutModel } from '../cashout/models/cashout.model';
 
 @Component({
   selector: 'app-deposit',
@@ -76,8 +78,10 @@ export class DepositComponent implements OnInit {
   public totalPaymentMonthly = 0;
 
   // cashout
-  public cashOutMalang = 0;
-  public cashOutSurabaya = 0;
+  public dataCashoutMalang: any;
+  public dataCashoutSurabaya: any;
+  public totalCostMalang: any;
+  public totalCostSurabaya: any;
   public cashoutOnderdilService = 0;
   public cashoutCourierMalang = 0;
   public cashoutCourierSurabaya = 0;
@@ -114,6 +118,7 @@ export class DepositComponent implements OnInit {
 
   constructor(
     private packageService: PackageService,
+    private cashoutService: CashoutService,
     private handlerResponseService: HandlerResponseService,
     private utils: Utils
   ) {}
@@ -141,6 +146,7 @@ export class DepositComponent implements OnInit {
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
 
+    this.dataListCashout(this.params);
     this.dataListBSD(this.params);
   }
 
@@ -154,6 +160,22 @@ export class DepositComponent implements OnInit {
     sessionStorage.setItem('printbsd', JSON.stringify(val));
     sessionStorage.setItem('type', JSON.stringify(item));
     window.open('#/finance/bsd/tirta-jaya/printbsd', '_blank');
+  }
+
+  private dataListCashout(params: PaginationContext): void {
+    this.configuration.isLoading = true;
+    this.cashoutService
+      .list(params)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((response: any) => {
+        const malangData = response.data?.filter((data: CashoutModel) => data.city_id === 1);
+        const surabayaData = response.data?.filter((data: CashoutModel) => data.city_id === 2);
+        this.dataCashoutMalang = malangData;
+        this.dataCashoutSurabaya = surabayaData;
+
+        this.totalCostMalang = this.utils.sumTotal(this.dataCashoutMalang?.map((data: CashoutModel) => data.fee));
+        this.totalCostSurabaya = this.utils.sumTotal(this.dataCashoutSurabaya?.map((data: CashoutModel) => data.fee));
+      });
   }
 
   private dataListBSD(params: PaginationContext): void {
@@ -254,7 +276,7 @@ export class DepositComponent implements OnInit {
             Number(this.totalDepositDriverPassenger) +
             Number(this.totalPackagePaidMalang) +
             Number(this.totalPackageCodMalang);
-          this.totalCashOutMalangDaily = Number(this.cashOutMalang) + Number(this.cashoutCourierMalang);
+          this.totalCashOutMalangDaily = Number(this.totalCostMalang) + Number(this.cashoutCourierMalang);
           this.totalDepositMalangDaily = Number(this.totalCashInMalangDaily) - Number(this.totalCashOutMalangDaily);
 
           // daily surabaya
@@ -262,7 +284,7 @@ export class DepositComponent implements OnInit {
             Number(this.totalPackagePaidSurabaya) +
             Number(this.totalPackageCodSurabaya) +
             Number(this.totalPassengerPaidSurabaya);
-          this.totalCashOutSurabayaDaily = Number(this.cashOutSurabaya) + Number(this.cashoutCourierSurabaya);
+          this.totalCashOutSurabayaDaily = Number(this.totalCostSurabaya) + Number(this.cashoutCourierSurabaya);
           this.totalDepositSurabayaDaily =
             Number(this.totalCashInSurabayaDaily) - Number(this.totalCashOutSurabayaDaily);
 
