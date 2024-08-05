@@ -37,6 +37,10 @@ const Routing: Routes = [
     path: 'finance/deposit/daily',
     loadChildren: () => import('./finance/deposit/deposit.module').then((m) => m.DepositModule),
   },
+  {
+    path: 'finance/cash-out/list',
+    loadChildren: () => import('./finance/cashout/cashout.module').then((m) => m.CashoutModule),
+  },
 
   // Master
   {

@@ -259,7 +259,7 @@ export class BsdComponent implements OnInit, OnDestroy {
     const valDate = {
       year: eventDate.year(),
       month: eventDate.month() + 1,
-      day: eventDate.day(),
+      day: eventDate.date(),
     };
     this.bookdate = { year: valDate.year, month: valDate.month, day: valDate.day };
     console.log(this.bookdate);

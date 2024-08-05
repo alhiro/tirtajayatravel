@@ -113,11 +113,11 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
 
     // Passenger
     this.totalPassenger = this.utils.sumTotal(
-      this.data?.passengers?.filter((data: PassengerModel) => data.total_passenger)
+      this.data?.passengers?.map((data: PassengerModel) => data.total_passenger)
     );
-    this.totalTariff = this.utils.sumTotal(this.data?.passengers?.filter((data: PassengerModel) => data.tariff));
+    this.totalTariff = this.utils.sumTotal(this.data?.passengers?.map((data: PassengerModel) => data.tariff));
     this.totalCommissionPassenger = this.utils.sumTotal(
-      this.data?.passengers?.map((data: PackageModel) => data.agent_commission)
+      this.data?.passengers?.map((data: PassengerModel) => data.agent_commission)
     );
     this.totalDebetPassenger = this.totalTariff + this.mandatoryDeposit + this.depositDriver + this.voluntaryDeposit;
     this.totalKreditPassenger =

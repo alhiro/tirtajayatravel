@@ -250,6 +250,29 @@ export class LocalService {
     },
   ];
 
+  typeCashout = [
+    {
+      type_id: 1,
+      name: 'Biaya BBM',
+    },
+    {
+      type_id: 2,
+      name: 'Pengeluaran Belanja',
+    },
+    {
+      type_id: 3,
+      name: 'Pengeluaran Pahlawan Trip',
+    },
+    {
+      type_id: 4,
+      name: 'Pengeluaran IBU',
+    },
+    {
+      type_id: 5,
+      name: 'Operasional Tirta Jaya',
+    },
+  ];
+
   constructor() {}
 
   getCity() {
@@ -290,5 +313,8 @@ export class LocalService {
 
   getStatusPassenger() {
     return this.statusPassenger;
+  }
+  getType() {
+    return this.typeCashout;
   }
 }

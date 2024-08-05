@@ -17,6 +17,7 @@ import { GoSendModel } from '@app/pages/booking/package/models/gosend';
 import { PassengerModel } from '@app/pages/booking/passenger/models/passenger.model';
 import { WaybillModel } from '@app/pages/booking/passenger/models/waybill.model';
 import { DestinationModel } from '@app/pages/booking/passenger/models/destination';
+import { CashoutModel } from '@app/pages/finance/cashout/models/cashout.model';
 
 @Injectable({
   providedIn: 'root',
@@ -445,6 +446,61 @@ export class HttpService {
       time: param.time,
     };
     return this.commonApi.put('/destination/update', body) as Observable<any>;
+  }
+
+  // FINANCE
+  // Cashout
+  cashoutGet(param: CashoutModel): Observable<any> {
+    return this.commonApi.get('/cashout/get?cashout_id=' + param.cashout_id) as Observable<any>;
+  }
+
+  cashoutList(param: PaginationContext): Observable<any> {
+    return this.commonApi.get(
+      '/cashout/list?limit=' +
+        param.limit +
+        '&page=' +
+        param.page +
+        '&search=' +
+        param.search +
+        '&startDate=' +
+        param.startDate +
+        '&endDate=' +
+        param.endDate
+    ) as Observable<any>;
+  }
+
+  cashoutEdit(param: CashoutModel): Observable<any> {
+    const body = {
+      cashout_id: param.cashout_id,
+      package_id: param.package_id,
+      passenger_id: param.passenger_id,
+      city_id: param.city_id,
+      date: param.date,
+      type: param.type,
+      fee: param.fee,
+      description: param.description,
+    };
+    return this.commonApi.put('/cashout/update', body) as Observable<any>;
+  }
+
+  cashoutCreate(param: CashoutModel): Observable<any> {
+    const body = {
+      package_id: param.package_id,
+      passenger_id: param.passenger_id,
+      city_id: param.city_id,
+      date: param.date,
+      type: param.type,
+      fee: param.fee,
+      description: param.description,
+    };
+    return this.commonApi.post('/cashout/create', body) as Observable<any>;
+  }
+
+  cashoutDelete(param: CashoutModel): Observable<any> {
+    const body = {
+      id: param.cashout_id,
+    };
+    return this.commonApi.post('/cashout/delete', body) as Observable<any>;
   }
 
   // MASTER
