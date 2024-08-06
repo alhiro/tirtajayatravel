@@ -195,6 +195,26 @@ export class Utils {
     return getDate;
   }
 
+  singleDate(value: Date) {
+    const startDateValue = moment(value).clone().startOf('day').format('YYYY-MM-DD HH:mm:ss');
+    const endDateValue = moment(value).clone().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+
+    const startDate = startDateValue;
+    const endDate = endDateValue;
+
+    return { startDate, endDate };
+  }
+
+  rangeDate(start: Date, end: Date) {
+    const startDateValue = moment(start).clone().startOf('day').format('YYYY-MM-DD HH:mm:ss');
+    const endDateValue = moment(end).clone().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+
+    const startDate = startDateValue;
+    const endDate = endDateValue;
+
+    return { startDate, endDate };
+  }
+
   sumTotal(data: any) {
     // Check if all values are null
     const allNull = data?.every((item: any) => Number(item) === null);

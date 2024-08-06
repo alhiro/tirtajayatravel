@@ -31,8 +31,8 @@ export class LayoutInitService {
 
   private initLayoutSettings(layoutType: LayoutType, config: ILayout) {
     // clear body classes
-    const bodyClasses = document.body.classList.value.split(' ');
-    bodyClasses.forEach((cssClass) => document.body.classList.remove(cssClass));
+    const bodyClasses = document.body.classList.value?.split(' ');
+    bodyClasses?.forEach((cssClass) => document.body.classList.remove(cssClass));
     // clear body attributes
     const bodyAttributes = document.body.getAttributeNames().filter((t) => t.indexOf('data-') > -1);
     bodyAttributes.forEach((attr) => document.body.removeAttribute(attr));

@@ -55,7 +55,7 @@ interface EventObject {
   styleUrls: ['./package.component.scss'],
   providers: [NgbDropdown],
 })
-export class PackageComponent implements OnInit {
+export class PackageComponent implements OnInit, OnDestroy {
   public levelrule!: number;
   public username!: string;
 
@@ -245,20 +245,24 @@ export class PackageComponent implements OnInit {
       this.toDate = date;
       datepicker.close(); // Close datepicker popup
 
-      const valueBookFromDate = new Date(
-        Date.UTC(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day, 0, 0)
-      ).toISOString();
+      // const valueBookFromDate = new Date(
+      //   Date.UTC(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day, 0, 0)
+      // ).toISOString();
 
-      const valueBookToDate = new Date(
-        Date.UTC(this.toDate.year, this.toDate.month - 1, this.toDate.day, 23, 59)
-      ).toISOString();
+      // const valueBookToDate = new Date(
+      //   Date.UTC(this.toDate.year, this.toDate.month - 1, this.toDate.day, 23, 59)
+      // ).toISOString();
+
+      const valueBookFromDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      const valueBookToDate = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
+      const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookToDate);
 
       const params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
         search: this.pagination.search,
-        startDate: valueBookFromDate,
-        endDate: valueBookToDate,
+        startDate: startDate,
+        endDate: endDate,
       };
       console.log(params);
       this.dataList(params);
@@ -492,7 +496,12 @@ export class PackageComponent implements OnInit {
     this.configuration.isLoading = true;
     this.packageService
       .list(params)
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        finalize(() => {
+          this.configuration.isLoading = false;
+        })
+      )
       .subscribe((response: any) => {
         // count malang or surabaya
         if (response.data.length > 0) {

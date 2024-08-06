@@ -1,7 +1,25 @@
 <!--begin::Row-->
 <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+  <div class="card-toolbar">
+    <div class="col-md-4 mb-5 mx-auto">
+      <div class="input-group">
+        <input
+          class="form-control p-1 px-4"
+          placeholder="Select date"
+          name="dp"
+          [(ngModel)]="date"
+          ngbDatepicker
+          #datePicker="ngbDatepicker"
+          (ngModelChange)="onDateChange($event)"
+          [readonly]="true"
+        />
+        <a class="btn btn-info btn-sm p-2 px-4 cursor-pointer" (click)="datePicker.toggle()"> Filter Date </a>
+      </div>
+    </div>
+  </div>
+
   <!--begin::Col-->
-  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
+  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10 mt-2">
     <!--begin::Card-->
     <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end">
       <!--begin::Header-->
@@ -46,7 +64,7 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ totalDepositDriverPackage | currency : 'Rp ' : true : '1.0-2' }}
+                  {{ totalDepositDriverPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                 </span>
               </td>
               <td>
@@ -72,7 +90,7 @@
         <!-- end::Table container -->
 
         <div class="mt-4 mb-9">
-          <b>Total BSD Package</b>: {{ totalDepositDriverPackage | currency : 'Rp ' : true : '1.0-2' }}
+          <b>Total BSD Package</b>: {{ totalDepositDriverPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}
         </div>
 
         <hr class="my-5" />
@@ -105,7 +123,7 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ totalDepositDriverPassenger | currency : 'Rp ' : true : '1.0-2' }}
+                  {{ totalDepositDriverPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                 </span>
               </td>
               <td>
@@ -131,7 +149,7 @@
         <!-- end::Table container -->
 
         <div class="mt-5 mb-10">
-          <b>Total BSD Passenger</b>: {{ totalDepositDriverPassenger | currency : 'Rp ' : true : '1.0-2' }}
+          <b>Total BSD Passenger</b>: {{ totalDepositDriverPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}
         </div>
 
         <hr class="my-5" />
@@ -144,7 +162,7 @@
               <td style="text-align: center">Action</td>
             </tr>
             <tr>
-              <td>{{ totalPackagePaidMalang | currency : 'Rp ' : true : '1.0-2' }}</td>
+              <td>{{ totalPackagePaidMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
                 <a><b>Detail</b></a>
               </td>
@@ -160,7 +178,7 @@
               <td style="text-align: center">Action</td>
             </tr>
             <tr>
-              <td>{{ totalPackagePaidSurabaya | currency : 'Rp ' : true : '1.0-2' }}</td>
+              <td>{{ totalPackagePaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
                 <a><b>Detail</b></a>
               </td>
@@ -176,7 +194,7 @@
               <td style="text-align: center">Action</td>
             </tr>
             <tr>
-              <td>{{ totalPackageCodMalang | currency : 'Rp ' : true : '1.0-2' }}</td>
+              <td>{{ totalPackageCodMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
                 <a><b>Detail</b></a>
               </td>
@@ -191,7 +209,7 @@
               <td style="text-align: center">Action</td>
             </tr>
             <tr>
-              <td>{{ totalPackageCodSurabaya | currency : 'Rp ' : true : '1.0-2' }}</td>
+              <td>{{ totalPackageCodSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
                 <a><b>Detail</b></a>
               </td>
@@ -206,7 +224,7 @@
               <td style="text-align: center" style="text-align: center">Action</td>
             </tr>
             <tr>
-              <td>{{ totalPassengerPaidMalang | currency : 'Rp ' : true : '1.0-2' }}</td>
+              <td>{{ totalPassengerPaidMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
                 <a><b>Detail</b></a>
               </td>
@@ -221,7 +239,7 @@
               <td style="text-align: center">Action</td>
             </tr>
             <tr>
-              <td>{{ totalPassengerPaidSurabaya | currency : 'Rp ' : true : '1.0-2' }}</td>
+              <td>{{ totalPassengerPaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
                 <a><b>Detail</b></a>
               </td>
@@ -237,7 +255,7 @@
               <td style="text-align: center">Action</td>
             </tr>
             <tr>
-              <td>{{ piutangTransition | currency : 'Rp ' : true : '1.0-2' }}</td>
+              <td>{{ piutangTransition | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
                 <a><b>Detail</b></a>
               </td>
@@ -252,7 +270,7 @@
   <!--end::Col-->
 
   <!--begin::Col-->
-  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
+  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10 mt-2">
     <!--begin::Card-->
     <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end">
       <!--begin::Header-->
@@ -277,7 +295,7 @@
               <td style="text-align: center"><b>Action</b></td>
             </tr>
             <tr>
-              <td>{{ totalCostMalang | currency : 'Rp ' : true : '1.0-2' }}</td>
+              <td>{{ totalCostMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
                 <a><b>Detail</b></a>
               </td>
@@ -294,7 +312,7 @@
             </tr>
 
             <tr>
-              <td>{{ totalCostSurabaya | currency : 'Rp ' : true : '1.0-2' }}</td>
+              <td>{{ totalCostSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
                 <a><b>Detail</b></a>
               </td>
@@ -310,7 +328,7 @@
               <td style="text-align: center"><b>Action</b></td>
             </tr>
             <tr>
-              <td>{{ cashoutOnderdilService | currency : 'Rp ' : true : '1.0-2' }}</td>
+              <td>{{ cashoutOnderdilService | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
                 <a><b>Detail</b></a>
               </td>
@@ -326,7 +344,7 @@
               <td style="text-align: center"><b>Action</b></td>
             </tr>
             <tr>
-              <td>{{ cashoutCourierMalang | currency : 'Rp ' : true : '1.0-2' }}</td>
+              <td>{{ cashoutCourierMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
                 <a><b>Detail</b></a>
               </td>
@@ -341,7 +359,7 @@
               <td style="text-align: center"><b>Action</b></td>
             </tr>
             <tr>
-              <td>{{ cashoutCourierSurabaya | currency : 'Rp ' : true : '1.0-2' }}</td>
+              <td>{{ cashoutCourierSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
                 <a><b>Detail</b></a>
               </td>
@@ -357,14 +375,14 @@
             </tr>
             <tr style="background-color: #ffb8b8">
               <td>Payment Transfer</td>
-              <td>{{ totalReminderPaymentTransfer | currency : 'Rp ' : true : '1.0-2' }}</td>
+              <td>{{ totalReminderPaymentTransfer | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
                 <a><b>Detail</b></a>
               </td>
             </tr>
             <tr style="background-color: #ffb8b8">
               <td>Monthly</td>
-              <td>{{ totalPaymentMonthly | currency : 'Rp ' : true : '1.0-2' }}</td>
+              <td>{{ totalPaymentMonthly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
                 <a><b>Detail</b></a>
               </td>
@@ -385,16 +403,16 @@
                 </tr>
                 <tr align="center">
                   <td>Total Cash In</td>
-                  <td align="right">{{ totalCashInMalangDaily | currency : 'Rp ' : true : '1.0-2' }}</td>
+                  <td align="right">{{ totalCashInMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
                 <tr align="center">
                   <td>Total Cash Out</td>
-                  <td align="right">{{ totalCashOutMalangDaily | currency : 'Rp ' : true : '1.0-2' }}</td>
+                  <td align="right">{{ totalCashOutMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
 
                 <tr align="center">
                   <td>Total Deposit</td>
-                  <td align="right">{{ totalDepositMalangDaily | currency : 'Rp ' : true : '1.0-2' }}</td>
+                  <td align="right">{{ totalDepositMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
               </tbody>
             </table>
@@ -412,11 +430,11 @@
                 </tr>
                 <tr align="center">
                   <td>Payment Monthly</td>
-                  <td align="right">{{ totalPaymentMonthly | currency : 'Rp ' : true : '1.0-2' }}</td>
+                  <td align="right">{{ totalPaymentMonthly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
                 <tr align="center">
                   <td>Payment Via Transfer</td>
-                  <td align="right">{{ totalReminderPaymentTransfer | currency : 'Rp ' : true : '1.0-2' }}</td>
+                  <td align="right">{{ totalReminderPaymentTransfer | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
               </tbody>
             </table>
@@ -434,15 +452,15 @@
                 </tr>
                 <tr align="center">
                   <td>Total Cash In</td>
-                  <td align="right">{{ totalCashInSurabayaDaily | currency : 'Rp ' : true : '1.0-2' }}</td>
+                  <td align="right">{{ totalCashInSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
                 <tr align="center">
                   <td>Total Cash Out</td>
-                  <td align="right">{{ totalCashOutSurabayaDaily | currency : 'Rp ' : true : '1.0-2' }}</td>
+                  <td align="right">{{ totalCashOutSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
                 <tr align="center">
                   <td>Total Deposit</td>
-                  <td align="right">{{ totalDepositSurabayaDaily | currency : 'Rp ' : true : '1.0-2' }}</td>
+                  <td align="right">{{ totalDepositSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
               </tbody>
             </table>
@@ -460,7 +478,7 @@
                 </tr>
                 <tr align="center">
                   <td>Total Deposit</td>
-                  <td align="right">{{ totalDepositDaily | currency : 'Rp ' : true : '1.0-2' }}</td>
+                  <td align="right">{{ totalDepositDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
               </tbody>
             </table>

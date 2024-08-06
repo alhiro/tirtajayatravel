@@ -1,0 +1,381 @@
+<!-- begin::Header -->
+<div class="card">
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">
+        @if (currentTab === 'Malang') { Package Table Malang } @else if (currentTab === 'Surabaya') { Package Table
+        Surabaya }
+      </span>
+      <span class="text-muted mt-1 fw-bold fs-7">
+        @if (currentTab === 'Malang') { Have {{ dataLengthMalang | number }} items } @else if (currentTab ===
+        'Surabaya') { Have {{ dataLengthSurabaya | number }} items }
+      </span>
+    </h3>
+    @if (username === 'admin_11' && levelrule === 8) {
+    <div class="card-toolbar">
+      <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+        <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
+          <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Malang'" data-toggle="tab">Malang</a>
+        </li>
+        <li class="nav-item" (click)="setCurrentTab('Surabaya')" [style.cursor]="'pointer'">
+          <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Surabaya'" data-toggle="tab">Surabaya</a>
+        </li>
+      </ul>
+    </div>
+    }
+    <div class="card-toolbar">
+      <!-- begin::Menu -->
+      <div class="menu-item px-3">
+        <div class="menu-content px-3 py-3">
+          <div class="btn btn-info btn-sm px-4 cursor-pointer" (click)="datepicker.toggle()">Filter Date</div>
+        </div>
+      </div>
+      <!-- end::Menu -->
+
+      <div class="col text-end">
+        <div class="dp-hidden position-absolute">
+          <div class="input-group">
+            <input
+              name="datepicker"
+              class="form-control hide-datepicker"
+              ngbDatepicker
+              #datepicker="ngbDatepicker"
+              [autoClose]="'outside'"
+              (dateSelect)="onDateSelection($event, datepicker)"
+              [displayMonths]="2"
+              [dayTemplate]="t"
+              outsideDays="hidden"
+              [startDate]="fromDate!"
+              [footerTemplate]="footerTemplate"
+              tabindex="-1"
+            />
+            <ng-template #t let-date let-focused="focused">
+              <span
+                class="custom-day"
+                [class.focused]="focused"
+                [class.range]="isRange(date)"
+                [class.faded]="isHovered(date) || isInside(date)"
+                (mouseenter)="hoveredDate = date"
+                (mouseleave)="hoveredDate = null"
+              >
+                {{ date.day }}
+              </span>
+            </ng-template>
+          </div>
+
+          <ng-template #footerTemplate>
+            <hr class="my-0" />
+            <button class="btn btn-secondary btn-sm m-2 float-end" (click)="resetFilterDate(datepicker)">Reset</button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <div class="tab-content mt-5" id="tabPackage">
+      <!--begin::Tap pane-->
+      <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Malang' }">
+        <!-- begin::Table container -->
+        <div class="table-responsive">
+          <!-- begin::Table -->
+          <ngx-table
+            #table
+            [configuration]="configuration"
+            [data]="data"
+            [columns]="columns"
+            [pagination]="pagination"
+            (event)="eventEmitted($event)"
+            tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+          >
+            <ng-template let-row let-index="index">
+              <!-- <td>
+                    <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
+                  </td> -->
+              <td>
+                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
+                  {{ row.resi_number }}
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">
+                  @if (row.level === 1) {
+                  <span class="badge badge-light-primary">Normal</span>
+                  } @else {
+                  <span class="badge badge-light-danger">Urgent</span>
+                  }
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.sender?.customer?.name }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">
+                  {{ row.recipient?.customer?.name }} <br />
+                  @if (row.recipient?.customer?.addresses.length > 0) { @for (value of
+                  row.recipient?.customer?.addresses; track value) { @if (value.default == true) {
+                  {{ value.address }}
+                  } } } @else {
+                  {{ row.recipient?.customer?.address }}
+                  }
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : true : '1.0-2' }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
+              </td>
+              <td>
+                <span class="badge badge-light-primary">{{ row.status_package }}</span>
+              </td>
+              <td class="text-end">
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Edit"
+                  (click)="openModalEdit(row)"
+                >
+                  <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+              </td>
+            </ng-template>
+          </ngx-table>
+          <!-- end::Table -->
+        </div>
+        <!-- end::Table container -->
+      </div>
+      <!--end::Tap pane-->
+
+      <!--begin::Tap pane-->
+      <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Surabaya' }">
+        <!-- begin::Table container -->
+        <div class="table-responsive">
+          <!-- begin::Table -->
+          <ngx-table
+            #table
+            [configuration]="configuration"
+            [data]="dataSurabaya"
+            [columns]="columns"
+            [pagination]="pagination"
+            (event)="eventEmitted($event)"
+            tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+          >
+            <ng-template let-row let-index="index">
+              <!-- <td>
+                    <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
+                  </td> -->
+              <td>
+                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
+                  {{ row.resi_number }}
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">
+                  @if (row.level === 1) {
+                  <span class="badge badge-light-primary">Normal</span>
+                  } @else {
+                  <span class="badge badge-light-danger">Urgent</span>
+                  }
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.sender?.customer?.name }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">
+                  {{ row.recipient?.customer?.name }}
+                </span>
+              </td>
+              <td>
+                <!-- <span class="text-gray-900 d-block">
+                  @if ( defaultAddressRecipient) {
+                  {{ defaultAddressRecipient.address }}
+                  } @else {
+                  {{ row.recipient?.customer?.address }}
+                  }
+                </span> -->
+                <span class="text-gray-900 d-block">
+                  @if (row.recipient?.customer?.addresses.length > 0) { @for (value of
+                  row.recipient?.customer?.addresses; track value) { @if (value.default == true) {
+                  {{ value.address }}
+                  } } } @else {
+                  {{ row.recipient?.customer?.address }}
+                  }
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : true : '1.0-2' }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
+              </td>
+              <td>
+                <span class="badge badge-light-primary">{{ row.status_package }}</span>
+              </td>
+              <td class="text-end">
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Edit"
+                  (click)="openModalEdit(row)"
+                >
+                  <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+              </td>
+            </ng-template>
+          </ngx-table>
+          <!-- end::Table -->
+        </div>
+        <!-- end::Table container -->
+      </div>
+      <!--end::Tap pane-->
+    </div>
+  </div>
+</div>
+<!-- begin::Body -->
+
+<!-- begin:: Modal Package -->
+<app-modal #modal [modalConfig]="modalConfigEdit">
+  <form (ngSubmit)="dataEdit()" [formGroup]="form" novalidate>
+    <div class="m-3">
+      <label class="d-block mb-4">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="cost"
+          autocomplete="cost"
+          [placeholder]="'Cost' | translate"
+        />
+        <span hidden translate>Cost</span>
+      </label>
+      <label class="d-block mb-4">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="discount"
+          autocomplete="discount"
+          [placeholder]="'Discount' | translate"
+        />
+        <span hidden translate>Discount</span>
+      </label>
+      <label class="d-block mb-4">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="koli"
+          autocomplete="koli"
+          [placeholder]="'Koli' | translate"
+        />
+        <span hidden translate>Amount Koli</span>
+      </label>
+      <label class="d-block mb-4">
+        <select
+          class="form-select form-control"
+          data-kt-select2="true"
+          data-placeholder="Select category"
+          data-allow-clear="true"
+          formControlName="category_id"
+        >
+          <option value="" disabled selected>Select category</option>
+          @for (value of category; track value) {
+          <option [value]="value.category_id">{{ value.name }}</option>
+          }
+        </select>
+      </label>
+
+      <div class="mb-2">
+        <div class="d-flex">
+          <label class="form-label fw-bold" [attr.for]="request">Special Request </label>
+          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              [attr.id]="request"
+              [checked]="isRequest"
+              (change)="checkRequest()"
+            />
+          </label>
+        </div>
+      </div>
+      <label class="d-block mb-4">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="description"
+          autocomplete="description"
+          [placeholder]="'Description' | translate"
+        />
+        <span hidden translate>Description</span>
+      </label>
+      <div class="mb-4">
+        <label class="form-label fw-bold">Origin From:</label>
+        <div class="d-flex">
+          <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+            <input
+              class="form-check-input"
+              type="radio"
+              value="Kantor"
+              name="origin_from"
+              formControlName="origin_from"
+            />
+            <span class="form-check-label text-gray-900">Kantor</span>
+          </label>
+          <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+            <input
+              class="form-check-input"
+              type="radio"
+              value="Ambil"
+              name="origin_from"
+              formControlName="origin_from"
+            />
+            <span class="form-check-label text-gray-900">Ambil</span>
+          </label>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="form-label fw-bold">Level:</label>
+        <div class="d-flex">
+          <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+            <input class="form-check-input" type="radio" [value]="1" name="level" formControlName="level" />
+            <span class="form-check-label text-gray-900">Normal</span>
+          </label>
+          <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+            <input class="form-check-input" type="radio" [value]="2" name="level" formControlName="level" />
+            <span class="form-check-label text-gray-900">Urgent</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button class="btn btn-primary w-100" type="submit" [disabled]="form.invalid || isLoading">
+        <!--begin::Spinner-->
+        <span
+          class="translate-middle-y lh-0 me-1"
+          data-kt-search-element="spinner"
+          [ngClass]="isLoading ? '' : 'd-none'"
+        >
+          <span class="spinner-border h-15px w-15px align-middle text-gray-500"></span>
+        </span>
+        <!--end::Spinner-->
+        <span translate>Submit</span>
+      </button>
+    </div>
+  </form>
+</app-modal>
+<!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
+<!-- end:: Modal Package -->

@@ -1,21 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Utils } from '@app/@shared';
-import {
-  Pagination,
-  PaginationContext,
-  Params,
-  defaultPagination,
-  defaultParams,
-} from '@app/@shared/interfaces/pagination';
+import { PaginationContext } from '@app/@shared/interfaces/pagination';
 import { GoSendModel } from '@app/pages/booking/package/models/gosend';
-import { PackageModel } from '@app/pages/booking/package/models/package.model';
 import { PackageService } from '@app/pages/booking/package/package.service';
-import { PassengerModel } from '@app/pages/booking/passenger/models/passenger.model';
 import { HandlerResponseService } from '@app/services/handler-response/handler-response.service';
 import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { Subject, catchError, finalize, of, takeUntil } from 'rxjs';
 import { CashoutService } from '../cashout/cashout.service';
 import { CashoutModel } from '../cashout/models/cashout.model';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-deposit',
@@ -106,13 +99,16 @@ export class DepositComponent implements OnInit {
     startDate: '',
     endDate: '',
   };
-  public params = {
+  public params: any = {
     limit: '',
     page: '',
     search: '',
     startDate: '',
     endDate: '',
   };
+
+  date!: NgbDateStruct;
+  @ViewChild('datepicker') datePicker!: any;
 
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -146,8 +142,41 @@ export class DepositComponent implements OnInit {
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
 
-    this.dataListCashout(this.params);
-    this.dataListBSD(this.params);
+    const inputDate = new Date();
+    const { startDate, endDate } = this.utils.singleDate(inputDate);
+
+    const params = {
+      limit: '',
+      page: '',
+      search: '',
+      startDate: startDate,
+      endDate: endDate,
+    };
+    console.log(params);
+    this.dataListCashout(params);
+    this.dataListBSD(params);
+  }
+
+  datepicker() {
+    this.datePicker?.toggle();
+  }
+
+  onDateChange(date: NgbDateStruct): void {
+    this.date = date;
+
+    const inputDate = new Date(date.year, date.month - 1, date.day);
+    const { startDate, endDate } = this.utils.singleDate(inputDate);
+
+    const params = {
+      limit: '',
+      page: '',
+      search: '',
+      startDate: startDate,
+      endDate: endDate,
+    };
+    console.log(params);
+    this.dataListCashout(params);
+    this.dataListBSD(params);
   }
 
   printDeposit() {}

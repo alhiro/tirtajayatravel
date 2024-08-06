@@ -26,6 +26,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "allowedCommonJsDependencies": ["moment", "apexcharts", "object-path", "sweetalert2"],
             "assets": [
               "src/favicon.ico",
               "src/apple-touch-icon.png",

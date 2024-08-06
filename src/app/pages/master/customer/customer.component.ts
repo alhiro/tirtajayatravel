@@ -296,7 +296,6 @@ export class CustomerComponent implements OnInit {
     this.formAddress.patchValue({
       customer_id: event.customer_id,
     });
-
     return await this.modalComponentAddress.open();
   }
 
@@ -304,10 +303,10 @@ export class CustomerComponent implements OnInit {
     console.log(this.formAddress.value);
     this.isLoading = true;
     const catSubscr = this.customerService
-      .createAddress(this.form.value)
+      .createAddress(this.formAddress.value)
       .pipe(
         finalize(() => {
-          this.form.markAsPristine();
+          this.formAddress.markAsPristine();
           this.isLoading = false;
         })
       )
