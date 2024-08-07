@@ -3,8 +3,8 @@
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
       <span class="card-label fw-bolder fs-3 mb-1">
-        @if (currentTab === 'Malang') { Package Table Malang } @else if (currentTab === 'Surabaya') { Package Table
-        Surabaya }
+        @if (currentTab === 'Malang') { Commission Table Malang } @else if (currentTab === 'Surabaya') { Commission
+        Table Surabaya }
       </span>
       <span class="text-muted mt-1 fw-bold fs-7">
         @if (currentTab === 'Malang') { Have {{ dataLengthMalang | number }} items } @else if (currentTab ===
@@ -26,8 +26,8 @@
     <div class="card-toolbar">
       <!-- begin::Menu -->
       <div class="menu-item px-3">
-        <div class="menu-content px-3 py-3">
-          <div class="btn btn-info btn-sm px-4 cursor-pointer" (click)="datepicker.toggle()">Filter Date</div>
+        <div class="menu-content px-0">
+          <div class="btn btn-info btn-sm py-2 px-4 cursor-pointer" (click)="datepicker.toggle()">Filter Date</div>
         </div>
       </div>
       <!-- end::Menu -->
@@ -94,24 +94,12 @@
                     <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
                   </td> -->
               <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
+                <span class="text-gray-900 d-block">
                   {{ row.resi_number }}
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">
-                  @if (row.level === 1) {
-                  <span class="badge badge-light-primary">Normal</span>
-                  } @else {
-                  <span class="badge badge-light-danger">Urgent</span>
-                  }
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.sender?.customer?.name }}</span>
+                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
@@ -125,15 +113,31 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : true : '1.0-2' }}</span>
+                <span class="text-gray-900 d-block">
+                  @if (row.recipient?.received_by) {
+                  {{ row.recipient?.received_by }}
+                  } @else {
+                  <div class="btn btn-info btn-sm px-3 p-1 cursor-pointer" (click)="openModalEdit(row)">
+                    <app-keenicon name="send" class="p-1 text-light fs-7"></app-keenicon> Receive
+                  </div>
+                  }
+                </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
+                <span class="text-gray-900 d-block">{{
+                  row.recipient?.received_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT'
+                }}</span>
               </td>
               <td>
-                <span class="badge badge-light-primary">{{ row.status_package }}</span>
+                <span class="text-gray-900 d-block">{{
+                  row.recipient?.check_date_sp | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT'
+                }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.recipient?.courier }}</span>
               </td>
               <td class="text-end">
+                @if (row.recipient?.received_by) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -145,6 +149,7 @@
                 >
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
+                }
               </td>
             </ng-template>
           </ngx-table>
@@ -173,39 +178,16 @@
                     <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
                   </td> -->
               <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
+                <span class="text-gray-900 d-block">
                   {{ row.resi_number }}
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">
-                  @if (row.level === 1) {
-                  <span class="badge badge-light-primary">Normal</span>
-                  } @else {
-                  <span class="badge badge-light-danger">Urgent</span>
-                  }
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.sender?.customer?.name }}</span>
+                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.recipient?.customer?.name }}
-                </span>
-              </td>
-              <td>
-                <!-- <span class="text-gray-900 d-block">
-                  @if ( defaultAddressRecipient) {
-                  {{ defaultAddressRecipient.address }}
-                  } @else {
-                  {{ row.recipient?.customer?.address }}
-                  }
-                </span> -->
-                <span class="text-gray-900 d-block">
+                  {{ row.recipient?.customer?.name }} <br />
                   @if (row.recipient?.customer?.addresses.length > 0) { @for (value of
                   row.recipient?.customer?.addresses; track value) { @if (value.default == true) {
                   {{ value.address }}
@@ -215,15 +197,31 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : true : '1.0-2' }}</span>
+                <span class="text-gray-900 d-block">
+                  @if (row.recipient?.received_by) {
+                  {{ row.recipient?.received_by }}
+                  } @else {
+                  <div class="btn btn-info btn-sm px-3 p-1 cursor-pointer" (click)="openModalEdit(row)">
+                    <app-keenicon name="send" class="p-1 text-light fs-7"></app-keenicon> Receive
+                  </div>
+                  }
+                </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
+                <span class="text-gray-900 d-block">{{
+                  row.recipient?.received_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT'
+                }}</span>
               </td>
               <td>
-                <span class="badge badge-light-primary">{{ row.status_package }}</span>
+                <span class="text-gray-900 d-block">{{
+                  row.recipient?.check_date_sp | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT'
+                }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.recipient?.courier }}</span>
               </td>
               <td class="text-end">
+                @if (row.recipient?.received_by) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -235,6 +233,7 @@
                 >
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
+                }
               </td>
             </ng-template>
           </ngx-table>
@@ -248,121 +247,63 @@
 </div>
 <!-- begin::Body -->
 
-<!-- begin:: Modal Package -->
+<!-- begin:: Modal Commission -->
 <app-modal #modal [modalConfig]="modalConfigEdit">
-  <form (ngSubmit)="dataEdit()" [formGroup]="form" novalidate>
+  <form (ngSubmit)="dataEdit()" [formGroup]="formRecipient" novalidate>
     <div class="m-3">
       <label class="d-block mb-4">
         <input
           type="text"
           class="form-control"
-          formControlName="cost"
-          autocomplete="cost"
-          [placeholder]="'Cost' | translate"
+          formControlName="received_by"
+          autocomplete="received_by"
+          [placeholder]="'Received By' | translate"
         />
-        <span hidden translate>Cost</span>
+        <span hidden translate>Received By</span>
+      </label>
+      <label class="d-block mb-4">
+        <div class="input-group">
+          <input
+            class="form-control p-1 px-4"
+            placeholder="Select date"
+            name="datePicker"
+            [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="receivedDate"
+            ngbDatepicker
+            #datePicker="ngbDatepicker"
+            (ngModelChange)="onDateChange($event)"
+            [readonly]="true"
+          />
+          <a class="btn btn-info btn-sm p-2 px-4 cursor-pointer" (click)="datePicker.toggle()"> Receive Date </a>
+        </div>
       </label>
       <label class="d-block mb-4">
         <input
+          id="select-employee"
           type="text"
           class="form-control"
-          formControlName="discount"
-          autocomplete="discount"
-          [placeholder]="'Discount' | translate"
+          [class.is-invalid]="searchFailedEmployee"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="modelEmployee"
+          [ngbTypeahead]="searchDataEmployee"
+          [resultTemplate]="rt"
+          [inputFormatter]="formatter"
+          placeholder="Courier search"
         />
-        <span hidden translate>Discount</span>
-      </label>
-      <label class="d-block mb-4">
-        <input
-          type="text"
-          class="form-control"
-          formControlName="koli"
-          autocomplete="koli"
-          [placeholder]="'Koli' | translate"
-        />
-        <span hidden translate>Amount Koli</span>
-      </label>
-      <label class="d-block mb-4">
-        <select
-          class="form-select form-control"
-          data-kt-select2="true"
-          data-placeholder="Select category"
-          data-allow-clear="true"
-          formControlName="category_id"
-        >
-          <option value="" disabled selected>Select category</option>
-          @for (value of category; track value) {
-          <option [value]="value.category_id">{{ value.name }}</option>
-          }
-        </select>
-      </label>
+        <ng-template #rt let-r="result" let-t="term">
+          {{ r.name }}
+        </ng-template>
 
-      <div class="mb-2">
-        <div class="d-flex">
-          <label class="form-label fw-bold" [attr.for]="request">Special Request </label>
-          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              [attr.id]="request"
-              [checked]="isRequest"
-              (change)="checkRequest()"
-            />
-          </label>
-        </div>
-      </div>
-      <label class="d-block mb-4">
-        <input
-          type="text"
-          class="form-control"
-          formControlName="description"
-          autocomplete="description"
-          [placeholder]="'Description' | translate"
-        />
-        <span hidden translate>Description</span>
+        @if (searchingEmployee) {
+        <small class="form-text text-muted">Searching. Please wait...</small>
+        } @if (searchFailedEmployee) {
+        <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+        }
       </label>
-      <div class="mb-4">
-        <label class="form-label fw-bold">Origin From:</label>
-        <div class="d-flex">
-          <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-            <input
-              class="form-check-input"
-              type="radio"
-              value="Kantor"
-              name="origin_from"
-              formControlName="origin_from"
-            />
-            <span class="form-check-label text-gray-900">Kantor</span>
-          </label>
-          <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-            <input
-              class="form-check-input"
-              type="radio"
-              value="Ambil"
-              name="origin_from"
-              formControlName="origin_from"
-            />
-            <span class="form-check-label text-gray-900">Ambil</span>
-          </label>
-        </div>
-      </div>
-      <div class="mb-4">
-        <label class="form-label fw-bold">Level:</label>
-        <div class="d-flex">
-          <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-            <input class="form-check-input" type="radio" [value]="1" name="level" formControlName="level" />
-            <span class="form-check-label text-gray-900">Normal</span>
-          </label>
-          <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-            <input class="form-check-input" type="radio" [value]="2" name="level" formControlName="level" />
-            <span class="form-check-label text-gray-900">Urgent</span>
-          </label>
-        </div>
-      </div>
     </div>
 
     <div>
-      <button class="btn btn-primary w-100" type="submit" [disabled]="form.invalid || isLoading">
+      <button class="btn btn-primary w-100" type="submit" [disabled]="formRecipient.invalid || isLoading">
         <!--begin::Spinner-->
         <span
           class="translate-middle-y lh-0 me-1"
@@ -378,4 +319,4 @@
   </form>
 </app-modal>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
-<!-- end:: Modal Package -->
+<!-- end:: Modal Commission -->

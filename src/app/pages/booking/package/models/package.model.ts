@@ -1,11 +1,12 @@
 import { GoSendModel } from './gosend';
+import { RecipientModel } from './recipient.model';
 
 export class PackageModel {
   package_id!: number;
   sender_id!: number;
   sender: any;
   recipient_id!: number;
-  recipient: any;
+  recipient!: RecipientModel;
   city_id!: number;
   city: any;
   employee_id!: number;

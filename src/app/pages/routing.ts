@@ -41,6 +41,10 @@ const Routing: Routes = [
     path: 'finance/cash-out/list',
     loadChildren: () => import('./finance/cashout/cashout.module').then((m) => m.CashoutModule),
   },
+  {
+    path: 'finance/commission/package',
+    loadChildren: () => import('./finance/commission/commission.module').then((m) => m.CommissionModule),
+  },
 
   // Master
   {

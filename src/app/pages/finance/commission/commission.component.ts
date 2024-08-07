@@ -69,20 +69,21 @@ export class CommissionComponent implements OnInit, OnDestroy {
     limit: 10,
     offset: 1,
     count: -1,
-    search: '',
+    search: 'Recipient',
     startDate: '',
     endDate: '',
   };
   public params = {
     limit: 10,
     page: 1,
-    search: '',
+    search: 'Recipient',
     startDate: '',
     endDate: '',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   form!: FormGroup;
+  formRecipient!: FormGroup;
   isLoading = false;
   isLoadingCustomer = false;
 
@@ -102,8 +103,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
   currentTab!: string;
 
   minDate: any;
-  bookdate!: NgbDateStruct;
-  booktime: NgbTimeStruct = { hour: 0, minute: 0, second: 0 };
+  receivedDate!: NgbDateStruct;
 
   calendar = inject(NgbCalendar);
 
@@ -132,6 +132,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
       this.currentTab = 'Malang';
     } else if (this.username === 'fosby' && this.levelrule === 2) {
       this.currentTab = 'Surabaya';
+    } else if (this.username === 'admin_11' && this.levelrule === 8) {
+      this.currentTab = 'Malang';
     }
 
     // set min selected date
@@ -143,6 +145,10 @@ export class CommissionComponent implements OnInit, OnDestroy {
     };
     var getDate = new Date(minDate);
     this.formatDateNow(getDate);
+  }
+
+  onDateChange(date: NgbDateStruct): void {
+    this.receivedDate = date;
   }
 
   datepicker() {
@@ -167,6 +173,9 @@ export class CommissionComponent implements OnInit, OnDestroy {
       const valueBookFromDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
       const valueBookToDate = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
       const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookToDate);
+
+      this.pagination.startDate = startDate;
+      this.pagination.endDate = endDate;
 
       const params = {
         limit: this.pagination.limit,
@@ -213,19 +222,17 @@ export class CommissionComponent implements OnInit, OnDestroy {
     // this.configuration.resizeColumn = true;
     // this.configuration.fixedColumnWidth = false;
     this.configuration.showDetailsArrow = true;
-    this.configuration.detailsTemplate = true;
     this.configuration.horizontalScroll = true;
 
     this.columns = [
-      // { key: 'package_id', title: 'No' },
-      { key: 'resi_number', title: 'Number Resi' },
-      { key: 'level', title: 'Level' },
-      { key: 'book_date', title: 'Book Date' },
-      { key: 'sender_id', title: 'Sender' },
-      { key: 'recipient_id', title: 'Recipient' },
+      // { key: 'received_id', title: 'No' },
+      { key: 'resi_number', title: 'Resi Number' },
       { key: 'cost', title: 'Cost' },
-      { key: 'admin', title: 'Admin' },
-      { key: '', title: 'Status' },
+      { key: 'recipient_id', title: 'Recipient' },
+      { key: 'received_by', title: 'Received By' },
+      { key: 'received_date', title: 'Received Date' },
+      { key: 'check_date_sp', title: 'Check' },
+      { key: 'courier', title: 'Courier' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
   }
@@ -260,7 +267,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
       photo: [''],
       print: [''],
       move_time: [''],
-      book_date: [''],
+      receivedDate: [''],
       send_date: [''],
       check_payment: [''],
       check_sp: [''],
@@ -270,6 +277,53 @@ export class CommissionComponent implements OnInit, OnDestroy {
       taking_status: [''],
       office: [''],
     });
+    this.form = this.formBuilder.group({
+      package_id: [''],
+      sender_id: [''],
+      recipient_id: [''],
+      city_id: [''],
+      employee_id: [''],
+      category_id: [''],
+      go_send_id: [''],
+      description: [''],
+      cost: [''],
+      discount: [''],
+      payment: [''],
+      koli: [''],
+      origin_from: [''],
+      level: [''],
+      request: [''],
+      request_description: [''],
+      note: [''],
+      status: [''],
+      status_package: [''],
+      resi_number: [''],
+      photo: [''],
+      print: [''],
+      move_time: [''],
+      receivedDate: [''],
+      send_date: [''],
+      check_payment: [''],
+      check_sp: [''],
+      check_date_sp: [''],
+      taking_time: [''],
+      taking_by: [''],
+      taking_status: [''],
+      office: [''],
+    });
+
+    this.formRecipient = this.formBuilder.group({
+      recipient_id: [''],
+      customer_id: [''],
+      package_id: [''],
+      date: [''],
+      user_payment: [''],
+      date_payment: [''],
+      received_by: [''],
+      received_date: [''],
+      courier: [''],
+      sign: [''],
+    });
   }
 
   formatDateNow(event: any) {
@@ -278,16 +332,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
       month: event.getMonth() + 1,
       day: event.getDate(),
     };
-    this.bookdate = { year: valDate.year, month: valDate.month, day: valDate.day };
-    console.log(this.bookdate);
-
-    const valTime = {
-      hour: event.getHours(),
-      minute: event.getMinutes(),
-      second: event.getSeconds(),
-    };
-    this.booktime = { hour: valTime.hour == 0 ? 1 : valTime.hour, minute: 0, second: 0 };
-    console.log(this.booktime);
+    this.receivedDate = { year: valDate.year, month: valDate.month, day: valDate.day };
+    console.log(this.receivedDate);
   }
 
   formatDateValue(value: any) {
@@ -298,16 +344,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
       month: eventDate.month() + 1,
       day: eventDate.date(),
     };
-    this.bookdate = { year: valDate.year, month: valDate.month, day: valDate.day };
-    console.log(this.bookdate);
-
-    const valTime = {
-      hour: eventDate.hour(),
-      minute: eventDate.minute(),
-      second: eventDate.second(),
-    };
-    this.booktime = { hour: valTime.hour == 0 ? 1 : valTime.hour, minute: 0, second: 0 };
-    console.log(this.booktime);
+    this.receivedDate = { year: valDate.year, month: valDate.month, day: valDate.day };
+    console.log(this.receivedDate);
   }
 
   setCurrentTab(tab: string) {
@@ -355,6 +393,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((response: any) => {
+        console.log(response);
         // count malang or surabaya
         if (response.data.length > 0) {
           const malangData = response.data?.filter(
@@ -376,6 +415,12 @@ export class CommissionComponent implements OnInit, OnDestroy {
           this.pagination = { ...this.pagination };
           this.configuration.isLoading = false;
           this.cdr.detectChanges();
+        } else {
+          this.dataLengthMalang = 0;
+          this.dataLengthSurabaya = 0;
+
+          this.data = [];
+          this.dataSurabaya = [];
         }
       });
   }
@@ -419,13 +464,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
       tap(() => (this.searchingEmployee = false))
     );
 
-  onDateChange(date: NgbDateStruct): void {
-    this.bookdate = date;
-  }
-
-  onTimehange(time: NgbTimeStruct): void {
-    this.booktime = time;
-  }
+  formatter = (result: { name: string }) => result.name;
 
   format(date: NgbDateStruct): string {
     return date ? `${date.day}/${date.month}/${date.year}` : '';
@@ -434,50 +473,41 @@ export class CommissionComponent implements OnInit, OnDestroy {
   async openModalEdit(event: PackageModel) {
     console.log(event);
 
-    this.formatDateValue(event?.book_date);
+    this.modelEmployee = event.recipient?.courier;
+    this.formatDateValue(event.recipient?.received_date);
 
-    this.form.patchValue({
-      package_id: event.package_id,
-      sender_id: event.sender_id,
+    this.formRecipient.patchValue({
       recipient_id: event.recipient_id,
-      city_id: event.city_id,
-      employee_id: event.employee_id,
-      category_id: event.category_id ? event.category_id : '',
-      go_send_id: event.go_send_id,
-      description: event.description,
-      cost: event.cost,
-      discount: event.discount,
-      payment: event.payment,
-      origin_from: event.origin_from,
-      level: event.level,
-      request: event.request ? event.request : '',
-      request_description: event.request_description,
-      note: event.note,
-      status: event.status ? event.status : '',
-      status_package: event.status_package ? event.status_package : '',
-      resi_number: event.resi_number,
-      photo: event.photo,
-      print: event.print,
-      move_time: event.move_time,
-      book_date: event.book_date,
-      send_date: event.send_date,
-      check_payment: event.check_payment,
-      check_sp: event.check_sp,
-      check_date_sp: event.check_date_sp,
-      taking_time: event.taking_time,
-      taking_by: event.taking_by,
-      taking_status: event.taking_status,
-      office: event.office,
+      package_id: event.package_id,
+      customer_id: event.recipient?.customer_id,
+      date: event.recipient?.date,
+      user_payment: event.recipient?.user_payment,
+      date_payment: event.recipient?.date_payment,
+      received_by: event.recipient?.received_by,
+      received_date: event.recipient?.received_date,
+      courier: event.recipient?.courier,
+      sign: event.recipient?.sign,
     });
 
     return await this.modalComponent.open();
   }
 
   dataEdit() {
-    // send data to gosend
+    // send data to recipient
+    const valueDate = new Date(
+      Date.UTC(this.receivedDate.year, this.receivedDate.month - 1, this.receivedDate.day)
+    ).toISOString();
+    console.log(valueDate);
+
+    this.formRecipient.patchValue({
+      courier: this.modelEmployee?.name,
+      received_date: valueDate,
+    });
+    console.log(this.formRecipient.value);
+
     this.isLoading = true;
     this.packageService
-      .patch(this.form.value)
+      .editRecipient(this.formRecipient.value)
       .pipe(
         finalize(() => {
           this.form.markAsPristine();

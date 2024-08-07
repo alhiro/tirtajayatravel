@@ -246,6 +246,8 @@ export class HttpService {
       user_payment: param.user_payment,
       date_payment: param.date_payment,
       received_by: param.received_by,
+      received_date: param.received_date,
+      courier: param.courier,
     };
     return this.commonApi.put('/recipient/update', body) as Observable<any>;
   }
