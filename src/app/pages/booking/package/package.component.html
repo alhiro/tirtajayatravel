@@ -93,7 +93,16 @@
 
           <ng-template #footerTemplate>
             <hr class="my-0" />
-            <button class="btn btn-secondary btn-sm m-2 float-end" (click)="resetFilterDate(datepicker)">Reset</button>
+            <button class="btn btn-primary btn-sm m-2 p-1 px-4 float-start" (click)="resetFilterDate(datepicker)">
+              Reset
+            </button>
+            <button
+              class="btn btn-warning btn-sm m-2 p-1 px-4 float-end"
+              [disabled]="configuration.isLoading"
+              (click)="printFilterDate(datepicker)"
+            >
+              Print
+            </button>
           </ng-template>
         </div>
       </div>
@@ -130,9 +139,9 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row.level === 1) {
+                  @if (row.level === 'Normal') {
                   <span class="badge badge-light-primary">Normal</span>
-                  } @else {
+                  } @else if (row.level === 'Urgent') {
                   <span class="badge badge-light-danger">Urgent</span>
                   }
                 </span>
@@ -155,7 +164,7 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : true : '1.0-2' }}</span>
+                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
@@ -175,6 +184,17 @@
                   (click)="openModalEdit(row)"
                 >
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Print"
+                  (click)="openModalPrint(row)"
+                >
+                  <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
@@ -291,9 +311,9 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row.level === 1) {
+                  @if (row.level === 'Normal') {
                   <span class="badge badge-light-primary">Normal</span>
-                  } @else {
+                  } @else if (row.level === 'Urgent') {
                   <span class="badge badge-light-danger">Urgent</span>
                   }
                 </span>
@@ -327,7 +347,7 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : true : '1.0-2' }}</span>
+                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
@@ -462,9 +482,9 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row.level === 1) {
+                  @if (row.level === 'Normal') {
                   <span class="badge badge-light-primary">Normal</span>
-                  } @else {
+                  } @else if (row.level === 'Urgent') {
                   <span class="badge badge-light-danger">Urgent</span>
                   }
                 </span>
@@ -491,7 +511,7 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : true : '1.0-2' }}</span>
+                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
@@ -557,9 +577,9 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row.level === 1) {
+                  @if (row.level === 'Normal') {
                   <span class="badge badge-light-primary">Normal</span>
-                  } @else {
+                  } @else if (row.level === 'Urgent') {
                   <span class="badge badge-light-danger">Urgent</span>
                   }
                 </span>
@@ -586,7 +606,7 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : true : '1.0-2' }}</span>
+                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
@@ -1121,11 +1141,11 @@
                 <label class="form-label fw-bold">Level:</label>
                 <div class="d-flex">
                   <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                    <input class="form-check-input" type="radio" [value]="1" name="level" formControlName="level" />
+                    <input class="form-check-input" type="radio" value="Normal" name="level" formControlName="level" />
                     <span class="form-check-label text-gray-900">Normal</span>
                   </label>
                   <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                    <input class="form-check-input" type="radio" [value]="2" name="level" formControlName="level" />
+                    <input class="form-check-input" type="radio" value="Urgent" name="level" formControlName="level" />
                     <span class="form-check-label text-gray-900">Urgent</span>
                   </label>
                 </div>

@@ -31,12 +31,19 @@ import { SharedModule } from '../shared/shared.module';
 import { Routing } from '@app/pages/routing';
 import { PrintspComponent } from '@app/pages/booking/delivery/printsp/printsp.component';
 import { PrintbsdComponent } from '@app/pages/finance/bsd/printbsd/printbsd.component';
+import { PrintPackageComponent } from '@app/pages/booking/package/printPackage/printPackage.component';
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
     children: Routing,
+  },
+  {
+    path: 'booking/package/transaction/printpackage',
+    component: PrintPackageComponent,
+    loadChildren: () =>
+      import('../../pages/booking/package/printPackage/printPackage.module').then((m) => m.PrintPackageModule),
   },
   {
     path: 'booking/departure/delivery/printsp',

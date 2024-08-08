@@ -108,6 +108,8 @@ export class CashoutComponent implements OnInit {
       this.currentTab = 'Malang';
     } else if (this.username === 'fosby' && this.levelrule === 2) {
       this.currentTab = 'Surabaya';
+    } else if (this.username === 'admin_11' && this.levelrule === 8) {
+      this.currentTab = 'Malang';
     }
 
     this.initForm();

@@ -221,6 +221,8 @@ export class PackageComponent implements OnInit, OnDestroy {
       this.currentTab = 'Malang';
     } else if (this.username === 'fosby' && this.levelrule === 2) {
       this.currentTab = 'Surabaya';
+    } else if (this.username === 'admin_11' && this.levelrule === 8) {
+      this.currentTab = 'Malang';
     }
 
     // set min selected date
@@ -232,10 +234,6 @@ export class PackageComponent implements OnInit, OnDestroy {
     };
     var getDate = new Date(minDate);
     this.formatDateNow(getDate);
-  }
-
-  datepicker() {
-    this.datePicker.toggle();
   }
 
   onDateSelection(date: NgbDate, datepicker: any) {
@@ -273,8 +271,14 @@ export class PackageComponent implements OnInit, OnDestroy {
   }
 
   resetFilterDate(datepicker: any) {
+    this.fromDate = this.calendar.getToday();
+    this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
     this.dataList(this.params);
     datepicker.close();
+  }
+
+  printFilterDate(datepicker: any) {
+    console.log(this.data);
   }
 
   isHovered(date: NgbDate) {
@@ -549,6 +553,16 @@ export class PackageComponent implements OnInit, OnDestroy {
           this.pagination = { ...this.pagination };
           this.configuration.isLoading = false;
           this.cdr.detectChanges();
+        } else {
+          this.dataLengthMalang = 0;
+          this.dataLengthSurabaya = 0;
+          this.dataLengthCancel = 0;
+          this.dataLengthHistory = 0;
+
+          this.data = [];
+          this.dataSurabaya = [];
+          this.dataCancel = [];
+          this.dataHistory = [];
         }
       });
   }
@@ -1065,6 +1079,11 @@ export class PackageComponent implements OnInit, OnDestroy {
     //     }
     //   );
     // this.unsubscribe.push(catSubscr);
+  }
+
+  openModalPrint(event: PackageModel) {
+    sessionStorage.setItem('printpackage', JSON.stringify(event));
+    window.open('#/booking/package/transaction/printpackage', '_blank');
   }
 
   openModalCancel(event: PackageModel) {}

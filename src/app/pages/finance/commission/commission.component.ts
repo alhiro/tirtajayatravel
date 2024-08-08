@@ -217,8 +217,6 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.dataList(this.params);
-
     // this.configuration.resizeColumn = true;
     // this.configuration.fixedColumnWidth = false;
     this.configuration.showDetailsArrow = true;
@@ -235,6 +233,19 @@ export class CommissionComponent implements OnInit, OnDestroy {
       { key: 'courier', title: 'Courier' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
+
+    const inputDate = new Date();
+    const { startDate, endDate } = this.utils.singleDate(inputDate);
+
+    const params = {
+      limit: '',
+      page: '',
+      search: '',
+      startDate: startDate,
+      endDate: endDate,
+    };
+    console.log(params);
+    this.dataList(params);
   }
 
   ngOnDestroy(): void {
@@ -473,7 +484,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
   async openModalEdit(event: PackageModel) {
     console.log(event);
 
-    this.modelEmployee = event.recipient?.courier;
+    const nameCourier = { name: event.recipient?.courier };
+    this.modelEmployee = nameCourier;
     this.formatDateValue(event.recipient?.received_date);
 
     this.formRecipient.patchValue({

@@ -245,6 +245,11 @@ export class BsdComponent implements OnInit, OnDestroy {
           this.pagination = { ...this.pagination };
           this.configuration.isLoading = false;
           this.cdr.detectChanges();
+        } else {
+          this.dataLengthBSDList = 0;
+          this.dataLengthBSDDone = 0;
+          this.dataBSDList = [];
+          this.dataBSDDone = [];
         }
       });
   }

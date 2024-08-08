@@ -209,6 +209,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
       this.currentTab = 'Malang';
     } else if (this.username === 'fosby' && this.levelrule === 2) {
       this.currentTab = 'Surabaya';
+    } else if (this.username === 'admin_11' && this.levelrule === 8) {
+      this.currentTab = 'Malang';
     }
 
     // set min selected date
@@ -520,6 +522,16 @@ export class PassengerComponent implements OnInit, OnDestroy {
           this.pagination = { ...this.pagination };
           this.configuration.isLoading = false;
           this.cdr.detectChanges();
+        } else {
+          this.dataLengthMalang = 0;
+          this.dataLengthSurabaya = 0;
+          this.dataLengthCancel = 0;
+          this.dataLengthHistory = 0;
+
+          this.data = [];
+          this.dataSurabaya = [];
+          this.dataCancel = [];
+          this.dataHistory = [];
         }
       });
   }
