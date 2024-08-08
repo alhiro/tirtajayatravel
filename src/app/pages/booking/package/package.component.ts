@@ -195,6 +195,9 @@ export class PackageComponent implements OnInit, OnDestroy {
   fromDate: NgbDate | null = this.calendar.getToday();
   toDate: NgbDate | null = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
 
+  startDate: any;
+  endDate: any;
+
   @Input() delivery!: GoSendModel;
 
   // private fields
@@ -234,6 +237,11 @@ export class PackageComponent implements OnInit, OnDestroy {
     };
     var getDate = new Date(minDate);
     this.formatDateNow(getDate);
+
+    // const valueBookFromDate = new Date(getDate.getFullYear(), getDate.getMonth() - 1, getDate.getDate());
+    // const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookFromDate);
+    // this.startDate = startDate;
+    // this.endDate = endDate;
   }
 
   onDateSelection(date: NgbDate, datepicker: any) {
@@ -254,13 +262,15 @@ export class PackageComponent implements OnInit, OnDestroy {
       const valueBookFromDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
       const valueBookToDate = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
       const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookToDate);
+      this.startDate = startDate;
+      this.endDate = endDate;
 
       const params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
         search: this.pagination.search,
-        startDate: startDate,
-        endDate: endDate,
+        startDate: this.startDate,
+        endDate: this.endDate,
       };
       console.log(params);
       this.dataList(params);
@@ -278,7 +288,23 @@ export class PackageComponent implements OnInit, OnDestroy {
   }
 
   printFilterDate(datepicker: any) {
-    console.log(this.data);
+    if (this.currentTab === 'Malang') {
+      console.log(this.data);
+      sessionStorage.setItem('city', JSON.stringify('Malang'));
+      sessionStorage.setItem('printlist', JSON.stringify(this.data));
+    } else if (this.currentTab === 'Surabaya') {
+      console.log(this.dataSurabaya);
+      sessionStorage.setItem('city', JSON.stringify('Surabaya'));
+      sessionStorage.setItem('printlist', JSON.stringify(this.dataSurabaya));
+    }
+
+    const dateRange = {
+      fromDate: this.startDate,
+      toDate: this.endDate,
+    };
+    console.log(dateRange);
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    window.open('#/booking/package/transaction/printlist', '_blank');
   }
 
   isHovered(date: NgbDate) {
@@ -320,7 +346,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       // { key: 'package_id', title: 'No' },
       { key: 'resi_number', title: 'Number Resi' },
       { key: 'level', title: 'Level' },
-      { key: 'book_date', title: 'Book Date' },
+      { key: 'book_date', title: 'Send Date' },
       { key: 'sender_id', title: 'Sender' },
       { key: 'recipient_id', title: 'Recipient' },
       { key: 'cost', title: 'Cost' },
@@ -949,6 +975,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       cost: event.cost,
       discount: event.discount,
       payment: event.payment,
+      koli: event.koli,
       origin_from: event.origin_from,
       level: event.level,
       request: event.request ? event.request : '',

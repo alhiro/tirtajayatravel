@@ -1,0 +1,139 @@
+<div class="p-5 py-0">
+  <div class="m-0">
+    <div class="card-header border-0">
+      <div class="card-toolbar">
+        <div class="col">
+          <!-- begin::Menu -->
+          <div class="menu-item">
+            <div class="menu-content px-0">
+              <h3 class="card-title align-items-start flex-column mb-2">
+                <span class="card-label fw-bolder fs-2">
+                  @if (city === 'Malang') { LIST TRANSAKSI PENUMPANG MALANG } @else { LIST TRANSAKSI PENUMPANG SURABAYA
+                  }
+                </span>
+              </h3>
+              @if (fromDate && endDate) {
+              <span class="card-label fw-bolder fs-5"> DEPARTURE DATE: {{ fromDate }} - {{ endDate }} </span>
+              }
+            </div>
+          </div>
+          <!-- end::Menu -->
+        </div>
+      </div>
+    </div>
+    <!-- end::Header -->
+    <!-- begin::Body -->
+    <div class="card-body py-3">
+      @for (value of groupAdmin; track value) {
+      <div class="d-flex">
+        <span>Pickup Date: {{ value.book_date | date : 'dd/MM/yyyy, H:mm:ss' : 'GMT' }}</span
+        >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span>Total Passenger: {{ value.totalPassenger | number }}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span>Total Tariff: {{ value.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+      </div>
+      <!-- begin::Table container -->
+      <div class="table-responsive">
+        <!-- begin::Table -->
+        <ngx-table
+          #table
+          [configuration]="configuration"
+          [data]="value.items"
+          [columns]="columns"
+          tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+        >
+          <ng-template let-row let-index="index">
+            <!-- <td>
+                <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
+              </td> -->
+            <td>
+              <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
+                {{ row.resi_number }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.created_by }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
+                {{ row.resi_number_new }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
+                {{ row.resi_number_old }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.status }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.description }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.payment }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.waybill?.customer?.name }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.total_passenger | number }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.waybill?.customer?.telp }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                @if (row.waybill?.customer?.addresses.length > 0) { @for (value of row.waybill?.customer?.addresses;
+                track value) { @if (value.default == true) {
+                {{ value.address }}
+                } } } @else {
+                {{ row.waybill?.customer?.address }}
+                }
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                @if (row.destination?.customer?.addresses.length > 0) { @for (value of
+                row.destination?.customer?.addresses; track value) { @if (value.default == true) {
+                {{ value.address }}
+                } } } @else {
+                {{ row.destination?.customer?.address }}
+                }
+              </span>
+            </td>
+          </ng-template>
+        </ngx-table>
+        <!-- end::Table -->
+      </div>
+      <!-- end::Table container -->
+      }
+      <div class="mt-7">
+        <span
+          ><b>TOTAL PENUMPANG: {{ totalPassenger | number }}</b></span
+        ><br />
+        <span
+          ><b>TOTAL COST: {{ totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
+        ><br />
+      </div>
+    </div>
+  </div>
+</div>

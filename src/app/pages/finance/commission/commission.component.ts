@@ -193,6 +193,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   resetFilterDate(datepicker: any) {
+    this.fromDate = this.calendar.getToday();
+    this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
     this.dataList(this.params);
     datepicker.close();
   }

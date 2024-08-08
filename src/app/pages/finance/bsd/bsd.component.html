@@ -67,18 +67,22 @@
                 </span>
               </td>
               <td>
+                @if (row.bsd) {
                 <span
-                  class="text-primary-900 fw-bolder text-hover-primary fs-6 cursor-pointer"
+                  class="btn btn-primary py-1 px-4 text-light fw-bolder text-hover-light fs-6 cursor-pointer"
                   (click)="printBSD(row, 'Package')"
                   >{{ row.bsd }}</span
                 >
+                }
               </td>
               <td>
+                @if (row.bsd_passenger) {
                 <span
-                  class="text-primary-900 fw-bolder text-hover-primary fs-6 cursor-pointer"
+                  class="btn btn-primary py-1 px-4 text-light fw-bolder text-hover-light fs-6 cursor-pointer"
                   (click)="printBSD(row, 'Passenger')"
                   >{{ row.bsd_passenger }}</span
                 >
+                }
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.box_bsd }}</span>

@@ -32,6 +32,8 @@ import { Routing } from '@app/pages/routing';
 import { PrintspComponent } from '@app/pages/booking/delivery/printsp/printsp.component';
 import { PrintbsdComponent } from '@app/pages/finance/bsd/printbsd/printbsd.component';
 import { PrintPackageComponent } from '@app/pages/booking/package/printPackage/printPackage.component';
+import { PrintListPackageComponent } from '@app/pages/booking/package/printList/printList.component';
+import { PrintListPassengerComponent } from '@app/pages/booking/passenger/printList/printList.component';
 
 const routes: Routes = [
   {
@@ -39,6 +41,7 @@ const routes: Routes = [
     component: LayoutComponent,
     children: Routing,
   },
+  // Print Package
   {
     path: 'booking/package/transaction/printpackage',
     component: PrintPackageComponent,
@@ -46,10 +49,24 @@ const routes: Routes = [
       import('../../pages/booking/package/printPackage/printPackage.module').then((m) => m.PrintPackageModule),
   },
   {
+    path: 'booking/package/transaction/printlist',
+    component: PrintListPackageComponent,
+    loadChildren: () => import('../../pages/booking/package/printList/printList.module').then((m) => m.PrintListModule),
+  },
+  // Print Passenger
+  {
+    path: 'booking/passenger/transaction/printlist',
+    component: PrintListPassengerComponent,
+    loadChildren: () =>
+      import('../../pages/booking/passenger/printList/printList.module').then((m) => m.PrintListModule),
+  },
+  // Print Delivery Daily
+  {
     path: 'booking/departure/delivery/printsp',
     component: PrintspComponent,
     loadChildren: () => import('../../pages/booking/delivery/printsp/printsp.module').then((m) => m.PrintspModule),
   },
+  // Print BSD
   {
     path: 'finance/bsd/tirta-jaya/printbsd',
     component: PrintbsdComponent,
