@@ -27,7 +27,9 @@ export class PassengerModel {
   move!: boolean;
   position!: string;
   charter!: string;
-  check_payment!: string;
+  check_payment!: boolean;
+  check_sp!: boolean;
+  check_date_sp!: Date;
 
   setPackage(_passenger: unknown) {
     const passenger = _passenger as PassengerModel;
@@ -54,6 +56,8 @@ export class PassengerModel {
     this.move = passenger.move || false;
     this.position = passenger.position || '';
     this.charter = passenger.charter || '';
-    this.check_payment = passenger.check_payment || '';
+    this.check_payment = passenger.check_payment || false;
+    this.check_sp = passenger.check_sp || false;
+    this.check_date_sp = passenger.check_date_sp;
   }
 }

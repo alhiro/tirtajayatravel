@@ -32,8 +32,8 @@ export class PackageModel {
   move_time!: Date;
   book_date!: Date;
   send_date!: Date;
-  check_payment!: string;
-  check_sp!: string;
+  check_payment!: boolean;
+  check_sp!: boolean;
   check_date_sp!: Date;
   taking_time!: Date;
   taking_by!: string;
@@ -68,9 +68,9 @@ export class PackageModel {
     this.move_time = packages.move_time;
     this.book_date = packages.book_date || '';
     this.send_date = packages.send_date || '';
-    this.check_payment = packages.check_payment || '';
-    this.check_sp = packages.check_sp || '';
-    this.check_date_sp = packages.check_date_sp || '';
+    this.check_payment = packages.check_payment || false;
+    this.check_sp = packages.check_sp || false;
+    this.check_date_sp = packages.check_date_sp;
     this.taking_time = packages.taking_time || '';
     this.taking_by = packages.taking_by || '';
     this.taking_status = packages.taking_status;

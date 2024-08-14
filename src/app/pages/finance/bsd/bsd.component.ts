@@ -28,6 +28,9 @@ import { GoSendModel } from '../../booking/package/models/gosend';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { Utils } from '@app/@shared';
+import { BsdService } from './bsd.service';
+import { PackageModel } from '@app/pages/booking/package/models/package.model';
+import { PassengerService } from '@app/pages/booking/passenger/passenger.service';
 
 interface EventObject {
   event: string;
@@ -43,9 +46,18 @@ interface EventObject {
   styleUrls: ['./bsd.component.scss'],
 })
 export class BsdComponent implements OnInit, OnDestroy {
+  public dataMalangPackage: any;
+  public dataSurabayaPackage: any;
+  public dataMalangPassenger: any;
+  public dataSurabayaPassenger: any;
+  public type: any;
+  public dataGosend: any;
+
   @ViewChild('table') table!: APIDefinition;
   public columnsList!: Columns[];
   public columnsDone!: Columns[];
+  public columnsPackage!: Columns[];
+  public columnsPassenger!: Columns[];
 
   public city: any;
   public level: any;
@@ -63,10 +75,17 @@ export class BsdComponent implements OnInit, OnDestroy {
   public searchingEmployee = false;
   public searchFailedEmployee = false;
 
+  public isPayment!: boolean;
+  public isSp!: boolean;
+  public isPaymentPassenger!: boolean;
+  public isSpPassenger!: boolean;
+
   public configuration: Config = { ...DefaultConfig };
   @Input() cssClass!: '';
   currentTab = 'Done';
   currentDisplay: boolean = false;
+  currentTabModal = 'Cost';
+  currentDisplayModal: boolean = false;
 
   public pagination = {
     limit: 10,
@@ -86,6 +105,9 @@ export class BsdComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   formSP!: FormGroup;
+  formPackage!: FormGroup;
+  formPassenger!: FormGroup;
+  formCost!: FormGroup;
 
   isLoading = false;
 
@@ -102,8 +124,14 @@ export class BsdComponent implements OnInit, OnDestroy {
     // dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
+  modalConfigEditBsd: ModalConfig = {
+    modalTitle: 'Edit BSD',
+    // dismissButtonLabel: 'Submit',
+    // closeButtonLabel: 'Cancel',
+  };
   addClass = 'modal-clean';
   @ViewChild('modalSP') private modalComponentSP!: ModalFullComponent;
+  @ViewChild('modalBSD') private modalComponentBSD!: ModalFullComponent;
 
   dataDelivery!: GoSendModel;
 
@@ -114,6 +142,8 @@ export class BsdComponent implements OnInit, OnDestroy {
     private readonly cdr: ChangeDetectorRef,
     private deliveryService: DeliveryService,
     private packageService: PackageService,
+    private passengerService: PassengerService,
+    private bsdService: BsdService,
     private formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
@@ -139,7 +169,7 @@ export class BsdComponent implements OnInit, OnDestroy {
       { key: 'bsd', title: 'BSD Package' },
       { key: 'bsd_passenger', title: 'BSD Passenger' },
       { key: 'bsd_box', title: 'BSD Box' },
-      { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
+      // { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
 
     this.columnsList = [
@@ -150,6 +180,33 @@ export class BsdComponent implements OnInit, OnDestroy {
       { key: 'send_date', title: 'Send Date' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
+
+    this.columnsPackage = [
+      // { key: 'package_id', title: 'No' },
+      { key: 'resi_number', title: 'Number Resi' },
+      { key: 'cost', title: 'Cost' },
+      { key: 'discount', title: 'Disc.' },
+      { key: 'recipient_id', title: 'Recipient' },
+      { key: 'origin_from', title: 'Status Package' },
+      { key: 'status', title: 'Status Payment' },
+      { key: 'check_payment', title: 'Check' },
+      { key: 'cost', title: 'Deposit' },
+      { key: 'check_sp', title: 'Check' },
+      { key: 'agent_commission', title: 'Commission Driver' },
+    ];
+
+    this.columnsPassenger = [
+      // { key: 'passenger_id', title: 'No' },
+      { key: 'resi_number', title: 'Number Resi' },
+      { key: 'tariff', title: 'Tariff' },
+      { key: 'discount', title: 'Disc.' },
+      { key: 'status', title: 'Status Passenger' },
+      { key: 'payment', title: 'Status Payment' },
+      { key: 'check_payment', title: 'Check' },
+      { key: 'tariff', title: 'Deposit' },
+      { key: 'check_sp', title: 'Check' },
+      { key: 'agent_commission', title: 'Commission Driver' },
+    ];
   }
 
   private initForm() {
@@ -159,6 +216,7 @@ export class BsdComponent implements OnInit, OnDestroy {
       car_id: '',
       city_id: '',
       package_id: '',
+      cost_id: '',
       telp: '',
       description: '',
       status: '',
@@ -173,6 +231,88 @@ export class BsdComponent implements OnInit, OnDestroy {
       box: '',
       bsd_box: '',
     });
+
+    this.formPackage = this.formBuilder.group({
+      package_id: [''],
+      sender_id: [''],
+      recipient_id: [''],
+      city_id: [''],
+      employee_id: [''],
+      category_id: [''],
+      go_send_id: [''],
+      description: [''],
+      cost: [''],
+      discount: [''],
+      payment: [''],
+      koli: [''],
+      origin_from: [''],
+      level: [''],
+      request: [''],
+      request_description: [''],
+      note: [''],
+      status: [''],
+      status_package: [''],
+      resi_number: [''],
+      photo: [''],
+      print: [''],
+      move_time: [''],
+      book_date: [''],
+      send_date: [''],
+      check_payment: [''],
+      check_sp: [''],
+      check_date_sp: [''],
+      taking_time: [''],
+      taking_by: [''],
+      taking_status: [''],
+      office: [''],
+    });
+
+    this.formPassenger = this.formBuilder.group({
+      passenger_id: [''],
+      waybill_id: [''],
+      destination_id: [''],
+      city_id: [''],
+      employee_id: [''],
+      go_send_id: [''],
+      tariff: [''],
+      discount: [0],
+      agent_commission: [0],
+      other_fee: [0],
+      book_date: [''],
+      total_passenger: [''],
+      payment: [''],
+      status: [''],
+      status_passenger: [''],
+      note: [''],
+      description: [''],
+      resi_number: [''],
+      cancel: [''],
+      move: [''],
+      position: [''],
+      charter: [''],
+      check_payment: [''],
+      check_sp: [''],
+      check_date_sp: [''],
+    });
+
+    this.formCost = this.formBuilder.group({
+      cost_id: [''],
+      go_send_id: [''],
+      parking_package: [0],
+      parking_passenger: [0],
+      bbm: [0],
+      bbm_cost: [0],
+      toll_in: [0],
+      toll_out: [0],
+      overnight: [0],
+      extra: [0],
+      others: [0],
+      mandatory_deposit: [0],
+      driver_deposit: [0],
+      voluntary_deposit: [0],
+      current_km: [0],
+      old_km: [0],
+    });
   }
 
   ngOnDestroy(): void {
@@ -186,6 +326,14 @@ export class BsdComponent implements OnInit, OnDestroy {
 
   setCurrentDisplay() {
     this.currentDisplay = !this.currentDisplay;
+  }
+
+  setCurrentTabModal(tab: string) {
+    this.currentTabModal = tab;
+  }
+
+  setCurrentDisplayModal() {
+    this.currentDisplayModal = !this.currentDisplay;
   }
 
   eventEmitted($event: { event: string; value: any }): void {
@@ -291,6 +439,7 @@ export class BsdComponent implements OnInit, OnDestroy {
       car_id: event.car_id,
       city_id: event.city_id,
       package_id: event.package_id,
+      cost_id: event.cost_id,
       send_time: event.send_time,
       send_date: event.send_date,
       sp_number: event.sp_number,
@@ -383,6 +532,274 @@ export class BsdComponent implements OnInit, OnDestroy {
     );
 
   formatter = (result: { name: string; car_number: string }) => result.car_number;
+
+  checkPayment(event: PackageModel) {
+    this.isPayment = !this.isPayment;
+
+    event.check_payment = this.isPayment;
+    this.formPackage.patchValue(event);
+    console.log(this.formPackage.value);
+  }
+
+  checkSp(event: PackageModel) {
+    this.isSp = !this.isSp;
+
+    event.check_sp = this.isSp;
+    (event.check_date_sp = new Date()), this.formPackage.patchValue(event);
+    console.log(this.formPackage.value);
+  }
+
+  checkPaymentPassenger(event: PackageModel) {
+    this.isPaymentPassenger = !this.isPaymentPassenger;
+
+    event.check_payment = this.isPaymentPassenger;
+    this.formPassenger.patchValue(event);
+    console.log(this.formPassenger.value);
+  }
+
+  checkSpPassenger(event: PackageModel) {
+    this.isSpPassenger = !this.isSpPassenger;
+
+    event.check_sp = this.isSpPassenger;
+    (event.check_date_sp = new Date()), this.formPassenger.patchValue(event);
+    console.log(this.formPassenger.value);
+  }
+
+  // Function to calculate agent_commission for a list
+  calculateCommissionNest(items: any, key: string) {
+    return items.map((item: any) => ({
+      ...item,
+      agent_commission: item[key] * 0.15,
+    }));
+  }
+
+  calculateCommissionPackage(items: any) {
+    return items.map((item: any) => ({
+      ...item,
+      agent_commission: item.cost * 0.15,
+    }));
+  }
+
+  calculateCommissionPassenger(items: any) {
+    return items.map((item: any) => ({
+      ...item,
+      agent_commission: item.tariff * 0.15,
+    }));
+  }
+
+  async openModalEditBSD(val: any, item: string) {
+    console.log(val);
+    this.dataGosend = val;
+    this.type = item;
+    console.log(this.type);
+
+    // edit Sp
+    this.dataGosend.bsd_date = new Date();
+    this.formSP.patchValue(this.dataGosend);
+
+    if (this.type === 'Package') {
+      console.log('open package');
+      // Edit cost
+      this.formCost.patchValue({
+        parking_package: val.cost?.parking_package,
+      });
+      console.log(this.formCost.value);
+
+      // data package
+      const updatedDataPackages = this.calculateCommissionPackage(val?.packages);
+      this.dataMalangPackage = updatedDataPackages?.filter((val: GoSendModel) => val.city_id === 1);
+      this.dataSurabayaPackage = updatedDataPackages?.filter((val: GoSendModel) => val.city_id === 2);
+      console.log(this.dataMalangPackage);
+      console.log(this.dataSurabayaPackage);
+
+      this.formPackage.patchValue(updatedDataPackages);
+    }
+
+    if (this.type === 'Passenger') {
+      console.log('open passenger');
+      this.formCost.patchValue({
+        cost_id: val.cost_id,
+        go_send_id: val.go_send_id,
+        parking_passenger: val.cost?.parking_passenger,
+        bbm: val.cost?.bbm,
+        bbm_cost: val.cost?.bbm_cost,
+        toll_in: val.cost?.toll_in,
+        toll_out: val.cost?.toll_out,
+        overnight: val.cost?.overnight,
+        extra: val.cost?.extra,
+        others: val.cost?.others,
+        mandatory_deposit: val.cost?.mandatory_deposit,
+        driver_deposit: val.cost?.driver_deposit,
+        voluntary_deposit: val.cost?.voluntary_deposit,
+        current_km: val.cost?.current_km,
+        old_km: val.cost?.old_km,
+      });
+      console.log(this.formCost.value);
+
+      // data passenger
+      const updatedDataPassengers = this.calculateCommissionPassenger(val?.passengers);
+      this.dataMalangPassenger = updatedDataPassengers?.filter((val: GoSendModel) => val.city_id === 1);
+      this.dataSurabayaPassenger = updatedDataPassengers?.filter((val: GoSendModel) => val.city_id === 2);
+      console.log(this.dataMalangPassenger);
+      console.log(this.dataSurabayaPassenger);
+
+      this.formPassenger.patchValue(updatedDataPassengers);
+    }
+
+    return await this.modalComponentBSD.open();
+  }
+
+  dataEditCost() {
+    console.log(this.formCost.value);
+
+    const costId = this.formCost.controls['cost_id'].value;
+    console.log(costId);
+
+    if (costId) {
+      console.log('update cost');
+
+      // update cost
+      this.bsdService
+        .costEdit(this.formCost.value)
+        .pipe(
+          finalize(() => {
+            this.formCost.markAsPristine();
+            this.isLoading = false;
+          })
+        )
+        .subscribe(
+          async (resp: any) => {
+            if (resp) {
+              this.snackbar.open(resp.message, '', {
+                panelClass: 'snackbar-success',
+                duration: 10000,
+              });
+
+              this.dataListBSD(this.params);
+              await this.modalComponentBSD.dismiss();
+            } else {
+              this.isLoading = false;
+            }
+          },
+          (error: any) => {
+            console.log(error);
+            this.isLoading = false;
+            this.handlerResponseService.failedResponse(error);
+          }
+        );
+    } else {
+      console.log('create new cost');
+
+      // create new cost and update gosend cost_id
+      this.bsdService
+        .costCreate(this.formCost.value)
+        .pipe(
+          switchMap((respCost: any) => {
+            console.log('Response from respCost:');
+            console.log(respCost);
+            this.formSP.patchValue({
+              cost_id: respCost.data.cost_id,
+            });
+            console.log(this.formSP.value);
+            return this.packageService.editSP(this.formSP.value);
+          }),
+          finalize(() => {
+            this.formCost.markAsPristine();
+            this.isLoading = false;
+          })
+        )
+        .subscribe(
+          async (resp: any) => {
+            if (resp) {
+              this.snackbar.open(resp.message, '', {
+                panelClass: 'snackbar-success',
+                duration: 10000,
+              });
+
+              this.dataListBSD(this.params);
+              await this.modalComponentBSD.dismiss();
+            } else {
+              this.isLoading = false;
+            }
+          },
+          (error: any) => {
+            console.log(error);
+            this.isLoading = false;
+            this.handlerResponseService.failedResponse(error);
+          }
+        );
+    }
+  }
+
+  dataEditBSD() {
+    if (this.type === 'Package') {
+      console.log('Package');
+      console.log(this.formPackage.value);
+      // update package
+      this.packageService
+        .patch(this.formPackage.value)
+        .pipe(
+          finalize(() => {
+            this.formCost.markAsPristine();
+            this.isLoading = false;
+          })
+        )
+        .subscribe(
+          async (resp: any) => {
+            if (resp) {
+              this.snackbar.open(resp.message, '', {
+                panelClass: 'snackbar-success',
+                duration: 10000,
+              });
+
+              this.dataListBSD(this.params);
+              await this.modalComponentBSD.dismiss();
+            } else {
+              this.isLoading = false;
+            }
+          },
+          (error: any) => {
+            console.log(error);
+            this.isLoading = false;
+            this.handlerResponseService.failedResponse(error);
+          }
+        );
+    }
+
+    if (this.type === 'Passenger') {
+      console.log('Passenger');
+      console.log(this.formPassenger.value);
+      // update passenger
+      this.passengerService
+        .patch(this.formPassenger.value)
+        .pipe(
+          finalize(() => {
+            this.formCost.markAsPristine();
+            this.isLoading = false;
+          })
+        )
+        .subscribe(
+          async (resp: any) => {
+            if (resp) {
+              this.snackbar.open(resp.message, '', {
+                panelClass: 'snackbar-success',
+                duration: 10000,
+              });
+
+              this.dataListBSD(this.params);
+              await this.modalComponentBSD.dismiss();
+            } else {
+              this.isLoading = false;
+            }
+          },
+          (error: any) => {
+            console.log(error);
+            this.isLoading = false;
+            this.handlerResponseService.failedResponse(error);
+          }
+        );
+    }
+  }
 
   printBSD(val: GoSendModel, item: string) {
     sessionStorage.setItem('printbsd', JSON.stringify(val));

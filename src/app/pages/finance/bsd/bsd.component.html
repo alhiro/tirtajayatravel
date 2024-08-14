@@ -68,38 +68,52 @@
               </td>
               <td>
                 @if (row.bsd) {
-                <span
-                  class="btn btn-primary py-1 px-4 text-light fw-bolder text-hover-light fs-6 cursor-pointer"
-                  (click)="printBSD(row, 'Package')"
-                  >{{ row.bsd }}</span
-                >
+                <div class="d-flex">
+                  <div
+                    class="btn btn-primary py-2 px-4 text-light fw-bolder text-hover-light cursor-pointer"
+                    (click)="openModalEditBSD(row, 'Package')"
+                  >
+                    <app-keenicon name="pencil" class="fs-md-5 text-light"></app-keenicon>
+                    <span class="fs-6">{{ row.bsd }}</span>
+                  </div>
+                  <div class="px-5 cursor-pointer" (click)="printBSD(row, 'Package')">
+                    <app-keenicon name="printer" class="fs-md-1 text-primary"></app-keenicon>
+                  </div>
+                </div>
                 }
               </td>
               <td>
                 @if (row.bsd_passenger) {
-                <span
-                  class="btn btn-primary py-1 px-4 text-light fw-bolder text-hover-light fs-6 cursor-pointer"
-                  (click)="printBSD(row, 'Passenger')"
-                  >{{ row.bsd_passenger }}</span
-                >
+                <div class="d-flex">
+                  <div
+                    class="btn btn-primary py-2 px-4 text-light fw-bolder text-hover-light cursor-pointer"
+                    (click)="openModalEditBSD(row, 'Passenger')"
+                  >
+                    <app-keenicon name="pencil" class="fs-md-5 text-light"></app-keenicon>
+                    <span class="fs-6">{{ row.bsd_passenger }}</span>
+                  </div>
+                  <div class="px-5 cursor-pointer" (click)="printBSD(row, 'Passenger')">
+                    <app-keenicon name="printer" class="fs-md-1 text-primary"></app-keenicon>
+                  </div>
+                </div>
                 }
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.box_bsd }}</span>
               </td>
-              <td>
+              <!-- <td>
                 <a
-                  href="javascript:void(0)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
                   title="Edit BSD"
+                  (click)="openModalEditBSD(row)"
                 >
-                  <app-keenicon name="document" class="fs-md-3 text-primary"></app-keenicon>
+                  <app-keenicon name="document" class="fs-md-3 text-primary" (click)="openModalEditBSD(row)"></app-keenicon>
                 </a>
-              </td>
+              </td> -->
             </ng-template>
           </ngx-table>
           <!-- end::Table -->
@@ -173,7 +187,7 @@
 </div>
 <!-- begin::Body -->
 
-<!-- begin:: Modal BSD -->
+<!-- begin:: Modal SP -->
 <app-modal #modalSP [modalConfig]="modalConfigEditSP">
   <form (ngSubmit)="dataEditSP()" [formGroup]="formSP" novalidate>
     <div class="m-3">
@@ -344,4 +358,577 @@
   </form>
 </app-modal>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
-<!-- end:: Modal bsd -->
+<!-- end:: Modal sp -->
+
+<!-- begin:: Modal BSD -->
+<app-modal-full #modalBSD [modalConfig]="modalConfigEditBsd" [modalClass]="addClass">
+  <div class="my-3">
+    <!-- begin::Header -->
+    <div class="card-header border-0 pt-5 text-center">
+      <div class="card-toolbar">
+        <ul class="nav nav-pills nav-pills-sm nav-dark-75" style="display: inline-flex">
+          <li class="nav-item" (click)="setCurrentTabModal('Cost')" [style.cursor]="'pointer'">
+            <a class="nav-link py-2 px-4" [class.active]="currentTabModal === 'Cost'" data-toggle="tab">Detail Cost</a>
+          </li>
+          <li class="nav-item" (click)="setCurrentTabModal('Detail')" [style.cursor]="'pointer'">
+            <a class="nav-link py-2 px-4" [class.active]="currentTabModal === 'Detail'" data-toggle="tab">{{
+              type === 'Passenger' ? 'Detail Passenger' : 'Detail Package'
+            }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- end::Header -->
+
+    <div class="card-body py-5">
+      <div class="tab-content mt-5" id="tabPackage">
+        <!--begin::Tap pane-->
+        <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTabModal === 'Cost' }">
+          <form (ngSubmit)="dataEditCost()" [formGroup]="formCost" novalidate>
+            @if (type ==='Passenger') {
+            <h3>Detail Cost</h3>
+            <div class="row">
+              <div class="col-md-4">
+                <span class="fw-bold">Parking Passenger</span>
+                <label class="d-block mb-4">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="parking_passenger"
+                    autocomplete="parking_passenger"
+                    [placeholder]="'Paring Passeknger Cost' | translate"
+                  />
+                  <span hidden translate>Parking Passenger</span>
+                </label>
+              </div>
+              <div class="col-md-4">
+                <span class="fw-bold">BBM</span>
+                <label class="d-block mb-4">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="bbm"
+                    autocomplete="bbm"
+                    [placeholder]="'BBM Cost' | translate"
+                  />
+                  <span hidden translate>BBM</span>
+                </label>
+              </div>
+              <div class="col-md-4">
+                <span class="fw-bold">Total BBM</span>
+                <label class="d-block mb-4">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="bbm_cost"
+                    autocomplete="bbm_cost"
+                    [placeholder]="'Total BBM Cost' | translate"
+                  />
+                  <span hidden translate>Total BBM</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <span class="fw-bold">Toll In</span>
+                <label class="d-block mb-4">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="toll_in"
+                    autocomplete="toll_in"
+                    [placeholder]="'Toll In Cost' | translate"
+                  />
+                  <span hidden translate>Toll In</span>
+                </label>
+              </div>
+              <div class="col-md-4">
+                <span class="fw-bold">Tol Out</span>
+                <label class="d-block mb-4">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="toll_out"
+                    autocomplete="toll_out"
+                    [placeholder]="'Tol Out Cost' | translate"
+                  />
+                  <span hidden translate>Tol Out</span>
+                </label>
+              </div>
+              <div class="col-md-4">
+                <span class="fw-bold">Overnight</span>
+                <label class="d-block mb-4">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="overnight"
+                    autocomplete="overnight"
+                    [placeholder]="'Overnight Cost' | translate"
+                  />
+                  <span hidden translate>Overnight</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <span class="fw-bold">Extra</span>
+                <label class="d-block mb-4">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="extra"
+                    autocomplete="extra"
+                    [placeholder]="'Extra Cost' | translate"
+                  />
+                  <span hidden translate>Extra</span>
+                </label>
+              </div>
+              <div class="col-md-4">
+                <span class="fw-bold">Others</span>
+                <label class="d-block mb-4">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="others"
+                    autocomplete="others"
+                    [placeholder]="'Others Cost' | translate"
+                  />
+                  <span hidden translate>Others</span>
+                </label>
+              </div>
+              <div class="col-md-4">
+                <span class="fw-bold">Mandatory Deposit</span>
+                <label class="d-block mb-4">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="mandatory_deposit"
+                    autocomplete="mandatory_deposit"
+                    [placeholder]="'Mandatory Deposit Cost' | translate"
+                  />
+                  <span hidden translate>Mandatory Deposit</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <span class="fw-bold">Driver Deposit</span>
+                <label class="d-block mb-4">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="driver_deposit"
+                    autocomplete="driver_deposit"
+                    [placeholder]="'Driver Deposit Cost' | translate"
+                  />
+                  <span hidden translate>Driver Deposit</span>
+                </label>
+              </div>
+              <div class="col-md-4">
+                <span class="fw-bold">Voluntary Deposit</span>
+                <label class="d-block mb-4">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="voluntary_deposit"
+                    autocomplete="voluntary_deposit"
+                    [placeholder]="'Voluntary Deposit Cost' | translate"
+                  />
+                  <span hidden translate>Voluntary Deposit</span>
+                </label>
+              </div>
+              <div class="col-md-4">
+                <span class="fw-bold">Current KM</span>
+                <label class="d-block mb-4">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="current_km"
+                    autocomplete="current_km"
+                    [placeholder]="'Current KM Cost' | translate"
+                  />
+                  <span hidden translate>Current KM</span>
+                </label>
+              </div>
+            </div>
+            } @if (type ==='Package') {
+            <div class="row">
+              <div class="col-md-4">
+                <span class="fw-bold">Parking</span>
+                <label class="d-block mb-4 mt-1">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="parking_package"
+                    autocomplete="parking_package"
+                    [placeholder]="'Parking Cost' | translate"
+                  />
+                  <span hidden translate>Parking</span>
+                </label>
+              </div>
+            </div>
+            }
+
+            <button class="btn btn-primary mt-5 p-2 px-5 fs-7 fw-normal float-end">
+              <span translate>Submit</span>
+            </button>
+          </form>
+        </div>
+        <!--end::Tap pane-->
+
+        <!--begin::Tap pane-->
+        <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTabModal === 'Detail' }">
+          <form (ngSubmit)="dataEditBSD()" [formGroup]="formPackage" novalidate>
+            <!-- begin::Table container -->
+            @if (type ==='Passenger') {
+            <div class="m-0">
+              <!-- begin::Body -->
+              <div class="card-body py-3">
+                @if (dataMalangPassenger?.length > 0) {
+                <!-- begin::Table container -->
+                <div class="table-responsive">
+                  <!-- begin::Table -->
+                  <ngx-table
+                    #table
+                    [configuration]="configuration"
+                    [data]="dataMalangPassenger"
+                    [columns]="columnsPassenger"
+                    tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+                  >
+                    <ng-template let-row let-index="index">
+                      <!-- <td>
+                              <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
+                            </td> -->
+                      <td>
+                        <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
+                          {{ row.resi_number }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.discount | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.status }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.payment }}
+                        </span>
+                      </td>
+                      <td>
+                        @if (row.check_payment) {
+                        <span class="text-gray-900 d-block">
+                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                            <input class="form-check-input" type="checkbox" [checked]="true" [disabled]="true" />
+                          </label>
+                        </span>
+                        } @else {
+                        <span class="text-gray-900 d-block">
+                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              [checked]="isPaymentPassenger"
+                              (change)="checkPaymentPassenger(row)"
+                            />
+                          </label>
+                        </span>
+                        }
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.payment }}
+                        </span>
+                      </td>
+                      <td>
+                        @if (row.check_sp) {
+                        <span class="text-gray-900 d-block">
+                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                            <input class="form-check-input" type="checkbox" [checked]="true" [disabled]="true" />
+                          </label>
+                        </span>
+                        } @else {
+                        <span class="text-gray-900 d-block">
+                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              [checked]="isSpPassenger"
+                              (change)="checkSpPassenger(row)"
+                            />
+                          </label>
+                        </span>
+                        }
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                    </ng-template>
+                  </ngx-table>
+                  <!-- end::Table -->
+                </div>
+                <!-- end::Table container -->
+                } @if (dataSurabayaPassenger?.length > 0) {
+                <!-- begin::Table container -->
+                <div class="table-responsive mt-7">
+                  <!-- begin::Table -->
+                  <ngx-table
+                    #table
+                    [configuration]="configuration"
+                    [data]="dataSurabayaPassenger"
+                    [columns]="columnsPassenger"
+                    tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+                  >
+                    <ng-template let-row let-index="index">
+                      <!-- <td>
+                              <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
+                            </td> -->
+                      <td>
+                        <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
+                          {{ row.resi_number }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.tariff }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.koli }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.payment }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon>
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.payment }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon>
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                    </ng-template>
+                  </ngx-table>
+                  <!-- end::Table -->
+                </div>
+                <!-- end::Table container -->
+                }
+              </div>
+            </div>
+            } @if (type ==='Package') {
+            <div class="m-0">
+              <!-- begin::Body -->
+              <div class="card-body py-3">
+                @if (dataMalangPackage?.length > 0) {
+                <!-- begin::Table container -->
+                <div class="table-responsive">
+                  <!-- begin::Table -->
+                  <ngx-table
+                    #table
+                    [configuration]="configuration"
+                    [data]="dataMalangPackage"
+                    [columns]="columnsPackage"
+                    tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+                  >
+                    <ng-template let-row let-index="index">
+                      <!-- <td>
+                            <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
+                          </td> -->
+                      <td>
+                        <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
+                          {{ row.resi_number }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.discount | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          @if (row.recipient?.customer?.addresses) { @for (value of row.recipient?.customer?.addresses;
+                          track value) { @if (value.default == true) {
+                          {{ value.address }}
+                          } } } @else {
+                          {{ row.recipient?.customer?.address }}
+                          }
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.origin_from }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.status }}
+                        </span>
+                      </td>
+                      <td>
+                        @if (row.check_payment) {
+                        <span class="text-gray-900 d-block">
+                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                            <input class="form-check-input" type="checkbox" [checked]="true" [disabled]="true" />
+                          </label>
+                        </span>
+                        } @else {
+                        <span class="text-gray-900 d-block">
+                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              [checked]="isPayment"
+                              (change)="checkPayment(row)"
+                            />
+                          </label>
+                        </span>
+                        }
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                      <td>
+                        @if (row.check_sp) {
+                        <span class="text-gray-900 d-block">
+                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                            <input class="form-check-input" type="checkbox" [checked]="true" [disabled]="true" />
+                          </label>
+                        </span>
+                        } @else {
+                        <span class="text-gray-900 d-block">
+                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                            <input class="form-check-input" type="checkbox" [checked]="isSp" (change)="checkSp(row)" />
+                          </label>
+                        </span>
+                        }
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                    </ng-template>
+                  </ngx-table>
+                  <!-- end::Table -->
+                </div>
+                <!-- end::Table container -->
+                } @if (dataSurabayaPackage?.length > 0) {
+                <!-- begin::Table container -->
+                <div class="table-responsive mt-7">
+                  <!-- begin::Table -->
+                  <ngx-table
+                    #table
+                    [configuration]="configuration"
+                    [data]="dataSurabayaPackage"
+                    [columns]="columnsPackage"
+                    tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+                  >
+                    <ng-template let-row let-index="index">
+                      <!-- <td>
+                            <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
+                          </td> -->
+                      <td>
+                        <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
+                          {{ row.resi_number }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          @if (row.recipient?.customer?.addresses) { @for (value of row.recipient?.customer?.addresses;
+                          track value) { @if (value.default == true) {
+                          {{ value.address }}
+                          } } } @else {
+                          {{ row.recipient?.customer?.address }}
+                          }
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.origin_from }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.status }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          <!-- <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon> -->
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          <!-- <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon> -->
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                    </ng-template>
+                  </ngx-table>
+                  <!-- end::Table -->
+                </div>
+                <!-- end::Table container -->
+                }
+              </div>
+            </div>
+            }
+
+            <button class="btn btn-primary mt-5 p-2 px-5 fs-7 fw-normal float-end">
+              <span translate>Submit</span>
+            </button>
+            <!-- end::Table container -->
+          </form>
+        </div>
+        <!--end::Tap pane-->
+      </div>
+    </div>
+  </div>
+</app-modal-full>
+<!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
+<!-- end:: Modal BSD -->

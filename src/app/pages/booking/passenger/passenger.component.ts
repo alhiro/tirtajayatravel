@@ -1061,8 +1061,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
   }
 
   openModalPrint(event: PassengerModel) {
-    sessionStorage.setItem('printpassenger', JSON.stringify(event));
-    window.open('#/booking/passenger/transaction/printpassenger', '_blank');
+    // sessionStorage.setItem('printpassenger', JSON.stringify(event));
+    // window.open('#/booking/passenger/transaction/printpassenger', '_blank');
   }
 
   openModalCancel(event: PassengerModel) {}

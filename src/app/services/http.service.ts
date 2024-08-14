@@ -18,6 +18,7 @@ import { PassengerModel } from '@app/pages/booking/passenger/models/passenger.mo
 import { WaybillModel } from '@app/pages/booking/passenger/models/waybill.model';
 import { DestinationModel } from '@app/pages/booking/passenger/models/destination';
 import { CashoutModel } from '@app/pages/finance/cashout/models/cashout.model';
+import { CostModel } from '@app/pages/finance/bsd/models/cost.model';
 
 @Injectable({
   providedIn: 'root',
@@ -277,6 +278,7 @@ export class HttpService {
       city_id: param.city_id,
       package_id: param.package_id,
       passenger_id: param.passenger_id,
+      cost_id: param.cost_id,
       telp: param.telp,
       send_time: param.send_time,
       send_date: param.send_date,
@@ -301,6 +303,7 @@ export class HttpService {
       city_id: param.city_id,
       package_id: param.package_id,
       passenger_id: param.passenger_id,
+      cost_id: param.cost_id,
       telp: param.telp,
       send_time: param.send_time,
       send_date: param.send_date,
@@ -358,6 +361,8 @@ export class HttpService {
       position: param.position,
       charter: param.charter,
       check_payment: param.check_payment,
+      check_sp: param.check_sp,
+      check_date_sp: param.check_date_sp,
     };
     return this.commonApi.put('/passenger/update', body) as Observable<any>;
   }
@@ -387,6 +392,8 @@ export class HttpService {
       position: param.position,
       charter: param.charter,
       check_payment: param.check_payment,
+      check_sp: param.check_sp,
+      check_date_sp: param.check_date_sp,
     };
     return this.commonApi.patch('/passenger/update', body) as Observable<any>;
   }
@@ -514,6 +521,56 @@ export class HttpService {
       cashout_id: param.cashout_id,
     };
     return this.commonApi.delete('/cashout/delete', body) as Observable<any>;
+  }
+
+  // Cost
+  costList(param: PaginationContext): Observable<any> {
+    return this.commonApi.get(
+      '/cost/list?limit=' + param.limit + '&page=' + param.page + '&search=' + param.search
+    ) as Observable<any>;
+  }
+
+  costEdit(param: CostModel): Observable<any> {
+    const body = {
+      cost_id: param.cost_id,
+      go_send_id: param.go_send_id,
+      parking_package: param.parking_package,
+      parking_passenger: param.parking_passenger,
+      bbm: param.bbm,
+      bbm_cost: param.bbm_cost,
+      toll_in: param.toll_in,
+      toll_out: param.toll_out,
+      overnight: param.overnight,
+      extra: param.extra,
+      others: param.others,
+      mandatory_deposit: param.mandatory_deposit,
+      driver_deposit: param.driver_deposit,
+      voluntary_deposit: param.voluntary_deposit,
+      current_km: param.current_km,
+      old_km: param.old_km,
+    };
+    return this.commonApi.put('/cost/update', body) as Observable<any>;
+  }
+
+  costCreate(param: CostModel): Observable<any> {
+    const body = {
+      go_send_id: param.go_send_id,
+      parking_package: param.parking_package,
+      parking_passenger: param.parking_passenger,
+      bbm: param.bbm,
+      bbm_cost: param.bbm_cost,
+      toll_in: param.toll_in,
+      toll_out: param.toll_out,
+      overnight: param.overnight,
+      extra: param.extra,
+      others: param.others,
+      mandatory_deposit: param.mandatory_deposit,
+      driver_deposit: param.driver_deposit,
+      voluntary_deposit: param.voluntary_deposit,
+      current_km: param.current_km,
+      old_km: param.old_km,
+    };
+    return this.commonApi.post('/cost/create', body) as Observable<any>;
   }
 
   // MASTER
