@@ -1,5 +1,6 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Utils } from '@app/@shared';
 import { AuthenticationService } from '@app/modules/auth';
 import { Observable, Subscription } from 'rxjs';
 
@@ -15,7 +16,13 @@ export class UserInnerComponent implements OnInit, OnDestroy {
   langs = languages;
   private unsubscribe: Subscription[] = [];
 
-  constructor(private authenticationService: AuthenticationService, private router: Router) {}
+  levelrule!: number;
+  username!: string;
+
+  constructor(private authenticationService: AuthenticationService, private router: Router, private utils: Utils) {
+    this.levelrule = this.utils.getLevel();
+    this.username = this.utils.getUsername();
+  }
 
   ngOnInit(): void {}
 

@@ -31,7 +31,7 @@ interface EventObject {
   templateUrl: './car.component.html',
   styleUrls: ['./car.component.scss'],
 })
-export class CarComponent implements OnInit {
+export class CarComponent implements OnInit, OnDestroy {
   @ViewChild('table') table!: APIDefinition;
   public columns!: Columns[];
   public data: any;

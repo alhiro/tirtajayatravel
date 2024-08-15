@@ -19,6 +19,7 @@ import { WaybillModel } from '@app/pages/booking/passenger/models/waybill.model'
 import { DestinationModel } from '@app/pages/booking/passenger/models/destination';
 import { CashoutModel } from '@app/pages/finance/cashout/models/cashout.model';
 import { CostModel } from '@app/pages/finance/bsd/models/cost.model';
+import { ScheduleModel } from '@app/pages/garage/schedule/models/schedule.model';
 
 @Injectable({
   providedIn: 'root',
@@ -571,6 +572,67 @@ export class HttpService {
       old_km: param.old_km,
     };
     return this.commonApi.post('/cost/create', body) as Observable<any>;
+  }
+
+  // GARAGE
+  // Schedule
+  scheduleList(param: PaginationContext): Observable<any> {
+    return this.commonApi.get(
+      '/garage/list?limit=' +
+        param.limit +
+        '&page=' +
+        param.page +
+        '&search=' +
+        param.search +
+        '&startDate=' +
+        param.startDate +
+        '&endDate=' +
+        param.endDate
+    ) as Observable<any>;
+  }
+
+  scheduleEdit(param: ScheduleModel): Observable<any> {
+    const body = {
+      garage_id: param.garage_id,
+      employee_id: param.employee_id,
+      car_id: param.car_id,
+      go_send_id: param.go_send_id,
+      name: param.name,
+      service_date: param.service_date,
+      service: param.service,
+      description: param.description,
+      reason: param.reason,
+      cost: param.cost,
+      current_km: param.current_km,
+      old_km: param.old_km,
+      status: param.status,
+    };
+    return this.commonApi.put('/garage/update', body) as Observable<any>;
+  }
+
+  scheduleCreate(param: ScheduleModel): Observable<any> {
+    const body = {
+      employee_id: param.employee_id,
+      car_id: param.car_id,
+      go_send_id: param.go_send_id,
+      name: param.name,
+      service_date: param.service_date,
+      service: param.service,
+      description: param.description,
+      reason: param.reason,
+      cost: param.cost,
+      current_km: param.current_km,
+      old_km: param.old_km,
+      status: param.status,
+    };
+    return this.commonApi.post('/garage/create', body) as Observable<any>;
+  }
+
+  scheduleDelete(param: ScheduleModel): Observable<any> {
+    const body = {
+      garage_id: param.garage_id,
+    };
+    return this.commonApi.delete('/garage/delete', body) as Observable<any>;
   }
 
   // MASTER

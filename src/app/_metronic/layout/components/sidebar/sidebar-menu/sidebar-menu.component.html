@@ -37,6 +37,7 @@
       </a>
     </div>
 
+    @if (levelrule === 8 || levelrule === 2) {
     <!-- Separator -->
     <div class="menu-item">
       <div class="menu-content pt-8 pb-2">
@@ -54,62 +55,62 @@
         <span class="menu-arrow"></span>
       </span>
       <!-- <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
-        <div class="menu-item menu-accordion" routerLinkActive="here show" data-kt-menu-trigger="click">
-          <span class="menu-link">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
+          <div class="menu-item menu-accordion" routerLinkActive="here show" data-kt-menu-trigger="click">
+            <span class="menu-link">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title" data-link="/crafted/pages/profile">Malang </span>
+              <span class="menu-arrow"></span>
             </span>
-            <span class="menu-title" data-link="/crafted/pages/profile">Malang </span>
-            <span class="menu-arrow"></span>
-          </span>
-          <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
-            <div class="menu-item">
-              <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/pages/profile/overview">
-                <span class="menu-bullet">
-                  <span class="bullet bullet-dot"></span>
-                </span>
-                <span class="menu-title">Transaction</span>
-              </a>
-            </div>
-            <div class="menu-item">
-              <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/pages/profile/projects">
-                <span class="menu-bullet">
-                  <span class="bullet bullet-dot"></span>
-                </span>
-                <span class="menu-title">List</span>
-              </a>
-            </div>
-            <div class="menu-item">
-              <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/pages/profile/campaigns">
-                <span class="menu-bullet">
-                  <span class="bullet bullet-dot"></span>
-                </span>
-                <span class="menu-title">Move</span>
-              </a>
-            </div>
-            <div class="menu-item">
-              <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/pages/profile/documents">
-                <span class="menu-bullet">
-                  <span class="bullet bullet-dot"></span>
-                </span>
-                <span class="menu-title">Cancel</span>
-              </a>
-            </div>
-            <div class="menu-item">
-              <a
-                class="menu-link without-sub"
-                routerLinkActive="active"
-                routerLink="/crafted/pages/profile/connections"
-              >
-                <span class="menu-bullet">
-                  <span class="bullet bullet-dot"></span>
-                </span>
-                <span class="menu-title">History</span>
-              </a>
+            <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+              <div class="menu-item">
+                <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/pages/profile/overview">
+                  <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                  </span>
+                  <span class="menu-title">Transaction</span>
+                </a>
+              </div>
+              <div class="menu-item">
+                <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/pages/profile/projects">
+                  <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                  </span>
+                  <span class="menu-title">List</span>
+                </a>
+              </div>
+              <div class="menu-item">
+                <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/pages/profile/campaigns">
+                  <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                  </span>
+                  <span class="menu-title">Move</span>
+                </a>
+              </div>
+              <div class="menu-item">
+                <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/pages/profile/documents">
+                  <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                  </span>
+                  <span class="menu-title">Cancel</span>
+                </a>
+              </div>
+              <div class="menu-item">
+                <a
+                  class="menu-link without-sub"
+                  routerLinkActive="active"
+                  routerLink="/crafted/pages/profile/connections"
+                >
+                  <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                  </span>
+                  <span class="menu-title">History</span>
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-      </div> -->
+        </div> -->
       <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
         <div class="menu-item">
           <a class="menu-link without-sub" routerLinkActive="active" routerLink="/package/transaction">
@@ -120,37 +121,37 @@
           </a>
         </div>
         <!-- <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/package/delivery">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">List Delivery</span>
-          </a>
-        </div> -->
+            <a class="menu-link without-sub" routerLinkActive="active" routerLink="/package/delivery">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">List Delivery</span>
+            </a>
+          </div> -->
         <!-- <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/account/settings">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">Move </span>
-          </a>
-        </div>
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/account/settings">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">Cancel </span>
-          </a>
-        </div>
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/account/settings">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">History </span>
-          </a>
-        </div> -->
+            <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/account/settings">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">Move </span>
+            </a>
+          </div>
+          <div class="menu-item">
+            <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/account/settings">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">Cancel </span>
+            </a>
+          </div>
+          <div class="menu-item">
+            <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/account/settings">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">History </span>
+            </a>
+          </div> -->
       </div>
     </div>
 
@@ -173,37 +174,37 @@
           </a>
         </div>
         <!-- <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/account/settings">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">List </span>
-          </a>
-        </div>
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/account/settings">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">Move </span>
-          </a>
-        </div>
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/account/settings">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">Cancel </span>
-          </a>
-        </div>
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/account/settings">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">History </span>
-          </a>
-        </div> -->
+            <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/account/settings">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">List </span>
+            </a>
+          </div>
+          <div class="menu-item">
+            <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/account/settings">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">Move </span>
+            </a>
+          </div>
+          <div class="menu-item">
+            <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/account/settings">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">Cancel </span>
+            </a>
+          </div>
+          <div class="menu-item">
+            <a class="menu-link without-sub" routerLinkActive="active" routerLink="/crafted/account/settings">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">History </span>
+            </a>
+          </div> -->
       </div>
     </div>
 
@@ -345,54 +346,55 @@
 
     <!-- Bill -->
     <!-- <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
-      <span class="menu-link">
-        <span class="menu-icon">
-          <app-keenicon name="finance-calculator" class="fs-2"></app-keenicon>
+        <span class="menu-link">
+          <span class="menu-icon">
+            <app-keenicon name="finance-calculator" class="fs-2"></app-keenicon>
+          </span>
+          <span class="menu-title" data-link="/finance/bill"> Bill </span>
+          <span class="menu-arrow"></span>
         </span>
-        <span class="menu-title" data-link="/finance/bill"> Bill </span>
-        <span class="menu-arrow"></span>
-      </span>
-      <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="finance/bill/monthly">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">Monthly </span>
-          </a>
+        <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+          <div class="menu-item">
+            <a class="menu-link without-sub" routerLinkActive="active" routerLink="finance/bill/monthly">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">Monthly </span>
+            </a>
+          </div>
         </div>
-      </div>
-    </div> -->
+      </div> -->
 
     <!-- Cash -->
     <!-- <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
-      <span class="menu-link">
-        <span class="menu-icon">
-          <app-keenicon name="finance-calculator" class="fs-2"></app-keenicon>
+        <span class="menu-link">
+          <span class="menu-icon">
+            <app-keenicon name="finance-calculator" class="fs-2"></app-keenicon>
+          </span>
+          <span class="menu-title" data-link="/finance/cash"> Cash (Zen) </span>
+          <span class="menu-arrow"></span>
         </span>
-        <span class="menu-title" data-link="/finance/cash"> Cash (Zen) </span>
-        <span class="menu-arrow"></span>
-      </span>
-      <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/cash/cashier-deposit">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">Cashier Deposit </span>
-          </a>
+        <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+          <div class="menu-item">
+            <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/cash/cashier-deposit">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">Cashier Deposit </span>
+            </a>
+          </div>
+          <div class="menu-item">
+            <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/cash/paid">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">Paid Off</span>
+            </a>
+          </div>
         </div>
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/cash/paid">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">Paid Off</span>
-          </a>
-        </div>
-      </div>
-    </div> -->
+      </div> -->
 
+    @if (levelrule === 8) {
     <!-- Separator -->
     <div class="menu-item">
       <div class="menu-content pt-8 pb-2">
@@ -419,17 +421,18 @@
           </a>
         </div>
       </div>
-      <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/garage/history">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">History </span>
-          </a>
-        </div>
-      </div>
+      <!-- <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+            <div class="menu-item">
+              <a class="menu-link without-sub" routerLinkActive="active" routerLink="/garage/history">
+                <span class="menu-bullet">
+                  <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">History </span>
+              </a>
+            </div>
+          </div> -->
     </div>
+    }
 
     <!-- Separator -->
     <div class="menu-item">
@@ -585,6 +588,73 @@
         </div>
       </div>
     </div>
+    } @if (levelrule === 6) {
+    <!-- Separator -->
+    <div class="menu-item">
+      <div class="menu-content pt-8 pb-2">
+        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Garage</span>
+      </div>
+    </div>
+
+    <!-- Garage -->
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+      <span class="menu-link">
+        <span class="menu-icon">
+          <app-keenicon name="car" class="fs-2"></app-keenicon>
+        </span>
+        <span class="menu-title" data-link="/garage">Garage </span>
+        <span class="menu-arrow"></span>
+      </span>
+      <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/garage/schedule">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title">Schedule </span>
+          </a>
+        </div>
+      </div>
+      <!-- <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+          <div class="menu-item">
+            <a class="menu-link without-sub" routerLinkActive="active" routerLink="/garage/history">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">History </span>
+            </a>
+          </div>
+        </div> -->
+    </div>
+
+    <!-- Separator -->
+    <div class="menu-item">
+      <div class="menu-content pt-8 pb-2">
+        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Apps</span>
+      </div>
+    </div>
+
+    <!-- Master -->
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+      <span class="menu-link">
+        <span class="menu-icon">
+          <app-keenicon name="data" class="fs-2"></app-keenicon>
+        </span>
+        <span class="menu-title" data-link="/master">Master </span>
+        <span class="menu-arrow"></span>
+      </span>
+      <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/master/car">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title">Car </span>
+          </a>
+        </div>
+      </div>
+    </div>
+    }
   </div>
   <!--end::Menu-->
 </div>

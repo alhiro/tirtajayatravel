@@ -46,6 +46,12 @@ const Routing: Routes = [
     loadChildren: () => import('./finance/commission/commission.module').then((m) => m.CommissionModule),
   },
 
+  // Garage
+  {
+    path: 'garage/schedule',
+    loadChildren: () => import('./garage/schedule/schedule.module').then((m) => m.ScheduleModule),
+  },
+
   // Master
   {
     path: 'master/category',
