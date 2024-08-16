@@ -672,7 +672,11 @@ export class PassengerComponent implements OnInit, OnDestroy {
             map((response: any) => {
               if (response) {
                 tap(() => (this.searching = false));
-                return response.data.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+                return response.data.filter(
+                  (val: any) =>
+                    val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
+                );
               }
             }),
             catchError(() => {
@@ -713,7 +717,11 @@ export class PassengerComponent implements OnInit, OnDestroy {
             map((response: any) => {
               if (response) {
                 tap(() => (this.searchingDestination = false));
-                return response.data.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+                return response.data.filter(
+                  (val: any) =>
+                    val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
+                );
               }
             }),
             catchError(() => {

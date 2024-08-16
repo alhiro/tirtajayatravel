@@ -774,7 +774,7 @@
                   placeholder="Customer search"
                 />
                 <ng-template #rt let-r="result" let-t="term">
-                  {{ r.name }}
+                  {{ r.name }} - {{ r.address }} - {{ r.telp }}
                 </ng-template>
 
                 @if (searching) {
@@ -866,7 +866,7 @@
                   placeholder="Destination search"
                 />
                 <ng-template #rt let-r="result" let-t="term">
-                  {{ r.name }}
+                  {{ r.name }} - {{ r.address }} - {{ r.telp }}
                 </ng-template>
 
                 @if (searchingDestination) {

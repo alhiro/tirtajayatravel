@@ -700,7 +700,11 @@ export class PackageComponent implements OnInit, OnDestroy {
             map((response: any) => {
               if (response) {
                 tap(() => (this.searching = false));
-                return response.data.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+                return response.data.filter(
+                  (val: any) =>
+                    val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
+                );
               }
             }),
             catchError(() => {
@@ -741,7 +745,11 @@ export class PackageComponent implements OnInit, OnDestroy {
             map((response: any) => {
               if (response) {
                 tap(() => (this.searchingRecipient = false));
-                return response.data.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+                return response.data.filter(
+                  (val: any) =>
+                    val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
+                );
               }
             }),
             catchError(() => {
