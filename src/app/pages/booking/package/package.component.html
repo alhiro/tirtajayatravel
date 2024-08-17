@@ -150,17 +150,12 @@
                 <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.sender?.customer?.name }}</span>
+                <span class="text-gray-900 d-block">{{ row.sender?.name }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.recipient?.customer?.name }} <br />
-                  @if (row.recipient?.customer?.addresses.length > 0) { @for (value of
-                  row.recipient?.customer?.addresses; track value) { @if (value.default == true) {
-                  {{ value.address }}
-                  } } } @else {
-                  {{ row.recipient?.customer?.address }}
-                  }
+                  {{ row.recipient?.name }} <br />
+                  {{ row.recipient?.address }}
                 </span>
               </td>
               <td>
@@ -336,28 +331,12 @@
                 <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.sender?.customer?.name }}</span>
+                <span class="text-gray-900 d-block">{{ row.sender?.name }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.recipient?.customer?.name }}
-                </span>
-              </td>
-              <td>
-                <!-- <span class="text-gray-900 d-block">
-                  @if ( defaultAddressRecipient) {
-                  {{ defaultAddressRecipient.address }}
-                  } @else {
-                  {{ row.recipient?.customer?.address }}
-                  }
-                </span> -->
-                <span class="text-gray-900 d-block">
-                  @if (row.recipient?.customer?.addresses.length > 0) { @for (value of
-                  row.recipient?.customer?.addresses; track value) { @if (value.default == true) {
-                  {{ value.address }}
-                  } } } @else {
-                  {{ row.recipient?.customer?.address }}
-                  }
+                  {{ row.recipient?.name }} <br />
+                  {{ row.recipient?.address }}
                 </span>
               </td>
               <td>
@@ -532,21 +511,12 @@
                 <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.sender?.customer?.name }}</span>
+                <span class="text-gray-900 d-block">{{ row.sender?.name }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.recipient?.customer?.name }}
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">
-                  @if (row.recipient?.customer?.addresses.length > 0) { @for (value of
-                  row.recipient?.customer?.addresses; track value) { @if (value.default == true) {
-                  {{ value.address }}
-                  } } } @else {
-                  {{ row.recipient?.customer?.address }}
-                  }
+                  {{ row.recipient?.name }} <br />
+                  {{ row.recipient?.address }}
                 </span>
               </td>
               <td>
@@ -627,21 +597,12 @@
                 <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.sender?.customer?.name }}</span>
+                <span class="text-gray-900 d-block">{{ row.sender?.name }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.recipient?.customer?.name }}
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">
-                  @if (row.recipient?.customer?.addresses.length > 0) { @for (value of
-                  row.recipient?.customer?.addresses; track value) { @if (value.default == true) {
-                  {{ value.address }}
-                  } } } @else {
-                  {{ row.recipient?.customer?.address }}
-                  }
+                  {{ row.recipient?.name }} <br />
+                  {{ row.recipient?.address }}
                 </span>
               </td>
               <td>
@@ -752,7 +713,7 @@
                   [(ngModel)]="modelCustomer"
                   [ngbTypeahead]="searchDataCustomer"
                   [resultTemplate]="rt"
-                  [inputFormatter]="formatter"
+                  [inputFormatter]="formatterCustomer"
                   placeholder="Customer search"
                 />
                 <ng-template #rt let-r="result" let-t="term">
@@ -818,12 +779,8 @@
 
                 <div>Address:</div>
                 <div class="mb-9">
-                  @if (modelCustomer?.addresses?.length > 0) { @if (selectedAddress) {
+                  @if (selectedAddress) {
                   <div>{{ selectedAddress.address }}</div>
-                  } @else {
-                  <div>{{ modelCustomer?.address }}</div>
-                  } } @else {
-                  <div>{{ modelCustomer?.address }}</div>
                   }
                 </div>
                 <!--end::Position-->
@@ -836,6 +793,22 @@
               <hr class="separator py-2" />
 
               <!--begin::Recipient-->
+              <div class="mb-2">
+                <div class="d-flex">
+                  <label class="form-label fw-bold" [attr.for]="request">Different Recipient </label>
+                  <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [attr.id]="request"
+                      [checked]="isDestinationDifferent"
+                      (change)="checkDestination()"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              @if (isDestinationDifferent) {
               <div class="d-flex flex-center flex-column py-2">
                 <input
                   id="select-recipient"
@@ -925,37 +898,64 @@
               }
               <!--end::Sender Info-->
               <!--end::Summary-->
+              } @else {
+              <!-- Same destination by customer relate address -->
+              @if (modelCustomer) {
+              <div class="d-flex flex-center flex-column py-5 pt-2">
+                <!--begin::Info-->
+                <!--begin::Info heading-->
+                @if (modelCustomer.addresses) {
+                <label class="d-block full-width">
+                  <select
+                    class="form-select form-control"
+                    data-kt-select2="true"
+                    data-placeholder="Select address"
+                    data-allow-clear="true"
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="modelAddressIdRecipient"
+                    (change)="selectAddressRecipient()"
+                  >
+                    <option value="" disabled selected>Select address</option>
+                    @for (value of modelCustomer.addresses; track value) {
+                    <option [value]="value.address_id">{{ value.address }}</option>
+                    }
+                  </select>
+                </label>
+                }
+                <!--end::Info heading-->
+                <!--end::Info-->
+              </div>
+              }
 
-              <!--begin::Details toggle-->
-              <!-- <div class="d-flex flex-stack fs-4 py-3">
-                          <div class="fw-bold rotate collapsible" data-bs-toggle="collapse" href="#kt_user_view_details" role="button"
-                            aria-expanded="false" aria-controls="kt_user_view_details">
-                            Details
-                            <span class="ms-2 rotate-180">
-                              <i class="ki-duotone ki-down fs-3"></i> </span>
-                          </div>
-                        
-                          <span data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-original-title="Edit customer details"
-                            data-kt-initialized="1">
-                            <a href="javascript:void(0)" class="btn btn-sm btn-light-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_update_details">
-                              Edit
-                            </a>
-                          </span>
-                        </div> -->
-              <!--end::Details toggle-->
+              <!--begin::Summary-->
+              <!--begin::Sender Info-->
+              @if (modelCustomer) {
+              <div class="d-flex flex-center flex-column py-5 pt-0">
+                <!--begin::Name-->
+                <h4 class="card-title">Choose Recipient:</h4>
+                <!--begin::Position-->
+                <div class="mb-1">
+                  <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{{ modelCustomer?.name }} </a>
+                </div>
+                @if (modelCustomer.company) {
+                <div class="badge badge-lg badge-light-primary d-inline mb-4">
+                  {{ modelCustomer.company?.name }}
+                </div>
+                } @else { }
 
-              <!-- <div class="separator"></div> -->
-
-              <!--begin::Details content-->
-              <!-- <div id="kt_user_view_details" class="collapse show">
-                          <div class="pb-5 fs-6">
-                            <div class="fw-bold mt-5">Account ID</div>
-                            <div class="text-gray-600">ID-45453423</div>
-                            <div class="fw-bold mt-5">Address</div>
-                            <div class="text-gray-600">101 Collin Street, <br>Melbourne 3000 VIC<br>Australia</div>
-                          </div>
-                        </div> -->
-              <!--end::Details content-->
+                <div>Address:</div>
+                <div class="mb-9">
+                  @if (selectedAddressRecipient) {
+                  <div>{{ selectedAddressRecipient?.address }}</div>
+                  }
+                </div>
+                <!--end::Position-->
+                <!--end::Name-->
+              </div>
+              }
+              <!--end::Sender Info-->
+              <!--end::Summary-->
+              }
             </div>
           </div>
           <!--end::Card body-->

@@ -323,12 +323,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                @if (row.recipient?.customer?.addresses) { @for (value of row.recipient?.customer?.addresses; track
-                value) { @if (value.default == true) {
-                {{ value.address }}
-                } } } @else {
-                {{ row.recipient?.customer?.address }}
-                }
+                {{ row.recipient?.address }}
               </span>
             </td>
             <td>
@@ -388,12 +383,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                @if (row.recipient?.customer?.addresses) { @for (value of row.recipient?.customer?.addresses; track
-                value) { @if (value.default == true) {
-                {{ value.address }}
-                } } } @else {
-                {{ row.recipient?.customer?.address }}
-                }
+                {{ row.recipient?.address }}
               </span>
             </td>
             <td>

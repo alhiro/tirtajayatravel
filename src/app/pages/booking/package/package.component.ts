@@ -88,6 +88,7 @@ export class PackageComponent implements OnInit, OnDestroy {
   public isCreate = false;
   public isCreateAddress = false;
   public isCreateSP!: boolean;
+  public isDestinationDifferent = false;
 
   public isRequest!: boolean;
   public selectedAddress: any;
@@ -131,7 +132,10 @@ export class PackageComponent implements OnInit, OnDestroy {
 
   form!: FormGroup;
   formAddress!: FormGroup;
+  formSender!: FormGroup;
+  formRecipient!: FormGroup;
   formSP!: FormGroup;
+
   isLoading = false;
   isLoadingCustomer = false;
 
@@ -403,7 +407,35 @@ export class PackageComponent implements OnInit, OnDestroy {
       name: ['', Validators.compose([Validators.maxLength(100)])],
       address: ['', Validators.compose([Validators.maxLength(255)])],
       telp: ['', Validators.compose([Validators.maxLength(255)])],
-      default: [''],
+      default: [false],
+      longitude: [null, Validators.compose([Validators.maxLength(100)])],
+      latitude: [null, Validators.compose([Validators.maxLength(100)])],
+      zoom: [7, Validators.compose([Validators.maxLength(5)])],
+      description: ['', Validators.compose([Validators.maxLength(255)])],
+      used: ['', Validators.compose([Validators.maxLength(255)])],
+    });
+
+    this.formSender = this.formBuilder.group({
+      sender_id: [''],
+      customer_id: ['', Validators.compose([Validators.required])],
+      name: ['', Validators.compose([Validators.maxLength(100)])],
+      address: ['', Validators.compose([Validators.maxLength(255)])],
+      telp: ['', Validators.compose([Validators.maxLength(255)])],
+      default: [false],
+      longitude: [null, Validators.compose([Validators.maxLength(100)])],
+      latitude: [null, Validators.compose([Validators.maxLength(100)])],
+      zoom: [7, Validators.compose([Validators.maxLength(5)])],
+      description: ['', Validators.compose([Validators.maxLength(255)])],
+      used: ['', Validators.compose([Validators.maxLength(255)])],
+    });
+
+    this.formRecipient = this.formBuilder.group({
+      recipient_id: [''],
+      customer_id: ['', Validators.compose([Validators.required])],
+      name: ['', Validators.compose([Validators.maxLength(100)])],
+      address: ['', Validators.compose([Validators.maxLength(255)])],
+      telp: ['', Validators.compose([Validators.maxLength(255)])],
+      default: [false],
       longitude: [null, Validators.compose([Validators.maxLength(100)])],
       latitude: [null, Validators.compose([Validators.maxLength(100)])],
       zoom: [7, Validators.compose([Validators.maxLength(5)])],
@@ -716,15 +748,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       tap(() => ((this.searching = false), (this.modelAddressId = '')))
     );
 
-  selectAddress() {
-    if (this.modelCustomer) {
-      const getdAddress = this.modelCustomer?.addresses.find(
-        (val: AddressModel) => val.address_id === Number(this.modelAddressId)
-      );
-      this.selectedAddress = getdAddress;
-      console.log(this.selectedAddress);
-    }
-  }
+  formatterCustomer = (result: { name: string }) => result.name;
 
   searchDataRecipient = (text$: Observable<string>) =>
     text$.pipe(
@@ -761,64 +785,76 @@ export class PackageComponent implements OnInit, OnDestroy {
       tap(() => ((this.searchingRecipient = false), (this.modelAddressIdRecipient = '')))
     );
 
-  setDefaultSelectionRecipient(value: any) {
-    this.modelRecipient?.addresses.forEach((item: AddressModel) => {
-      console.log(item.address_id);
-      console.log(value);
-      item.default = item.address_id === Number(value);
-    });
-    console.log(this.modelRecipient?.addresses);
-  }
+  formatter = (result: { name: string }) => result.name;
 
-  // findDataRecipientByValue(value: any) {
-  //   return this.modelRecipient?.addresses.find((val: AddressModel) => val.address_id === Number(value));
-  // }
-
-  selectAddressRecipient() {
-    this.setDefaultSelectionRecipient(this.modelAddressIdRecipient);
-    const getdAddress = this.modelRecipient?.addresses.find(
-      (val: AddressModel) => val.address_id === Number(this.modelAddressIdRecipient)
-    );
-    this.selectedAddressRecipient = getdAddress;
-    console.log(this.selectedAddressRecipient);
-
-    if (this.selectedAddressRecipient) {
-      console.log('prosess update address recipient');
-      const dataAddress = {
-        address_id: this.selectedAddressRecipient.address_id,
-        customer_id: this.selectedAddressRecipient.customer_id,
-        default: this.selectedAddressRecipient.default,
-      };
-      console.log(this.formAddress.value);
-
-      this.isLoading = true;
-      this.packageService
-        .updateAddressDefault(dataAddress)
-        .pipe(
-          finalize(() => {
-            this.formAddress.markAsPristine();
-            this.isLoading = false;
-          }),
-          catchError(() => {
-            this.isLoading = false;
-            this.handlerResponseService.failedResponse('Failed selected address');
-            return of([]);
-          })
-        )
-        .subscribe((response: any) => {
-          console.log('response address');
-          console.log(response);
-          if (response) {
-            this.snackbar.open('Success selected address be default', '', {
-              panelClass: 'snackbar-success',
-              duration: 10000,
-            });
-          }
-        });
+  selectAddress() {
+    if (this.modelCustomer) {
+      const getdAddress = this.modelCustomer?.addresses.find(
+        (val: AddressModel) => val.address_id === Number(this.modelAddressId)
+      );
+      this.selectedAddress = getdAddress;
+      console.log(this.selectedAddress);
     }
   }
 
-  formatter = (result: { name: string }) => result.name;
+  // setDefaultSelectionRecipient(value: any) {
+  //   this.modelRecipient?.addresses.forEach((item: AddressModel) => {
+  //     console.log(item.address_id);
+  //     console.log(value);
+  //     item.default = item.address_id === Number(value);
+  //   });
+  //   console.log(this.modelRecipient?.addresses);
+  // }
+
+  findDataRecipientByValue(value: any) {
+    return this.isDestinationDifferent
+      ? this.modelRecipient?.addresses.find((val: AddressModel) => val.address_id === Number(value))
+      : this.modelCustomer?.addresses.find((val: AddressModel) => val.address_id === Number(value));
+  }
+
+  selectAddressRecipient() {
+    if (this.modelCustomer) {
+      // this.setDefaultSelectionRecipient(this.modelAddressIdRecipient);
+      const getdAddress = this.findDataRecipientByValue(this.modelAddressIdRecipient);
+      this.selectedAddressRecipient = getdAddress;
+      console.log(this.selectedAddressRecipient);
+    }
+
+    // if (this.selectedAddressRecipient) {
+    //   console.log('prosess update address recipient');
+    //   const dataAddress = {
+    //     address_id: this.selectedAddressRecipient.address_id,
+    //     customer_id: this.selectedAddressRecipient.customer_id,
+    //     default: this.selectedAddressRecipient.default,
+    //   };
+    //   console.log(this.formAddress.value);
+
+    //   // this.isLoading = true;
+    //   // this.packageService
+    //   //   .updateAddressDefault(dataAddress)
+    //   //   .pipe(
+    //   //     finalize(() => {
+    //   //       this.formAddress.markAsPristine();
+    //   //       this.isLoading = false;
+    //   //     }),
+    //   //     catchError(() => {
+    //   //       this.isLoading = false;
+    //   //       this.handlerResponseService.failedResponse('Failed selected address');
+    //   //       return of([]);
+    //   //     })
+    //   //   )
+    //   //   .subscribe((response: any) => {
+    //   //     console.log('response address');
+    //   //     console.log(response);
+    //   //     if (response) {
+    //   //       this.snackbar.open('Success selected address be default', '', {
+    //   //         panelClass: 'snackbar-success',
+    //   //         duration: 10000,
+    //   //       });
+    //   //     }
+    //   //   });
+    // }
+  }
 
   onDateChange(date: NgbDateStruct): void {
     this.bookdate = date;
@@ -830,6 +866,11 @@ export class PackageComponent implements OnInit, OnDestroy {
 
   format(date: NgbDateStruct): string {
     return date ? `${date.day}/${date.month}/${date.year}` : '';
+  }
+
+  checkDestination() {
+    this.isDestinationDifferent = !this.isDestinationDifferent;
+    this.modelRecipient = '';
   }
 
   clearForm() {
@@ -878,36 +919,49 @@ export class PackageComponent implements OnInit, OnDestroy {
     ).toISOString();
     console.log(valueBookDate);
 
-    this.form.patchValue({
-      book_date: valueBookDate,
+    this.formSender.patchValue({
+      customer_id: this.modelCustomer?.customer_id,
+      name: this.selectedAddress?.name,
+      address: this.selectedAddress?.address,
+      telp: this.selectedAddress?.telp,
+      defaults: this.selectedAddress?.default,
+      longitude: this.selectedAddress?.longitude,
+      latitude: this.selectedAddress?.latitude,
+      zoom: this.selectedAddress?.zoom,
+      description: this.selectedAddress?.description,
+      used: this.selectedAddress?.used,
     });
 
-    const dataCustomert: any = {
-      customer_id: this.modelCustomer?.customer_id,
-    };
-    console.log(dataCustomert);
-
-    const dataReceipt: any = {
-      customer_id: this.modelRecipient?.customer_id,
-    };
-    console.log(dataReceipt);
+    this.formRecipient.patchValue({
+      customer_id: this.isDestinationDifferent ? this.modelRecipient?.customer_id : this.modelCustomer?.customer_id,
+      name: this.selectedAddressRecipient?.name,
+      address: this.selectedAddressRecipient?.address,
+      telp: this.selectedAddressRecipient?.telp,
+      defaults: this.selectedAddressRecipient?.default,
+      longitude: this.selectedAddressRecipient?.longitude,
+      latitude: this.selectedAddressRecipient?.latitude,
+      zoom: this.selectedAddressRecipient?.zoom,
+      description: this.selectedAddressRecipient?.description,
+      used: this.selectedAddressRecipient?.used,
+    });
 
     // create send data to sender, recipient, package
     this.isLoading = true;
     this.packageService
-      .createSender(dataCustomert)
+      .createSender(this.formSender.value)
       .pipe(
         switchMap((respCustomer: any) => {
           console.log('Response from respCustomer:', respCustomer);
           this.form.patchValue({
             sender_id: respCustomer.data.sender_id,
           });
-          return this.packageService.createRecipient(dataReceipt);
+          return this.packageService.createRecipient(this.formRecipient.value);
         }),
         switchMap((respRecipient: any) => {
           console.log('Response from respRecipient:');
           console.log(respRecipient);
           this.form.patchValue({
+            book_date: valueBookDate,
             recipient_id: respRecipient.data.recipient_id,
           });
           console.log(this.form.value);
@@ -954,7 +1008,7 @@ export class PackageComponent implements OnInit, OnDestroy {
 
     this.modelCustomer = event.sender?.customer;
     const getdAddressCustomer = this.modelCustomer?.addresses.find(
-      (val: AddressModel) => val.customer_id === Number(this.modelCustomer?.customer_id) && val.default === true
+      (val: AddressModel) => val.telp === event.sender?.telp
     );
     this.modelAddressId = getdAddressCustomer?.address_id;
     console.log(this.modelAddressId);
@@ -962,7 +1016,7 @@ export class PackageComponent implements OnInit, OnDestroy {
 
     this.modelRecipient = event.recipient?.customer;
     const getdAddressRecipient = this.modelRecipient?.addresses.find(
-      (val: AddressModel) => val.customer_id === Number(this.modelRecipient?.customer_id) && val.default === true
+      (val: AddressModel) => val.telp === event.recipient?.telp
     );
     this.modelAddressIdRecipient = getdAddressRecipient?.address_id;
     console.log(this.modelAddressIdRecipient);
@@ -1006,6 +1060,14 @@ export class PackageComponent implements OnInit, OnDestroy {
       office: event.office,
     });
 
+    this.formSender.patchValue({
+      sender_id: event.sender_id,
+    });
+
+    this.formRecipient.patchValue({
+      recipient_id: event.recipient_id,
+    });
+
     return await this.modalComponent.open();
   }
 
@@ -1021,38 +1083,51 @@ export class PackageComponent implements OnInit, OnDestroy {
     ).toISOString();
     console.log(valueBookDate);
 
-    this.form.patchValue({
-      sender_id: this.modelCustomer?.customer_id,
-      recipient_id: this.modelRecipient?.customer_id,
-      book_date: valueBookDate,
+    this.formSender.patchValue({
+      customer_id: this.modelCustomer?.customer_id,
+      name: this.selectedAddress?.name,
+      address: this.selectedAddress?.address,
+      telp: this.selectedAddress?.telp,
+      defaults: this.selectedAddress?.default,
+      longitude: this.selectedAddress?.longitude,
+      latitude: this.selectedAddress?.latitude,
+      zoom: this.selectedAddress?.zoom,
+      description: this.selectedAddress?.description,
+      used: this.selectedAddress?.used,
     });
 
-    const dataCustomert: any = {
-      customer_id: this.modelCustomer?.customer_id,
-    };
-    console.log(dataCustomert);
-
-    const dataReceipt: any = {
-      customer_id: this.modelRecipient?.customer_id,
-    };
-    console.log(dataReceipt);
+    this.formRecipient.patchValue({
+      customer_id: this.isDestinationDifferent ? this.modelRecipient?.customer_id : this.modelCustomer?.customer_id,
+      name: this.selectedAddressRecipient?.name,
+      address: this.selectedAddressRecipient?.address,
+      telp: this.selectedAddressRecipient?.telp,
+      defaults: this.selectedAddressRecipient?.default,
+      longitude: this.selectedAddressRecipient?.longitude,
+      latitude: this.selectedAddressRecipient?.latitude,
+      zoom: this.selectedAddressRecipient?.zoom,
+      description: this.selectedAddressRecipient?.description,
+      used: this.selectedAddressRecipient?.used,
+    });
+    console.log(this.selectedAddressRecipient);
+    console.log(this.formRecipient.value);
 
     // edit send data to sender, recipient, package
     this.isLoading = true;
     this.packageService
-      .createSender(dataCustomert)
+      .editSender(this.formSender.value)
       .pipe(
         switchMap((respCustomer: any) => {
           console.log('Response from respCustomer:', respCustomer);
           this.form.patchValue({
             sender_id: respCustomer.data.sender_id,
           });
-          return this.packageService.createRecipient(dataReceipt);
+          return this.packageService.editRecipient(this.formRecipient.value);
         }),
         switchMap((respRecipient: any) => {
           console.log('Response from respRecipient:');
           console.log(respRecipient);
           this.form.patchValue({
+            book_date: valueBookDate,
             recipient_id: respRecipient.data.recipient_id,
           });
           console.log(this.form.value);

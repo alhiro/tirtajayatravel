@@ -154,33 +154,19 @@
               </td>
               <!-- <td>
                     <span class="text-gray-900 d-block">
-                      {{ row.waybill?.customer?.name }}
+                      {{ row.waybill?.name }}
                     </span>
                   </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row.waybill?.customer?.addresses.length > 0) { @for (value of row.waybill?.customer?.addresses;
-                  track value) { @if (value.default == true) {
-                  {{ row.waybill?.customer?.name }} <br />
-                  {{ value.address }}
-                  } } } @else {
-                  {{ row.waybill?.customer?.name }} <br />
-                  {{ row.waybill?.customer?.address }}
-                  }
+                  {{ row.waybill?.name }} <br />
+                  {{ row.waybill?.address }}
                 </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row.destination?.customer?.addresses.length > 0) { @for (value of
-                  row.destination?.customer?.addresses; track value) { @if (value.default == true) {
-                  {{ value.address }}
-                  } @else {
-                  {{ row.destination?.customer?.name }} <br />
-                  {{ row.destination?.customer?.address }}
-                  } } } @else {
-                  {{ row.destination?.customer?.name }} <br />
-                  {{ row.destination?.customer?.address }}
-                  }
+                  {{ row.destination?.name }} <br />
+                  {{ row.destination?.address }}
                 </span>
               </td>
               <td>
@@ -332,33 +318,19 @@
               </td>
               <!-- <td>
                     <span class="text-gray-900 d-block">
-                      {{ row.waybill?.customer?.name }}
+                      {{ row.waybill?.name }}
                     </span>
                   </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row.waybill?.customer?.addresses.length > 0) { @for (value of row.waybill?.customer?.addresses;
-                  track value) { @if (value.default == true) {
-                  {{ row.waybill?.customer?.name }} <br />
-                  {{ value.address }}
-                  } } } @else {
-                  {{ row.waybill?.customer?.name }} <br />
-                  {{ row.waybill?.customer?.address }}
-                  }
+                  {{ row.waybill?.name }} <br />
+                  {{ row.waybill?.address }}
                 </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row.destination?.customer?.addresses.length > 0) { @for (value of
-                  row.destination?.customer?.addresses; track value) { @if (value.default == true) {
-                  {{ value.address }}
-                  } @else {
-                  {{ row.destination?.customer?.name }} <br />
-                  {{ row.destination?.customer?.address }}
-                  } } } @else {
-                  {{ row.destination?.customer?.name }} <br />
-                  {{ row.destination?.customer?.address }}
-                  }
+                  {{ row.destination?.name }} <br />
+                  {{ row.destination?.address }}
                 </span>
               </td>
               <td>
@@ -531,33 +503,19 @@
               </td>
               <!-- <td>
                   <span class="text-gray-900 d-block">
-                    {{ row.waybill?.customer?.name }}
+                    {{ row.waybill?.name }}
                   </span>
                 </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row.waybill?.customer?.addresses.length > 0) { @for (value of row.waybill?.customer?.addresses;
-                  track value) { @if (value.default == true) {
-                  {{ row.waybill?.customer?.name }} <br />
-                  {{ value.address }}
-                  } } } @else {
-                  {{ row.waybill?.customer?.name }} <br />
-                  {{ row.waybill?.customer?.address }}
-                  }
+                  {{ row.waybill?.name }} <br />
+                  {{ row.waybill?.address }}
                 </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row.destination?.customer?.addresses.length > 0) { @for (value of
-                  row.destination?.customer?.addresses; track value) { @if (value.default == true) {
-                  {{ value.address }}
-                  } @else {
-                  {{ row.destination?.customer?.name }} <br />
-                  {{ row.destination?.customer?.address }}
-                  } } } @else {
-                  {{ row.destination?.customer?.name }} <br />
-                  {{ row.destination?.customer?.address }}
-                  }
+                  {{ row.destination?.name }} <br />
+                  {{ row.destination?.address }}
                 </span>
               </td>
               <td>
@@ -636,33 +594,19 @@
               </td>
               <!-- <td>
                     <span class="text-gray-900 d-block">
-                      {{ row.waybill?.customer?.name }}
+                      {{ row.waybill?.name }}
                     </span>
                   </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row.waybill?.customer?.addresses.length > 0) { @for (value of row.waybill?.customer?.addresses;
-                  track value) { @if (value.default == true) {
-                  {{ row.waybill?.customer?.name }} <br />
-                  {{ value.address }}
-                  } } } @else {
-                  {{ row.waybill?.customer?.name }} <br />
-                  {{ row.waybill?.customer?.address }}
-                  }
+                  {{ row.waybill?.name }} <br />
+                  {{ row.waybill?.address }}
                 </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row.destination?.customer?.addresses.length > 0) { @for (value of
-                  row.destination?.customer?.addresses; track value) { @if (value.default == true) {
-                  {{ value.address }}
-                  } @else {
-                  {{ row.destination?.customer?.name }} <br />
-                  {{ row.destination?.customer?.address }}
-                  } } } @else {
-                  {{ row.destination?.customer?.name }} <br />
-                  {{ row.destination?.customer?.address }}
-                  }
+                  {{ row.destination?.name }} <br />
+                  {{ row.destination?.address }}
                 </span>
               </td>
               <td>
@@ -770,7 +714,7 @@
                   [(ngModel)]="modelCustomer"
                   [ngbTypeahead]="searchDataCustomer"
                   [resultTemplate]="rt"
-                  [inputFormatter]="formatter"
+                  [inputFormatter]="formatterCustomer"
                   placeholder="Customer search"
                 />
                 <ng-template #rt let-r="result" let-t="term">
@@ -838,8 +782,6 @@
                 <div class="mb-9">
                   @if (selectedAddress) {
                   <div>{{ selectedAddress.address }}</div>
-                  } @else {
-                  <div>{{ modelCustomer?.address }}</div>
                   }
                 </div>
                 <!--end::Position-->
@@ -852,6 +794,23 @@
               <hr class="separator py-2" />
 
               <!--begin::Destination-->
+              <div class="mb-2">
+                <div class="d-flex">
+                  <label class="form-label fw-bold" [attr.for]="request">Different Destination </label>
+                  <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [attr.id]="request"
+                      [checked]="isDestinationDifferent"
+                      (change)="checkDestination()"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              @if (isDestinationDifferent) {
+              <!-- Differnt destination by others customer relate address -->
               <div class="d-flex flex-center flex-column py-2">
                 <input
                   id="select-destination"
@@ -941,6 +900,64 @@
               }
               <!--end::waybill Info-->
               <!--end::Summary-->
+              } @else {
+              <!-- Same destination by customer relate address -->
+              @if (modelCustomer) {
+              <div class="d-flex flex-center flex-column py-5 pt-2">
+                <!--begin::Info-->
+                <!--begin::Info heading-->
+                @if (modelCustomer.addresses) {
+                <label class="d-block full-width">
+                  <select
+                    class="form-select form-control"
+                    data-kt-select2="true"
+                    data-placeholder="Select address"
+                    data-allow-clear="true"
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="modelAddressIdDestination"
+                    (change)="selectAddressDestination()"
+                  >
+                    <option value="" disabled selected>Select address</option>
+                    @for (value of modelCustomer.addresses; track value) {
+                    <option [value]="value.address_id">{{ value.address }}</option>
+                    }
+                  </select>
+                </label>
+                }
+                <!--end::Info heading-->
+                <!--end::Info-->
+              </div>
+              }
+
+              <!--begin::Summary-->
+              <!--begin::Waybill Info-->
+              @if (modelCustomer) {
+              <div class="d-flex flex-center flex-column py-5 pt-0">
+                <!--begin::Name-->
+                <h4 class="card-title">Choose Destination:</h4>
+                <!--begin::Position-->
+                <div class="mb-1">
+                  <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{{ modelCustomer?.name }} </a>
+                </div>
+                @if (modelCustomer.company) {
+                <div class="badge badge-lg badge-light-primary d-inline mb-4">
+                  {{ modelCustomer.company?.name }}
+                </div>
+                } @else { }
+
+                <div>Address:</div>
+                <div class="mb-9">
+                  @if (selectedAddressDestination) {
+                  <div>{{ selectedAddressDestination?.address }}</div>
+                  }
+                </div>
+                <!--end::Position-->
+                <!--end::Name-->
+              </div>
+              }
+              <!--end::Waybill Info-->
+              <!--end::Summary-->
+              }
             </div>
           </div>
           <!--end::Card body-->

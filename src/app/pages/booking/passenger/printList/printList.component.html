@@ -87,7 +87,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.waybill?.customer?.name }}
+                {{ row.waybill?.name }}
               </span>
             </td>
             <td>
@@ -97,27 +97,17 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.waybill?.customer?.telp }}
+                {{ row.waybill?.telp }}
               </span>
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                @if (row.waybill?.customer?.addresses.length > 0) { @for (value of row.waybill?.customer?.addresses;
-                track value) { @if (value.default == true) {
-                {{ value.address }}
-                } } } @else {
-                {{ row.waybill?.customer?.address }}
-                }
+                {{ row.waybill?.address }}
               </span>
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                @if (row.destination?.customer?.addresses.length > 0) { @for (value of
-                row.destination?.customer?.addresses; track value) { @if (value.default == true) {
-                {{ value.address }}
-                } } } @else {
-                {{ row.destination?.customer?.address }}
-                }
+                {{ row.destination?.address }}
               </span>
             </td>
           </ng-template>

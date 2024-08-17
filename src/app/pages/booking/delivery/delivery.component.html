@@ -690,24 +690,14 @@
         </td>
         <td>
           <span class="text-gray-900 d-block">
-            {{ row.waybill?.customer?.name }}<br />
-            @if (row.waybill?.customer?.addresses.length > 0) { @for (value of row.waybill?.customer?.addresses; track
-            value) { @if (value.default == true) {
-            {{ value.address }}
-            } } } @else {
-            {{ row.waybill?.customer?.address }}
-            }
+            {{ row.waybill?.name }}<br />
+            {{ row.waybill?.address }}
           </span>
         </td>
         <td>
           <span class="text-gray-900 d-block">
-            {{ row.destination?.customer?.name }}<br />
-            @if (row.destination?.customer?.addresses.length > 0) { @for (value of row.destination?.customer?.addresses;
-            track value) { @if (value.default == true) {
-            {{ value.address }}
-            } } } @else {
-            {{ row.destination?.customer?.address }}
-            }
+            {{ row.destination?.name }}<br />
+            {{ row.destination?.address }}
           </span>
         </td>
         <td>
@@ -803,18 +793,13 @@
         </td>
         <td>
           <span class="text-gray-900 d-block">
-            {{ row.sender?.customer?.name }}
+            {{ row.sender?.name }}
           </span>
         </td>
         <td>
           <span class="text-gray-900 d-block">
-            {{ row.recipient?.customer?.name }}<br />
-            @if (row.recipient?.customer?.addresses.length > 0) { @for (value of row.recipient?.customer?.addresses;
-            track value) { @if (value.default == true) {
-            {{ value.address }}
-            } } } @else {
-            {{ row.recipient?.customer?.address }}
-            }
+            {{ row.recipient?.name }}<br />
+            {{ row.recipient?.address }}
           </span>
         </td>
         <td>

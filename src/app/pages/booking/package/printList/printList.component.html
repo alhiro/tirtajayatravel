@@ -86,26 +86,16 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.sender?.customer?.name }} <br />
-                @if (row.sender?.customer?.addresses) { @for (value of row.sender?.customer?.addresses; track value) {
-                @if (value.default == true) {
-                {{ value.address }}
-                } } } @else {
-                {{ row.sender?.customer?.address }}
-                }<br />
-                {{ row.sender?.customer?.telp }}
+                {{ row.sender?.name }} <br />
+                {{ row.sender?.address }} <br />
+                {{ row.sender?.telp }}
               </span>
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.recipient?.customer?.name }}
-                @if (row.recipient?.customer?.addresses) { @for (value of row.recipient?.customer?.addresses; track
-                value) { @if (value.default == true) {
-                {{ value.address }}
-                } } } @else {
-                {{ row.recipient?.customer?.address }}
-                }<br />
-                {{ row.recipient?.customer?.telp }}
+                {{ row.recipient?.name }}<br />
+                {{ row.recipient?.address }}<br />
+                {{ row.recipient?.telp }}
               </span>
             </td>
             <td>

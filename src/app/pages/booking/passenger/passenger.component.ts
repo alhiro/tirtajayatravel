@@ -78,9 +78,12 @@ export class PassengerComponent implements OnInit, OnDestroy {
   public dataLengthCustomer!: number;
   public toggledRows = new Set<number>();
 
+  public dataAddress: any;
+
   public isCreate = false;
   public isCreateAddress = false;
   public isCreateSP!: boolean;
+  public isDestinationDifferent = false;
 
   public selectedAddress: any;
   public selectedAddressDestination: any;
@@ -122,7 +125,10 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
   form!: FormGroup;
   formAddress!: FormGroup;
+  formWaybill!: FormGroup;
+  formDestination!: FormGroup;
   formSP!: FormGroup;
+
   isLoading = false;
   isLoadingCustomer = false;
 
@@ -334,8 +340,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
       { key: 'tariff', title: 'Price' },
       { key: 'status', title: 'Status Payment' },
       { key: 'total_passenger', title: 'Total Passenger' },
-      { key: 'customer.address', title: 'Pickup Address' },
-      { key: 'customer.address', title: 'Delivery Address' },
+      { key: 'waybill.address', title: 'Pickup Address' },
+      { key: 'destination.address', title: 'Destination Address' },
       { key: 'description', title: 'Description' },
       { key: 'created_at', title: 'Created At' },
       { key: 'status_passenger', title: 'Status' },
@@ -381,7 +387,35 @@ export class PassengerComponent implements OnInit, OnDestroy {
       name: ['', Validators.compose([Validators.maxLength(100)])],
       address: ['', Validators.compose([Validators.maxLength(255)])],
       telp: ['', Validators.compose([Validators.maxLength(255)])],
-      default: [''],
+      default: [false],
+      longitude: [null, Validators.compose([Validators.maxLength(100)])],
+      latitude: [null, Validators.compose([Validators.maxLength(100)])],
+      zoom: [7, Validators.compose([Validators.maxLength(5)])],
+      description: ['', Validators.compose([Validators.maxLength(255)])],
+      used: ['', Validators.compose([Validators.maxLength(255)])],
+    });
+
+    this.formWaybill = this.formBuilder.group({
+      waybill_id: [''],
+      customer_id: ['', Validators.compose([Validators.required])],
+      name: ['', Validators.compose([Validators.maxLength(100)])],
+      address: ['', Validators.compose([Validators.maxLength(255)])],
+      telp: ['', Validators.compose([Validators.maxLength(255)])],
+      default: [false],
+      longitude: [null, Validators.compose([Validators.maxLength(100)])],
+      latitude: [null, Validators.compose([Validators.maxLength(100)])],
+      zoom: [7, Validators.compose([Validators.maxLength(5)])],
+      description: ['', Validators.compose([Validators.maxLength(255)])],
+      used: ['', Validators.compose([Validators.maxLength(255)])],
+    });
+
+    this.formDestination = this.formBuilder.group({
+      destination_id: [''],
+      customer_id: ['', Validators.compose([Validators.required])],
+      name: ['', Validators.compose([Validators.maxLength(100)])],
+      address: ['', Validators.compose([Validators.maxLength(255)])],
+      telp: ['', Validators.compose([Validators.maxLength(255)])],
+      default: [false],
       longitude: [null, Validators.compose([Validators.maxLength(100)])],
       latitude: [null, Validators.compose([Validators.maxLength(100)])],
       zoom: [7, Validators.compose([Validators.maxLength(5)])],
@@ -687,16 +721,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
       ),
       tap(() => ((this.searching = false), (this.modelAddressId = '')))
     );
-
-  selectAddress() {
-    if (this.modelCustomer) {
-      const getdAddress = this.modelCustomer?.addresses.find(
-        (val: AddressModel) => val.address_id === Number(this.modelAddressId)
-      );
-      this.selectedAddress = getdAddress;
-      console.log(this.selectedAddress);
-    }
-  }
+  formatterCustomer = (result: { name: string }) => result.name;
 
   searchDataDestination = (text$: Observable<string>) =>
     text$.pipe(
@@ -735,59 +760,120 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
   formatter = (result: { name: string; car_number: string }) => result.car_number;
 
-  setDefaultSelectionDestination(value: any) {
-    this.modelDestination?.addresses.forEach((item: AddressModel) => {
-      console.log(item.address_id);
-      console.log(value);
-      item.default = item.address_id === Number(value);
-    });
-    console.log(this.modelDestination?.addresses);
+  selectAddress() {
+    console.log(this.modelCustomer);
+    if (this.modelCustomer) {
+      const getdAddress = this.modelCustomer?.addresses.find(
+        (val: AddressModel) => val.address_id === Number(this.modelAddressId)
+      );
+      this.selectedAddress = getdAddress;
+      console.log(this.selectedAddress);
+
+      // if (this.selectedAddress) {
+      //   console.log('prosess update address pickup');
+      //   const dataAddress = {
+      //     address_id: this.selectedAddress.address_id,
+      //     customer_id: this.selectedAddress.customer_id,
+      //     used: 1
+      //   };
+      //   console.log(this.formAddress.value);
+
+      //   this.dataAddress = dataAddress;
+      //   this.isLoading = false;
+
+      //   // this.isLoading = true;
+      //   // this.passengerService
+      //   //   .updateAddressDefault(dataAddress)
+      //   //   .pipe(
+      //   //     finalize(() => {
+      //   //       this.formAddress.markAsPristine();
+      //   //       this.isLoading = false;
+      //   //     }),
+      //   //     catchError(() => {
+      //   //       this.isLoading = false;
+      //   //       this.handlerResponseService.failedResponse('Failed selected address');
+      //   //       return of([]);
+      //   //     })
+      //   //   )
+      //   //   .subscribe((response: any) => {
+      //   //     console.log('response address');
+      //   //     console.log(response);
+      //   //     if (response) {
+      //   //       this.snackbar.open('Success selected address be default', '', {
+      //   //         panelClass: 'snackbar-success',
+      //   //         duration: 10000,
+      //   //       });
+      //   //     }
+      //   //   });
+      // }
+    }
   }
 
+  // setDefaultSelectionDestination(value: any) {
+  //   this.isDestinationDifferent ? this.modelDestination?.addresses.forEach((item: AddressModel) => {
+  //     console.log(item.address_id);
+  //     console.log(value);
+  //     item.default = item.address_id === Number(value);
+  //   }) : this.modelCustomer?.addresses.forEach((item: AddressModel) => {
+  //     console.log(item.address_id);
+  //     console.log(value);
+  //     item.default = item.address_id === Number(value);
+  //   });
+  //   console.log(this.modelDestination?.addresses);
+  //   console.log(this.modelCustomer?.addresses);
+  // }
+
   findDatadestinationByValue(value: any) {
-    return this.modelDestination?.addresses.find((val: AddressModel) => val.address_id === Number(value));
+    return this.isDestinationDifferent
+      ? this.modelDestination?.addresses.find((val: AddressModel) => val.address_id === Number(value))
+      : this.modelCustomer?.addresses.find((val: AddressModel) => val.address_id === Number(value));
   }
 
   selectAddressDestination() {
-    this.setDefaultSelectionDestination(this.modelAddressIdDestination);
-    const getdAddress = this.findDatadestinationByValue(this.modelAddressIdDestination);
-    this.selectedAddressDestination = getdAddress;
-    console.log(this.selectedAddressDestination);
-
-    if (this.selectedAddressDestination) {
-      console.log('prosess update address destination');
-      const dataAddress = {
-        address_id: this.selectedAddressDestination.address_id,
-        customer_id: this.selectedAddressDestination.customer_id,
-        default: this.selectedAddressDestination.default,
-      };
-      console.log(this.formAddress.value);
-
-      this.isLoading = true;
-      this.passengerService
-        .updateAddressDefault(dataAddress)
-        .pipe(
-          finalize(() => {
-            this.formAddress.markAsPristine();
-            this.isLoading = false;
-          }),
-          catchError(() => {
-            this.isLoading = false;
-            this.handlerResponseService.failedResponse('Failed selected address');
-            return of([]);
-          })
-        )
-        .subscribe((response: any) => {
-          console.log('response address');
-          console.log(response);
-          if (response) {
-            this.snackbar.open('Success selected address be default', '', {
-              panelClass: 'snackbar-success',
-              duration: 10000,
-            });
-          }
-        });
+    if (this.modelCustomer) {
+      // this.setDefaultSelectionDestination(this.modelAddressIdDestination);
+      const getdAddress = this.findDatadestinationByValue(this.modelAddressIdDestination);
+      this.selectedAddressDestination = getdAddress;
+      console.log(this.selectedAddressDestination);
     }
+
+    // if (this.selectedAddressDestination) {
+    //   console.log('prosess update address destination');
+    //   const dataAddress = {
+    //     address_id: this.selectedAddressDestination.address_id,
+    //     customer_id: this.selectedAddressDestination.customer_id,
+    //     default: true,
+    //   };
+    //   console.log(this.formAddress.value);
+
+    //   this.dataAddress = dataAddress;
+    //   this.isLoading = false;
+
+    //   // this.isLoading = true;
+    //   // this.passengerService
+    //   //   .updateAddressDefault(dataAddress)
+    //   //   .pipe(
+    //   //     finalize(() => {
+    //   //       this.formAddress.markAsPristine();
+    //   //       this.isLoading = false;
+    //   //     }),
+    //   //     catchError(() => {
+    //   //       this.isLoading = false;
+    //   //       this.handlerResponseService.failedResponse('Failed selected address');
+    //   //       return of([]);
+    //   //     })
+    //   //   )
+    //   //   .subscribe((response: any) => {
+    //   //     console.log('response address');
+    //   //     console.log(response);
+    //   //     if (response) {
+    //   //       this.snackbar.open('Success selected address be default', '', {
+    //   //         panelClass: 'snackbar-success',
+    //   //         duration: 10000,
+    //   //       });
+    //   //     }
+    //   //   });
+    // }
   }
 
   onDateChange(date: NgbDateStruct): void {
@@ -796,6 +882,11 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
   onTimehange(time: NgbTimeStruct): void {
     this.booktime = time;
+  }
+
+  checkDestination() {
+    this.isDestinationDifferent = !this.isDestinationDifferent;
+    this.modelDestination = '';
   }
 
   format(date: NgbDateStruct): string {
@@ -848,39 +939,53 @@ export class PassengerComponent implements OnInit, OnDestroy {
     ).toISOString();
     console.log(valueBookDate);
 
-    this.form.patchValue({
-      book_date: valueBookDate,
+    console.log(this.modelCustomer);
+
+    this.formWaybill.patchValue({
+      customer_id: this.modelCustomer?.customer_id,
+      name: this.selectedAddress?.name,
+      address: this.selectedAddress?.address,
+      telp: this.selectedAddress?.telp,
+      defaults: this.selectedAddress?.default,
+      longitude: this.selectedAddress?.longitude,
+      latitude: this.selectedAddress?.latitude,
+      zoom: this.selectedAddress?.zoom,
+      description: this.selectedAddress?.description,
+      used: this.selectedAddress?.used,
     });
 
-    const dataCustomert: any = {
-      customer_id: this.modelCustomer?.customer_id,
-    };
-    console.log(dataCustomert);
+    this.formDestination.patchValue({
+      customer_id: this.isDestinationDifferent ? this.modelDestination?.customer_id : this.modelCustomer?.customer_id,
+      name: this.selectedAddressDestination?.name,
+      address: this.selectedAddressDestination?.address,
+      telp: this.selectedAddressDestination?.telp,
+      defaults: this.selectedAddressDestination?.default,
+      longitude: this.selectedAddressDestination?.longitude,
+      latitude: this.selectedAddressDestination?.latitude,
+      zoom: this.selectedAddressDestination?.zoom,
+      description: this.selectedAddressDestination?.description,
+      used: this.selectedAddressDestination?.used,
+    });
 
-    const dataReceipt: any = {
-      customer_id: this.modelDestination?.customer_id,
-    };
-    console.log(dataReceipt);
-
-    // create send data to waybill, destination, passenger
+    // create waybill & destination & edit passenger
     this.isLoading = true;
     this.passengerService
-      .createWaybill(dataCustomert)
+      .createWaybill(this.formWaybill.value)
       .pipe(
         switchMap((respCustomer: any) => {
           console.log('Response from respCustomer:', respCustomer);
           this.form.patchValue({
             waybill_id: respCustomer.data.waybill_id,
           });
-          return this.passengerService.createDestination(dataReceipt);
+          return this.passengerService.createDestination(this.formDestination.value);
         }),
         switchMap((respDestination: any) => {
           console.log('Response from respDestination:');
           console.log(respDestination);
           this.form.patchValue({
+            book_date: valueBookDate,
             destination_id: respDestination.data.destination_id,
           });
-          console.log(this.form.value);
           return this.passengerService.create(this.form.value);
         }),
         finalize(() => {
@@ -918,7 +1023,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
     this.modelCustomer = event.waybill?.customer;
     const getdAddressCustomer = this.modelCustomer?.addresses.find(
-      (val: AddressModel) => val.customer_id === Number(this.modelCustomer?.customer_id) && val.default === true
+      (val: AddressModel) => val.telp === event.waybill?.telp
     );
     this.modelAddressId = getdAddressCustomer?.address_id;
     console.log(this.modelAddressId);
@@ -927,7 +1032,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
     this.modelDestination = event.destination?.customer;
     const getdAddressDestination = this.modelDestination?.addresses.find(
-      (val: AddressModel) => val.customer_id === Number(this.modelDestination?.customer_id) && val.default === true
+      (val: AddressModel) => val.telp === event.destination?.telp
     );
     this.modelAddressIdDestination = getdAddressDestination?.address_id;
     console.log(this.modelAddressIdDestination);
@@ -958,6 +1063,14 @@ export class PassengerComponent implements OnInit, OnDestroy {
       charter: event.charter,
     });
 
+    this.formWaybill.patchValue({
+      waybill_id: event.waybill_id,
+    });
+
+    this.formDestination.patchValue({
+      destination_id: event.destination_id,
+    });
+
     return await this.modalComponent.open();
   }
 
@@ -973,41 +1086,51 @@ export class PassengerComponent implements OnInit, OnDestroy {
     ).toISOString();
     console.log(valueBookDate);
 
-    this.form.patchValue({
-      waybill_id: this.modelCustomer?.customer_id,
-      destination_id: this.modelDestination?.customer_id,
-      book_date: valueBookDate,
+    this.formWaybill.patchValue({
+      customer_id: this.modelCustomer?.customer_id,
+      name: this.selectedAddress?.name,
+      address: this.selectedAddress?.address,
+      telp: this.selectedAddress?.telp,
+      defaults: this.selectedAddress?.default,
+      longitude: this.selectedAddress?.longitude,
+      latitude: this.selectedAddress?.latitude,
+      zoom: this.selectedAddress?.zoom,
+      description: this.selectedAddress?.description,
+      used: this.selectedAddress?.used,
     });
 
-    const dataCustomert: any = {
-      customer_id: this.modelCustomer?.customer_id,
-    };
-    console.log(dataCustomert);
+    this.formDestination.patchValue({
+      customer_id: this.isDestinationDifferent ? this.modelDestination?.customer_id : this.modelCustomer?.customer_id,
+      name: this.selectedAddressDestination?.name,
+      address: this.selectedAddressDestination?.address,
+      telp: this.selectedAddressDestination?.telp,
+      defaults: this.selectedAddressDestination?.default,
+      longitude: this.selectedAddressDestination?.longitude,
+      latitude: this.selectedAddressDestination?.latitude,
+      zoom: this.selectedAddressDestination?.zoom,
+      description: this.selectedAddressDestination?.description,
+      used: this.selectedAddressDestination?.used,
+    });
 
-    const dataReceipt: any = {
-      customer_id: this.modelDestination?.customer_id,
-    };
-    console.log(dataReceipt);
-
-    // edit send data to waybill, destination, passenger
+    // edit waybill & destination & edit passenger
     this.isLoading = true;
     this.passengerService
-      .createWaybill(dataCustomert)
+      .editWaybill(this.formWaybill.value)
       .pipe(
         switchMap((respCustomer: any) => {
           console.log('Response from respCustomer:', respCustomer);
           this.form.patchValue({
             waybill_id: respCustomer.data.waybill_id,
           });
-          return this.passengerService.createDestination(dataReceipt);
+          return this.passengerService.editDestination(this.formDestination.value);
         }),
         switchMap((respDestination: any) => {
           console.log('Response from respDestination:');
           console.log(respDestination);
           this.form.patchValue({
+            book_date: valueBookDate,
             destination_id: respDestination.data.destination_id,
           });
-          console.log(this.form.value);
           return this.passengerService.edit(this.form.value);
         }),
         finalize(() => {

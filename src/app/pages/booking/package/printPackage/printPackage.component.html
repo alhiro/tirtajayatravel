@@ -111,7 +111,7 @@
       <td colspan="2" height="18" class="xl65" style="height: 13.5pt">Nama</td>
       <td class="xl29">:</td>
       <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
-        <b>{{ data.sender?.customer?.name }}</b>
+        <b>{{ data.sender?.name }}</b>
       </td>
       <td colspan="2" class="xl54" style="border-left: none">&nbsp;</td>
       <td class="xl35"></td>
@@ -124,12 +124,7 @@
       <td class="xl29">:</td>
       <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
         <b>
-          @if (data.sender?.customer?.addresses.length > 0) { @for (value of data.sender?.customer?.addresses; track
-          value) { @if (value.default == true) {
-          {{ value.address }}
-          } } } @else {
-          {{ data.sender?.customer?.address }}
-          }
+          {{ data.sender?.address }}
         </b>
       </td>
       <td colspan="2" class="xl47" style="border-left: none">&nbsp;</td>
@@ -142,7 +137,7 @@
       <td colspan="2" height="17" class="xl49" style="height: 12.75pt" x:str="Telp ">Telp</td>
       <td class="xl30">:</td>
       <td colspan="5" class="xl50" style="border-right: 0.5pt solid black">
-        <b>{{ data.sender?.customer?.telp }}</b>
+        <b>{{ data.sender?.telp }}</b>
       </td>
       <td class="xl38" colspan="2" style="mso-ignore: colspan">Penerima</td>
       <td class="xl35">:</td>
@@ -160,7 +155,7 @@
       <td colspan="2" height="17" class="xl65" style="height: 12.75pt">Nama</td>
       <td class="xl29">:</td>
       <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
-        <b>{{ data.recipient?.customer?.name }}</b>
+        <b>{{ data.recipient?.name }}</b>
       </td>
       <td colspan="2" class="xl60" style="border-left: none">&nbsp;</td>
       <td class="xl27"></td>
@@ -172,12 +167,7 @@
       <td class="xl29">:</td>
       <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
         <b>
-          @if (data.recipient?.customer?.addresses.length > 0) { @for (value of data.recipient?.customer?.addresses;
-          track value) { @if (value.default == true) {
-          {{ value.address }}
-          } } } @else {
-          {{ data.recipient?.customer?.address }}
-          }
+          {{ data.recipient?.address }}
         </b>
       </td>
       <td class="xl38" colspan="2" style="mso-ignore: colspan">Tgl Terima</td>
@@ -189,7 +179,7 @@
       <td colspan="2" height="17" class="xl49" style="height: 12.75pt" x:str="Telp ">Telp</td>
       <td class="xl30">:</td>
       <td colspan="5" class="xl50" style="border-right: 0.5pt solid black">
-        <b>{{ data.recipient?.customer?.telp }}</b>
+        <b>{{ data.recipient?.telp }}</b>
       </td>
       <td colspan="2" class="xl58" style="border-left: none">&nbsp;</td>
       <td class="xl24">&nbsp;</td>
@@ -411,7 +401,7 @@
       <td colspan="2" height="18" class="xl65" style="height: 13.5pt">Nama</td>
       <td class="xl29">:</td>
       <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
-        <b>{{ data.sender?.customer?.name }}</b>
+        <b>{{ data.sender?.name }}</b>
       </td>
       <td colspan="2" class="xl54" style="border-left: none">&nbsp;</td>
       <td class="xl35"></td>
@@ -424,12 +414,7 @@
       <td class="xl29">:</td>
       <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
         <b>
-          @if (data.sender?.customer?.addresses.length > 0) { @for (value of data.sender?.customer?.addresses; track
-          value) { @if (value.default == true) {
-          {{ value.address }}
-          } } } @else {
-          {{ data.sender?.customer?.address }}
-          }
+          {{ data.sender?.address }}
         </b>
       </td>
       <td colspan="2" class="xl47" style="border-left: none">&nbsp;</td>
@@ -442,7 +427,7 @@
       <td colspan="2" height="17" class="xl49" style="height: 12.75pt" x:str="Telp ">Telp</td>
       <td class="xl30">:</td>
       <td colspan="5" class="xl50" style="border-right: 0.5pt solid black">
-        <b>{{ data.sender?.customer?.telp }}</b>
+        <b>{{ data.sender?.telp }}</b>
       </td>
       <td class="xl38" colspan="2" style="mso-ignore: colspan">Penerima</td>
       <td class="xl35">:</td>
@@ -460,7 +445,7 @@
       <td colspan="2" height="17" class="xl65" style="height: 12.75pt">Nama</td>
       <td class="xl29">:</td>
       <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
-        <b>{{ data.recipient?.customer?.name }}</b>
+        <b>{{ data.recipient?.name }}</b>
       </td>
       <td colspan="2" class="xl60" style="border-left: none">&nbsp;</td>
       <td class="xl27"></td>
@@ -472,12 +457,7 @@
       <td class="xl29">:</td>
       <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
         <b>
-          @if (data.recipient?.customer?.addresses.length > 0) { @for (value of data.recipient?.customer?.addresses;
-          track value) { @if (value.default == true) {
-          {{ value.address }}
-          } } } @else {
-          {{ data.recipient?.customer?.address }}
-          }
+          {{ data.recipient?.address }}
         </b>
       </td>
       <td class="xl38" colspan="2" style="mso-ignore: colspan">Tgl Terima</td>
@@ -489,7 +469,7 @@
       <td colspan="2" height="17" class="xl49" style="height: 12.75pt" x:str="Telp ">Telp</td>
       <td class="xl30">:</td>
       <td colspan="5" class="xl50" style="border-right: 0.5pt solid black">
-        <b>{{ data.recipient?.customer?.telp }}</b>
+        <b>{{ data.recipient?.telp }}</b>
       </td>
       <td colspan="2" class="xl58" style="border-left: none">&nbsp;</td>
       <td class="xl24">&nbsp;</td>
@@ -711,7 +691,7 @@
       <td colspan="2" height="18" class="xl65" style="height: 13.5pt">Nama</td>
       <td class="xl29">:</td>
       <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
-        <b>{{ data.sender?.customer?.name }}</b>
+        <b>{{ data.sender?.name }}</b>
       </td>
       <td colspan="2" class="xl54" style="border-left: none">&nbsp;</td>
       <td class="xl35"></td>
@@ -724,12 +704,7 @@
       <td class="xl29">:</td>
       <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
         <b>
-          @if (data.sender?.customer?.addresses.length > 0) { @for (value of data.sender?.customer?.addresses; track
-          value) { @if (value.default == true) {
-          {{ value.address }}
-          } } } @else {
-          {{ data.sender?.customer?.address }}
-          }
+          {{ data.sender?.address }}
         </b>
       </td>
       <td colspan="2" class="xl47" style="border-left: none">&nbsp;</td>
@@ -742,7 +717,7 @@
       <td colspan="2" height="17" class="xl49" style="height: 12.75pt" x:str="Telp ">Telp</td>
       <td class="xl30">:</td>
       <td colspan="5" class="xl50" style="border-right: 0.5pt solid black">
-        <b>{{ data.sender?.customer?.telp }}</b>
+        <b>{{ data.sender?.telp }}</b>
       </td>
       <td class="xl38" colspan="2" style="mso-ignore: colspan">Penerima</td>
       <td class="xl35">:</td>
@@ -760,7 +735,7 @@
       <td colspan="2" height="17" class="xl65" style="height: 12.75pt">Nama</td>
       <td class="xl29">:</td>
       <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
-        <b>{{ data.recipient?.customer?.name }}</b>
+        <b>{{ data.recipient?.name }}</b>
       </td>
       <td colspan="2" class="xl60" style="border-left: none">&nbsp;</td>
       <td class="xl27"></td>
@@ -772,12 +747,7 @@
       <td class="xl29">:</td>
       <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
         <b>
-          @if (data.recipient?.customer?.addresses.length > 0) { @for (value of data.recipient?.customer?.addresses;
-          track value) { @if (value.default == true) {
-          {{ value.address }}
-          } } } @else {
-          {{ data.recipient?.customer?.address }}
-          }
+          {{ data.recipient?.address }}
         </b>
       </td>
       <td class="xl38" colspan="2" style="mso-ignore: colspan">Tgl Terima</td>
@@ -789,7 +759,7 @@
       <td colspan="2" height="17" class="xl49" style="height: 12.75pt" x:str="Telp ">Telp</td>
       <td class="xl30">:</td>
       <td colspan="5" class="xl50" style="border-right: 0.5pt solid black">
-        <b>{{ data.recipient?.customer?.telp }}</b>
+        <b>{{ data.recipient?.telp }}</b>
       </td>
       <td colspan="2" class="xl58" style="border-left: none">&nbsp;</td>
       <td class="xl24">&nbsp;</td>
