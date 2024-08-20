@@ -5,15 +5,15 @@ import {
   Subject,
   Subscription,
   catchError,
-  debounceTime,
-  distinctUntilChanged,
   finalize,
-  map,
+  merge,
   of,
   switchMap,
   takeUntil,
   tap,
+  OperatorFunction,
 } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { PackageService } from './package.service';
 import { PaginationContext } from '@app/@shared/interfaces/pagination';
 import { ModalComponent, ModalConfig, ModalXlComponent } from '@app/_metronic/partials';
@@ -34,6 +34,7 @@ import {
   NgbDatepicker,
   NgbDropdown,
   NgbTimeStruct,
+  NgbTypeahead,
 } from '@ng-bootstrap/ng-bootstrap';
 import { EmployeeService } from '@app/pages/master/employee/employee.service';
 import { CarService } from '@app/pages/master/car/car.service';
@@ -203,6 +204,12 @@ export class PackageComponent implements OnInit, OnDestroy {
   endDate: any;
 
   @Input() delivery!: GoSendModel;
+
+  focusSender$ = new Subject<string>();
+  clickSender$ = new Subject<string>();
+  focusRecipient$ = new Subject<string>();
+  clickRecipient$ = new Subject<string>();
+  @ViewChild('instance', { static: true }) instance!: NgbTypeahead;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -790,70 +797,69 @@ export class PackageComponent implements OnInit, OnDestroy {
   selectAddress() {
     if (this.modelCustomer) {
       const getdAddress = this.modelCustomer?.addresses.find(
-        (val: AddressModel) => val.address_id === Number(this.modelAddressId)
+        (val: AddressModel) => val.address_id === Number(this.modelAddressId.address_id)
       );
       this.selectedAddress = getdAddress;
       console.log(this.selectedAddress);
     }
   }
 
-  // setDefaultSelectionRecipient(value: any) {
-  //   this.modelRecipient?.addresses.forEach((item: AddressModel) => {
-  //     console.log(item.address_id);
-  //     console.log(value);
-  //     item.default = item.address_id === Number(value);
-  //   });
-  //   console.log(this.modelRecipient?.addresses);
-  // }
+  searchAddressSender = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.clickSender$.pipe(filter(() => this.instance?.isPopupOpen()));
+    const inputFocus$ = this.focusSender$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+      map((term: any) => {
+        return term === ''
+          ? this.modelCustomer?.addresses
+          : this.modelCustomer?.addresses
+              .filter(
+                (val: any) =>
+                  val.name?.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                  val.telp?.toLowerCase().indexOf(term.toLowerCase()) > -1
+              )
+              .slice(0, 10);
+      })
+    );
+  };
+
+  dataRecipientAddresses() {
+    return this.isDestinationDifferent ? this.modelRecipient?.addresses : this.modelCustomer?.addresses;
+  }
+
+  searchAddressRecipient = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.clickRecipient$.pipe(filter(() => this.instance?.isPopupOpen()));
+    const inputFocus$ = this.focusRecipient$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+      map((term: any) => {
+        return term === ''
+          ? this.dataRecipientAddresses()
+          : this.dataRecipientAddresses()
+              .filter(
+                (val: any) =>
+                  val.name?.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                  val.telp?.toLowerCase().indexOf(term.toLowerCase()) > -1
+              )
+              .slice(0, 10);
+      })
+    );
+  };
 
   findDataRecipientByValue(value: any) {
-    return this.isDestinationDifferent
-      ? this.modelRecipient?.addresses.find((val: AddressModel) => val.address_id === Number(value))
-      : this.modelCustomer?.addresses.find((val: AddressModel) => val.address_id === Number(value));
+    return this.dataRecipientAddresses().find((val: AddressModel) => val.address_id === Number(value));
   }
 
   selectAddressRecipient() {
     if (this.modelCustomer) {
+      console.log(this.modelAddressIdRecipient);
       // this.setDefaultSelectionRecipient(this.modelAddressIdRecipient);
-      const getdAddress = this.findDataRecipientByValue(this.modelAddressIdRecipient);
+      const getdAddress = this.findDataRecipientByValue(this.modelAddressIdRecipient.address_id);
       this.selectedAddressRecipient = getdAddress;
       console.log(this.selectedAddressRecipient);
     }
-
-    // if (this.selectedAddressRecipient) {
-    //   console.log('prosess update address recipient');
-    //   const dataAddress = {
-    //     address_id: this.selectedAddressRecipient.address_id,
-    //     customer_id: this.selectedAddressRecipient.customer_id,
-    //     default: this.selectedAddressRecipient.default,
-    //   };
-    //   console.log(this.formAddress.value);
-
-    //   // this.isLoading = true;
-    //   // this.packageService
-    //   //   .updateAddressDefault(dataAddress)
-    //   //   .pipe(
-    //   //     finalize(() => {
-    //   //       this.formAddress.markAsPristine();
-    //   //       this.isLoading = false;
-    //   //     }),
-    //   //     catchError(() => {
-    //   //       this.isLoading = false;
-    //   //       this.handlerResponseService.failedResponse('Failed selected address');
-    //   //       return of([]);
-    //   //     })
-    //   //   )
-    //   //   .subscribe((response: any) => {
-    //   //     console.log('response address');
-    //   //     console.log(response);
-    //   //     if (response) {
-    //   //       this.snackbar.open('Success selected address be default', '', {
-    //   //         panelClass: 'snackbar-success',
-    //   //         duration: 10000,
-    //   //       });
-    //   //     }
-    //   //   });
-    // }
   }
 
   onDateChange(date: NgbDateStruct): void {
@@ -1010,17 +1016,17 @@ export class PackageComponent implements OnInit, OnDestroy {
     const getdAddressCustomer = this.modelCustomer?.addresses.find(
       (val: AddressModel) => val.telp === event.sender?.telp
     );
-    this.modelAddressId = getdAddressCustomer?.address_id;
-    console.log(this.modelAddressId);
-    this.selectedAddress = getdAddressCustomer;
+    this.modelAddressId = getdAddressCustomer;
+    // console.log(this.modelAddressId);
+    // this.selectedAddress = getdAddressCustomer;
 
     this.modelRecipient = event.recipient?.customer;
     const getdAddressRecipient = this.modelRecipient?.addresses.find(
       (val: AddressModel) => val.telp === event.recipient?.telp
     );
-    this.modelAddressIdRecipient = getdAddressRecipient?.address_id;
-    console.log(this.modelAddressIdRecipient);
-    this.selectedAddressRecipient = getdAddressRecipient;
+    this.modelAddressIdRecipient = getdAddressRecipient;
+    // console.log(this.modelAddressIdRecipient);
+    // this.selectedAddressRecipient = getdAddressRecipient;
 
     console.log(this.modelCustomer);
     console.log(this.modelRecipient);

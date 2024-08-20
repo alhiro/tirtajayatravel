@@ -733,7 +733,7 @@
                 <!--begin::Info-->
                 <!--begin::Info heading-->
                 @if (modelCustomer.addresses) {
-                <label class="d-block full-width">
+                <!-- <label class="d-block full-width">
                   <select
                     class="form-select form-control"
                     data-kt-select2="true"
@@ -748,7 +748,30 @@
                     <option [value]="value.address_id">{{ value.address }}</option>
                     }
                   </select>
+                </label> -->
+
+                <label class="d-block full-width">
+                  <input
+                    id="select-customer"
+                    type="text"
+                    class="form-control"
+                    [class.is-invalid]="searchFailed"
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="modelAddressId"
+                    [ngbTypeahead]="searchAddressSender"
+                    [resultTemplate]="rt"
+                    [inputFormatter]="formatterCustomer"
+                    (focus)="focusSender$.next($any($event).target.value)"
+                    (click)="clickSender$.next($any($event).target.value)"
+                    (change)="selectAddress()"
+                    #instance="ngbTypeahead"
+                    placeholder="Customer address sender search"
+                  />
                 </label>
+
+                <ng-template #rt let-r="result" let-t="term">
+                  {{ r.name }} - {{ r.address }} - {{ r.telp }}
+                </ng-template>
 
                 <div
                   class="btn btn-primary btn-sm py-1 fs-8 cursor-pointer my-3"
@@ -780,8 +803,12 @@
 
                 <div>Address:</div>
                 <div class="mb-9">
-                  @if (selectedAddress) {
-                  <div>{{ selectedAddress.address }}</div>
+                  @if (modelAddressId) {
+                  <div>
+                    {{ modelAddressId?.name }}<br />
+                    {{ modelAddressId?.address }}<br />
+                    {{ modelAddressId?.telp }}
+                  </div>
                   }
                 </div>
                 <!--end::Position-->
@@ -907,7 +934,7 @@
                 <!--begin::Info-->
                 <!--begin::Info heading-->
                 @if (modelCustomer.addresses) {
-                <label class="d-block full-width">
+                <!-- <label class="d-block full-width">
                   <select
                     class="form-select form-control"
                     data-kt-select2="true"
@@ -922,7 +949,30 @@
                     <option [value]="value.address_id">{{ value.address }}</option>
                     }
                   </select>
+                </label> -->
+
+                <label class="d-block full-width">
+                  <input
+                    id="select-customer"
+                    type="text"
+                    class="form-control"
+                    [class.is-invalid]="searchFailed"
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="modelAddressIdDestination"
+                    [ngbTypeahead]="searchAddressDestination"
+                    [resultTemplate]="rt"
+                    [inputFormatter]="formatterCustomer"
+                    (focus)="focusDestination$.next($any($event).target.value)"
+                    (click)="clickDestination$.next($any($event).target.value)"
+                    (change)="selectAddressDestination()"
+                    #instance="ngbTypeahead"
+                    placeholder="Customer address recipient search"
+                  />
                 </label>
+
+                <ng-template #rt let-r="result" let-t="term">
+                  {{ r.name }} - {{ r.address }} - {{ r.telp }}
+                </ng-template>
                 }
                 <!--end::Info heading-->
                 <!--end::Info-->
@@ -947,8 +997,10 @@
 
                 <div>Address:</div>
                 <div class="mb-9">
-                  @if (selectedAddressDestination) {
-                  <div>{{ selectedAddressDestination?.address }}</div>
+                  @if (modelAddressIdDestination) {
+                  {{ modelAddressIdDestination?.name }}<br />
+                  {{ modelAddressIdDestination?.address }}<br />
+                  {{ modelAddressIdDestination?.telp }}
                   }
                 </div>
                 <!--end::Position-->
