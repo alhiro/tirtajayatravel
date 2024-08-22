@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { API, APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
-import { Subject, Subscription, finalize, takeUntil } from 'rxjs';
+import { Subject, Subscription, debounceTime, finalize, takeUntil } from 'rxjs';
 import { CustomerService } from './customer.service';
 import {
   Pagination,
@@ -35,6 +35,8 @@ interface EventObject {
 })
 export class CustomerComponent implements OnInit {
   @ViewChild('table') table!: APIDefinition;
+  @ViewChild('tableAddress') tableAddress!: APIDefinition;
+
   public columns!: Columns[];
   public data: any;
   public company: any;
@@ -45,9 +47,13 @@ export class CustomerComponent implements OnInit {
   public isCreateAddress = false;
 
   public configuration: Config = { ...DefaultConfig };
+  public configurationAddress: Config = { ...DefaultConfig };
 
   public pagination: Pagination = { ...defaultPagination };
   public params: Params = { ...defaultParams };
+  public paginationAddress: Pagination = { ...defaultPagination };
+  public paramsAddress: Params = { ...defaultParams };
+
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   form!: FormGroup;
@@ -102,10 +108,14 @@ export class CustomerComponent implements OnInit {
     this.company = this.localService.getCompany();
     this.business = this.localService.getBusiness();
 
-    this.configuration.resizeColumn = true;
-    this.configuration.fixedColumnWidth = false;
+    this.configuration.resizeColumn = false;
+    this.configuration.fixedColumnWidth = true;
     this.configuration.showDetailsArrow = true;
     this.configuration.detailsTemplate = true;
+    this.configuration.horizontalScroll = true;
+
+    this.configurationAddress.resizeColumn = true;
+    this.configurationAddress.fixedColumnWidth = false;
 
     this.columns = [
       // { key: 'customer_id', title: 'No' },
@@ -149,6 +159,28 @@ export class CustomerComponent implements OnInit {
     this.ngUnsubscribe.complete();
   }
 
+  onChangeAddress(event: Event): void {
+    this.tableAddress.apiEvent({
+      type: API.onGlobalSearch,
+      value: (event.target as HTMLInputElement).value,
+    });
+  }
+
+  onChange(event: Event): void {
+    console.log(event);
+
+    const textSearch = (event.target as HTMLInputElement).value;
+    const params = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: textSearch,
+      startDate: this.pagination.startDate,
+      endDate: this.pagination.endDate,
+    };
+
+    this.dataList(params);
+  }
+
   eventEmitted($event: { event: string; value: any }): void {
     console.log('click table event');
     console.log($event.event);
@@ -176,7 +208,7 @@ export class CustomerComponent implements OnInit {
     this.configuration.isLoading = true;
     this.customerService
       .list(params)
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
         this.dataLength = response.length;
         this.data = response.data;
@@ -233,6 +265,30 @@ export class CustomerComponent implements OnInit {
     this.unsubscribe.push(catSubscr);
   }
 
+  // Address
+  eventEmittedAddress($event: { event: string; value: any }): void {
+    console.log('click table event');
+    console.log($event.event);
+    console.log($event.value);
+    if ($event.event === 'onPagination') {
+      this.parseEventAddress($event);
+    }
+  }
+
+  private parseEventAddress(obj: EventObject): void {
+    this.paginationAddress.limit = obj.value.limit ? obj.value.limit : this.paginationAddress.limit;
+    this.paginationAddress.offset = obj.value.page ? obj.value.page : this.paginationAddress.offset;
+    this.paginationAddress = { ...this.paginationAddress };
+    const params = {
+      limit: this.paginationAddress.limit,
+      page: this.paginationAddress.offset,
+      search: this.paginationAddress.search,
+      startDate: this.paginationAddress.startDate,
+      endDate: this.paginationAddress.endDate,
+    }; // see https://github.com/typicode/json-server
+    this.dataList(params);
+  }
+
   async openModalEdit(event: CustomerModel) {
     this.isCreate = false;
 
@@ -284,7 +340,6 @@ export class CustomerComponent implements OnInit {
     this.unsubscribe.push(catSubscr);
   }
 
-  // Address
   clearFormAddress() {
     this.formAddress.reset();
   }
@@ -357,7 +412,7 @@ export class CustomerComponent implements OnInit {
     console.log(this.formAddress.value);
     this.isLoading = true;
     const catSubscr = this.customerService
-      .editAddress(this.form.value)
+      .editAddress(this.formAddress.value)
       .pipe(
         finalize(() => {
           this.form.markAsPristine();

@@ -1243,6 +1243,12 @@ export class PackageComponent implements OnInit, OnDestroy {
             });
 
             this.dataList(this.params);
+            this.modelCustomer = '';
+            this.modelAddressId = '';
+            this.modelRecipient = '';
+            this.modelAddressIdRecipient = '';
+
+            await this.modalComponent.dismiss();
             await this.modalComponentAddress.dismiss();
           } else {
             this.isLoading = false;

@@ -1201,6 +1201,12 @@ export class PassengerComponent implements OnInit, OnDestroy {
             });
 
             this.dataList(this.params);
+            this.modelCustomer = '';
+            this.modelAddressId = '';
+            this.modelDestination = '';
+            this.modelAddressIdDestination = '';
+
+            await this.modalComponent.dismiss();
             await this.modalComponentAddress.dismiss();
           } else {
             this.isLoading = false;

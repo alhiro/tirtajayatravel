@@ -820,7 +820,7 @@
               <hr class="separator py-2" />
 
               <!--begin::Recipient-->
-              <div class="mb-2">
+              <!-- <div class="mb-2">
                 <div class="d-flex">
                   <label class="form-label fw-bold" [attr.for]="request">Different Recipient </label>
                   <label class="form-check form-check-sm form-check-solid me-5 mx-2">
@@ -833,7 +833,7 @@
                     />
                   </label>
                 </div>
-              </div>
+              </div> -->
 
               @if (isDestinationDifferent) {
               <div class="d-flex flex-center flex-column py-2">
@@ -883,7 +883,7 @@
                 </label>
                 <div
                   class="btn btn-primary btn-sm py-1 fs-8 cursor-pointer my-3"
-                  (click)="openModalNewAddress(modelRecipient)"
+                  (click)="openModalNewAddress(modelCustomer)"
                 >
                   Add New Address
                 </div>
@@ -971,6 +971,13 @@
                 <ng-template #rt let-r="result" let-t="term">
                   {{ r.name }} - {{ r.address }} - {{ r.telp }}
                 </ng-template>
+
+                <div
+                  class="btn btn-primary btn-sm py-1 fs-8 cursor-pointer my-3"
+                  (click)="openModalNewAddress(modelCustomer)"
+                >
+                  Add New Address
+                </div>
                 }
                 <!--end::Info heading-->
                 <!--end::Info-->
