@@ -1,0 +1,12 @@
+:host ::ng-deep {
+  thead {
+    position: sticky;
+    top: 0;
+    background-color: white;
+  }
+
+  .ngx-table__header-search {
+    font-size: 13px;
+    padding: 14px 8px;
+  }
+}

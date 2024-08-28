@@ -8,7 +8,7 @@ import { CategoryModel } from '@app/pages/master/category/models/category.model'
 import { SubCategoryModel } from '@app/pages/master/sub-category/models/subcategory.model';
 import { EmployeeyModel } from '@app/pages/master/employee/models/employee.model';
 import { CarModel } from '@app/pages/master/car/models/car.model';
-import { CustomerModel } from '@app/pages/master/customer/models/customer.model';
+import { CustomerModel, CustomerContext } from '@app/pages/master/customer/models/customer.model';
 import { AddressModel } from '@app/pages/master/customer/models/address.model';
 import { PackageModel } from '@app/pages/booking/package/models/package.model';
 import { RecipientModel } from '@app/pages/booking/package/models/recipient.model';
@@ -795,7 +795,7 @@ export class HttpService {
   }
 
   // Customer
-  customerGet(param: CustomerModel): Observable<any> {
+  customerGet(param: CustomerContext): Observable<any> {
     return this.commonApi.get('/customer/get?customer_id=' + param.customer_id) as Observable<any>;
   }
 
@@ -830,6 +830,10 @@ export class HttpService {
       status: param.status,
     };
     return this.commonApi.post('/customer/create', body) as Observable<any>;
+  }
+
+  customerGetAddress(param: CustomerContext): Observable<any> {
+    return this.commonApi.get('/address/get?customer_id=' + param.customer_id) as Observable<any>;
   }
 
   customerEditAddress(param: AddressModel): Observable<any> {
@@ -874,6 +878,13 @@ export class HttpService {
       used: param.used,
     };
     return this.commonApi.post('/address/create', body) as Observable<any>;
+  }
+
+  customerDeleteAddress(param: AddressModel): Observable<any> {
+    const body = {
+      address_id: param.address_id,
+    };
+    return this.commonApi.delete('/address/delete', body) as Observable<any>;
   }
 
   // Car

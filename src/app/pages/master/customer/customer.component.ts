@@ -1,6 +1,26 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { API, APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
-import { Subject, Subscription, debounceTime, finalize, takeUntil } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  Subscription,
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  finalize,
+  map,
+  of,
+  switchMap,
+  takeUntil,
+} from 'rxjs';
 import { CustomerService } from './customer.service';
 import {
   Pagination,
@@ -10,15 +30,16 @@ import {
   defaultParams,
 } from '@app/@shared/interfaces/pagination';
 import { HttpService } from '@app/services/http.service';
-import { ModalComponent, ModalConfig } from '@app/_metronic/partials';
+import { ModalComponent, ModalFullComponent, ModalConfig } from '@app/_metronic/partials';
 
-import { CustomerModel } from './models/customer.model';
+import { CustomerModel, CustomerContext } from './models/customer.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { untilDestroyed } from '@ngneat/until-destroy';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HandlerResponseService } from '@app/services/handler-response/handler-response.service';
 import { LocalService } from '@app/services/local.service';
 import { AddressModel } from './models/address.model';
+import Swal from 'sweetalert2';
 
 interface EventObject {
   event: string;
@@ -38,27 +59,37 @@ export class CustomerComponent implements OnInit {
   @ViewChild('tableAddress') tableAddress!: APIDefinition;
 
   public columns!: Columns[];
+  public columnsAddress!: Columns[];
+
   public data: any;
+  public dataLength!: number;
+  public dataAddress: any;
+  public dataLengthAddress!: number;
+  public dataSelectedCustomer: any;
+
+  public modelCustomer: any;
+
   public company: any;
   public business: any;
-  public dataLength!: number;
+
   public toggledRows = new Set<number>();
   public isCreate = false;
   public isCreateAddress = false;
+  public isDetails = false;
 
   public configuration: Config = { ...DefaultConfig };
   public configurationAddress: Config = { ...DefaultConfig };
 
   public pagination: Pagination = { ...defaultPagination };
   public params: Params = { ...defaultParams };
-  public paginationAddress: Pagination = { ...defaultPagination };
-  public paramsAddress: Params = { ...defaultParams };
 
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   form!: FormGroup;
   formAddress!: FormGroup;
   isLoading = false;
+  termCustomer!: string;
+
   get f() {
     return this.form.controls;
   }
@@ -86,8 +117,15 @@ export class CustomerComponent implements OnInit {
     dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
+  modalConfigListAddress: ModalConfig = {
+    modalTitle: 'List Customer Address',
+    // dismissButtonLabel: 'Submit',
+    // closeButtonLabel: 'Cancel',
+  };
+  addClass = 'modal-clean';
   @ViewChild('modal') private modalComponent!: ModalComponent;
   @ViewChild('modalAddress') private modalComponentAddress!: ModalComponent;
+  @ViewChild('modalListAddress') private modalComponentListAddress!: ModalFullComponent;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -109,16 +147,25 @@ export class CustomerComponent implements OnInit {
     this.business = this.localService.getBusiness();
 
     this.configuration.resizeColumn = false;
-    this.configuration.fixedColumnWidth = true;
-    this.configuration.showDetailsArrow = true;
-    this.configuration.detailsTemplate = true;
-    this.configuration.horizontalScroll = true;
+    this.configuration.fixedColumnWidth = false;
+    this.configuration.tableLayout.hover = true;
 
-    this.configurationAddress.resizeColumn = true;
-    this.configurationAddress.fixedColumnWidth = false;
+    this.configurationAddress.resizeColumn = false;
+    this.configurationAddress.fixedColumnWidth = true;
+    this.configurationAddress.paginationEnabled = false;
+    this.configurationAddress.rows = 100000;
 
     this.columns = [
       // { key: 'customer_id', title: 'No' },
+      { key: '', title: '' },
+      { key: 'name', title: 'Name' },
+      { key: 'telp', title: 'Telp' },
+      { key: 'address', title: 'Address' },
+      { key: 'created_by', title: 'Created  By' },
+      { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
+    ];
+
+    this.columnsAddress = [
       { key: 'name', title: 'Name' },
       { key: 'telp', title: 'Telp' },
       { key: 'address', title: 'Address' },
@@ -159,29 +206,86 @@ export class CustomerComponent implements OnInit {
     this.ngUnsubscribe.complete();
   }
 
-  onChangeAddress(event: Event): void {
+  async onChangeAddress(event: Event, customer: CustomerModel): Promise<void> {
+    const value = (event.target as HTMLInputElement).value;
+    console.log(value);
+    console.log(customer);
+
+    this.dataListAddress({ customer_id: customer.customer_id });
+
     this.tableAddress.apiEvent({
       type: API.onGlobalSearch,
-      value: (event.target as HTMLInputElement).value,
+      value: value,
     });
+
+    const dataAddress =
+      value === ''
+        ? this.dataAddress
+        : this.dataAddress.filter(
+            (val: any) =>
+              val.name?.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
+              val.telp?.toLowerCase().indexOf(value.toLowerCase()) > -1
+          );
+
+    console.log(dataAddress);
+    this.dataAddress = dataAddress;
+    this.dataLengthAddress = dataAddress.length;
   }
 
-  onChange(event: Event): void {
-    console.log(event);
+  // onChange(event: Event): void {
+  //   console.log(event);
 
-    const textSearch = (event.target as HTMLInputElement).value;
-    const params = {
-      limit: this.pagination.limit,
-      page: this.pagination.offset,
-      search: textSearch,
-      startDate: this.pagination.startDate,
-      endDate: this.pagination.endDate,
-    };
+  //   const textSearch = (event.target as HTMLInputElement).value;
 
-    this.dataList(params);
-  }
+  //   this.pagination.count = Math.ceil(this.dataLength / this.pagination.limit);
+  //   const params = {
+  //     limit: this.pagination.limit,
+  //     page: this.pagination.offset,
+  //     search: textSearch,
+  //     startDate: this.pagination.startDate,
+  //     endDate: this.pagination.endDate,
+  //   };
+  //   this.dataList(params);
+  // }
 
-  eventEmitted($event: { event: string; value: any }): void {
+  searchDataCustomer: any = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+      switchMap((term) =>
+        this.customerService
+          .list({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+            startDate: this.params.startDate,
+            endDate: this.params.endDate,
+          })
+          .pipe(
+            map((response: any) => {
+              if (response) {
+                console.log(this.modelCustomer);
+
+                const params = {
+                  limit: this.pagination.limit,
+                  page: this.pagination.offset,
+                  search: term,
+                  startDate: this.pagination.startDate,
+                  endDate: this.pagination.endDate,
+                };
+                this.dataList(params);
+              }
+            }),
+            catchError((err) => {
+              console.log(err);
+              // this.handlerResponseService.failedResponse(err);
+              return of([]);
+            })
+          )
+      )
+    );
+
+  eventEmitted($event: { event: any; value: any }): void {
     console.log('click table event');
     console.log($event.event);
     console.log($event.value);
@@ -191,13 +295,16 @@ export class CustomerComponent implements OnInit {
   }
 
   private parseEvent(obj: EventObject): void {
+    console.log(this.modelCustomer);
+
     this.pagination.limit = obj.value.limit ? obj.value.limit : this.pagination.limit;
     this.pagination.offset = obj.value.page ? obj.value.page : this.pagination.offset;
     this.pagination = { ...this.pagination };
     const params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
-      search: this.pagination.search,
+      search:
+        this.modelCustomer === '' || this.modelCustomer === undefined ? this.pagination.search : this.modelCustomer,
       startDate: this.pagination.startDate,
       endDate: this.pagination.endDate,
     }; // see https://github.com/typicode/json-server
@@ -213,10 +320,25 @@ export class CustomerComponent implements OnInit {
         this.dataLength = response.length;
         this.data = response.data;
         // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-        this.pagination.count =
-          this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
+        this.pagination.count = response.length;
         this.pagination = { ...this.pagination };
+        console.log(this.pagination);
+
         this.configuration.isLoading = false;
+        this.cdr.detectChanges();
+      });
+  }
+
+  private dataListAddress(params: CustomerContext): any {
+    this.configurationAddress.isLoading = true;
+    this.customerService
+      .get(params)
+      .pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
+      .subscribe((response: any) => {
+        this.dataAddress = response.data.addresses;
+        this.dataLengthAddress = this.dataAddress.length;
+
+        this.configurationAddress.isLoading = false;
         this.cdr.detectChanges();
       });
   }
@@ -263,30 +385,6 @@ export class CustomerComponent implements OnInit {
         }
       );
     this.unsubscribe.push(catSubscr);
-  }
-
-  // Address
-  eventEmittedAddress($event: { event: string; value: any }): void {
-    console.log('click table event');
-    console.log($event.event);
-    console.log($event.value);
-    if ($event.event === 'onPagination') {
-      this.parseEventAddress($event);
-    }
-  }
-
-  private parseEventAddress(obj: EventObject): void {
-    this.paginationAddress.limit = obj.value.limit ? obj.value.limit : this.paginationAddress.limit;
-    this.paginationAddress.offset = obj.value.page ? obj.value.page : this.paginationAddress.offset;
-    this.paginationAddress = { ...this.paginationAddress };
-    const params = {
-      limit: this.paginationAddress.limit,
-      page: this.paginationAddress.offset,
-      search: this.paginationAddress.search,
-      startDate: this.paginationAddress.startDate,
-      endDate: this.paginationAddress.endDate,
-    }; // see https://github.com/typicode/json-server
-    this.dataList(params);
   }
 
   async openModalEdit(event: CustomerModel) {
@@ -340,6 +438,17 @@ export class CustomerComponent implements OnInit {
     this.unsubscribe.push(catSubscr);
   }
 
+  // Address
+  async openModalListAddress(event: CustomerModel) {
+    console.log(event);
+    this.dataSelectedCustomer = event;
+
+    const id: CustomerContext = { customer_id: event.customer_id };
+    this.dataListAddress(id);
+
+    return await this.modalComponentListAddress.open();
+  }
+
   clearFormAddress() {
     this.formAddress.reset();
   }
@@ -367,13 +476,14 @@ export class CustomerComponent implements OnInit {
       )
       .subscribe(
         async (resp: any) => {
+          console.log(resp);
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
               duration: 10000,
             });
 
-            this.dataList(this.params);
+            this.dataListAddress({ customer_id: resp?.data?.customer_id });
             await this.modalComponentAddress.dismiss();
           } else {
             this.isLoading = false;
@@ -415,19 +525,20 @@ export class CustomerComponent implements OnInit {
       .editAddress(this.formAddress.value)
       .pipe(
         finalize(() => {
-          this.form.markAsPristine();
+          this.formAddress.markAsPristine();
           this.isLoading = false;
         })
       )
       .subscribe(
         async (resp: any) => {
+          console.log(resp);
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
               duration: 10000,
             });
 
-            this.dataList(this.params);
+            this.dataListAddress({ customer_id: resp?.data?.customer_id });
             await this.modalComponentAddress.dismiss();
           } else {
             this.isLoading = false;
@@ -440,5 +551,57 @@ export class CustomerComponent implements OnInit {
         }
       );
     this.unsubscribe.push(catSubscr);
+  }
+
+  async openModalDeleteAddress(event: AddressModel) {
+    this.formAddress.patchValue(event);
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.dataAddressDelete();
+      }
+    });
+  }
+
+  dataAddressDelete() {
+    console.log(this.formAddress.value);
+    this.isLoading = true;
+    const addressSubscr = this.customerService
+      .deleteAddress(this.formAddress.value)
+      .pipe(
+        finalize(() => {
+          this.formAddress.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponentListAddress.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+    this.unsubscribe.push(addressSubscr);
   }
 }

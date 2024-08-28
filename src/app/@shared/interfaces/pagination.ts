@@ -25,12 +25,12 @@ export const defaultPagination: Pagination = {
 };
 
 // Param
-export class Params {
-  limit = 10;
-  page = 1;
-  search = '';
-  startDate = '';
-  endDate = '';
+export interface Params {
+  limit: any;
+  page: any;
+  search: string;
+  startDate: any;
+  endDate: any;
 }
 export const defaultParams: Params = {
   limit: 10,

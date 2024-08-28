@@ -404,6 +404,37 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     return await this.modalComponent.open();
   }
 
+  async openModalCancel(event: ScheduleModel) {
+    this.formatDateValue(event?.service_date);
+    this.modelCar = event?.car;
+
+    const valueSendDate = new Date(
+      Date.UTC(this.bookdate.year, this.bookdate.month - 1, this.bookdate.day)
+    ).toISOString();
+
+    this.form.patchValue(event);
+
+    this.form.patchValue({
+      car_id: this.modelCar?.car_id,
+      service_date: valueSendDate,
+      status: 'Cancel',
+    });
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You can revert it back by edit service in history!',
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#D8A122',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, Cancel it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.dataEdit();
+      }
+    });
+  }
+
   dataEdit() {
     const valueSendDate = new Date(
       Date.UTC(this.bookdate.year, this.bookdate.month - 1, this.bookdate.day)
@@ -446,37 +477,6 @@ export class ScheduleComponent implements OnInit, OnDestroy {
         }
       );
     this.unsubscribe.push(Subscr);
-  }
-
-  async openModalCancel(event: ScheduleModel) {
-    this.formatDateValue(event?.service_date);
-    this.modelCar = event?.car;
-
-    const valueSendDate = new Date(
-      Date.UTC(this.bookdate.year, this.bookdate.month - 1, this.bookdate.day)
-    ).toISOString();
-
-    this.form.patchValue(event);
-
-    this.form.patchValue({
-      car_id: this.modelCar?.car_id,
-      service_date: valueSendDate,
-      status: 'Cancel',
-    });
-
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'You can revert it back by edit service in history!',
-      icon: 'info',
-      showCancelButton: true,
-      confirmButtonColor: '#D8A122',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, Cancel it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.dataEdit();
-      }
-    });
   }
 
   async openModalDelete(event: ScheduleModel) {

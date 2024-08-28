@@ -41,6 +41,7 @@ import { CarService } from '@app/pages/master/car/car.service';
 import * as moment from 'moment';
 import { Utils } from '@app/@shared';
 import { GoSendModel } from './models/gosend';
+import Swal from 'sweetalert2';
 
 interface EventObject {
   event: string;
@@ -355,7 +356,7 @@ export class PackageComponent implements OnInit, OnDestroy {
 
     this.columns = [
       // { key: 'package_id', title: 'No' },
-      { key: 'resi_number', title: 'Number Resi' },
+      { key: 'resi_number', title: 'Number Resi', pinned: true },
       { key: 'level', title: 'Level' },
       { key: 'book_date', title: 'Send Date' },
       { key: 'sender_id', title: 'Sender' },
@@ -927,28 +928,28 @@ export class PackageComponent implements OnInit, OnDestroy {
 
     this.formSender.patchValue({
       customer_id: this.modelCustomer?.customer_id,
-      name: this.selectedAddress?.name,
-      address: this.selectedAddress?.address,
-      telp: this.selectedAddress?.telp,
-      defaults: this.selectedAddress?.default,
-      longitude: this.selectedAddress?.longitude,
-      latitude: this.selectedAddress?.latitude,
-      zoom: this.selectedAddress?.zoom,
-      description: this.selectedAddress?.description,
-      used: this.selectedAddress?.used,
+      name: this.modelAddressId?.name,
+      address: this.modelAddressId?.address,
+      telp: this.modelAddressId?.telp,
+      defaults: this.modelAddressId?.default,
+      longitude: this.modelAddressId?.longitude,
+      latitude: this.modelAddressId?.latitude,
+      zoom: this.modelAddressId?.zoom,
+      description: this.modelAddressId?.description,
+      used: this.modelAddressId?.used,
     });
 
     this.formRecipient.patchValue({
       customer_id: this.isDestinationDifferent ? this.modelRecipient?.customer_id : this.modelCustomer?.customer_id,
-      name: this.selectedAddressRecipient?.name,
-      address: this.selectedAddressRecipient?.address,
-      telp: this.selectedAddressRecipient?.telp,
-      defaults: this.selectedAddressRecipient?.default,
-      longitude: this.selectedAddressRecipient?.longitude,
-      latitude: this.selectedAddressRecipient?.latitude,
-      zoom: this.selectedAddressRecipient?.zoom,
-      description: this.selectedAddressRecipient?.description,
-      used: this.selectedAddressRecipient?.used,
+      name: this.modelAddressIdRecipient?.name,
+      address: this.modelAddressIdRecipient?.address,
+      telp: this.modelAddressIdRecipient?.telp,
+      defaults: this.modelAddressIdRecipient?.default,
+      longitude: this.modelAddressIdRecipient?.longitude,
+      latitude: this.modelAddressIdRecipient?.latitude,
+      zoom: this.modelAddressIdRecipient?.zoom,
+      description: this.modelAddressIdRecipient?.description,
+      used: this.modelAddressIdRecipient?.used,
     });
 
     // create send data to sender, recipient, package
@@ -1091,30 +1092,30 @@ export class PackageComponent implements OnInit, OnDestroy {
 
     this.formSender.patchValue({
       customer_id: this.modelCustomer?.customer_id,
-      name: this.selectedAddress?.name,
-      address: this.selectedAddress?.address,
-      telp: this.selectedAddress?.telp,
-      defaults: this.selectedAddress?.default,
-      longitude: this.selectedAddress?.longitude,
-      latitude: this.selectedAddress?.latitude,
-      zoom: this.selectedAddress?.zoom,
-      description: this.selectedAddress?.description,
-      used: this.selectedAddress?.used,
+      name: this.modelAddressId?.name,
+      address: this.modelAddressId?.address,
+      telp: this.modelAddressId?.telp,
+      defaults: this.modelAddressId?.default,
+      longitude: this.modelAddressId?.longitude,
+      latitude: this.modelAddressId?.latitude,
+      zoom: this.modelAddressId?.zoom,
+      description: this.modelAddressId?.description,
+      used: this.modelAddressId?.used,
     });
 
     this.formRecipient.patchValue({
       customer_id: this.isDestinationDifferent ? this.modelRecipient?.customer_id : this.modelCustomer?.customer_id,
-      name: this.selectedAddressRecipient?.name,
-      address: this.selectedAddressRecipient?.address,
-      telp: this.selectedAddressRecipient?.telp,
-      defaults: this.selectedAddressRecipient?.default,
-      longitude: this.selectedAddressRecipient?.longitude,
-      latitude: this.selectedAddressRecipient?.latitude,
-      zoom: this.selectedAddressRecipient?.zoom,
-      description: this.selectedAddressRecipient?.description,
-      used: this.selectedAddressRecipient?.used,
+      name: this.modelAddressIdRecipient?.name,
+      address: this.modelAddressIdRecipient?.address,
+      telp: this.modelAddressIdRecipient?.telp,
+      defaults: this.modelAddressIdRecipient?.default,
+      longitude: this.modelAddressIdRecipient?.longitude,
+      latitude: this.modelAddressIdRecipient?.latitude,
+      zoom: this.modelAddressIdRecipient?.zoom,
+      description: this.modelAddressIdRecipient?.description,
+      used: this.modelAddressIdRecipient?.used,
     });
-    console.log(this.selectedAddressRecipient);
+    console.log(this.modelAddressIdRecipient);
     console.log(this.formRecipient.value);
 
     // edit send data to sender, recipient, package
@@ -1202,7 +1203,56 @@ export class PackageComponent implements OnInit, OnDestroy {
     window.open('#/booking/package/transaction/printpackage', '_blank');
   }
 
-  openModalCancel(event: PackageModel) {}
+  async openModalCancel(event: PackageModel) {
+    this.form.patchValue(event);
+
+    this.form.patchValue({
+      status_package: 'Cancel',
+    });
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You can revert it back by edit service in others menu!',
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#D8A122',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, Cancel it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // edit package
+        this.isLoading = true;
+        this.packageService
+          .patch(this.form.value)
+          .pipe(
+            finalize(() => {
+              this.form.markAsPristine();
+              this.isLoading = false;
+            })
+          )
+          .subscribe(
+            async (resp: any) => {
+              if (resp) {
+                this.snackbar.open(resp.message, '', {
+                  panelClass: 'snackbar-success',
+                  duration: 10000,
+                });
+
+                this.dataList(this.params);
+                await this.modalComponent.dismiss();
+              } else {
+                this.isLoading = false;
+              }
+            },
+            (error: any) => {
+              console.log(error);
+              this.isLoading = false;
+              this.handlerResponseService.failedResponse(error);
+            }
+          );
+      }
+    });
+  }
 
   openModalDelete(event: PackageModel) {}
 

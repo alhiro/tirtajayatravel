@@ -8,14 +8,29 @@ import { CustomerComponent } from './customer.component';
 import { SharedModule } from '../../../_metronic/shared/shared.module';
 import { DropdownMenusModule } from '../../../_metronic/partials/content/dropdown-menus/dropdown-menus.module';
 import { ModalsModule } from '@app/_metronic/partials';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import {
+  NgbDatepicker,
+  NgbDropdownModule,
+  NgbTimepickerModule,
+  NgbTooltipModule,
+  NgbModule,
+} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [CustomerComponent],
   imports: [
     // Common modules
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     TranslateModule,
+    NgbDropdownModule,
+    NgbModule,
+    NgbDatepicker,
+    NgbTimepickerModule,
+    NgbTooltipModule,
     // Lazy loading
     CustomerRoutingModule,
     // Custom modules
@@ -23,7 +38,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     DropdownMenusModule,
     TableModule,
     ModalsModule,
-    ReactiveFormsModule,
   ],
 })
 export class CustomerModule {}

@@ -1,6 +1,9 @@
+import { CustomerModel } from './customer.model';
+
 export class AddressModel {
   address_id!: number;
   customer_id!: number;
+  customer!: CustomerModel;
   name!: string;
   address!: string;
   telp!: string;

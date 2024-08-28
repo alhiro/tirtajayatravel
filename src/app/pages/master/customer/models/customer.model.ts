@@ -1,3 +1,7 @@
+export class CustomerContext {
+  customer_id!: number;
+}
+
 export class CustomerModel {
   customer_id!: number;
   business_id!: number;

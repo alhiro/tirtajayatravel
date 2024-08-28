@@ -39,6 +39,7 @@ import { PassengerModel } from './models/passenger.model';
 import { Utils, padNumber } from '@app/@shared';
 import * as moment from 'moment';
 import { GoSendModel } from '../package/models/gosend';
+import Swal from 'sweetalert2';
 
 interface EventObject {
   event: string;
@@ -348,7 +349,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
     this.columns = [
       // { key: 'passenger_id', title: 'No' },
-      { key: 'resi_number', title: 'Number Resi' },
+      { key: 'resi_number', title: 'Number Resi', pinned: true },
       { key: 'book_date', title: 'Book Date' },
       { key: 'tariff', title: 'Price' },
       { key: 'status', title: 'Status Payment' },
@@ -908,28 +909,28 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
     this.formWaybill.patchValue({
       customer_id: this.modelCustomer?.customer_id,
-      name: this.selectedAddress?.name,
-      address: this.selectedAddress?.address,
-      telp: this.selectedAddress?.telp,
-      defaults: this.selectedAddress?.default,
-      longitude: this.selectedAddress?.longitude,
-      latitude: this.selectedAddress?.latitude,
-      zoom: this.selectedAddress?.zoom,
-      description: this.selectedAddress?.description,
-      used: this.selectedAddress?.used,
+      name: this.modelAddressId?.name,
+      address: this.modelAddressId?.address,
+      telp: this.modelAddressId?.telp,
+      defaults: this.modelAddressId?.default,
+      longitude: this.modelAddressId?.longitude,
+      latitude: this.modelAddressId?.latitude,
+      zoom: this.modelAddressId?.zoom,
+      description: this.modelAddressId?.description,
+      used: this.modelAddressId?.used,
     });
 
     this.formDestination.patchValue({
       customer_id: this.isDestinationDifferent ? this.modelDestination?.customer_id : this.modelCustomer?.customer_id,
-      name: this.selectedAddressDestination?.name,
-      address: this.selectedAddressDestination?.address,
-      telp: this.selectedAddressDestination?.telp,
-      defaults: this.selectedAddressDestination?.default,
-      longitude: this.selectedAddressDestination?.longitude,
-      latitude: this.selectedAddressDestination?.latitude,
-      zoom: this.selectedAddressDestination?.zoom,
-      description: this.selectedAddressDestination?.description,
-      used: this.selectedAddressDestination?.used,
+      name: this.modelAddressIdDestination?.name,
+      address: this.modelAddressIdDestination?.address,
+      telp: this.modelAddressIdDestination?.telp,
+      defaults: this.modelAddressIdDestination?.default,
+      longitude: this.modelAddressIdDestination?.longitude,
+      latitude: this.modelAddressIdDestination?.latitude,
+      zoom: this.modelAddressIdDestination?.zoom,
+      description: this.modelAddressIdDestination?.description,
+      used: this.modelAddressIdDestination?.used,
     });
 
     // create waybill & destination & edit passenger
@@ -1052,28 +1053,28 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
     this.formWaybill.patchValue({
       customer_id: this.modelCustomer?.customer_id,
-      name: this.selectedAddress?.name,
-      address: this.selectedAddress?.address,
-      telp: this.selectedAddress?.telp,
-      defaults: this.selectedAddress?.default,
-      longitude: this.selectedAddress?.longitude,
-      latitude: this.selectedAddress?.latitude,
-      zoom: this.selectedAddress?.zoom,
-      description: this.selectedAddress?.description,
-      used: this.selectedAddress?.used,
+      name: this.modelAddressId?.name,
+      address: this.modelAddressId?.address,
+      telp: this.modelAddressId?.telp,
+      defaults: this.modelAddressId?.default,
+      longitude: this.modelAddressId?.longitude,
+      latitude: this.modelAddressId?.latitude,
+      zoom: this.modelAddressId?.zoom,
+      description: this.modelAddressId?.description,
+      used: this.modelAddressId?.used,
     });
 
     this.formDestination.patchValue({
       customer_id: this.isDestinationDifferent ? this.modelDestination?.customer_id : this.modelCustomer?.customer_id,
-      name: this.selectedAddressDestination?.name,
-      address: this.selectedAddressDestination?.address,
-      telp: this.selectedAddressDestination?.telp,
-      defaults: this.selectedAddressDestination?.default,
-      longitude: this.selectedAddressDestination?.longitude,
-      latitude: this.selectedAddressDestination?.latitude,
-      zoom: this.selectedAddressDestination?.zoom,
-      description: this.selectedAddressDestination?.description,
-      used: this.selectedAddressDestination?.used,
+      name: this.modelAddressIdDestination?.name,
+      address: this.modelAddressIdDestination?.address,
+      telp: this.modelAddressIdDestination?.telp,
+      defaults: this.modelAddressIdDestination?.default,
+      longitude: this.modelAddressIdDestination?.longitude,
+      latitude: this.modelAddressIdDestination?.latitude,
+      zoom: this.modelAddressIdDestination?.zoom,
+      description: this.modelAddressIdDestination?.description,
+      used: this.modelAddressIdDestination?.used,
     });
 
     // edit waybill & destination & edit passenger
@@ -1160,7 +1161,56 @@ export class PassengerComponent implements OnInit, OnDestroy {
     // window.open('#/booking/passenger/transaction/printpassenger', '_blank');
   }
 
-  openModalCancel(event: PassengerModel) {}
+  async openModalCancel(event: PassengerModel) {
+    this.form.patchValue(event);
+
+    this.form.patchValue({
+      status_passenger: 'Cancel',
+    });
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You can revert it back by edit service in others menu!',
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#D8A122',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, Cancel it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // edit passenger
+        this.isLoading = true;
+        this.passengerService
+          .patch(this.form.value)
+          .pipe(
+            finalize(() => {
+              this.form.markAsPristine();
+              this.isLoading = false;
+            })
+          )
+          .subscribe(
+            async (resp: any) => {
+              if (resp) {
+                this.snackbar.open(resp.message, '', {
+                  panelClass: 'snackbar-success',
+                  duration: 10000,
+                });
+
+                this.dataList(this.params);
+                await this.modalComponent.dismiss();
+              } else {
+                this.isLoading = false;
+              }
+            },
+            (error: any) => {
+              console.log(error);
+              this.isLoading = false;
+              this.handlerResponseService.failedResponse(error);
+            }
+          );
+      }
+    });
+  }
 
   openModalDelete(event: PassengerModel) {}
 

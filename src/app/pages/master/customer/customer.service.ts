@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpService } from '@app/services/http.service';
 import { Observable, map } from 'rxjs';
 import { PaginationContext } from '@app/@shared/interfaces/pagination';
-import { CustomerModel } from './models/customer.model';
+import { CustomerModel, CustomerContext } from './models/customer.model';
 import { AddressModel } from './models/address.model';
 
 @Injectable({
@@ -11,7 +11,7 @@ import { AddressModel } from './models/address.model';
 export class CustomerService {
   constructor(private httpService: HttpService) {}
 
-  get(context: CustomerModel): Observable<CustomerModel> {
+  get(context: CustomerContext): Observable<CustomerContext> {
     return this.httpService.customerGet(context).pipe(
       map((result) => {
         if (!result) {
@@ -56,6 +56,17 @@ export class CustomerService {
   }
 
   // Address
+  getAddress(context: CustomerContext): Observable<CustomerContext> {
+    return this.httpService.customerGetAddress(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   editAddress(context: AddressModel): Observable<AddressModel> {
     return this.httpService.customerEditAddress(context).pipe(
       map((result) => {
@@ -69,6 +80,17 @@ export class CustomerService {
 
   createAddress(context: AddressModel): Observable<AddressModel> {
     return this.httpService.customerCreateAddress(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
+  deleteAddress(context: AddressModel): Observable<AddressModel> {
+    return this.httpService.customerDeleteAddress(context).pipe(
       map((result) => {
         if (!result) {
           return result;
