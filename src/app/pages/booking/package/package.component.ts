@@ -105,10 +105,12 @@ export class PackageComponent implements OnInit, OnDestroy {
   public modelEmployee: any;
   public modelCar: any;
   public searching = false;
+  public searchingSender = false;
   public searchingRecipient = false;
   public searchingEmployee = false;
   public searchingCar = false;
   public searchFailed = false;
+  public searchFailedSender = false;
   public searchFailedRecipient = false;
   public searchFailedEmployee = false;
   public searchFailedCar = false;
@@ -356,7 +358,7 @@ export class PackageComponent implements OnInit, OnDestroy {
 
     this.columns = [
       // { key: 'package_id', title: 'No' },
-      { key: 'resi_number', title: 'Number Resi', pinned: true },
+      { key: 'resi_number', title: 'Number Resi' },
       { key: 'level', title: 'Level' },
       { key: 'book_date', title: 'Send Date' },
       { key: 'sender_id', title: 'Sender' },
@@ -811,17 +813,36 @@ export class PackageComponent implements OnInit, OnDestroy {
     const inputFocus$ = this.focusSender$;
 
     return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-      map((term: any) => {
-        return term === ''
-          ? this.modelCustomer?.addresses
-          : this.modelCustomer?.addresses
-              .filter(
-                (val: any) =>
-                  val.name?.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
-                  val.telp?.toLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 10);
-      })
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => (this.searchingSender = true)),
+      switchMap((term) =>
+        this.customerService
+          .getAddressList({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+            customer_id: this.modelCustomer?.customer_id,
+          })
+          .pipe(
+            tap(() => (this.searchFailedSender = false)),
+            map((response: any) => {
+              if (response) {
+                tap(() => (this.searchingSender = false));
+                return response.data.filter(
+                  (val: any) =>
+                    val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
+                );
+              }
+            }),
+            catchError(() => {
+              this.searchFailedSender = true;
+              return of([]);
+            })
+          )
+      ),
+      tap(() => (this.searchingSender = false))
     );
   };
 
@@ -835,17 +856,38 @@ export class PackageComponent implements OnInit, OnDestroy {
     const inputFocus$ = this.focusRecipient$;
 
     return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-      map((term: any) => {
-        return term === ''
-          ? this.dataRecipientAddresses()
-          : this.dataRecipientAddresses()
-              .filter(
-                (val: any) =>
-                  val.name?.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
-                  val.telp?.toLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 10);
-      })
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => (this.searchingRecipient = true)),
+      switchMap((term) =>
+        this.customerService
+          .getAddressList({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+            customer_id: this.isDestinationDifferent
+              ? this.modelRecipient?.customer_id
+              : this.modelCustomer?.customer_id,
+          })
+          .pipe(
+            tap(() => (this.searchFailedRecipient = false)),
+            map((response: any) => {
+              if (response) {
+                tap(() => (this.searchingRecipient = false));
+                return response.data.filter(
+                  (val: any) =>
+                    val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
+                );
+              }
+            }),
+            catchError(() => {
+              this.searchFailedRecipient = true;
+              return of([]);
+            })
+          )
+      ),
+      tap(() => (this.searchingRecipient = false))
     );
   };
 
@@ -1293,12 +1335,6 @@ export class PackageComponent implements OnInit, OnDestroy {
             });
 
             this.dataList(this.params);
-            this.modelCustomer = '';
-            this.modelAddressId = '';
-            this.modelRecipient = '';
-            this.modelAddressIdRecipient = '';
-
-            await this.modalComponent.dismiss();
             await this.modalComponentAddress.dismiss();
           } else {
             this.isLoading = false;

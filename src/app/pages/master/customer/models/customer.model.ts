@@ -1,4 +1,11 @@
 export class CustomerContext {
+  limit: any;
+  page: any;
+  search: any;
+  customer_id!: number;
+}
+
+export class CustomerIdContext {
   customer_id!: number;
 }
 

@@ -8,7 +8,7 @@ import { CategoryModel } from '@app/pages/master/category/models/category.model'
 import { SubCategoryModel } from '@app/pages/master/sub-category/models/subcategory.model';
 import { EmployeeyModel } from '@app/pages/master/employee/models/employee.model';
 import { CarModel } from '@app/pages/master/car/models/car.model';
-import { CustomerModel, CustomerContext } from '@app/pages/master/customer/models/customer.model';
+import { CustomerModel, CustomerContext, CustomerIdContext } from '@app/pages/master/customer/models/customer.model';
 import { AddressModel } from '@app/pages/master/customer/models/address.model';
 import { PackageModel } from '@app/pages/booking/package/models/package.model';
 import { RecipientModel } from '@app/pages/booking/package/models/recipient.model';
@@ -795,7 +795,7 @@ export class HttpService {
   }
 
   // Customer
-  customerGet(param: CustomerContext): Observable<any> {
+  customerGet(param: CustomerIdContext): Observable<any> {
     return this.commonApi.get('/customer/get?customer_id=' + param.customer_id) as Observable<any>;
   }
 
@@ -832,8 +832,22 @@ export class HttpService {
     return this.commonApi.post('/customer/create', body) as Observable<any>;
   }
 
-  customerGetAddress(param: CustomerContext): Observable<any> {
+  // Customer address
+  customerGetAddress(param: CustomerIdContext): Observable<any> {
     return this.commonApi.get('/address/get?customer_id=' + param.customer_id) as Observable<any>;
+  }
+
+  customerListAddress(param: CustomerContext): Observable<any> {
+    return this.commonApi.get(
+      '/address/list?limit=' +
+        param.limit +
+        '&page=' +
+        param.page +
+        '&search=' +
+        param.search +
+        '&customer_id=' +
+        param.customer_id
+    ) as Observable<any>;
   }
 
   customerEditAddress(param: AddressModel): Observable<any> {

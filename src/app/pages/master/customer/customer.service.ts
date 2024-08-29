@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpService } from '@app/services/http.service';
 import { Observable, map } from 'rxjs';
 import { PaginationContext } from '@app/@shared/interfaces/pagination';
-import { CustomerModel, CustomerContext } from './models/customer.model';
+import { CustomerModel, CustomerContext, CustomerIdContext } from './models/customer.model';
 import { AddressModel } from './models/address.model';
 
 @Injectable({
@@ -11,7 +11,7 @@ import { AddressModel } from './models/address.model';
 export class CustomerService {
   constructor(private httpService: HttpService) {}
 
-  get(context: CustomerContext): Observable<CustomerContext> {
+  get(context: CustomerIdContext): Observable<CustomerContext> {
     return this.httpService.customerGet(context).pipe(
       map((result) => {
         if (!result) {
@@ -56,6 +56,17 @@ export class CustomerService {
   }
 
   // Address
+  getAddressList(context: CustomerContext): Observable<any> {
+    return this.httpService.customerListAddress(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   getAddress(context: CustomerContext): Observable<CustomerContext> {
     return this.httpService.customerGetAddress(context).pipe(
       map((result) => {

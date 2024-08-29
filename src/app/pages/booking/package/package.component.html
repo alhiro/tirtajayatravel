@@ -761,6 +761,12 @@
                   {{ r.name }} - {{ r.address }} - {{ r.telp }}
                 </ng-template>
 
+                @if (searchingSender) {
+                <small class="form-text text-muted">Searching. Please wait...</small>
+                } @if (searchFailedSender) {
+                <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+                }
+
                 <div
                   class="btn btn-primary btn-sm py-1 fs-8 cursor-pointer my-3"
                   (click)="openModalNewAddress(modelCustomer)"
@@ -960,6 +966,12 @@
                 <ng-template #rt let-r="result" let-t="term">
                   {{ r.name }} - {{ r.address }} - {{ r.telp }}
                 </ng-template>
+
+                @if (searchingRecipient) {
+                <small class="form-text text-muted">Searching. Please wait...</small>
+                } @if (searchFailedRecipient) {
+                <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+                }
 
                 <div
                   class="btn btn-primary btn-sm py-1 fs-8 cursor-pointer my-3"

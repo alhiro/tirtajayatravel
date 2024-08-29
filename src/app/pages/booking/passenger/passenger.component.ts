@@ -104,10 +104,12 @@ export class PassengerComponent implements OnInit, OnDestroy {
   public modelEmployee: any;
   public modelCar: any;
   public searching = false;
+  public searchingSender = false;
   public searchingDestination = false;
   public searchingEmployee = false;
   public searchingCar = false;
   public searchFailed = false;
+  public searchFailedSender = false;
   public searchFailedDestination = false;
   public searchFailedEmployee = false;
   public searchFailedCar = false;
@@ -349,7 +351,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
     this.columns = [
       // { key: 'passenger_id', title: 'No' },
-      { key: 'resi_number', title: 'Number Resi', pinned: true },
+      { key: 'resi_number', title: 'Number Resi' },
       { key: 'book_date', title: 'Book Date' },
       { key: 'tariff', title: 'Price' },
       { key: 'status', title: 'Status Payment' },
@@ -791,17 +793,36 @@ export class PassengerComponent implements OnInit, OnDestroy {
     const inputFocus$ = this.focusSender$;
 
     return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-      map((term: any) => {
-        return term === ''
-          ? this.modelCustomer?.addresses
-          : this.modelCustomer?.addresses
-              .filter(
-                (val: any) =>
-                  val.name?.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
-                  val.telp?.toLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 10);
-      })
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => (this.searchingSender = true)),
+      switchMap((term) =>
+        this.customerService
+          .getAddressList({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+            customer_id: this.modelCustomer?.customer_id,
+          })
+          .pipe(
+            tap(() => (this.searchFailedSender = false)),
+            map((response: any) => {
+              if (response) {
+                tap(() => (this.searchingSender = false));
+                return response.data.filter(
+                  (val: any) =>
+                    val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
+                );
+              }
+            }),
+            catchError(() => {
+              this.searchFailedSender = true;
+              return of([]);
+            })
+          )
+      ),
+      tap(() => (this.searchingSender = false))
     );
   };
 
@@ -815,17 +836,38 @@ export class PassengerComponent implements OnInit, OnDestroy {
     const inputFocus$ = this.focusDestination$;
 
     return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-      map((term: any) => {
-        return term === ''
-          ? this.dataDestinationAddresses()
-          : this.dataDestinationAddresses()
-              .filter(
-                (val: any) =>
-                  val.name?.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
-                  val.telp?.toLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 10);
-      })
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => (this.searchingDestination = true)),
+      switchMap((term) =>
+        this.customerService
+          .getAddressList({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+            customer_id: this.isDestinationDifferent
+              ? this.modelDestination?.customer_id
+              : this.modelCustomer?.customer_id,
+          })
+          .pipe(
+            tap(() => (this.searchFailedDestination = false)),
+            map((response: any) => {
+              if (response) {
+                tap(() => (this.searchingDestination = false));
+                return response.data.filter(
+                  (val: any) =>
+                    val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
+                );
+              }
+            }),
+            catchError(() => {
+              this.searchFailedDestination = true;
+              return of([]);
+            })
+          )
+      ),
+      tap(() => (this.searchingDestination = false))
     );
   };
 
@@ -1251,12 +1293,6 @@ export class PassengerComponent implements OnInit, OnDestroy {
             });
 
             this.dataList(this.params);
-            this.modelCustomer = '';
-            this.modelAddressId = '';
-            this.modelDestination = '';
-            this.modelAddressIdDestination = '';
-
-            await this.modalComponent.dismiss();
             await this.modalComponentAddress.dismiss();
           } else {
             this.isLoading = false;

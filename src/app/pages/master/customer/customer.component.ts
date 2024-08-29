@@ -32,7 +32,7 @@ import {
 import { HttpService } from '@app/services/http.service';
 import { ModalComponent, ModalFullComponent, ModalConfig } from '@app/_metronic/partials';
 
-import { CustomerModel, CustomerContext } from './models/customer.model';
+import { CustomerModel, CustomerContext, CustomerIdContext } from './models/customer.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { untilDestroyed } from '@ngneat/until-destroy';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -329,7 +329,7 @@ export class CustomerComponent implements OnInit {
       });
   }
 
-  private dataListAddress(params: CustomerContext): any {
+  private dataListAddress(params: CustomerIdContext): any {
     this.configurationAddress.isLoading = true;
     this.customerService
       .get(params)
@@ -443,7 +443,7 @@ export class CustomerComponent implements OnInit {
     console.log(event);
     this.dataSelectedCustomer = event;
 
-    const id: CustomerContext = { customer_id: event.customer_id };
+    const id: CustomerIdContext = { customer_id: event.customer_id };
     this.dataListAddress(id);
 
     return await this.modalComponentListAddress.open();
