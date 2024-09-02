@@ -339,7 +339,7 @@ export class CashoutComponent implements OnInit {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -399,7 +399,7 @@ export class CashoutComponent implements OnInit {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -454,7 +454,7 @@ export class CashoutComponent implements OnInit {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);

@@ -88,9 +88,9 @@ export class PrintListPassengerComponent implements OnInit, OnDestroy {
         existingGroup.items.push({
           passenger_id: item.passenger_id,
           waybill_id: item.waybill_id,
-          waybill: item.waybill,
+          waybills: item.waybills,
           destination_id: item.destination_id,
-          destination: item.destination,
+          destinations: item.destinations,
           city_id: item.city_id,
           city: item.city,
           employee_id: item.employee_id,
@@ -127,9 +127,9 @@ export class PrintListPassengerComponent implements OnInit, OnDestroy {
             {
               passenger_id: item.passenger_id,
               waybill_id: item.waybill_id,
-              waybill: item.waybill,
+              waybills: item.waybills,
               destination_id: item.destination_id,
-              destination: item.destination,
+              destinations: item.destinations,
               city_id: item.city_id,
               city: item.city,
               employee_id: item.employee_id,

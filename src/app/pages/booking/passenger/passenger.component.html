@@ -152,28 +152,40 @@
               <td>
                 <span class="text-gray-900 d-block">{{ row.total_passenger | number }}</span>
               </td>
-              <!-- <td>
-                    <span class="text-gray-900 d-block">
-                      {{ row.waybill?.name }}
-                    </span>
-                  </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.waybill?.name }} <br />
-                  {{ row.waybill?.address }}
+                  {{ row.waybill?.name }}
                 </span>
               </td>
               <td>
+                @for (value of row.waybills; track value) {
                 <span class="text-gray-900 d-block">
-                  {{ row.destination?.name }} <br />
-                  {{ row.destination?.address }}
+                  <ul>
+                    <li>
+                      {{ value?.name }} <br />
+                      {{ value?.address }}
+                    </li>
+                  </ul>
                 </span>
+                }
+              </td>
+              <td>
+                @for (value of row.destinations; track value) {
+                <span class="text-gray-900 d-block">
+                  <ul>
+                    <li>
+                      {{ value?.name }} <br />
+                      {{ value?.address }}
+                    </li>
+                  </ul>
+                </span>
+                }
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
+                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
               </td>
               <td>
                 <span class="badge badge-light-primary">{{ row.status_passenger }}</span>
@@ -316,28 +328,40 @@
               <td>
                 <span class="text-gray-900 d-block">{{ row.total_passenger | number }}</span>
               </td>
-              <!-- <td>
-                    <span class="text-gray-900 d-block">
-                      {{ row.waybill?.name }}
-                    </span>
-                  </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.waybill?.name }} <br />
-                  {{ row.waybill?.address }}
+                  {{ row.waybill?.name }}
                 </span>
               </td>
               <td>
+                @for (value of row.waybills; track value) {
                 <span class="text-gray-900 d-block">
-                  {{ row.destination?.name }} <br />
-                  {{ row.destination?.address }}
+                  <ul class="numbering">
+                    <li>
+                      {{ value?.name }} <br />
+                      {{ value?.address }}
+                    </li>
+                  </ul>
                 </span>
+                }
+              </td>
+              <td>
+                @for (value of row.destinations; track value) {
+                <span class="text-gray-900 d-block">
+                  <ul class="numbering">
+                    <li>
+                      {{ value?.name }} <br />
+                      {{ value?.address }}
+                    </li>
+                  </ul>
+                </span>
+                }
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
+                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
               </td>
               @if (!delivery) {
               <td class="text-end">
@@ -501,28 +525,40 @@
               <td>
                 <span class="text-gray-900 d-block">{{ row.total_passenger | number }}</span>
               </td>
-              <!-- <td>
-                  <span class="text-gray-900 d-block">
-                    {{ row.waybill?.name }}
-                  </span>
-                </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.waybill?.name }} <br />
-                  {{ row.waybill?.address }}
+                  {{ row.waybill?.name }}
                 </span>
               </td>
               <td>
+                @for (value of row.waybills; track value) {
                 <span class="text-gray-900 d-block">
-                  {{ row.destination?.name }} <br />
-                  {{ row.destination?.address }}
+                  <ul class="numbering">
+                    <li>
+                      {{ value?.name }} <br />
+                      {{ value?.address }}
+                    </li>
+                  </ul>
                 </span>
+                }
+              </td>
+              <td>
+                @for (value of row.destinations; track value) {
+                <span class="text-gray-900 d-block">
+                  <ul class="numbering">
+                    <li>
+                      {{ value?.name }} <br />
+                      {{ value?.address }}
+                    </li>
+                  </ul>
+                </span>
+                }
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
+                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
               </td>
               <td class="text-end">
                 <a
@@ -581,28 +617,40 @@
               <td>
                 <span class="text-gray-900 d-block">{{ row.total_passenger | number }}</span>
               </td>
-              <!-- <td>
-                    <span class="text-gray-900 d-block">
-                      {{ row.waybill?.name }}
-                    </span>
-                  </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.waybill?.name }} <br />
-                  {{ row.waybill?.address }}
+                  {{ row.waybill?.name }}
                 </span>
               </td>
               <td>
+                @for (value of row.waybills; track value) {
                 <span class="text-gray-900 d-block">
-                  {{ row.destination?.name }} <br />
-                  {{ row.destination?.address }}
+                  <ul class="numbering">
+                    <li>
+                      {{ value?.name }} <br />
+                      {{ value?.address }}
+                    </li>
+                  </ul>
                 </span>
+                }
+              </td>
+              <td>
+                @for (value of row.destinations; track value) {
+                <span class="text-gray-900 d-block">
+                  <ul class="numbering">
+                    <li>
+                      {{ value?.name }} <br />
+                      {{ value?.address }}
+                    </li>
+                  </ul>
+                </span>
+                }
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
+                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
               </td>
               <td class="text-end">
                 <a
@@ -702,6 +750,7 @@
                   [ngModelOptions]="{ standalone: true }"
                   [(ngModel)]="modelCustomer"
                   [ngbTypeahead]="searchDataCustomer"
+                  (selectItem)="selectCustomer($event)"
                   [resultTemplate]="rt"
                   [inputFormatter]="formatterCustomer"
                   placeholder="Customer search"
@@ -748,11 +797,11 @@
                     [ngModelOptions]="{ standalone: true }"
                     [(ngModel)]="modelAddressId"
                     [ngbTypeahead]="searchAddressSender"
+                    (selectItem)="selectAddress($event)"
                     [resultTemplate]="rt"
                     [inputFormatter]="formatterCustomer"
                     (focus)="focusSender$.next($any($event).target.value)"
                     (click)="clickSender$.next($any($event).target.value)"
-                    (change)="selectAddress()"
                     #instance="ngbTypeahead"
                     placeholder="Customer address passenger search"
                   />
@@ -791,13 +840,42 @@
                 } @else { }
 
                 <div>Address:</div>
-                <div class="mb-9">
-                  @if (modelAddressId) {
+                <div class="table-responsive full-width">
+                  <!-- @if (modelAddressId) {
                   <div>
                     {{ modelAddressId?.name }}<br />
                     {{ modelAddressId?.address }}<br />
                     {{ modelAddressId?.telp }}
                   </div>
+                  } -->
+
+                  @if (selectedAddress) {
+                  <table class="table mt-5 mb-0 table-custom">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Telp</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (value of selectedAddress; track value) {
+                      <tr>
+                        <td>{{ value.name }}</td>
+                        <td>{{ value.address }}</td>
+                        <td>{{ value.telp }}</td>
+                        <td>
+                          <app-keenicon
+                            name="trash"
+                            class="fs-md-3 text-danger cursor-pointer"
+                            (click)="removeSelectedSenderAddress(value)"
+                          ></app-keenicon>
+                        </td>
+                      </tr>
+                      }
+                    </tbody>
+                  </table>
                   }
                 </div>
                 <!--end::Position-->
@@ -864,7 +942,7 @@
                     data-allow-clear="true"
                     [ngModelOptions]="{ standalone: true }"
                     [(ngModel)]="modelAddressIdDestination"
-                    (change)="selectAddressDestination()"
+                    (change)="selectAddressDestination($event)"
                   >
                     <option value="" disabled selected>Select address</option>
                     @for (value of modelDestination.addresses; track value) {
@@ -902,13 +980,13 @@
 
                 <div>Address:</div>
                 <div class="mb-9">
-                  @if (selectedAddressDestination) {
-                  <div>{{ selectedAddressDestination.address }}</div>
+                  <!-- @if (selectedAddressDestination) {
+                  <div>{{ selectedAddressDestination?.address }}</div>
                   } @else if(defaultAddressDestination) {
-                  <div>{{ defaultAddressDestination.address }}</div>
+                  <div>{{ defaultAddressDestination?.address }}</div>
                   } @else {
                   <div>{{ modelDestination?.address }}</div>
-                  }
+                  } -->
                 </div>
                 <!--end::Position-->
                 <!--end::Name-->
@@ -945,15 +1023,15 @@
                     id="select-customer"
                     type="text"
                     class="form-control"
-                    [class.is-invalid]="searchFailed"
+                    [class.is-invalid]="searchFailedDestination"
                     [ngModelOptions]="{ standalone: true }"
                     [(ngModel)]="modelAddressIdDestination"
                     [ngbTypeahead]="searchAddressDestination"
+                    (selectItem)="selectAddressDestination($event)"
                     [resultTemplate]="rt"
                     [inputFormatter]="formatterCustomer"
                     (focus)="focusDestination$.next($any($event).target.value)"
                     (click)="clickDestination$.next($any($event).target.value)"
-                    (change)="selectAddressDestination()"
                     #instance="ngbTypeahead"
                     placeholder="Customer address destination search"
                   />
@@ -992,11 +1070,40 @@
                 } @else { }
 
                 <div>Address:</div>
-                <div class="mb-9">
-                  @if (modelAddressIdDestination) {
+                <div class="table-responsive full-width">
+                  <!-- @if (modelAddressIdDestination) {
                   {{ modelAddressIdDestination?.name }}<br />
                   {{ modelAddressIdDestination?.address }}<br />
                   {{ modelAddressIdDestination?.telp }}
+                  } -->
+
+                  @if (selectedAddressDestination) {
+                  <table class="table mt-5 mb-0 table-custom">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Telp</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (value of selectedAddressDestination; track value) {
+                      <tr>
+                        <td>{{ value.name }}</td>
+                        <td>{{ value.address }}</td>
+                        <td>{{ value.telp }}</td>
+                        <td>
+                          <app-keenicon
+                            name="trash"
+                            class="fs-md-3 text-danger cursor-pointer"
+                            (click)="removeSelectedDestinationAddress(value)"
+                          ></app-keenicon>
+                        </td>
+                      </tr>
+                      }
+                    </tbody>
+                  </table>
                   }
                 </div>
                 <!--end::Position-->

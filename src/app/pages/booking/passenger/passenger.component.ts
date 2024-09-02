@@ -93,8 +93,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
   public isCreateSP!: boolean;
   public isDestinationDifferent = false;
 
-  public selectedAddress: any;
-  public selectedAddressDestination: any;
+  public selectedAddress: any[] = [];
+  public selectedAddressDestination: any[] = [];
   public searchCustomer!: string;
   public modelCustomer: any;
   public modelDestination: any;
@@ -356,10 +356,11 @@ export class PassengerComponent implements OnInit, OnDestroy {
       { key: 'tariff', title: 'Price' },
       { key: 'status', title: 'Status Payment' },
       { key: 'total_passenger', title: 'Total Passenger' },
-      { key: 'waybill.address', title: 'Pickup Address' },
-      { key: 'destination.address', title: 'Destination Address' },
+      { key: 'waybill.name', title: 'Booking' },
+      { key: 'waybill_id', title: 'Pickup Address' },
+      { key: 'destination_id', title: 'Destination Address' },
       { key: 'description', title: 'Description' },
-      { key: 'created_at', title: 'Created At' },
+      { key: 'created_by', title: 'Created By' },
       { key: 'status_passenger', title: 'Status' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
@@ -375,10 +376,12 @@ export class PassengerComponent implements OnInit, OnDestroy {
       passenger_id: [''],
       waybill_id: [''],
       destination_id: [''],
+      waybills: [],
+      destinations: [],
       city_id: [''],
       employee_id: [''],
       go_send_id: [''],
-      tariff: [''],
+      tariff: [0],
       discount: [0],
       agent_commission: [0],
       other_fee: [0],
@@ -776,15 +779,39 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
   formatter = (result: { name: string; car_number: string }) => result.car_number;
 
-  selectAddress() {
-    console.log(this.modelCustomer);
-    if (this.modelCustomer) {
-      const getdAddress = this.modelCustomer?.addresses.find(
-        (val: AddressModel) => val.address_id === Number(this.modelAddressId.address_id)
+  selectCustomer(event: any) {
+    event.preventDefault();
+    console.log(event.item);
+
+    if (event.item) {
+      this.modelCustomer = event.item;
+      this.selectedAddress = [];
+      this.selectedAddressDestination = [];
+    }
+  }
+
+  selectAddress(event: any) {
+    event.preventDefault();
+    console.log(event);
+    const selectedItem = event.item;
+    if (selectedItem) {
+      console.log(this.modelCustomer);
+      const getdAddress = this.modelCustomer?.addresses?.find(
+        (val: AddressModel) => val.customer_id === Number(selectedItem.customer_id)
       );
-      this.selectedAddress = getdAddress;
+
+      if (getdAddress) {
+        this.selectedAddress.push(selectedItem);
+      } else {
+        this.selectedAddress = [];
+      }
       console.log(this.selectedAddress);
     }
+  }
+
+  removeSelectedSenderAddress(item: any) {
+    this.selectedAddress = this.selectedAddress.filter((val: any) => val.address_id !== item.address_id);
+    console.log(this.selectedAddress);
   }
 
   searchAddressSender = (text$: Observable<string>) => {
@@ -875,13 +902,30 @@ export class PassengerComponent implements OnInit, OnDestroy {
     return this.dataDestinationAddresses().find((val: AddressModel) => val.address_id === Number(value));
   }
 
-  selectAddressDestination() {
-    if (this.modelCustomer) {
-      // this.setDefaultSelectionDestination(this.modelAddressIdDestination);
-      const getdAddress = this.findDatadestinationByValue(this.modelAddressIdDestination.address_id);
-      this.selectedAddressDestination = getdAddress;
+  selectAddressDestination(event: any) {
+    event.preventDefault();
+    console.log(event);
+    const selectedItem = event.item;
+    if (selectedItem) {
+      console.log(this.modelCustomer);
+      const getdAddress = this.modelCustomer?.addresses?.find(
+        (val: AddressModel) => val.customer_id === Number(selectedItem.customer_id)
+      );
+
+      if (getdAddress) {
+        this.selectedAddressDestination.push(selectedItem);
+      } else {
+        this.selectedAddressDestination = [];
+      }
       console.log(this.selectedAddressDestination);
     }
+  }
+
+  removeSelectedDestinationAddress(item: any) {
+    this.selectedAddressDestination = this.selectedAddressDestination.filter(
+      (val: any) => val.address_id !== item.address_id
+    );
+    console.log(this.selectedAddressDestination);
   }
 
   onDateChange(date: NgbDateStruct): void {
@@ -949,53 +993,63 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
     console.log(this.modelCustomer);
 
-    this.formWaybill.patchValue({
-      customer_id: this.modelCustomer?.customer_id,
-      name: this.modelAddressId?.name,
-      address: this.modelAddressId?.address,
-      telp: this.modelAddressId?.telp,
-      defaults: this.modelAddressId?.default,
-      longitude: this.modelAddressId?.longitude,
-      latitude: this.modelAddressId?.latitude,
-      zoom: this.modelAddressId?.zoom,
-      description: this.modelAddressId?.description,
-      used: this.modelAddressId?.used,
-    });
+    // this.formWaybill.patchValue({
+    //   customer_id: this.modelCustomer?.customer_id,
+    //   name: this.modelAddressId?.name,
+    //   address: this.modelAddressId?.address,
+    //   telp: this.modelAddressId?.telp,
+    //   defaults: this.modelAddressId?.default,
+    //   longitude: this.modelAddressId?.longitude,
+    //   latitude: this.modelAddressId?.latitude,
+    //   zoom: this.modelAddressId?.zoom,
+    //   description: this.modelAddressId?.description,
+    //   used: this.modelAddressId?.used,
+    // });
 
-    this.formDestination.patchValue({
-      customer_id: this.isDestinationDifferent ? this.modelDestination?.customer_id : this.modelCustomer?.customer_id,
-      name: this.modelAddressIdDestination?.name,
-      address: this.modelAddressIdDestination?.address,
-      telp: this.modelAddressIdDestination?.telp,
-      defaults: this.modelAddressIdDestination?.default,
-      longitude: this.modelAddressIdDestination?.longitude,
-      latitude: this.modelAddressIdDestination?.latitude,
-      zoom: this.modelAddressIdDestination?.zoom,
-      description: this.modelAddressIdDestination?.description,
-      used: this.modelAddressIdDestination?.used,
+    // this.formDestination.patchValue({
+    //   customer_id: this.isDestinationDifferent ? this.modelDestination?.customer_id : this.modelCustomer?.customer_id,
+    //   name: this.modelAddressIdDestination?.name,
+    //   address: this.modelAddressIdDestination?.address,
+    //   telp: this.modelAddressIdDestination?.telp,
+    //   defaults: this.modelAddressIdDestination?.default,
+    //   longitude: this.modelAddressIdDestination?.longitude,
+    //   latitude: this.modelAddressIdDestination?.latitude,
+    //   zoom: this.modelAddressIdDestination?.zoom,
+    //   description: this.modelAddressIdDestination?.description,
+    //   used: this.modelAddressIdDestination?.used,
+    // });
+
+    this.form.patchValue({
+      book_date: valueBookDate,
+      waybill_id: this.modelCustomer?.customer_id,
+      waybills: this.selectedAddress,
+      destination_id: this.isDestinationDifferent
+        ? this.modelDestination?.customer_id
+        : this.modelCustomer?.customer_id,
+      destinations: this.selectedAddressDestination,
     });
 
     // create waybill & destination & edit passenger
     this.isLoading = true;
     this.passengerService
-      .createWaybill(this.formWaybill.value)
+      .create(this.form.value)
       .pipe(
-        switchMap((respCustomer: any) => {
-          console.log('Response from respCustomer:', respCustomer);
-          this.form.patchValue({
-            waybill_id: respCustomer.data.waybill_id,
-          });
-          return this.passengerService.createDestination(this.formDestination.value);
-        }),
-        switchMap((respDestination: any) => {
-          console.log('Response from respDestination:');
-          console.log(respDestination);
-          this.form.patchValue({
-            book_date: valueBookDate,
-            destination_id: respDestination.data.destination_id,
-          });
-          return this.passengerService.create(this.form.value);
-        }),
+        // switchMap((respCustomer: any) => {
+        //   console.log('Response from respCustomer:', respCustomer);
+        //   this.form.patchValue({
+        //     waybill_id: respCustomer.data.waybill_id,
+        //   });
+        //   return this.passengerService.createDestination(this.formDestination.value);
+        // }),
+        // switchMap((respDestination: any) => {
+        //   console.log('Response from respDestination:');
+        //   console.log(respDestination);
+        //   this.form.patchValue({
+        //     book_date: valueBookDate,
+        //     destination_id: respDestination.data.destination_id,
+        //   });
+        //   return this.passengerService.create(this.form.value);
+        // }),
         finalize(() => {
           this.form.markAsPristine();
           this.isLoading = false;
@@ -1006,7 +1060,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -1029,54 +1083,25 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
     this.formatDateValue(event?.book_date);
 
-    this.modelCustomer = event.waybill?.customer;
-    const getdAddressCustomer = this.modelCustomer?.addresses.find(
-      (val: AddressModel) => val.telp === event.waybill?.telp
-    );
-    this.modelAddressId = getdAddressCustomer;
-    // this.selectedAddress = getdAddressCustomer;
-    // console.log(this.selectedAddress);
+    this.modelCustomer = event.waybill;
+    // const getdAddressCustomer = this.modelCustomer?.addresses.find(
+    //   (val: AddressModel) => val.telp === event.waybill?.telp
+    // );
+    // this.modelAddressId = getdAddressCustomer;
+    this.selectedAddress = event.waybills === null ? [] : event.waybills;
+    console.log(this.selectedAddress);
 
-    this.modelDestination = event.destination?.customer;
-    const getdAddressDestination = this.modelDestination?.addresses.find(
-      (val: AddressModel) => val.telp === event.destination?.telp
-    );
-    this.modelAddressIdDestination = getdAddressDestination;
-    // console.log(this.modelAddressIdDestination);
-    // this.selectedAddressDestination = getdAddressDestination;
+    this.modelDestination = event.destination;
+    // const getdAddressDestination = this.modelDestination?.addresses.find(
+    //   (val: AddressModel) => val.telp === event.destination?.telp
+    // );
+    // this.modelAddressIdDestination = getdAddressDestination;
+    this.selectedAddressDestination = event.destinations === null ? [] : event.destinations;
+    console.log(this.selectedAddressDestination);
 
-    console.log(this.modelCustomer);
-    console.log(this.modelDestination);
-
-    this.form.patchValue({
-      passenger_id: event.passenger_id,
-      waybill_id: event.waybill_id,
-      destination_id: event.destination_id,
-      city_id: event.city_id,
-      employee_id: event.employee_id,
-      go_send_id: event.go_send_id,
-      description: event.description,
-      tariff: event.tariff,
-      discount: event.discount,
-      total_passenger: event.total_passenger,
-      payment: event.payment,
-      note: event.note,
-      status: event.status,
-      status_passenger: event.status_passenger,
-      resi_number: event.resi_number,
-      book_date: event.book_date,
-      check_payment: event.check_payment,
-      position: event.position,
-      charter: event.charter,
-    });
-
-    this.formWaybill.patchValue({
-      waybill_id: event.waybill_id,
-    });
-
-    this.formDestination.patchValue({
-      destination_id: event.destination_id,
-    });
+    this.form.patchValue(event);
+    // this.formWaybill.patchValue({waybill_id: event.waybill_id});
+    // this.formDestination.patchValue({destination_id: event.destination_id});
 
     return await this.modalComponent.open();
   }
@@ -1093,83 +1118,66 @@ export class PassengerComponent implements OnInit, OnDestroy {
     ).toISOString();
     console.log(valueBookDate);
 
-    this.formWaybill.patchValue({
-      customer_id: this.modelCustomer?.customer_id,
-      name: this.modelAddressId?.name,
-      address: this.modelAddressId?.address,
-      telp: this.modelAddressId?.telp,
-      defaults: this.modelAddressId?.default,
-      longitude: this.modelAddressId?.longitude,
-      latitude: this.modelAddressId?.latitude,
-      zoom: this.modelAddressId?.zoom,
-      description: this.modelAddressId?.description,
-      used: this.modelAddressId?.used,
+    // this.formWaybill.patchValue({
+    //   customer_id: this.modelCustomer?.customer_id,
+    //   name: this.modelAddressId?.name,
+    //   address: this.modelAddressId?.address,
+    //   telp: this.modelAddressId?.telp,
+    //   defaults: this.modelAddressId?.default,
+    //   longitude: this.modelAddressId?.longitude,
+    //   latitude: this.modelAddressId?.latitude,
+    //   zoom: this.modelAddressId?.zoom,
+    //   description: this.modelAddressId?.description,
+    //   used: this.modelAddressId?.used,
+    // });
+
+    // this.formDestination.patchValue({
+    //   customer_id: this.isDestinationDifferent ? this.modelDestination?.customer_id : this.modelCustomer?.customer_id,
+    //   name: this.modelAddressIdDestination?.name,
+    //   address: this.modelAddressIdDestination?.address,
+    //   telp: this.modelAddressIdDestination?.telp,
+    //   defaults: this.modelAddressIdDestination?.default,
+    //   longitude: this.modelAddressIdDestination?.longitude,
+    //   latitude: this.modelAddressIdDestination?.latitude,
+    //   zoom: this.modelAddressIdDestination?.zoom,
+    //   description: this.modelAddressIdDestination?.description,
+    //   used: this.modelAddressIdDestination?.used,
+    // });
+
+    this.form.patchValue({
+      book_date: valueBookDate,
+      waybill_id: this.modelCustomer?.customer_id,
+      destination_id: this.isDestinationDifferent
+        ? this.modelDestination?.customer_id
+        : this.modelCustomer?.customer_id,
+      waybills: this.selectedAddress,
+      destinations: this.selectedAddressDestination,
     });
+    console.log(this.modelCustomer);
+    console.log(this.modelDestination);
+    console.log(this.form.value);
 
-    this.formDestination.patchValue({
-      customer_id: this.isDestinationDifferent ? this.modelDestination?.customer_id : this.modelCustomer?.customer_id,
-      name: this.modelAddressIdDestination?.name,
-      address: this.modelAddressIdDestination?.address,
-      telp: this.modelAddressIdDestination?.telp,
-      defaults: this.modelAddressIdDestination?.default,
-      longitude: this.modelAddressIdDestination?.longitude,
-      latitude: this.modelAddressIdDestination?.latitude,
-      zoom: this.modelAddressIdDestination?.zoom,
-      description: this.modelAddressIdDestination?.description,
-      used: this.modelAddressIdDestination?.used,
-    });
-
-    // edit waybill & destination & edit passenger
-    this.isLoading = true;
-    this.passengerService
-      .editWaybill(this.formWaybill.value)
-      .pipe(
-        switchMap((respCustomer: any) => {
-          console.log('Response from respCustomer:', respCustomer);
-          this.form.patchValue({
-            waybill_id: respCustomer.data.waybill_id,
-          });
-          return this.passengerService.editDestination(this.formDestination.value);
-        }),
-        switchMap((respDestination: any) => {
-          console.log('Response from respDestination:');
-          console.log(respDestination);
-          this.form.patchValue({
-            book_date: valueBookDate,
-            destination_id: respDestination.data.destination_id,
-          });
-          return this.passengerService.edit(this.form.value);
-        }),
-        finalize(() => {
-          this.form.markAsPristine();
-          this.isLoading = false;
-        })
-      )
-      .subscribe(
-        async (resp: any) => {
-          if (resp) {
-            this.snackbar.open(resp.message, '', {
-              panelClass: 'snackbar-success',
-              duration: 10000,
-            });
-
-            this.dataList(this.params);
-            await this.modalComponent.dismiss();
-          } else {
-            this.isLoading = false;
-          }
-        },
-        (error: any) => {
-          console.log(error);
-          this.isLoading = false;
-          this.handlerResponseService.failedResponse(error);
-        }
-      );
-
-    // console.log(this.form.value);
+    //// edit waybill & destination & edit passenger
     // this.isLoading = true;
-    // const catSubscr = this.passengerService.edit(this.form.value)
+    // this.passengerService
+    //   .edit(this.form.value)
     //   .pipe(
+    //     // switchMap((respCustomer: any) => {
+    //     //   console.log('Response from respCustomer:', respCustomer);
+    //     //   this.form.patchValue({
+    //     //     waybill_id: respCustomer.data.waybill_id,
+    //     //   });
+    //     //   return this.passengerService.editDestination(this.formDestination.value);
+    //     // }),
+    //     // switchMap((respDestination: any) => {
+    //     //   console.log('Response from respDestination:');
+    //     //   console.log(respDestination);
+    //     //   this.form.patchValue({
+    //     //     book_date: valueBookDate,
+    //     //     destination_id: respDestination.data.destination_id,
+    //     //   });
+    //     //   return this.passengerService.edit(this.form.value);
+    //     // }),
     //     finalize(() => {
     //       this.form.markAsPristine();
     //       this.isLoading = false;
@@ -1180,7 +1188,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
     //       if (resp) {
     //         this.snackbar.open(resp.message, '', {
     //           panelClass: 'snackbar-success',
-    //           duration: 10000,
+    //           duration: 5000,
     //         });
 
     //         this.dataList(this.params);
@@ -1195,7 +1203,38 @@ export class PassengerComponent implements OnInit, OnDestroy {
     //       this.handlerResponseService.failedResponse(error);
     //     }
     //   );
-    // this.unsubscribe.push(catSubscr);
+
+    console.log(this.form.value);
+    this.isLoading = true;
+    const pasSubscr = this.passengerService
+      .edit(this.form.value)
+      .pipe(
+        finalize(() => {
+          this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 5000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponent.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+    this.unsubscribe.push(pasSubscr);
   }
 
   openModalPrint(event: PassengerModel) {
@@ -1235,7 +1274,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
               if (resp) {
                 this.snackbar.open(resp.message, '', {
                   panelClass: 'snackbar-success',
-                  duration: 10000,
+                  duration: 5000,
                 });
 
                 this.dataList(this.params);
@@ -1289,7 +1328,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -1343,7 +1382,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -1431,7 +1470,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -1525,7 +1564,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -1567,7 +1606,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -1609,7 +1648,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);

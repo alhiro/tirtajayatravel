@@ -369,7 +369,7 @@ export class CustomerComponent implements OnInit {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -420,7 +420,7 @@ export class CustomerComponent implements OnInit {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -480,7 +480,7 @@ export class CustomerComponent implements OnInit {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataListAddress({ customer_id: resp?.data?.customer_id });
@@ -535,7 +535,7 @@ export class CustomerComponent implements OnInit {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataListAddress({ customer_id: resp?.data?.customer_id });
@@ -587,7 +587,7 @@ export class CustomerComponent implements OnInit {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);

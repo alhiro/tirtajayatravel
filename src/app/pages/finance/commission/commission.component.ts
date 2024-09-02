@@ -533,7 +533,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);

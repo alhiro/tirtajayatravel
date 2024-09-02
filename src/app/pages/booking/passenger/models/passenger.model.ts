@@ -3,8 +3,10 @@ import { GoSendModel } from '../../package/models/gosend';
 export class PassengerModel {
   passenger_id!: number;
   waybill_id!: number;
+  waybills: any;
   waybill: any;
   destination_id!: number;
+  destinations: any;
   destination: any;
   city_id!: number;
   city: any;
@@ -34,8 +36,9 @@ export class PassengerModel {
   setPackage(_passenger: unknown) {
     const passenger = _passenger as PassengerModel;
     this.passenger_id = passenger.passenger_id;
-    this.waybill = passenger.waybill;
+    this.waybills = passenger.waybills;
     this.destination_id = passenger.destination_id;
+    this.destinations = passenger.destinations;
     this.city_id = passenger.city_id;
     (this.city = passenger.city), (this.employee_id = passenger.employee_id);
     this.go_send_id = passenger.go_send_id;

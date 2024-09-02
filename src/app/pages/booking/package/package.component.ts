@@ -353,7 +353,6 @@ export class PackageComponent implements OnInit, OnDestroy {
     // this.configuration.resizeColumn = true;
     // this.configuration.fixedColumnWidth = false;
     this.configuration.showDetailsArrow = true;
-    this.configuration.detailsTemplate = true;
     this.configuration.horizontalScroll = true;
 
     this.columns = [
@@ -385,10 +384,10 @@ export class PackageComponent implements OnInit, OnDestroy {
       category_id: [''],
       go_send_id: [''],
       description: [''],
-      cost: [''],
-      discount: [''],
+      cost: [0],
+      discount: [0],
       payment: [''],
-      koli: [''],
+      koli: [1],
       origin_from: [''],
       level: [''],
       request: [''],
@@ -1026,7 +1025,7 @@ export class PackageComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -1192,7 +1191,7 @@ export class PackageComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -1222,7 +1221,7 @@ export class PackageComponent implements OnInit, OnDestroy {
     //       if (resp) {
     //         this.snackbar.open(resp.message, '', {
     //           panelClass: 'snackbar-success',
-    //           duration: 10000,
+    //           duration: 5000,
     //         });
 
     //         this.dataList(this.params);
@@ -1277,7 +1276,7 @@ export class PackageComponent implements OnInit, OnDestroy {
               if (resp) {
                 this.snackbar.open(resp.message, '', {
                   panelClass: 'snackbar-success',
-                  duration: 10000,
+                  duration: 5000,
                 });
 
                 this.dataList(this.params);
@@ -1331,7 +1330,7 @@ export class PackageComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -1385,7 +1384,7 @@ export class PackageComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -1472,7 +1471,7 @@ export class PackageComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -1566,7 +1565,7 @@ export class PackageComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -1613,7 +1612,7 @@ export class PackageComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);
@@ -1655,7 +1654,7 @@ export class PackageComponent implements OnInit, OnDestroy {
           if (resp) {
             this.snackbar.open(resp.message, '', {
               panelClass: 'snackbar-success',
-              duration: 10000,
+              duration: 5000,
             });
 
             this.dataList(this.params);

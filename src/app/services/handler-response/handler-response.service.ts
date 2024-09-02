@@ -28,7 +28,7 @@ export class HandlerResponseService {
         // go to login
         this.snackbar.open(error.error.message, '', {
           panelClass: 'snackbar-error',
-          duration: 50000,
+          duration: 5000,
         });
         this.utils.clearAllLocalstorage();
 
@@ -41,7 +41,7 @@ export class HandlerResponseService {
         // show dialog
         this.snackbar.open(error.error.message, '', {
           panelClass: 'snackbar-error',
-          duration: 50000,
+          duration: 5000,
         });
         this.utils.clearAllLocalstorage();
 
@@ -57,7 +57,7 @@ export class HandlerResponseService {
         if (error) {
           this.snackbar.open(error.error.message, '', {
             panelClass: 'snackbar-error',
-            duration: 50000,
+            duration: 5000,
           });
 
           // console.log(error);
@@ -76,7 +76,7 @@ export class HandlerResponseService {
         if (error) {
           this.snackbar.open(error.statusText, '', {
             panelClass: 'snackbar-error',
-            duration: 50000,
+            duration: 5000,
           });
         }
         break;
@@ -86,7 +86,7 @@ export class HandlerResponseService {
         if (error) {
           this.snackbar.open(error.statusText, '', {
             panelClass: 'snackbar-error',
-            duration: 50000,
+            duration: 5000,
           });
         }
         break;
@@ -95,7 +95,7 @@ export class HandlerResponseService {
         // show dialog
         this.snackbar.open('Method not allowed', '', {
           panelClass: 'snackbar-error',
-          duration: 50000,
+          duration: 5000,
         });
         break;
 
@@ -104,7 +104,7 @@ export class HandlerResponseService {
         // this.utils.showNotification('GENERAL', 'SERVER_ERROR');
         this.snackbar.open('Internal Server Error ', '', {
           panelClass: 'snackbar-error',
-          duration: 50000,
+          duration: 5000,
         });
         break;
 
@@ -112,7 +112,7 @@ export class HandlerResponseService {
         // show dialog
         this.snackbar.open('Disconnection from server ', '', {
           panelClass: 'snackbar-error',
-          duration: 50000,
+          duration: 5000,
         });
         break;
     }
@@ -131,7 +131,7 @@ export class HandlerResponseService {
     if (!statusNetwork) {
       this.snackbar.open('Disconnection from server', 'Info', {
         panelClass: 'snackbar-error',
-        duration: 50000,
+        duration: 5000,
       });
     }
     return statusNetwork;

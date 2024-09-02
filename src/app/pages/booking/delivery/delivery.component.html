@@ -689,16 +689,28 @@
           </span>
         </td>
         <td>
+          @for (value of row.waybills; track value) {
           <span class="text-gray-900 d-block">
-            {{ row.waybill?.name }}<br />
-            {{ row.waybill?.address }}
+            <ul>
+              <li>
+                {{ value?.name }} <br />
+                {{ value?.address }}
+              </li>
+            </ul>
           </span>
+          }
         </td>
         <td>
+          @for (value of row.destinations; track value) {
           <span class="text-gray-900 d-block">
-            {{ row.destination?.name }}<br />
-            {{ row.destination?.address }}
+            <ul>
+              <li>
+                {{ value?.name }} <br />
+                {{ value?.address }}
+              </li>
+            </ul>
           </span>
+          }
         </td>
         <td>
           <span class="text-gray-900 d-block">

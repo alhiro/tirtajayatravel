@@ -125,7 +125,6 @@
             [columns]="columns"
             [pagination]="pagination"
             (event)="eventEmitted($event)"
-            [detailsTemplate]="detailsTemplate"
             tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
           >
             <ng-template let-row let-index="index">
@@ -261,34 +260,6 @@
             </ng-template>
           </ngx-table>
           <!-- end::Table -->
-
-          <ng-template #detailsTemplate let-row>
-            <!-- <div class="mt-3 mb-5">
-                <div class="mb-4">
-                  <div class="text-gray-900 fw-bolder text-hover-primary fs-4">{{ row.name }}</div>
-                  <div class="text-gray-900">{{ row.telp }}</div>
-                </div>
-                <div>
-                  @if(row.addresses?.length > 0) {
-                  <p class="text-gray-900">Status Delivery:</p>
-                  <div class="list-full">
-                    @for (value of row?.addresses; track value) {
-                    <ul class="menu-gray-900 fw-semibold order-1 px-0">
-                      <li class="menu-item">
-                        <span class="menu-link p-0">{{ value.name }}</span>
-                        <span class="menu-link p-0">{{ value.address }}</span>
-                        <span class="menu-link p-0">{{ value.telp }}</span>
-                        <span class="menu-link p-0">{{ value.description }}</span>
-                      </li>
-                    </ul>
-                    }
-                  </div>
-                  } @else {
-                  <div class="btn btn-primary btn-sm px-4 cursor-pointer" (click)="openModalNewAddress(row)">Add Address</div>
-                  }
-                </div>
-              </div> -->
-          </ng-template>
         </div>
         <!-- end::Table container -->
       </div>
@@ -306,7 +277,6 @@
             [columns]="columns"
             [pagination]="pagination"
             (event)="eventEmitted($event)"
-            [detailsTemplate]="detailsTemplate"
             tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
           >
             <ng-template let-row let-index="index">
@@ -442,34 +412,6 @@
             </ng-template>
           </ngx-table>
           <!-- end::Table -->
-
-          <ng-template #detailsTemplate let-row>
-            <!-- <div class="mt-3 mb-5">
-                <div class="mb-4">
-                  <div class="text-gray-900 fw-bolder text-hover-primary fs-4">{{ row.name }}</div>
-                  <div class="text-gray-900">{{ row.telp }}</div>
-                </div>
-                <div>
-                  @if(row.addresses?.length > 0) {
-                  <p class="text-gray-900">Status Delivery:</p>
-                  <div class="list-full">
-                    @for (value of row?.addresses; track value) {
-                    <ul class="menu-gray-900 fw-semibold order-1 px-0">
-                      <li class="menu-item">
-                        <span class="menu-link p-0">{{ value.name }}</span>
-                        <span class="menu-link p-0">{{ value.address }}</span>
-                        <span class="menu-link p-0">{{ value.telp }}</span>
-                        <span class="menu-link p-0">{{ value.description }}</span>
-                      </li>
-                    </ul>
-                    }
-                  </div>
-                  } @else {
-                  <div class="btn btn-primary btn-sm px-4 cursor-pointer" (click)="openModalNewAddress(row)">Add Address</div>
-                  }
-                </div>
-              </div> -->
-          </ng-template>
         </div>
         <!-- end::Table container -->
       </div>
