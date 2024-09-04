@@ -58,6 +58,17 @@ export class PassengerService {
     );
   }
 
+  delete(context: PassengerModel): Observable<PassengerModel> {
+    return this.httpService.passengerDelete(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   createWaybill(context: WaybillModel): Observable<WaybillModel> {
     return this.httpService.waybillCreate(context).pipe(
       map((result) => {

@@ -86,6 +86,7 @@ export class SubCategoryComponent implements OnInit, OnDestroy {
 
     this.configuration.resizeColumn = true;
     this.configuration.fixedColumnWidth = false;
+    this.configuration.orderEnabled = false;
 
     this.columns = [
       // { key: 'category_sub_id', title: 'No' },

@@ -244,6 +244,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     this.configuration.resizeColumn = true;
     this.configuration.fixedColumnWidth = false;
     this.configuration.horizontalScroll = true;
+    this.configuration.orderEnabled = false;
 
     this.columns = [
       // { key: 'garage_id', title: 'No' },

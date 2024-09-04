@@ -204,6 +204,13 @@ export class HttpService {
     return this.commonApi.post('/package/create', body) as Observable<any>;
   }
 
+  packageDelete(param: PackageModel): Observable<any> {
+    const body = {
+      package_id: param.package_id,
+    };
+    return this.commonApi.delete('/package/delete', body) as Observable<any>;
+  }
+
   senderCreate(param: SenderModel): Observable<any> {
     const body = {
       customer_id: param.customer_id,
@@ -467,6 +474,13 @@ export class HttpService {
       check_payment: param.check_payment,
     };
     return this.commonApi.post('/passenger/create', body) as Observable<any>;
+  }
+
+  passengerDelete(param: PassengerModel): Observable<any> {
+    const body = {
+      passenger_id: param.passenger_id,
+    };
+    return this.commonApi.delete('/passenger/delete', body) as Observable<any>;
   }
 
   waybillCreate(param: WaybillModel): Observable<any> {

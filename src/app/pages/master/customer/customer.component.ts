@@ -149,9 +149,11 @@ export class CustomerComponent implements OnInit {
     this.configuration.resizeColumn = false;
     this.configuration.fixedColumnWidth = false;
     this.configuration.tableLayout.hover = true;
+    this.configuration.orderEnabled = false;
 
     this.configurationAddress.resizeColumn = false;
     this.configurationAddress.fixedColumnWidth = true;
+    this.configurationAddress.orderEnabled = false;
     this.configurationAddress.paginationEnabled = false;
     this.configurationAddress.rows = 100000;
 

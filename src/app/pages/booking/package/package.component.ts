@@ -354,6 +354,7 @@ export class PackageComponent implements OnInit, OnDestroy {
     // this.configuration.fixedColumnWidth = false;
     this.configuration.showDetailsArrow = true;
     this.configuration.horizontalScroll = true;
+    this.configuration.orderEnabled = false;
 
     this.columns = [
       // { key: 'package_id', title: 'No' },
@@ -1295,7 +1296,57 @@ export class PackageComponent implements OnInit, OnDestroy {
     });
   }
 
-  openModalDelete(event: PackageModel) {}
+  async openModalDelete(event: PackageModel) {
+    this.form.patchValue(event);
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.dataDelete();
+      }
+    });
+  }
+
+  dataDelete() {
+    console.log(this.formAddress.value);
+    this.isLoading = true;
+    const passSubscr = this.packageService
+      .delete(this.formAddress.value)
+      .pipe(
+        finalize(() => {
+          this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 5000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponent.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+    this.unsubscribe.push(passSubscr);
+  }
 
   // Address
   clearFormAddress() {

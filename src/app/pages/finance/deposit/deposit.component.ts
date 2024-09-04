@@ -123,6 +123,7 @@ export class DepositComponent implements OnInit {
     this.configuration.resizeColumn = true;
     this.configuration.fixedColumnWidth = false;
     this.configuration.paginationEnabled = false;
+    this.configuration.orderEnabled = false;
 
     this.columnsPackage = [
       // { key: '', title: 'No.' },

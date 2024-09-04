@@ -211,6 +211,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     // this.configuration.resizeColumn = true;
     // this.configuration.fixedColumnWidth = false;
     this.configuration.horizontalScroll = true;
+    this.configuration.orderEnabled = false;
 
     this.columns = [
       // { key: 'category_sub_id', title: 'No' },
@@ -294,7 +295,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   }
 
   eventEmitted($event: { event: string; value: any }): void {
-    if ($event.event !== 'onClick') {
+    if ($event.event !== 'onPagination') {
       this.parseEvent($event);
     }
   }

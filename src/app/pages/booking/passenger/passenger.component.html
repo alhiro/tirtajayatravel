@@ -128,7 +128,6 @@
             [columns]="columns"
             [pagination]="pagination"
             (event)="eventEmitted($event)"
-            [detailsTemplate]="detailsTemplate"
             tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
           >
             <ng-template let-row let-index="index">
@@ -136,7 +135,11 @@
                       <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
                     </td> -->
               <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
+                <span
+                  class="text-gray-900 fw-bolder text-hover-primary fs-6 cursor-pointer"
+                  ngbTooltip="Edit Passenger"
+                  (click)="openModalEdit(row)"
+                >
                   {{ row.resi_number }}
                 </span>
               </td>
@@ -198,8 +201,8 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Edit"
                   (click)="openModalEdit(row)"
+                  ngbTooltip="Edit Passenger"
                 >
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
@@ -209,19 +212,18 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Cancel"
+                  ngbTooltip="Cancel Passenger"
                   (click)="openModalCancel(row)"
                 >
                   <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
                 </a>
                 <a
-                  href="javascript:void(0)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Delete"
+                  ngbTooltip="Delete Passenger"
                   (click)="openModalDelete(row)"
                 >
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
@@ -236,7 +238,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Remove Driver"
+                  ngbTooltip="Remove Driver"
                   (click)="removeDriverSP(row)"
                 >
                   <app-keenicon name="minus-square" class="fs-md-3 text-danger"></app-keenicon>
@@ -248,7 +250,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Assign Driver"
+                  ngbTooltip="Assign Driver"
                   (click)="assignDriverSP(row)"
                 >
                   <app-keenicon name="plus-square" class="fs-md-3 text-primary"></app-keenicon>
@@ -259,34 +261,6 @@
             </ng-template>
           </ngx-table>
           <!-- end::Table -->
-
-          <ng-template #detailsTemplate let-row>
-            <!-- <div class="mt-3 mb-5">
-                  <div class="mb-4">
-                    <div class="text-gray-900 fw-bolder text-hover-primary fs-4">{{ row.name }}</div>
-                    <div class="text-gray-900">{{ row.telp }}</div>
-                  </div>
-                  <div>
-                    @if(row.addresses?.length > 0) {
-                    <p class="text-gray-900">Status Delivery:</p>
-                    <div class="list-full">
-                      @for (value of row?.addresses; track value) {
-                      <ul class="menu-gray-900 fw-semibold order-1 px-0">
-                        <li class="menu-item">
-                          <span class="menu-link p-0">{{ value.name }}</span>
-                          <span class="menu-link p-0">{{ value.address }}</span>
-                          <span class="menu-link p-0">{{ value.telp }}</span>
-                          <span class="menu-link p-0">{{ value.description }}</span>
-                        </li>
-                      </ul>
-                      }
-                    </div>
-                    } @else {
-                    <div class="btn btn-primary btn-sm px-4 cursor-pointer" (click)="openModalNewAddress(row)">Add Address</div>
-                    }
-                  </div>
-                </div> -->
-          </ng-template>
         </div>
         <!-- end::Table container -->
       </div>
@@ -304,7 +278,6 @@
             [columns]="columns"
             [pagination]="pagination"
             (event)="eventEmitted($event)"
-            [detailsTemplate]="detailsTemplate"
             tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
           >
             <ng-template let-row let-index="index">
@@ -312,7 +285,11 @@
                       <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
                     </td> -->
               <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
+                <span
+                  class="text-gray-900 fw-bolder text-hover-primary fs-6 cursor-pointer"
+                  ngbTooltip="Edit Passenger"
+                  (click)="openModalEdit(row)"
+                >
                   {{ row.resi_number }}
                 </span>
               </td>
@@ -365,15 +342,14 @@
               </td>
               @if (!delivery) {
               <td class="text-end">
-                @if (username === 'admin_11' && levelrule === 8) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Edit"
                   (click)="openModalEdit(row)"
+                  ngbTooltip="Edit Passenger"
                 >
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
@@ -383,47 +359,22 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Print"
-                  (click)="openModalPrint(row)"
-                >
-                  <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
-                </a>
-                <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Cancel"
+                  ngbTooltip="Cancel Passenger"
                   (click)="openModalCancel(row)"
                 >
                   <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
                 </a>
                 <a
-                  href="javascript:void(0)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Delete"
+                  ngbTooltip="Delete Passenger"
                   (click)="openModalDelete(row)"
                 >
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
                 </a>
-                } @else {
-                <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Print"
-                  (click)="openModalPrint(row)"
-                >
-                  <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
-                </a>
-                }
               </td>
               } @else {
               <td class="text-end">
@@ -434,7 +385,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Remove Driver"
+                  ngbTooltip="Remove Driver"
                   (click)="removeDriverSP(row)"
                 >
                   <app-keenicon name="minus-square" class="fs-md-3 text-danger"></app-keenicon>
@@ -446,7 +397,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Assign Driver"
+                  ngbTooltip="Assign Driver"
                   (click)="assignDriverSP(row)"
                 >
                   <app-keenicon name="plus-square" class="fs-md-3 text-primary"></app-keenicon>
@@ -457,34 +408,6 @@
             </ng-template>
           </ngx-table>
           <!-- end::Table -->
-
-          <ng-template #detailsTemplate let-row>
-            <!-- <div class="mt-3 mb-5">
-                  <div class="mb-4">
-                    <div class="text-gray-900 fw-bolder text-hover-primary fs-4">{{ row.name }}</div>
-                    <div class="text-gray-900">{{ row.telp }}</div>
-                  </div>
-                  <div>
-                    @if(row.addresses?.length > 0) {
-                    <p class="text-gray-900">Status Delivery:</p>
-                    <div class="list-full">
-                      @for (value of row?.addresses; track value) {
-                      <ul class="menu-gray-900 fw-semibold order-1 px-0">
-                        <li class="menu-item">
-                          <span class="menu-link p-0">{{ value.name }}</span>
-                          <span class="menu-link p-0">{{ value.address }}</span>
-                          <span class="menu-link p-0">{{ value.telp }}</span>
-                          <span class="menu-link p-0">{{ value.description }}</span>
-                        </li>
-                      </ul>
-                      }
-                    </div>
-                    } @else {
-                    <div class="btn btn-primary btn-sm px-4 cursor-pointer" (click)="openModalNewAddress(row)">Add Address</div>
-                    }
-                  </div>
-                </div> -->
-          </ng-template>
         </div>
         <!-- end::Table container -->
       </div>
@@ -509,7 +432,11 @@
                       <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
                     </td> -->
               <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
+                <span
+                  class="text-gray-900 fw-bolder text-hover-primary fs-6 cursor-pointer"
+                  ngbTooltip="Edit Passenger"
+                  (click)="openModalEdit(row)"
+                >
                   {{ row.resi_number }}
                 </span>
               </td>
@@ -562,13 +489,12 @@
               </td>
               <td class="text-end">
                 <a
-                  href="javascript:void(0)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Delete"
+                  ngbTooltip="Delete Driver"
                   (click)="openModalDelete(row)"
                 >
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
@@ -601,7 +527,11 @@
                       <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
                     </td> -->
               <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
+                <span
+                  class="text-gray-900 fw-bolder text-hover-primary fs-6 cursor-pointer"
+                  ngbTooltip="Edit Passenger"
+                  (click)="openModalEdit(row)"
+                >
                   {{ row.resi_number }}
                 </span>
               </td>
@@ -654,13 +584,12 @@
               </td>
               <td class="text-end">
                 <a
-                  href="javascript:void(0)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Detail"
+                  ngbTooltip="Detail Passenger"
                 >
                   <app-keenicon name="eye" class="fs-md-3 text-primary"></app-keenicon>
                 </a>

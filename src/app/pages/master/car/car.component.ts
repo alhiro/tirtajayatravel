@@ -81,6 +81,7 @@ export class CarComponent implements OnInit, OnDestroy {
 
     this.configuration.resizeColumn = true;
     this.configuration.fixedColumnWidth = false;
+    this.configuration.orderEnabled = false;
 
     this.columns = [
       // { key: 'car_id', title: 'No' },

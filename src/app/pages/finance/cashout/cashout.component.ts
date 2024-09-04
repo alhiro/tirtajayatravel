@@ -213,6 +213,7 @@ export class CashoutComponent implements OnInit {
 
     this.configuration.resizeColumn = true;
     this.configuration.fixedColumnWidth = false;
+    this.configuration.orderEnabled = false;
 
     this.columns = [
       // { key: 'cashout_id', title: 'No' },

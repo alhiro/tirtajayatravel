@@ -58,6 +58,17 @@ export class PackageService {
     );
   }
 
+  delete(context: PackageModel): Observable<PackageModel> {
+    return this.httpService.packageDelete(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   createSender(context: SenderModel): Observable<RecipientModel> {
     return this.httpService.senderCreate(context).pipe(
       map((result) => {

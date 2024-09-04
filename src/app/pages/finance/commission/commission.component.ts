@@ -223,6 +223,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     // this.configuration.fixedColumnWidth = false;
     this.configuration.showDetailsArrow = true;
     this.configuration.horizontalScroll = true;
+    this.configuration.orderEnabled = false;
 
     this.columns = [
       // { key: 'received_id', title: 'No' },

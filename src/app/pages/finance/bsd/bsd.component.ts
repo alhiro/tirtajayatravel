@@ -161,6 +161,7 @@ export class BsdComponent implements OnInit, OnDestroy {
     this.configuration.resizeColumn = true;
     this.configuration.fixedColumnWidth = false;
     this.configuration.horizontalScroll = false;
+    this.configuration.orderEnabled = false;
 
     this.columnsDone = [
       // { key: 'go_send_id', title: 'No' },

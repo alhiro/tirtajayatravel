@@ -33,6 +33,7 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
     this.configuration.resizeColumn = false;
     this.configuration.fixedColumnWidth = false;
     this.configuration.paginationEnabled = false;
+    this.configuration.orderEnabled = false;
 
     this.columns = [
       // { key: 'category_sub_id', title: 'No' },
