@@ -15,6 +15,16 @@
         <li class="nav-item">
           <a
             class="nav-link btn btn-sm btn-color-muted btn-active btn-active-light fw-bold px-4 me-1"
+            [ngClass]="{ active: tab === 'Day' }"
+            data-bs-toggle="tab"
+            (click)="setTab('Day')"
+            id="kt_chart_widget_8_week_toggle"
+            >Day</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link btn btn-sm btn-color-muted btn-active btn-active-light fw-bold px-4 me-1"
             [ngClass]="{ active: tab === 'Week' }"
             data-bs-toggle="tab"
             (click)="setTab('Week')"

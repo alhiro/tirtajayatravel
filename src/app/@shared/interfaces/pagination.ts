@@ -39,3 +39,13 @@ export const defaultParams: Params = {
   startDate: '',
   endDate: '',
 };
+
+// Date
+export interface Dates {
+  startDate: any;
+  endDate: any;
+}
+export const Dates: Dates = {
+  startDate: '',
+  endDate: '',
+};

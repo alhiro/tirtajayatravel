@@ -33,6 +33,8 @@ import { TilesWidget14Component } from './tiles/tiles-widget14/tiles-widget14.co
 import { DropdownMenusModule } from '../dropdown-menus/dropdown-menus.module';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ListsWidget2Component } from './lists/lists-widget2/lists-widget2.component';
+import { ListsWidget2aComponent } from './lists/lists-widget2a/lists-widget2.component';
+import { ListsWidget2bComponent } from './lists/lists-widget2b/lists-widget2.component';
 import { ListsWidget5Component } from './lists/lists-widget5/lists-widget5.component';
 import { ListsWidget6Component } from './lists/lists-widget6/lists-widget6.component';
 import { ListsWidget7Component } from './lists/lists-widget7/lists-widget7.component';
@@ -116,6 +118,8 @@ import { SharedModule } from '../../../shared/shared.module';
     TilesWidget14Component,
     // Other
     ListsWidget2Component,
+    ListsWidget2aComponent,
+    ListsWidget2bComponent,
     ListsWidget5Component,
     ListsWidget6Component,
     ListsWidget7Component,
@@ -198,6 +202,8 @@ import { SharedModule } from '../../../shared/shared.module';
     TilesWidget14Component,
     // Other
     ListsWidget2Component,
+    ListsWidget2aComponent,
+    ListsWidget2bComponent,
     ListsWidget5Component,
     ListsWidget6Component,
     ListsWidget7Component,

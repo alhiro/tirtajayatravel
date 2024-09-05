@@ -42,6 +42,10 @@ const Routing: Routes = [
     loadChildren: () => import('./finance/cashout/cashout.module').then((m) => m.CashoutModule),
   },
   {
+    path: 'finance/recapitulation-finance/deposit',
+    loadChildren: () => import('./finance/recapitulation/recapitulation.module').then((m) => m.RecapitulationModule),
+  },
+  {
     path: 'finance/commission/package',
     loadChildren: () => import('./finance/commission/commission.module').then((m) => m.CommissionModule),
   },

@@ -291,6 +291,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
       taking_status: [''],
       office: [''],
     });
+
     this.form = this.formBuilder.group({
       package_id: [''],
       sender_id: [''],

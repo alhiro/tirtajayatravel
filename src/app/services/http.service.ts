@@ -3,7 +3,7 @@ import { CommonApiService } from './common-api/common-api.service';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@env/environment.prod';
-import { PaginationContext } from '@app/@shared/interfaces/pagination';
+import { Dates, PaginationContext } from '@app/@shared/interfaces/pagination';
 import { CategoryModel } from '@app/pages/master/category/models/category.model';
 import { SubCategoryModel } from '@app/pages/master/sub-category/models/subcategory.model';
 import { EmployeeyModel } from '@app/pages/master/employee/models/employee.model';
@@ -73,6 +73,12 @@ export class HttpService {
 
   registerUser(body: any): Observable<any> {
     return this.commonApi.post('/auth/register-user', body) as Observable<any>;
+  }
+
+  // DASHBOARD
+  // Summary
+  summary(): Observable<any> {
+    return this.commonApi.get('/dashboard/order-summary') as Observable<any>;
   }
 
   // BOOKING
@@ -610,6 +616,13 @@ export class HttpService {
       cashout_id: param.cashout_id,
     };
     return this.commonApi.delete('/cashout/delete', body) as Observable<any>;
+  }
+
+  // Recapitulation
+  recapitulationList(param: Dates): Observable<any> {
+    return this.commonApi.get(
+      '/cashout/recapitulation/list?startDate=' + param.startDate + '&endDate=' + param.endDate
+    ) as Observable<any>;
   }
 
   // Cost

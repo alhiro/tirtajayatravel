@@ -147,8 +147,8 @@ export class DepositComponent implements OnInit {
     const { startDate, endDate } = this.utils.singleDate(inputDate);
 
     const params = {
-      limit: '',
-      page: '',
+      limit: 100,
+      page: 1,
       search: '',
       startDate: startDate,
       endDate: endDate,
@@ -169,8 +169,8 @@ export class DepositComponent implements OnInit {
     const { startDate, endDate } = this.utils.singleDate(inputDate);
 
     const params = {
-      limit: '',
-      page: '',
+      limit: 100,
+      page: 1,
       search: '',
       startDate: startDate,
       endDate: endDate,

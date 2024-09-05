@@ -7,3 +7,19 @@ q {
   font-size: 1.2rem;
   quotes: "« " " »";
 }
+
+[class^="col-md-"],
+[class*=" col-md-"] {
+  padding: 12px;
+}
+
+:host ::ng-deep {
+  .card {
+    margin-bottom: 0 !important;
+
+    .card-header,
+    .card-body {
+      padding: 1.5rem 1.5rem !important;
+    }
+  }
+}

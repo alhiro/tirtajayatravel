@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '@app/services/http.service';
 import { Observable, map } from 'rxjs';
-import { PaginationContext } from '@app/@shared/interfaces/pagination';
+import { Dates, PaginationContext } from '@app/@shared/interfaces/pagination';
 import { CashoutModel } from './models/cashout.model';
 
 @Injectable({
@@ -45,6 +45,17 @@ export class CashoutService {
 
   delete(context: CashoutModel): Observable<CashoutModel> {
     return this.httpService.cashoutDelete(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
+  listRecapitulation(context: Dates): Observable<CashoutModel> {
+    return this.httpService.recapitulationList(context).pipe(
       map((result) => {
         if (!result) {
           return result;
