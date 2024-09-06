@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { API, APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import {
@@ -23,6 +24,7 @@ import {
 } from 'rxjs';
 import { CustomerService } from './customer.service';
 import {
+  Dates,
   Pagination,
   PaginationContext,
   Params,
@@ -40,6 +42,8 @@ import { HandlerResponseService } from '@app/services/handler-response/handler-r
 import { LocalService } from '@app/services/local.service';
 import { AddressModel } from './models/address.model';
 import Swal from 'sweetalert2';
+import { Utils } from '@app/@shared';
+import { NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 
 interface EventObject {
   event: string;
@@ -97,6 +101,15 @@ export class CustomerComponent implements OnInit {
     return this.formAddress.controls;
   }
 
+  calendar = inject(NgbCalendar);
+
+  hoveredDate: NgbDate | null = null;
+  fromDate: NgbDate | null = this.calendar.getToday();
+  toDate: NgbDate | null = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
+
+  startDate: any;
+  endDate: any;
+
   modalConfigCreate: ModalConfig = {
     modalTitle: 'Create Customer',
     dismissButtonLabel: 'Submit',
@@ -136,9 +149,66 @@ export class CustomerComponent implements OnInit {
     private formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
-    private localService: LocalService
+    private localService: LocalService,
+    private utils: Utils
   ) {
     this.initForm();
+  }
+
+  onDateSelection(date: NgbDate, datepicker: any) {
+    if (!this.fromDate && !this.toDate) {
+      this.fromDate = date;
+    } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
+      this.toDate = date;
+      datepicker.close(); // Close datepicker popup
+
+      const valueBookFromDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      const valueBookToDate = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
+      const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookToDate);
+      this.startDate = startDate;
+      this.endDate = endDate;
+
+      const params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.startDate,
+        endDate: this.endDate,
+      };
+      console.log(params);
+      this.dataList(params);
+    } else {
+      this.toDate = null;
+      this.fromDate = date;
+    }
+  }
+
+  printFilterDate(datepicker: any) {
+    const dateRange = {
+      startDate: this.startDate,
+      endDate: this.endDate,
+    };
+    console.log(dateRange);
+    this.dataExport(dateRange);
+  }
+
+  isHovered(date: NgbDate) {
+    return (
+      this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate)
+    );
+  }
+
+  isInside(date: NgbDate) {
+    return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
+  }
+
+  isRange(date: NgbDate) {
+    return (
+      date.equals(this.fromDate) ||
+      (this.toDate && date.equals(this.toDate)) ||
+      this.isInside(date) ||
+      this.isHovered(date)
+    );
   }
 
   ngOnInit() {
@@ -605,5 +675,17 @@ export class CustomerComponent implements OnInit {
         }
       );
     this.unsubscribe.push(addressSubscr);
+  }
+
+  dataExport(param: Dates): void {
+    this.configuration.isLoading = true;
+    this.customerService
+      .customerExport(param)
+      .pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
+      .subscribe((response: any) => {
+        console.log(response);
+        this.configuration.isLoading = false;
+        this.utils.downloadExcel(response);
+      });
   }
 }

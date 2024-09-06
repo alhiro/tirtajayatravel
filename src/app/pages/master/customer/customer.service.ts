@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '@app/services/http.service';
-import { Observable, map } from 'rxjs';
-import { PaginationContext } from '@app/@shared/interfaces/pagination';
+import { Observable, catchError, map, throwError } from 'rxjs';
+import { Dates, PaginationContext } from '@app/@shared/interfaces/pagination';
 import { CustomerModel, CustomerContext, CustomerIdContext } from './models/customer.model';
 import { AddressModel } from './models/address.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CustomerService {
-  constructor(private httpService: HttpService) {}
+  constructor(private httpService: HttpService, private snackbar: MatSnackBar) {}
 
   get(context: CustomerIdContext): Observable<CustomerContext> {
     return this.httpService.customerGet(context).pipe(
@@ -18,6 +19,35 @@ export class CustomerService {
           return result;
         }
         return result;
+      })
+    );
+  }
+
+  customerExport(context: Dates): Observable<any> {
+    return this.httpService.customerExport(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      }),
+      catchError((error) => {
+        // Handle the error and return an observable with a user-facing error message
+        let errorMessage = 'An error occurred while downloading the Excel file';
+        if (error.error instanceof ErrorEvent) {
+          // Client-side error
+          errorMessage = `Error: ${error.error.message}`;
+        } else {
+          // Server-side error
+          errorMessage = `Server returned code: ${error.status}, error message is: ${error.message}`;
+        }
+
+        this.snackbar.open(errorMessage, '', {
+          panelClass: 'snackbar-error',
+          duration: 5000,
+        });
+
+        return throwError(() => new Error(errorMessage)); // Return a custom error
       })
     );
   }

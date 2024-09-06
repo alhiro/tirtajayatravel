@@ -832,6 +832,12 @@ export class HttpService {
     return this.commonApi.get('/customer/get?customer_id=' + param.customer_id) as Observable<any>;
   }
 
+  customerExport(param: Dates): Observable<any> {
+    return this.http.get('/customer/export?startDate=' + param.startDate + '&endDate=' + param.endDate, {
+      responseType: 'blob',
+    }) as Observable<any>;
+  }
+
   customerList(param: PaginationContext): Observable<any> {
     return this.commonApi.get(
       '/customer/list?limit=' + param.limit + '&page=' + param.page + '&search=' + param.search
