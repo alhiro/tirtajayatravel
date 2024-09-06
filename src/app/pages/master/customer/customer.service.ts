@@ -23,7 +23,7 @@ export class CustomerService {
     );
   }
 
-  customerExport(context: Dates): Observable<any> {
+  customerExport(context: PaginationContext): Observable<any> {
     return this.httpService.customerExport(context).pipe(
       map((result) => {
         if (!result) {

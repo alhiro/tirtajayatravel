@@ -109,6 +109,7 @@ export class CustomerComponent implements OnInit {
 
   startDate: any;
   endDate: any;
+  public inputCustomer: any = '';
 
   modalConfigCreate: ModalConfig = {
     modalTitle: 'Create Customer',
@@ -184,12 +185,15 @@ export class CustomerComponent implements OnInit {
   }
 
   printFilterDate(datepicker: any) {
-    const dateRange = {
+    const params = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.inputCustomer,
       startDate: this.startDate,
       endDate: this.endDate,
     };
-    console.log(dateRange);
-    this.dataExport(dateRange);
+    console.log(params);
+    this.dataExport(params);
   }
 
   isHovered(date: NgbDate) {
@@ -337,11 +341,12 @@ export class CustomerComponent implements OnInit {
             map((response: any) => {
               if (response) {
                 console.log(this.modelCustomer);
+                this.inputCustomer = term;
 
                 const params = {
                   limit: this.pagination.limit,
                   page: this.pagination.offset,
-                  search: term,
+                  search: this.inputCustomer,
                   startDate: this.pagination.startDate,
                   endDate: this.pagination.endDate,
                 };
@@ -677,15 +682,16 @@ export class CustomerComponent implements OnInit {
     this.unsubscribe.push(addressSubscr);
   }
 
-  dataExport(param: Dates): void {
+  dataExport(params: PaginationContext): void {
     this.configuration.isLoading = true;
     this.customerService
-      .customerExport(param)
+      .customerExport(params)
       .pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
         console.log(response);
         this.configuration.isLoading = false;
         this.utils.downloadExcel(response);
+        this.dataList(params);
       });
   }
 }
