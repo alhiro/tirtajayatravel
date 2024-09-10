@@ -80,7 +80,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
         if (currentLayoutType !== nextLayoutType || !currentLayoutType) {
           this.layout.currentLayoutTypeSubject.next(nextLayoutType);
-          this.initService.reInitProps(nextLayoutType);
+          this.initService?.reInitProps(nextLayoutType);
         }
       }
     });

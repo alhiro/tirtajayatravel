@@ -23,7 +23,16 @@ export class NewChartsWidget8Component implements OnInit {
   hadDelay: boolean = false;
 
   isLoading = false;
-  data: any;
+  data: any = [
+    {
+      name: 'Package Profit',
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    },
+    {
+      name: 'Passenger Profit',
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    },
+  ];
 
   constructor(private cdr: ChangeDetectorRef, private homeService: HomeService) {}
 
@@ -60,21 +69,8 @@ export class NewChartsWidget8Component implements OnInit {
       )
       .subscribe((resp) => {
         if (resp) {
-          this.data = resp;
-          this.setupCharts(this.data);
+          this.setupCharts(resp);
         } else {
-          const data = [
-            {
-              name: 'Package Profit',
-              data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            },
-            {
-              name: 'Passenger Profit',
-              data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            },
-          ];
-
-          this.data = data;
           this.setupCharts(this.data);
         }
 

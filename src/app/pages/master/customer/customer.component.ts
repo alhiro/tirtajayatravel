@@ -531,6 +531,8 @@ export class CustomerComponent implements OnInit {
   }
 
   async openModalNewAddress(event: CustomerModel) {
+    console.log(event);
+
     this.isCreateAddress = true;
     this.clearFormAddress();
 

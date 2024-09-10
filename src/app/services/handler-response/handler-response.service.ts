@@ -100,9 +100,10 @@ export class HandlerResponseService {
         break;
 
       case StatusCode.SERVER_ERROR:
+        console.log(error.error);
         // show dialog
         // this.utils.showNotification('GENERAL', 'SERVER_ERROR');
-        this.snackbar.open('Internal Server Error ', '', {
+        this.snackbar.open(error.error.data.err != '' ? error.error.data.err.message : error.statusText, '', {
           panelClass: 'snackbar-error',
           duration: 5000,
         });
