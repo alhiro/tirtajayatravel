@@ -18,4 +18,15 @@ export class HomeService {
       })
     );
   }
+
+  statistic(): Observable<any> {
+    return this.httpService.statistic().pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
 }

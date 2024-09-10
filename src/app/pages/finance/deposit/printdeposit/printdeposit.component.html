@@ -1,19 +1,216 @@
-<!--begin::Row-->
-<div class="row g-5 g-xl-10 mb-5 mb-xl-10">
-  <!--begin::Col-->
-  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
-    <!--begin::Card body-->
-    <div class="card-body pt-0">left</div>
-    <!--end::Card body-->
-  </div>
-  <!--end::Col-->
+<div class="my-20">
+  <div class="col-md-8 mx-auto">
+    <!--begin::Row-->
+    <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+      <!--begin::Col-->
+      <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-3 mb-xl-3">
+        <!--begin::Card body-->
+        <div class="card-body pt-0">
+          <b>BSD PACKAGE</b>
+          <!-- begin::Table container -->
+          <div class="table-responsive mb-5">
+            <!-- begin::Table -->
+            <ngx-table
+              #table
+              [configuration]="configuration"
+              [data]="data.dataPackage"
+              [columns]="columnsPackage"
+              tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+            >
+              <ng-template let-row let-index="index">
+                <td>
+                  <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.bsd }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.employee?.name }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ data.totalDepositDriverPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  </span>
+                </td>
+              </ng-template>
+            </ngx-table>
+            <!-- end::Table -->
+          </div>
+          <!-- end::Table container -->
+          <b>TOTAL BSD PACKAGE: {{ data?.totalDepositDriverPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+        </div>
+        <!--end::Card body-->
+      </div>
+      <!--end::Col-->
 
-  <!--begin::Col-->
-  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
-    <!--begin::Card body-->
-    <div class="card-body pt-0">right</div>
-    <!--end::Card body-->
+      <!--begin::Col-->
+      <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-3 mb-xl-3">
+        <!--begin::Card body-->
+        <div class="card-body pt-0">
+          <h6>BSD PASSENGER</h6>
+          <!-- begin::Table container -->
+          <div class="table-responsive mb-5">
+            <!-- begin::Table -->
+            <ngx-table
+              #table
+              [configuration]="configuration"
+              [data]="data.dataPassenger"
+              [columns]="columnsPassenger"
+              tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+            >
+              <ng-template let-row let-index="index">
+                <td>
+                  <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.bsd_passenger }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.employee?.name }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ data?.totalDepositDriverPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  </span>
+                </td>
+              </ng-template>
+            </ngx-table>
+            <!-- end::Table -->
+          </div>
+          <!-- end::Table container -->
+
+          <b>TOTAL BSD PASSENGER: {{ data?.totalDepositDriverPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+        </div>
+        <!--end::Card body-->
+      </div>
+      <!--end::Col-->
+      <!--begin::Col-->
+      <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-3 mb-xl-3">
+        <!--begin::Card body-->
+        <b>LIST PAID PACKAGE MALANG</b>
+        <div class="card-body pt-0">{{ data?.totalPackagePaidMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</div>
+        <!--end::Card body-->
+      </div>
+      <!--end::Col-->
+
+      <!--begin::Col-->
+      <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-3 mb-xl-3">
+        <!--begin::Card body-->
+        <b>LIST PAID PACKAGE SURABAYA</b>
+        <div class="card-body pt-0">{{ data?.totalPackagePaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</div>
+        <!--end::Card body-->
+      </div>
+      <!--end::Col-->
+
+      <!--begin::Col-->
+      <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 mb-md-3 mb-xl-3">
+        <!--begin::Card body-->
+        <div class="card-body pt-0">
+          <b>PAYMENTS TO BE RECEIVED</b>
+          <table class="table table-striped table-bordered table-hover">
+            <tbody>
+              <tr style="background-color: #ffb8b8">
+                <td colspan="2">Total Piutang And Transfer</td>
+              </tr>
+              <tr style="background-color: #ffb8b8">
+                <td>Payment Transfer</td>
+                <td>{{ data?.totalReminderPaymentTransfer | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+              </tr>
+              <tr style="background-color: #ffb8b8">
+                <td>Monthly</td>
+                <td>{{ data?.totalPaymentMonthly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>
+            <b>OPERATIONAL DEPOSIT: {{ totalOperationalDeposit | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+          </h3>
+        </div>
+        <!--end::Card body-->
+      </div>
+      <!--end::Col-->
+
+      <!--begin::Col-->
+      <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-3 mb-xl-3">
+        <!--begin::Card body-->
+        <div class="card-body pt-0">
+          <b>LIST PACKAGE PAY FOR SURABAYA</b>
+          <div class="card-body pt-0">{{ data?.totalPackageCodSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</div>
+        </div>
+        <!--end::Card body-->
+      </div>
+      <!--end::Col-->
+
+      <!--begin::Col-->
+      <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-3 mb-xl-3">
+        <!--begin::Card body-->
+        <div class="card-body pt-0">
+          <b>LIST PACKAGE PAY FOR MALANG</b>
+          <div class="card-body pt-0">{{ data?.totalPackageCodMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</div>
+        </div>
+        <!--end::Card body-->
+      </div>
+      <!--end::Col-->
+
+      <!--begin::Col-->
+      <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-3 mb-xl-3">
+        <!--begin::Card body-->
+        <div class="card-body pt-0">
+          <b>LIST CASH OUT OPERATIONAL MALANG</b>
+          <div class="card-body pt-0">{{ data?.totalCostMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</div>
+        </div>
+        <!--end::Card body-->
+      </div>
+      <!--end::Col-->
+
+      <!--begin::Col-->
+      <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-3 mb-xl-3">
+        <!--begin::Card body-->
+        <div class="card-body pt-0">
+          <b>LIST CASH OUT OPERATIONAL SURABAYA</b>
+          <div class="card-body pt-0">{{ data?.totalCostSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</div>
+        </div>
+        <!--end::Card body-->
+      </div>
+      <!--end::Col-->
+
+      <!--begin::Col-->
+      <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-3 mb-xl-3">
+        <!--begin::Card body-->
+        <div class="card-body pt-0">
+          <b>LIST COMMISSION COURIER MALANG</b>
+          <div class="card-body pt-0">{{ data?.cashoutCourierMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</div>
+        </div>
+        <!--end::Card body-->
+      </div>
+      <!--end::Col-->
+
+      <!--begin::Col-->
+      <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-3 mb-xl-3">
+        <!--begin::Card body-->
+        <div class="card-body pt-0">
+          <b>LIST COMMISSION COURIER SURABAYA</b>
+          <div class="card-body pt-0">{{ data?.cashoutCourierSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</div>
+        </div>
+        <!--end::Card body-->
+      </div>
+      <!--end::Col-->
+
+      <h3>
+        <b
+          >REMAINING OPERATIONAL DEPOSIT: {{ data?.totalCashOutMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+        >
+      </h3>
+    </div>
+    <!--end::Row-->
   </div>
-  <!--end::Col-->
 </div>
-<!--end::Row-->

@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import * as ApexCharts from 'apexcharts';
 import { getCSSVariableValue } from '../../../../../../kt/_utils';
+import { finalize } from 'rxjs/operators';
+import { HomeService } from '@app/pages/home/home.service';
 
 @Component({
   selector: 'app-new-charts-widget8',
@@ -15,182 +17,224 @@ export class NewChartsWidget8Component implements OnInit {
   @Input() chartHeight: string = '425px';
   @Input() chartHeightNumber: number = 425;
   @Input() cssClass: string = '';
-  tab: 'Day' | 'Week' | 'Month' = 'Week';
+  tab: 'Package' | 'Passenger' = 'Package';
   chart1Options: any = {};
   chart2Options: any = {};
-  chart3Options: any = {};
   hadDelay: boolean = false;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  isLoading = false;
+  data: any;
+
+  constructor(private cdr: ChangeDetectorRef, private homeService: HomeService) {}
 
   ngOnInit(): void {
-    this.setupCharts();
+    this.getStatistic();
   }
 
-  init() {
-    this.chart1Options = getChart1Options(this.chartHeightNumber);
+  init(data: any) {
+    this.chart1Options = this.getChart1Options(data, this.chartHeightNumber);
     this.chart2Options = getChart2Options(this.chartHeightNumber);
-    this.chart3Options = getChart2Options(this.chartHeightNumber);
   }
 
-  setTab(_tab: 'Day' | 'Week' | 'Month') {
+  setTab(_tab: 'Package' | 'Passenger') {
     this.tab = _tab;
-    if (_tab === 'Day') {
-      this.chart3Options = getChart2Options(this.chartHeightNumber);
-    }
-
-    if (_tab === 'Week') {
+    if (_tab === 'Package') {
       this.chart2Options = getChart2Options(this.chartHeightNumber);
     }
 
-    if (_tab === 'Month') {
-      this.chart1Options = getChart1Options(this.chartHeightNumber);
+    if (_tab === 'Passenger') {
+      this.chart1Options = this.getChart1Options(this.data, this.chartHeightNumber);
     }
 
-    this.setupCharts();
+    this.setupCharts(this.data);
   }
 
-  setupCharts() {
+  getStatistic() {
+    this.isLoading = true;
+    this.homeService
+      .statistic()
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe((resp) => {
+        if (resp) {
+          this.data = resp;
+          this.setupCharts(this.data);
+        } else {
+          const data = [
+            {
+              name: 'Package Profit',
+              data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            },
+            {
+              name: 'Passenger Profit',
+              data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            },
+          ];
+
+          this.data = data;
+          this.setupCharts(this.data);
+        }
+
+        this.cdr.detectChanges();
+      });
+  }
+
+  setupCharts(data: any) {
     setTimeout(() => {
       this.hadDelay = true;
-      this.init();
+      this.init(data);
       this.cdr.detectChanges();
     }, 100);
   }
-}
 
-function getChart1Options(chartHeightNumber: number) {
-  const data = [
-    [[100, 250, 30]],
-    [[225, 300, 35]],
-    [[300, 350, 25]],
-    [[350, 350, 20]],
-    [[450, 400, 25]],
-    [[550, 350, 35]],
-  ];
-  const height = chartHeightNumber;
-  const borderColor = getCSSVariableValue('--bs-border-dashed-color');
-  const labelColor = getCSSVariableValue('--bs-gray-500');
-  const baseColor = getCSSVariableValue('--bs-info');
-  const lightColor = getCSSVariableValue('--bs-info-light');
+  getChart1Options(data: any, chartHeightNumber: number) {
+    const height = chartHeightNumber;
+    const borderColor = getCSSVariableValue('--bs-border-dashed-color');
+    const labelColor = getCSSVariableValue('--bs-gray-500');
+    const baseColor = getCSSVariableValue('--bs-info');
+    const lightColor = getCSSVariableValue('--bs-info-light');
+    const orangeColor = getCSSVariableValue('--bs-warning');
+    const greenColor = getCSSVariableValue('--bs-success');
+    const redColor = getCSSVariableValue('--bs-danger');
 
-  return {
-    series: [
-      {
-        name: 'Net Profit',
-        data: [30, 40, 40, 90, 90, 70, 70],
-      },
-    ],
-    chart: {
-      fontFamily: 'inherit',
-      type: 'area',
-      height: 350,
-      toolbar: {
-        show: false,
-      },
-    },
-    plotOptions: {},
-    legend: {
-      show: false,
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    fill: {
-      type: 'solid',
-      opacity: 1,
-    },
-    stroke: {
-      curve: 'smooth',
-      show: true,
-      width: 3,
-      colors: [baseColor],
-    },
-    xaxis: {
-      categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-      labels: {
-        style: {
-          colors: labelColor,
-          fontSize: '12px',
+    return {
+      // series: [
+      //   {
+      //     name: 'Package Transaction',
+      //     data: [30, 40, 40, 90, 90, 70, 70, 100, 120, 0, 0, 0],
+      //   },
+      //   {
+      //     name: 'Passenger Transaction',
+      //     data: [10, 10, 20, 50, 60, 1, 20, 0, 0, 80, 0, 0],
+      //   },
+      // ],
+      series: data,
+      chart: {
+        fontFamily: 'inherit',
+        type: 'area',
+        height: height,
+        toolbar: {
+          show: false,
         },
       },
-      crosshairs: {
-        position: 'front',
-        stroke: {
-          color: baseColor,
-          width: 1,
-          dashArray: 3,
+      plotOptions: {},
+      legend: {
+        show: true,
+        position: 'top',
+        horizontalAlign: 'center',
+        offsetX: 0,
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      fill: {
+        type: 'gradient', // Use gradient fill
+        gradient: {
+          type: 'vertical', // Gradient direction: 'vertical', 'horizontal', 'diagonal1', 'diagonal2'
+          shadeIntensity: 1, // Intensity of the gradient
+          gradientToColors: ['#FFC300', '#00BFFF'], // Colors for the gradient transition
+          inverseColors: false, // Reverse the gradient colors
+          opacityFrom: 1, // Starting opacity of the gradient
+          opacityTo: 0.5, // Ending opacity of the gradient
+          stops: [0, 100], // Gradient stop positions
+        },
+      },
+      stroke: {
+        curve: 'smooth',
+        show: false,
+        width: 3,
+        colors: [baseColor],
+      },
+      xaxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+        labels: {
+          style: {
+            colors: labelColor,
+            fontSize: '12px',
+          },
+        },
+        crosshairs: {
+          position: 'front',
+          stroke: {
+            color: baseColor,
+            width: 1,
+            dashArray: 3,
+          },
+        },
+        tooltip: {
+          enabled: true,
+          formatter: undefined,
+          offsetY: 0,
+          style: {
+            fontSize: '12px',
+          },
+        },
+      },
+      yaxis: {
+        show: false,
+        labels: {
+          style: {
+            colors: labelColor,
+            fontSize: '12px',
+          },
+        },
+      },
+      states: {
+        normal: {
+          filter: {
+            type: 'none',
+            value: 0,
+          },
+        },
+        hover: {
+          filter: {
+            type: 'none',
+            value: 0,
+          },
+        },
+        active: {
+          allowMultipleDataPointsSelection: false,
+          filter: {
+            type: 'none',
+            value: 0,
+          },
         },
       },
       tooltip: {
-        enabled: true,
-        formatter: undefined,
-        offsetY: 0,
         style: {
           fontSize: '12px',
         },
-      },
-    },
-    yaxis: {
-      labels: {
-        style: {
-          colors: labelColor,
-          fontSize: '12px',
+        y: {
+          formatter: function (val: number) {
+            return 'Rp ' + val;
+          },
         },
       },
-    },
-    states: {
-      normal: {
-        filter: {
-          type: 'none',
-          value: 0,
+      colors: [redColor, greenColor],
+      grid: {
+        borderColor: borderColor,
+        strokeDashArray: 4,
+        yaxis: {
+          lines: {
+            show: true,
+          },
         },
       },
-      hover: {
-        filter: {
-          type: 'none',
-          value: 0,
-        },
+      markers: {
+        strokeColors: baseColor,
+        strokeWidth: 3,
       },
-      active: {
-        allowMultipleDataPointsSelection: false,
-        filter: {
-          type: 'none',
-          value: 0,
-        },
-      },
-    },
-    tooltip: {
-      style: {
-        fontSize: '12px',
-      },
-      y: {
-        formatter: function (val: number) {
-          return '$' + val + ' thousands';
-        },
-      },
-    },
-    colors: [lightColor],
-    grid: {
-      borderColor: borderColor,
-      strokeDashArray: 4,
-      yaxis: {
-        lines: {
-          show: true,
-        },
-      },
-    },
-    markers: {
-      strokeColors: baseColor,
-      strokeWidth: 3,
-    },
-  };
+    };
+  }
 }
 
 function getChart2Options(chartHeightNumber: number) {
@@ -206,20 +250,20 @@ function getChart2Options(chartHeightNumber: number) {
   const borderColor = getCSSVariableValue('--bs-border-dashed-color');
 
   const options = {
-    // series: [
-    //   {
-    //     name: 'Social Campaigns',
-    //     data: data[0], // array value is of the format [x, y, z] where x (timestamp) and y are the two axes coordinates,
-    //   },
-    //   {
-    //     name: 'Email Newsletter',
-    //     data: data[1],
-    //   },
-    //   {
-    //     name: 'TV Campaign',
-    //     data: data[2],
-    //   },
-    // ],
+    series: [
+      {
+        name: 'Social Campaigns',
+        data: data[0], // array value is of the format [x, y, z] where x (timestamp) and y are the two axes coordinates,
+      },
+      {
+        name: 'Email Newsletter',
+        data: data[1],
+      },
+      {
+        name: 'TV Campaign',
+        data: data[2],
+      },
+    ],
     chart: {
       fontFamily: 'inherit',
       type: 'bubble',
@@ -263,6 +307,7 @@ function getChart2Options(chartHeightNumber: number) {
       },
     },
     yaxis: {
+      show: false,
       tickAmount: 7,
       min: 0,
       max: 700,

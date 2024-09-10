@@ -21,6 +21,7 @@ export class DepositComponent implements OnInit {
 
   public configuration: Config = { ...DefaultConfig };
 
+  public depositData: any;
   public dataPackage: any;
   public dataPassenger: any;
 
@@ -123,6 +124,7 @@ export class DepositComponent implements OnInit {
     this.configuration.resizeColumn = true;
     this.configuration.fixedColumnWidth = false;
     this.configuration.paginationEnabled = false;
+    this.configuration.rows = 100;
     this.configuration.orderEnabled = false;
 
     this.columnsPackage = [
@@ -180,7 +182,10 @@ export class DepositComponent implements OnInit {
     this.dataListBSD(params);
   }
 
-  printDeposit() {}
+  printDeposit() {
+    sessionStorage.setItem('data-deposit', JSON.stringify(this.depositData));
+    window.open('#/finance/deposit/daily/printdaily', '_blank');
+  }
 
   eventEmitted($event: { event: string; value: any }): void {
     console.log($event.value);
@@ -224,9 +229,9 @@ export class DepositComponent implements OnInit {
         })
       )
       .subscribe((response: any) => {
-        if (response) {
-          this.configuration.isLoading = false;
+        this.configuration.isLoading = false;
 
+        if (response) {
           const dataPackage = response.data?.filter((data: GoSendModel) => data.status === 'Box' && data.bsd !== null);
           this.dataPackage = dataPackage;
           console.log(this.dataPackage);
@@ -319,6 +324,39 @@ export class DepositComponent implements OnInit {
             Number(this.totalCashInSurabayaDaily) - Number(this.totalCashOutSurabayaDaily);
 
           this.totalDepositDaily = Number(this.totalDepositMalangDaily) + Number(this.totalDepositSurabayaDaily);
+
+          this.depositData = {
+            dataPackage: dataPackage,
+            dataPassenger: dataPassenger,
+            // cashin
+            totalDepositDriverPackage: this.totalDepositDriverPackage,
+            totalDepositDriverPassenger: this.totalDepositDriverPassenger,
+            totalPackagePaidMalang: totalPackagePaidMalang,
+            totalPackagePaidSurabaya: totalPackagePaidSurabaya,
+            totalPackageCodMalang: totalPackageCodMalang,
+            totalPackageCodSurabaya: totalPackageCodSurabaya,
+            totalPassengerPaidMalang: totalPassengerPaidMalang,
+            totalPassengerPaidSurabaya: totalPassengerPaidSurabaya,
+            piutangTransition: this.piutangTransition,
+            // cashout
+            totalCostMalang: this.totalCostMalang,
+            totalCostSurabaya: this.totalCostSurabaya,
+            cashoutOnderdilService: this.cashoutOnderdilService,
+            cashoutCourierMalang: this.cashoutCourierMalang,
+            cashoutCourierSurabaya: this.cashoutCourierSurabaya,
+            totalReminderPaymentTransfer: this.totalReminderPaymentTransfer,
+            totalPaymentMonthly: this.totalPaymentMonthly,
+            // deposit cash malang
+            totalCashInMalangDaily: this.totalCashInMalangDaily,
+            totalCashOutMalangDaily: this.totalCashOutMalangDaily,
+            totalDepositMalangDaily: this.totalDepositMalangDaily,
+            // information cash in surabaya:
+            totalCashInSurabayaDaily: this.totalCashInSurabayaDaily,
+            totalCashOutSurabayaDaily: this.totalCashOutSurabayaDaily,
+            totalDepositSurabayaDaily: this.totalDepositSurabayaDaily,
+            // deposit cash daily
+            totalDepositDaily: this.totalDepositDaily,
+          };
         }
       });
   }

@@ -34,6 +34,7 @@ import { PrintbsdComponent } from '@app/pages/finance/bsd/printbsd/printbsd.comp
 import { PrintPackageComponent } from '@app/pages/booking/package/printPackage/printPackage.component';
 import { PrintListPackageComponent } from '@app/pages/booking/package/printList/printList.component';
 import { PrintListPassengerComponent } from '@app/pages/booking/passenger/printList/printList.component';
+import { PrintdepositComponent } from '@app/pages/finance/deposit/printdeposit/printdeposit.component';
 
 const routes: Routes = [
   {
@@ -71,6 +72,13 @@ const routes: Routes = [
     path: 'finance/bsd/tirta-jaya/printbsd',
     component: PrintbsdComponent,
     loadChildren: () => import('../../pages/finance/bsd/printbsd/printbsd.module').then((m) => m.PrintbsdModule),
+  },
+  // print deposit daily
+  {
+    path: 'finance/deposit/daily/printdaily',
+    component: PrintdepositComponent,
+    loadChildren: () =>
+      import('../../pages/finance/deposit/printdeposit/printdeposit.module').then((m) => m.PrintDepositModule),
   },
 ];
 

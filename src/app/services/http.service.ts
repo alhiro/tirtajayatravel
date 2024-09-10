@@ -81,6 +81,10 @@ export class HttpService {
     return this.commonApi.get('/dashboard/order-summary') as Observable<any>;
   }
 
+  statistic(): Observable<any> {
+    return this.commonApi.get('/dashboard/statistic-summary') as Observable<any>;
+  }
+
   // BOOKING
   // Packager
   packageList(param: PaginationContext): Observable<any> {
