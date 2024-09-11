@@ -578,10 +578,12 @@ export class PackageComponent implements OnInit, OnDestroy {
         // count malang or surabaya
         if (response.data.length > 0) {
           const malangData = response.data?.filter(
-            (data: PackageModel) => data.city_id === 1 && data.status_package === 'Progress'
+            (data: PackageModel) =>
+              (data.city_id === 1 && data.status_package === 'Progress') || data.status_package === 'Delivery'
           );
           const surabayaData = response.data?.filter(
-            (data: PackageModel) => data.city_id === 2 && data.status_package === 'Progress'
+            (data: PackageModel) =>
+              (data.city_id === 2 && data.status_package === 'Progress') || data.status_package === 'Delivery'
           );
           const cancelData = response.data?.filter((data: PackageModel) => data.status_package === 'Cancel');
           const historyData = response.data?.filter((data: PackageModel) => data.status_package === 'Completed');

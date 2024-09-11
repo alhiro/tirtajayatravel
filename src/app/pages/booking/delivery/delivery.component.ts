@@ -427,7 +427,20 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.dataDetail = val;
     this.dataDetailPackages = val?.packages;
     this.dataDetailPassenger = val?.passengers;
-    return await this.modalComponentDetail.open();
+
+    return await this.modalComponentDetail.open().then(
+      (resp: any) => {
+        console.log(resp);
+
+        if (resp === true || resp === 1) {
+          this.dataListGosend(this.params);
+          console.log('User closes or esc');
+        }
+      },
+      () => {
+        console.log('Backdrop click');
+      }
+    );
   }
 
   clearForm() {

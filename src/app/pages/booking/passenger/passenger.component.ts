@@ -559,10 +559,12 @@ export class PassengerComponent implements OnInit, OnDestroy {
         // count malang or surabaya
         if (response.data.length > 0) {
           const malangData = response.data?.filter(
-            (data: PassengerModel) => data.city_id === 1 && data.status_passenger === 'Progress'
+            (data: PassengerModel) =>
+              (data.city_id === 1 && data.status_passenger === 'Progress') || data.status_passenger === 'Delivery'
           );
           const surabayaData = response.data?.filter(
-            (data: PassengerModel) => data.city_id === 2 && data.status_passenger === 'Progress'
+            (data: PassengerModel) =>
+              (data.city_id === 2 && data.status_passenger === 'Progress') || data.status_passenger === 'Delivery'
           );
           const cancelData = response.data?.filter((data: PassengerModel) => data.status_passenger === 'Cancel');
           const historyData = response.data?.filter((data: PassengerModel) => data.status_passenger === 'Completed');
