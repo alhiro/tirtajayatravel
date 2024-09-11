@@ -164,6 +164,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   @ViewChild('modalGeneratePassengerSP') private modalComponentGeneratePassengerSP!: ModalFullComponent;
 
   dataDelivery!: GoSendModel;
+  isDeliveryPackage = false;
+  isDeliveryPassenger = false;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -239,7 +241,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       // { key: 'category_sub_id', title: 'No' },
       { key: 'resi_number', title: 'Resi Number' },
       { key: 'level', title: 'Level' },
-      { key: 'sp_package', title: 'SP' },
+      { key: 'book_date', title: 'SP' },
       { key: 'sender_id', title: 'Sender' },
       { key: 'recipient_id', title: 'Recipient' },
       { key: 'origin_form', title: 'From' },
@@ -671,15 +673,17 @@ export class DeliveryComponent implements OnInit, OnDestroy {
 
   async openModalGeneratePackageSP(event: GoSendModel) {
     console.log(event);
+    this.isDeliveryPackage = true;
     this.dataDelivery = event;
     return await this.modalComponentGeneratePackageSP.open().then(
       (resp: any) => {
         console.log(resp);
 
         if (resp === true || resp === 1) {
+          this.isDeliveryPackage = false;
           this.dataListGosend(this.params);
+          console.log('User closes or esc');
         }
-        console.log('User closes or esc');
       },
       () => {
         console.log('Backdrop click');
@@ -689,15 +693,17 @@ export class DeliveryComponent implements OnInit, OnDestroy {
 
   async openModalGeneratePassengerSP(event: GoSendModel) {
     console.log(event);
+    this.isDeliveryPassenger = true;
     this.dataDelivery = event;
     return await this.modalComponentGeneratePassengerSP.open().then(
       (resp: any) => {
         console.log(resp);
 
         if (resp === true || resp === 1) {
+          this.isDeliveryPassenger = false;
           this.dataListGosend(this.params);
+          console.log('User closes or esc');
         }
-        console.log('User closes or esc');
       },
       () => {
         console.log('Backdrop click');

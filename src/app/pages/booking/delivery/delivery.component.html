@@ -243,19 +243,19 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row?.employee?.packages?.length > 0) {
+                  @if (row?.packages?.length > 0) {
                   <img
-                    style="width: 25px"
+                    style="width: 25px; cursor: pointer"
                     src="../../../../assets/media/box.png"
                     alt="{{ row.sp_package }}"
-                    title="{{ row.sp_package }}"
+                    ngbTooltip="{{ row.sp_package }}"
                   />
-                  } @if (row?.employee?.passengers?.length > 0) {
+                  } @if (row?.passengers?.length > 0) {
                   <img
-                    style="width: 22px"
+                    style="width: 22px; cursor: pointer"
                     src="../../../../assets/media/avatars/blank.png"
                     alt="{{ row.sp_passenger }}"
-                    title="{{ row.sp_passenger }}"
+                    ngbTooltip="{{ row.sp_passenger }}"
                   />
                   }
                 </span>
@@ -833,14 +833,18 @@
 
 <!-- begin:: Modal generate SP Package-->
 <app-modal-full #modalGeneratePackageSP [modalConfig]="modalConfigGenerateSP" [modalClass]="addClass">
+  @if (isDeliveryPackage) {
   <app-package [delivery]="dataDelivery"></app-package>
+  }
 </app-modal-full>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
 <!-- end:: Modal generate sp package -->
 
 <!-- begin:: Modal generate SP Passenger -->
 <app-modal-full #modalGeneratePassengerSP [modalConfig]="modalConfigGenerateSP" [modalClass]="addClass">
+  @if (isDeliveryPassenger) {
   <app-passenger [delivery]="dataDelivery"></app-passenger>
+  }
 </app-modal-full>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
 <!-- end:: Modal generate sp passenger -->
