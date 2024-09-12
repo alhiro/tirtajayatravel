@@ -15,7 +15,7 @@ export class PassengerModel {
   go_send!: GoSendModel;
   tariff!: number;
   discount!: number;
-  agent_commission!: Date;
+  agent_commission!: number;
   other_fee!: number;
   book_date!: Date;
   total_passenger!: Date;

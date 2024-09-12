@@ -31,6 +31,7 @@ import { Utils } from '@app/@shared';
 import { BsdService } from './bsd.service';
 import { PackageModel } from '@app/pages/booking/package/models/package.model';
 import { PassengerService } from '@app/pages/booking/passenger/passenger.service';
+import { PassengerModel } from '@app/pages/booking/passenger/models/passenger.model';
 
 interface EventObject {
   event: string;
@@ -245,6 +246,7 @@ export class BsdComponent implements OnInit, OnDestroy {
       cost: [''],
       discount: [''],
       payment: [''],
+      agent_commission: [0],
       koli: [''],
       origin_from: [''],
       level: [''],
@@ -338,7 +340,7 @@ export class BsdComponent implements OnInit, OnDestroy {
   }
 
   eventEmitted($event: { event: string; value: any }): void {
-    if ($event.event !== 'onClick') {
+    if ($event.event === 'onPagination') {
       this.parseEvent($event);
     }
   }
@@ -534,35 +536,103 @@ export class BsdComponent implements OnInit, OnDestroy {
 
   formatter = (result: { name: string; car_number: string }) => result.car_number;
 
-  checkPayment(event: PackageModel) {
-    this.isPayment = !this.isPayment;
+  checkPayment(item: PackageModel, event: Event) {
+    console.log(item);
+    const target = event.target as HTMLInputElement;
+    item.check_payment = target.checked;
 
-    event.check_payment = this.isPayment;
-    this.formPackage.patchValue(event);
+    this.formPackage.patchValue(item);
+
+    if (item.check_payment) {
+      this.formPackage.patchValue({
+        check_payment: true,
+        sender_id: item.sender.sender_id,
+        recipient_id: item.recipient.recipient_id,
+      });
+    } else {
+      this.formPackage.patchValue({
+        check_payment: false,
+        sender_id: item.sender.sender_id,
+        recipient_id: item.recipient.recipient_id,
+      });
+    }
     console.log(this.formPackage.value);
   }
 
-  checkSp(event: PackageModel) {
-    this.isSp = !this.isSp;
+  checkSp(item: PackageModel, event: Event) {
+    console.log(item);
+    const target = event.target as HTMLInputElement;
+    item.check_sp = target.checked;
 
-    event.check_sp = this.isSp;
-    (event.check_date_sp = new Date()), this.formPackage.patchValue(event);
+    this.formPackage.patchValue(item);
+
+    if (item.check_sp) {
+      item.agent_commission = item.cost * 0.15;
+
+      this.formPackage.patchValue({
+        check_sp: true,
+        check_date_sp: new Date(),
+        agent_commission: item.cost * 0.15,
+        sender_id: item.sender.sender_id,
+        recipient_id: item.recipient.recipient_id,
+      });
+    } else {
+      item.agent_commission = 0;
+
+      this.formPackage.patchValue({
+        check_sp: false,
+        check_date_sp: new Date(),
+        agent_commission: 0,
+        sender_id: item.sender.sender_id,
+        recipient_id: item.recipient.recipient_id,
+      });
+    }
     console.log(this.formPackage.value);
   }
 
-  checkPaymentPassenger(event: PackageModel) {
-    this.isPaymentPassenger = !this.isPaymentPassenger;
+  checkPaymentPassenger(item: PassengerModel, event: Event) {
+    console.log(item);
+    const target = event.target as HTMLInputElement;
+    item.check_sp = target.checked;
 
-    event.check_payment = this.isPaymentPassenger;
-    this.formPassenger.patchValue(event);
+    this.formPassenger.patchValue(item);
+
+    if (item.check_sp) {
+      this.formPassenger.patchValue({
+        check_payment: true,
+      });
+    } else {
+      this.formPassenger.patchValue({
+        check_payment: false,
+      });
+    }
     console.log(this.formPassenger.value);
   }
 
-  checkSpPassenger(event: PackageModel) {
-    this.isSpPassenger = !this.isSpPassenger;
+  checkSpPassenger(item: PassengerModel, event: Event) {
+    console.log(item);
+    const target = event.target as HTMLInputElement;
+    item.check_sp = target.checked;
 
-    event.check_sp = this.isSpPassenger;
-    (event.check_date_sp = new Date()), this.formPassenger.patchValue(event);
+    this.formPassenger.patchValue(item);
+
+    if (item.check_sp) {
+      item.agent_commission = item.tariff * 0.15;
+
+      this.formPassenger.patchValue({
+        check_sp: true,
+        check_date_sp: new Date(),
+        agent_commission: item.tariff * 0.15,
+      });
+    } else {
+      item.agent_commission = 0;
+
+      this.formPassenger.patchValue({
+        check_sp: false,
+        check_date_sp: new Date(),
+        agent_commission: 0,
+      });
+    }
     console.log(this.formPassenger.value);
   }
 
@@ -602,18 +672,21 @@ export class BsdComponent implements OnInit, OnDestroy {
       console.log('open package');
       // Edit cost
       this.formCost.patchValue({
+        cost_id: val.cost_id,
+        go_send_id: val.go_send_id,
         parking_package: val.cost?.parking_package,
       });
       console.log(this.formCost.value);
 
       // data package
-      const updatedDataPackages = this.calculateCommissionPackage(val?.packages);
-      this.dataMalangPackage = updatedDataPackages?.filter((val: GoSendModel) => val.city_id === 1);
-      this.dataSurabayaPackage = updatedDataPackages?.filter((val: GoSendModel) => val.city_id === 2);
+      // const updatedDataPackages = this.calculateCommissionPackage(val?.packages);
+      // console.log(updatedDataPackages);
+      this.dataMalangPackage = val?.packages?.filter((val: GoSendModel) => val.city_id === 1);
+      this.dataSurabayaPackage = val?.packages?.filter((val: GoSendModel) => val.city_id === 2);
       console.log(this.dataMalangPackage);
       console.log(this.dataSurabayaPackage);
 
-      this.formPackage.patchValue(updatedDataPackages);
+      this.formPackage.patchValue(val?.packages);
     }
 
     if (this.type === 'Passenger') {
@@ -638,13 +711,13 @@ export class BsdComponent implements OnInit, OnDestroy {
       console.log(this.formCost.value);
 
       // data passenger
-      const updatedDataPassengers = this.calculateCommissionPassenger(val?.passengers);
-      this.dataMalangPassenger = updatedDataPassengers?.filter((val: GoSendModel) => val.city_id === 1);
-      this.dataSurabayaPassenger = updatedDataPassengers?.filter((val: GoSendModel) => val.city_id === 2);
+      // const updatedDataPassengers = this.calculateCommissionPassenger(val?.passengers);
+      this.dataMalangPassenger = val?.passengers?.filter((val: GoSendModel) => val.city_id === 1);
+      this.dataSurabayaPassenger = val?.passengers?.filter((val: GoSendModel) => val.city_id === 2);
       console.log(this.dataMalangPassenger);
       console.log(this.dataSurabayaPassenger);
 
-      this.formPassenger.patchValue(updatedDataPassengers);
+      this.formPassenger.patchValue(val?.passengers);
     }
 
     return await this.modalComponentBSD.open();

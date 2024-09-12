@@ -103,10 +103,14 @@ export class HandlerResponseService {
         console.log(error.error);
         // show dialog
         // this.utils.showNotification('GENERAL', 'SERVER_ERROR');
-        this.snackbar.open(error.error.data.err != '' ? error.error.data.err.message : error.statusText, '', {
-          panelClass: 'snackbar-error',
-          duration: 5000,
-        });
+        this.snackbar.open(
+          error.error.data.err != '' || error.error.data != '' ? error.error.message : error.statusText,
+          '',
+          {
+            panelClass: 'snackbar-error',
+            duration: 5000,
+          }
+        );
         break;
 
       case StatusCode.ERR_INTERNET_DISCONNECTED:

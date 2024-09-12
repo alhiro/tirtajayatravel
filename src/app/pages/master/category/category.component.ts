@@ -105,7 +105,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   eventEmitted($event: { event: string; value: any }): void {
-    if ($event.event !== 'onClick') {
+    if ($event.event === 'onPagination') {
       this.parseEvent($event);
     }
   }

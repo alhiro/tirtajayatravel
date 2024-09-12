@@ -15,7 +15,8 @@
         {{ dataLengthHistory | number }} items }
       </span>
     </h3>
-    @if (username === 'admin_11' && levelrule === 8) {
+
+    @if (!delivery) { @if (username === 'admin_11' && levelrule === 8) {
     <div class="card-toolbar">
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
@@ -27,6 +28,7 @@
       </ul>
     </div>
     }
+
     <div class="card-toolbar">
       <!-- begin::Menu -->
       <div class="menu-item px-3">
@@ -40,7 +42,6 @@
       </div>
       <!-- end::Menu -->
 
-      @if (!delivery) {
       <div class="col text-end">
         <div ngbDropdown placement="bottom-end" class="d-inline-block">
           <button type="button" class="btn btn-sm btn-light" id="otherspackage" ngbDropdownToggle>More Action</button>
@@ -106,8 +107,8 @@
           </ng-template>
         </div>
       </div>
-      }
     </div>
+    }
   </div>
   <!-- end::Header -->
   <!-- begin::Body -->

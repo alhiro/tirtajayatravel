@@ -1,5 +1,21 @@
 <!-- begin::Header -->
 <div class="card">
+  <div class="card-header d-block">
+    <div class="input-group d-block">
+      <label class="d-block mt-5">
+        <input
+          id="select-gosend"
+          type="text"
+          class="form-control"
+          [(ngModel)]="searchGlobal"
+          [ngbTypeahead]="searchDataGoSend"
+          [placeholder]="'Search name, address, no resi' | translate"
+        />
+        <span hidden translate>Search name, address, no resi</span>
+      </label>
+    </div>
+  </div>
+
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
       <span class="card-label fw-bolder fs-3 mb-1">
@@ -58,13 +74,14 @@
     </div>
   </div>
   <!-- end::Header -->
+
   <!-- begin::Body -->
   <div class="card-body py-3">
     <div class="tab-content mt-5" id="tabPackage">
       <!--begin::Tap pane-->
       <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Malang' }">
         <!-- begin::Table container -->
-        <div class="table-responsive">
+        <div class="table-responsive full-width">
           <!-- begin::Table -->
           <ngx-table
             #table
@@ -224,7 +241,7 @@
       <!--begin::Tap pane-->
       <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Surabaya' }">
         <!-- begin::Table container -->
-        <div class="table-responsive">
+        <div class="table-responsive full-width">
           <!-- begin::Table -->
           <ngx-table
             #table
@@ -640,9 +657,9 @@
 <!-- end:: Modal employee -->
 
 <!-- begin:: Modal detail print sp -->
-<app-modal-full #modalDetail [modalConfig]="modalConfigDetailSP">
+<app-modal-full #modalDetail [modalConfig]="modalConfigDetailSP" [modalClass]="addClass">
   <div class="m-0">
-    <div class="card-header border-0 pt-5" style="display: flex; justify-content: space-between">
+    <div class="card-header border-0" style="display: flex; justify-content: space-between">
       <div class="card-toolbar">
         <div class="col">
           <!-- begin::Menu -->
@@ -660,9 +677,9 @@
         <div class="col text-end">
           <!-- begin::Menu -->
           <div class="menu-item px-3">
-            <div class="menu-content px-3 py-3">
+            <div class="menu-content px-2 py-1">
               <a
-                class="btn btn-primary btn-hover-primary btn-sm cursor-pointer p-3"
+                class="btn btn-primary btn-hover-primary btn-sm cursor-pointer p-1 px-3 fs-7"
                 data-bs-toggle="tooltip"
                 data-bs-trigger="hover"
                 data-bs-dismiss-="click"
@@ -680,7 +697,7 @@
     </div>
   </div>
   <!-- begin::Table container -->
-  <div class="table-responsive">
+  <div class="table-responsive full-width small-table">
     <!-- begin::Table -->
     <ngx-table
       #table
@@ -696,7 +713,7 @@
           <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
         </td> -->
         <td>
-          <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
+          <span class="text-gray-900 fw-bolder text-hover-primary fs-7">
             {{ row.resi_number }}
           </span>
         </td>
@@ -739,6 +756,19 @@
             {{ row.position }}
           </span>
         </td>
+        <td class="text-end">
+          <a
+            class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+            data-bs-toggle="tooltip"
+            data-bs-trigger="hover"
+            data-bs-dismiss-="click"
+            data-bs-placement="top"
+            ngbTooltip="Remove Passenger"
+            (click)="removeDriverSPPassenger(row)"
+          >
+            <app-keenicon name="minus" class="fs-md-3 text-danger"></app-keenicon>
+          </a>
+        </td>
       </ng-template>
     </ngx-table>
     <!-- end::Table -->
@@ -747,7 +777,7 @@
 
   <div class="mt-10">
     <div class="m-0">
-      <div class="card-header border-0 pt-5" style="display: flex; justify-content: space-between">
+      <div class="card-header border-0" style="display: flex; justify-content: space-between">
         <div class="card-toolbar">
           <div class="col">
             <!-- begin::Menu -->
@@ -765,9 +795,9 @@
           <div class="col text-end">
             <!-- begin::Menu -->
             <div class="menu-item px-3">
-              <div class="menu-content px-3 py-3">
+              <div class="menu-content px-2 py-1">
                 <a
-                  class="btn btn-primary btn-hover-primary btn-sm cursor-pointer p-3"
+                  class="btn btn-primary btn-hover-primary btn-sm cursor-pointer p-1 px-3 fs-7"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
@@ -786,7 +816,7 @@
     </div>
   </div>
   <!-- begin::Table container -->
-  <div class="table-responsive">
+  <div class="table-responsive full-width small-table">
     <!-- begin::Table -->
     <ngx-table
       #table
@@ -802,13 +832,13 @@
           <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
         </td> -->
         <td>
-          <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
+          <span class="text-gray-900 fw-bolder text-hover-primary fs-7">
             {{ row.resi_number }}
           </span>
         </td>
         <td>
           <span class="text-gray-900 d-block">
-            @if (level === 1) {
+            @if (row.level === 'Normal') {
             <span class="badge badge-light-primary">Normal</span>
             } @else {
             <span class="badge badge-light-danger">Urgent</span>
@@ -836,6 +866,19 @@
             {{ row.origin_from }}
           </span>
         </td>
+        <td class="text-end">
+          <a
+            class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+            data-bs-toggle="tooltip"
+            data-bs-trigger="hover"
+            data-bs-dismiss-="click"
+            data-bs-placement="top"
+            ngbTooltip="Remove Package"
+            (click)="removeDriverSPPackage(row)"
+          >
+            <app-keenicon name="minus" class="fs-md-3 text-danger"></app-keenicon>
+          </a>
+        </td>
       </ng-template>
     </ngx-table>
     <!-- end::Table -->
@@ -848,7 +891,7 @@
 <!-- begin:: Modal generate SP Package-->
 <app-modal-full #modalGeneratePackageSP [modalConfig]="modalConfigGenerateSP" [modalClass]="addClass">
   @if (isDeliveryPackage) {
-  <app-package [delivery]="dataDelivery"></app-package>
+  <app-package [delivery]="dataDelivery" [setCity]="setCity"></app-package>
   }
 </app-modal-full>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->

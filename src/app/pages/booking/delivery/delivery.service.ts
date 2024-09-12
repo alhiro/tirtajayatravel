@@ -3,6 +3,7 @@ import { HttpService } from '@app/services/http.service';
 import { Observable, map } from 'rxjs';
 import { PaginationContext } from '@app/@shared/interfaces/pagination';
 import { EmployeeyModel } from '@app/pages/master/employee/models/employee.model';
+import { GoSendModel } from '../package/models/gosend';
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +46,17 @@ export class DeliveryService {
 
   create(context: EmployeeyModel): Observable<EmployeeyModel> {
     return this.httpService.employeeCreate(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
+  search(context: PaginationContext): Observable<GoSendModel> {
+    return this.httpService.SpSearch(context).pipe(
       map((result) => {
         if (!result) {
           return result;

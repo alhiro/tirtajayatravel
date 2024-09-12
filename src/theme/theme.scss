@@ -37,6 +37,21 @@
   }
 }
 
+.small-table {
+  width: 100%;
+
+  .ngx-table {
+    width: 100%;
+
+    thead {
+      font-size: 13px;
+    }
+    tbody {
+      font-size: 12px;
+    }
+  }
+}
+
 .ngx-table {
   font-family: inherit !important;
 }

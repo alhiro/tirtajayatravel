@@ -115,6 +115,7 @@ export class HttpService {
       cost: param.cost,
       discount: param.discount,
       payment: param.payment,
+      agent_commission: param.agent_commission,
       koli: param.koli,
       origin_from: param.origin_from,
       level: param.level,
@@ -153,6 +154,7 @@ export class HttpService {
       cost: param.cost,
       discount: param.discount,
       payment: param.payment,
+      agent_commission: param.agent_commission,
       koli: param.koli,
       origin_from: param.origin_from,
       level: param.level,
@@ -307,6 +309,21 @@ export class HttpService {
       courier: param.courier,
     };
     return this.commonApi.put('/recipient/update', body) as Observable<any>;
+  }
+
+  SpSearch(param: PaginationContext): Observable<any> {
+    return this.commonApi.get(
+      '/go-send/gosend-search?limit=' +
+        param.limit +
+        '&page=' +
+        param.page +
+        '&search=' +
+        param.search +
+        '&startDate=' +
+        param.startDate +
+        '&endDate=' +
+        param.endDate
+    ) as Observable<any>;
   }
 
   SpList(param: PaginationContext): Observable<any> {

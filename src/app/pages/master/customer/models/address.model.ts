@@ -3,6 +3,7 @@ import { CustomerModel } from './customer.model';
 export class AddressModel {
   address_id!: number;
   customer_id!: number;
+  sender_id!: number;
   customer!: CustomerModel;
   name!: string;
   address!: string;

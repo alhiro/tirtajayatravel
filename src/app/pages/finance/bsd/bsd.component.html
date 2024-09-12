@@ -190,7 +190,7 @@
 <!-- begin:: Modal SP -->
 <app-modal #modalSP [modalConfig]="modalConfigEditSP">
   <form (ngSubmit)="dataEditSP()" [formGroup]="formSP" novalidate>
-    <div class="m-3">
+    <div class="my-3">
       <!-- <label class="d-block mb-4">
         <div class="custom-datetime input-group">
           <input
@@ -271,9 +271,9 @@
         <!--begin::Row-->
         <div class="row g-5 g-xl-10">
           <!--begin::Col-->
-          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mt-3">
             <!--begin::Card body-->
-            <div class="card-body d-flex align-items-end pt-0">
+            <div class="card-body d-block align-items-end pt-0">
               <div id="kt_user_view_details" class="collapse show">
                 <div class="pb-5 fs-6">
                   <div class="fw-bold">Driver</div>
@@ -296,9 +296,9 @@
           <!--end::Col-->
 
           <!--begin::Col-->
-          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mt-3">
             <!--begin::Card body-->
-            <div class="card-body d-flex align-items-end pt-0">
+            <div class="card-body d-block align-items-end pt-0">
               <div id="kt_user_view_details" class="collapse show">
                 <div class="pb-5 fs-6">
                   <div class="fw-bold">Car</div>
@@ -361,7 +361,7 @@
 <!-- end:: Modal sp -->
 
 <!-- begin:: Modal BSD -->
-<app-modal-full #modalBSD [modalConfig]="modalConfigEditBsd" [modalClass]="addClass">
+<app-modal-full #modalBSD [modalConfig]="modalConfigEditBsd">
   <div class="my-3">
     <!-- begin::Header -->
     <div class="card-header border-0 pt-5 text-center">
@@ -628,24 +628,16 @@
                         </span>
                       </td>
                       <td>
-                        @if (row.check_payment) {
-                        <span class="text-gray-900 d-block">
-                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
-                            <input class="form-check-input" type="checkbox" [checked]="true" [disabled]="true" />
-                          </label>
-                        </span>
-                        } @else {
                         <span class="text-gray-900 d-block">
                           <label class="form-check form-check-sm form-check-solid me-5 mx-2">
                             <input
                               class="form-check-input"
                               type="checkbox"
-                              [checked]="isPaymentPassenger"
-                              (change)="checkPaymentPassenger(row)"
+                              [checked]="row.check_payment"
+                              (change)="checkPaymentPassenger(row, $event)"
                             />
                           </label>
                         </span>
-                        }
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
@@ -653,24 +645,16 @@
                         </span>
                       </td>
                       <td>
-                        @if (row.check_sp) {
-                        <span class="text-gray-900 d-block">
-                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
-                            <input class="form-check-input" type="checkbox" [checked]="true" [disabled]="true" />
-                          </label>
-                        </span>
-                        } @else {
                         <span class="text-gray-900 d-block">
                           <label class="form-check form-check-sm form-check-solid me-5 mx-2">
                             <input
                               class="form-check-input"
                               type="checkbox"
-                              [checked]="isSpPassenger"
-                              (change)="checkSpPassenger(row)"
+                              [checked]="row.check_sp"
+                              (change)="checkSpPassenger(row, $event)"
                             />
                           </label>
                         </span>
-                        }
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
@@ -795,24 +779,16 @@
                         </span>
                       </td>
                       <td>
-                        @if (row.check_payment) {
-                        <span class="text-gray-900 d-block">
-                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
-                            <input class="form-check-input" type="checkbox" [checked]="true" [disabled]="true" />
-                          </label>
-                        </span>
-                        } @else {
                         <span class="text-gray-900 d-block">
                           <label class="form-check form-check-sm form-check-solid me-5 mx-2">
                             <input
                               class="form-check-input"
                               type="checkbox"
-                              [checked]="isPayment"
-                              (change)="checkPayment(row)"
+                              [checked]="row.check_payment"
+                              (change)="checkPayment(row, $event)"
                             />
                           </label>
                         </span>
-                        }
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
@@ -820,19 +796,16 @@
                         </span>
                       </td>
                       <td>
-                        @if (row.check_sp) {
                         <span class="text-gray-900 d-block">
                           <label class="form-check form-check-sm form-check-solid me-5 mx-2">
-                            <input class="form-check-input" type="checkbox" [checked]="true" [disabled]="true" />
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              [checked]="row.check_sp"
+                              (change)="checkSp(row, $event)"
+                            />
                           </label>
                         </span>
-                        } @else {
-                        <span class="text-gray-900 d-block">
-                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
-                            <input class="form-check-input" type="checkbox" [checked]="isSp" (change)="checkSp(row)" />
-                          </label>
-                        </span>
-                        }
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">

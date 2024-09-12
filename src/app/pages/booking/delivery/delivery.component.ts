@@ -32,6 +32,8 @@ import { NavigationExtras, Router } from '@angular/router';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { Utils } from '@app/@shared';
+import { PassengerService } from '../passenger/passenger.service';
+import { PassengerModel } from '../passenger/models/passenger.model';
 
 interface EventObject {
   event: string;
@@ -86,6 +88,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   @Input() cssClass!: '';
   currentTab = 'Malang';
   currentDisplay: boolean = false;
+
+  public searchGlobal: any;
 
   public pagination = {
     limit: 10,
@@ -166,6 +170,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   dataDelivery!: GoSendModel;
   isDeliveryPackage = false;
   isDeliveryPassenger = false;
+  setCity: any;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -174,6 +179,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     private readonly cdr: ChangeDetectorRef,
     private deliveryService: DeliveryService,
     private packageService: PackageService,
+    private passengerService: PassengerService,
     private carService: CarService,
     private formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
@@ -297,7 +303,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   }
 
   eventEmitted($event: { event: string; value: any }): void {
-    if ($event.event !== 'onPagination') {
+    console.log($event.event);
+    if ($event.event === 'onPagination') {
       this.parseEvent($event);
     }
   }
@@ -688,6 +695,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     console.log(event);
     this.isDeliveryPackage = true;
     this.dataDelivery = event;
+    this.setCity = this.currentTab;
+
     return await this.modalComponentGeneratePackageSP.open().then(
       (resp: any) => {
         console.log(resp);
@@ -708,6 +717,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     console.log(event);
     this.isDeliveryPassenger = true;
     this.dataDelivery = event;
+    this.setCity = this.currentTab;
+
     return await this.modalComponentGeneratePassengerSP.open().then(
       (resp: any) => {
         console.log(resp);
@@ -796,5 +807,145 @@ export class DeliveryComponent implements OnInit, OnDestroy {
           )
       ),
       tap(() => (this.searchingCar = false))
+    );
+
+  removeDriverSPPackage(event: GoSendModel) {
+    const updateSP: any = {
+      package_id: event.package_id,
+      go_send_id: event.go_send_id,
+      status_package: 'Progress',
+    };
+    console.log(updateSP);
+
+    // send data to package
+    this.isLoading = true;
+    this.packageService
+      .patch(updateSP)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 5000,
+            });
+
+            this.dataDetailPackages = resp.data.packages;
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  removeDriverSPPassenger(event: GoSendModel) {
+    const updateSP: any = {
+      passenger_id: event.passenger_id,
+      go_send_id: event.go_send_id,
+      status_passenger: 'Progress',
+    };
+    console.log(updateSP);
+
+    // send data to package
+    this.isLoading = true;
+    this.passengerService
+      .patch(updateSP)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 5000,
+            });
+
+            let city: any;
+            if (this.currentTab === 'Malang') {
+              city = 1;
+            } else if (this.currentTab === 'Surabaya') {
+              city = 2;
+            }
+
+            this.dataDetailPassenger = resp.data.passengers;
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  searchDataGoSend: any = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+      tap(() => (this.configuration.isLoading = true)),
+      switchMap((term) =>
+        this.deliveryService
+          .search({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+            startDate: this.params.startDate,
+            endDate: this.params.endDate,
+          })
+          .pipe(
+            map((response: any) => {
+              this.configuration.isLoading = false;
+
+              if (response) {
+                if (term !== '') {
+                  const malangData = response.data?.filter(
+                    (data: GoSendModel) => data.city_id === 1 && data.bsd === null && data.bsd_passenger === null
+                  );
+                  const surabayaData = response.data?.filter(
+                    (data: GoSendModel) => data.city_id === 2 && data.bsd === null && data.bsd_passenger === null
+                  );
+
+                  this.dataLengthMalang = malangData?.length;
+                  this.dataLengthSurabaya = surabayaData?.length;
+                  this.data = malangData;
+                  this.dataSurabaya = surabayaData;
+
+                  // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
+                  this.pagination.count =
+                    this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
+                  this.pagination = { ...this.pagination };
+                  this.configuration.isLoading = false;
+                  this.cdr.detectChanges();
+                } else {
+                  this.dataListGosend(this.params);
+                }
+              } else {
+                this.dataLengthMalang = 0;
+                this.dataLengthSurabaya = 0;
+                this.data = [];
+                this.dataSurabaya = [];
+              }
+            }),
+            catchError(() => {
+              this.configuration.isLoading = false;
+
+              return of([]);
+            })
+          )
+      )
     );
 }

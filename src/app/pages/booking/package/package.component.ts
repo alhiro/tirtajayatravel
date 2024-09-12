@@ -207,6 +207,7 @@ export class PackageComponent implements OnInit, OnDestroy {
   endDate: any;
 
   @Input() delivery!: GoSendModel;
+  @Input() setCity: any;
 
   focusSender$ = new Subject<string>();
   clickSender$ = new Subject<string>();
@@ -341,6 +342,14 @@ export class PackageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log(this.setCity);
+
+    if (this.setCity === 'Malang') {
+      this.currentTab = 'Malang';
+    } else {
+      this.currentTab = 'Surabaya';
+    }
+
     this.dataCategory();
     this.dataList(this.params);
     this.company = this.localService.getCompany();
@@ -578,12 +587,10 @@ export class PackageComponent implements OnInit, OnDestroy {
         // count malang or surabaya
         if (response.data.length > 0) {
           const malangData = response.data?.filter(
-            (data: PackageModel) =>
-              (data.city_id === 1 && data.status_package === 'Progress') || data.status_package === 'Delivery'
+            (data: PackageModel) => data.city_id === 1 && data.status_package === 'Progress'
           );
           const surabayaData = response.data?.filter(
-            (data: PackageModel) =>
-              (data.city_id === 2 && data.status_package === 'Progress') || data.status_package === 'Delivery'
+            (data: PackageModel) => data.city_id === 2 && data.status_package === 'Progress'
           );
           const cancelData = response.data?.filter((data: PackageModel) => data.status_package === 'Cancel');
           const historyData = response.data?.filter((data: PackageModel) => data.status_package === 'Completed');
