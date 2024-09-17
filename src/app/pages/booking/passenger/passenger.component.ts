@@ -203,6 +203,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
   endDate: any;
 
   @Input() delivery!: GoSendModel;
+  @Input() setCity: any;
 
   focusSender$ = new Subject<string>();
   clickSender$ = new Subject<string>();
@@ -332,6 +333,14 @@ export class PassengerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log(this.setCity);
+
+    if (this.setCity === 'Malang') {
+      this.currentTab = 'Malang';
+    } else {
+      this.currentTab = 'Surabaya';
+    }
+
     this.dataCategory();
     this.dataList(this.params);
     this.company = this.localService.getCompany();
