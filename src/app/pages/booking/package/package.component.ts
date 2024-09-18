@@ -357,8 +357,10 @@ export class PackageComponent implements OnInit, OnDestroy {
 
     if (this.setCity === 'Malang') {
       this.currentTab = 'Malang';
-    } else {
+    } else if (this.setCity === 'Surabaya') {
       this.currentTab = 'Surabaya';
+    } else {
+      this.currentTab = 'Malang';
     }
 
     this.dataCategory();
@@ -606,6 +608,11 @@ export class PackageComponent implements OnInit, OnDestroy {
           const cancelData = response.data?.filter((data: PackageModel) => data.status_package === 'Cancel');
           const historyData = response.data?.filter((data: PackageModel) => data.status_package === 'Completed');
 
+          this.dataLengthMalang = malangData?.length;
+          this.dataLengthSurabaya = surabayaData?.length;
+          this.dataLengthCancel = cancelData?.length;
+          this.dataLengthHistory = historyData?.length;
+
           if (
             this.dataLengthMalang > 0 ||
             this.dataLengthSurabaya > 0 ||
@@ -627,21 +634,25 @@ export class PackageComponent implements OnInit, OnDestroy {
             this.dataHistory = [];
           }
 
-          // set gosend empty or not
-          // const createSP = response.data;
-          // createSP?.forEach((val: any) => {
-          //   if (val.go_send_id != null) {
-          //     return (val.isCreateSP = false);
-          //   } else {
-          //     return (val.isCreateSP = true);
-          //   }
-          // });
-          // console.log(createSP);
-
           // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-          this.pagination.count =
-            this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
-          this.pagination = { ...this.pagination };
+          if (this.currentTab === 'Malang') {
+            this.pagination.count =
+              this.pagination.count === -1 ? (this.data ? this.dataLengthMalang : 0) : this.pagination.count;
+            this.pagination = { ...this.pagination };
+          } else if (this.currentTab === 'Surabaya') {
+            this.pagination.count =
+              this.pagination.count === -1 ? (this.dataSurabaya ? this.dataLengthSurabaya : 0) : this.pagination.count;
+            this.pagination = { ...this.pagination };
+          } else if (this.currentTab === 'Cancel') {
+            this.pagination.count =
+              this.pagination.count === -1 ? (this.dataCancel ? this.dataLengthCancel : 0) : this.pagination.count;
+            this.pagination = { ...this.pagination };
+          } else if (this.currentTab === 'History') {
+            this.pagination.count =
+              this.pagination.count === -1 ? (this.dataHistory ? this.dataLengthHistory : 0) : this.pagination.count;
+            this.pagination = { ...this.pagination };
+          }
+
           this.configuration.isLoading = false;
           this.cdr.detectChanges();
         } else {
@@ -1279,7 +1290,7 @@ export class PackageComponent implements OnInit, OnDestroy {
 
     Swal.fire({
       title: 'Are you sure?',
-      text: 'You can revert it back by edit service in others menu!',
+      text: 'You can revert it back by edit service in more action!',
       icon: 'info',
       showCancelButton: true,
       confirmButtonColor: '#D8A122',
