@@ -1,4 +1,14 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { API, APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import {
   Observable,
@@ -208,6 +218,7 @@ export class PackageComponent implements OnInit, OnDestroy {
 
   @Input() delivery!: GoSendModel;
   @Input() setCity: any;
+  @Output() isAssignSP = new EventEmitter<boolean>();
 
   focusSender$ = new Subject<string>();
   clickSender$ = new Subject<string>();
@@ -362,7 +373,7 @@ export class PackageComponent implements OnInit, OnDestroy {
     // this.configuration.resizeColumn = true;
     // this.configuration.fixedColumnWidth = false;
     this.configuration.showDetailsArrow = true;
-    this.configuration.horizontalScroll = true;
+    this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = false;
 
     this.columns = [
@@ -595,15 +606,26 @@ export class PackageComponent implements OnInit, OnDestroy {
           const cancelData = response.data?.filter((data: PackageModel) => data.status_package === 'Cancel');
           const historyData = response.data?.filter((data: PackageModel) => data.status_package === 'Completed');
 
-          this.dataLengthMalang = malangData?.length;
-          this.dataLengthSurabaya = surabayaData?.length;
-          this.dataLengthCancel = cancelData?.length;
-          this.dataLengthHistory = historyData?.length;
+          if (
+            this.dataLengthMalang > 0 ||
+            this.dataLengthSurabaya > 0 ||
+            this.dataLengthCancel > 0 ||
+            this.dataLengthHistory > 0
+          ) {
+            this.configuration.horizontalScroll = true;
 
-          this.data = malangData;
-          this.dataSurabaya = surabayaData;
-          this.dataCancel = cancelData;
-          this.dataHistory = historyData;
+            this.data = malangData;
+            this.dataSurabaya = surabayaData;
+            this.dataCancel = cancelData;
+            this.dataHistory = historyData;
+          } else {
+            this.configuration.horizontalScroll = false;
+
+            this.data = [];
+            this.dataSurabaya = [];
+            this.dataCancel = [];
+            this.dataHistory = [];
+          }
 
           // set gosend empty or not
           // const createSP = response.data;
@@ -623,6 +645,8 @@ export class PackageComponent implements OnInit, OnDestroy {
           this.configuration.isLoading = false;
           this.cdr.detectChanges();
         } else {
+          this.configuration.horizontalScroll = false;
+
           this.dataLengthMalang = 0;
           this.dataLengthSurabaya = 0;
           this.dataLengthCancel = 0;
@@ -1641,6 +1665,7 @@ export class PackageComponent implements OnInit, OnDestroy {
 
   assignDriverSP(event: PackageModel) {
     console.log(this.delivery);
+    this.isAssignSP.emit(false);
 
     const updateSP: any = {
       package_id: event.package_id,
@@ -1668,14 +1693,17 @@ export class PackageComponent implements OnInit, OnDestroy {
             });
 
             this.dataList(this.params);
+            this.isAssignSP.emit(true);
             await this.modalComponentSP.dismiss();
           } else {
             this.isLoading = false;
+            this.isAssignSP.emit(false);
           }
         },
         (error: any) => {
           console.log(error);
           this.isLoading = false;
+          this.isAssignSP.emit(false);
           this.handlerResponseService.failedResponse(error);
         }
       );

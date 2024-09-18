@@ -126,6 +126,7 @@ export class DepositComponent implements OnInit {
     this.configuration.paginationEnabled = false;
     this.configuration.rows = 100;
     this.configuration.orderEnabled = false;
+    this.configuration.horizontalScroll = false;
 
     this.columnsPackage = [
       // { key: '', title: 'No.' },
@@ -210,6 +211,8 @@ export class DepositComponent implements OnInit {
 
         this.totalCostMalang = this.utils.sumTotal(this.dataCashoutMalang?.map((data: CashoutModel) => data.fee));
         this.totalCostSurabaya = this.utils.sumTotal(this.dataCashoutSurabaya?.map((data: CashoutModel) => data.fee));
+
+        this.configuration.horizontalScroll = true;
       });
   }
 
@@ -224,12 +227,14 @@ export class DepositComponent implements OnInit {
         }),
         catchError((err) => {
           this.configuration.isLoading = false;
+          this.configuration.horizontalScroll = false;
           this.handlerResponseService.failedResponse(err);
           return of([]);
         })
       )
       .subscribe((response: any) => {
         this.configuration.isLoading = false;
+        this.configuration.horizontalScroll = true;
 
         if (response) {
           const dataPackage = response.data?.filter((data: GoSendModel) => data.status === 'Box' && data.bsd !== null);

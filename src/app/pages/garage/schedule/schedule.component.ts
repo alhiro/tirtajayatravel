@@ -243,7 +243,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
     this.configuration.resizeColumn = true;
     this.configuration.fixedColumnWidth = false;
-    this.configuration.horizontalScroll = true;
+    this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = false;
 
     this.columns = [
@@ -327,15 +327,16 @@ export class ScheduleComponent implements OnInit, OnDestroy {
             this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
           this.pagination = { ...this.pagination };
           this.configuration.isLoading = false;
+          this.configuration.horizontalScroll = true;
           this.cdr.detectChanges();
         } else {
+          this.configuration.isLoading = false;
+          this.configuration.horizontalScroll = false;
+
           this.dataLength = 0;
           this.data = [];
           this.dataLengthHistory = 0;
           this.dataHistory = [];
-
-          this.configuration.isLoading = false;
-          this.configuration.horizontalScroll = false;
         }
       });
   }

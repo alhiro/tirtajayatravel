@@ -87,6 +87,7 @@ export class SubCategoryComponent implements OnInit, OnDestroy {
     this.configuration.resizeColumn = true;
     this.configuration.fixedColumnWidth = false;
     this.configuration.orderEnabled = false;
+    this.configuration.horizontalScroll = false;
 
     this.columns = [
       // { key: 'category_sub_id', title: 'No' },
@@ -158,6 +159,7 @@ export class SubCategoryComponent implements OnInit, OnDestroy {
           this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
         this.pagination = { ...this.pagination };
         this.configuration.isLoading = false;
+        this.configuration.horizontalScroll = true;
         this.cdr.detectChanges();
       });
   }

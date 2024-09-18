@@ -395,8 +395,11 @@ export class BsdComponent implements OnInit, OnDestroy {
             this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
           this.pagination = { ...this.pagination };
           this.configuration.isLoading = false;
+          this.configuration.horizontalScroll = true;
           this.cdr.detectChanges();
         } else {
+          this.configuration.horizontalScroll = false;
+
           this.dataLengthBSDList = 0;
           this.dataLengthBSDDone = 0;
           this.dataBSDList = [];

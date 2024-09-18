@@ -224,11 +224,13 @@ export class CustomerComponent implements OnInit {
     this.configuration.fixedColumnWidth = false;
     this.configuration.tableLayout.hover = true;
     this.configuration.orderEnabled = false;
+    this.configuration.horizontalScroll = false;
 
     this.configurationAddress.resizeColumn = false;
     this.configurationAddress.fixedColumnWidth = true;
     this.configurationAddress.orderEnabled = false;
     this.configurationAddress.paginationEnabled = false;
+    this.configurationAddress.horizontalScroll = false;
     this.configurationAddress.rows = 100000;
 
     this.columns = [
@@ -402,6 +404,7 @@ export class CustomerComponent implements OnInit {
         console.log(this.pagination);
 
         this.configuration.isLoading = false;
+        this.configuration.horizontalScroll = true;
         this.cdr.detectChanges();
       });
   }
@@ -416,6 +419,7 @@ export class CustomerComponent implements OnInit {
         this.dataLengthAddress = this.dataAddress.length;
 
         this.configurationAddress.isLoading = false;
+        this.configurationAddress.horizontalScroll = true;
         this.cdr.detectChanges();
       });
   }

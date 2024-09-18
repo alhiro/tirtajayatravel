@@ -52,6 +52,7 @@ export class RecapitulationComponent implements OnInit {
     ];
 
     this.configuration.paginationEnabled = false;
+    this.configuration.horizontalScroll = false;
   }
 
   onDateSelection(date: NgbDate, datepicker: any) {
@@ -203,10 +204,12 @@ export class RecapitulationComponent implements OnInit {
           this.data = result;
 
           this.configuration.isLoading = false;
+          this.configuration.horizontalScroll = true;
           this.cdr.detectChanges();
         } else {
           this.data = [];
           this.configuration.isLoading = false;
+          this.configuration.horizontalScroll = false;
           this.cdr.detectChanges();
         }
       });

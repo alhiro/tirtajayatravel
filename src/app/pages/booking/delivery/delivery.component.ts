@@ -171,6 +171,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   isDeliveryPackage = false;
   isDeliveryPassenger = false;
   setCity: any;
+  isAssign = false;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -218,7 +219,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
 
     // this.configuration.resizeColumn = true;
     // this.configuration.fixedColumnWidth = false;
-    this.configuration.horizontalScroll = true;
+    this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = false;
 
     this.columns = [
@@ -352,8 +353,11 @@ export class DeliveryComponent implements OnInit, OnDestroy {
             this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
           this.pagination = { ...this.pagination };
           this.configuration.isLoading = false;
+          this.configuration.horizontalScroll = true;
           this.cdr.detectChanges();
         } else {
+          this.configuration.horizontalScroll = false;
+
           this.dataLengthMalang = 0;
           this.dataLengthSurabaya = 0;
           this.data = [];
@@ -691,20 +695,32 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       );
   }
 
+  handleEventAssign(isAssign: boolean) {
+    console.log(isAssign);
+    this.isAssign = isAssign;
+  }
+
   async openModalGeneratePackageSP(event: GoSendModel) {
     console.log(event);
     this.isDeliveryPackage = true;
     this.dataDelivery = event;
     this.setCity = this.currentTab;
+    console.log(this.setCity);
 
     return await this.modalComponentGeneratePackageSP.open().then(
       (resp: any) => {
         console.log(resp);
+        console.log(this.isAssign);
 
         if (resp === true || resp === 1) {
-          this.isDeliveryPackage = false;
-          this.dataListGosend(this.params);
-          console.log('User closes or esc');
+          if (this.isAssign === true) {
+            this.isDeliveryPackage = false;
+            this.dataListGosend(this.params);
+            console.log('User closes or esc after submit');
+          } else {
+            this.isDeliveryPackage = false;
+            console.log('User closes or esc');
+          }
         }
       },
       () => {
@@ -718,15 +734,22 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.isDeliveryPassenger = true;
     this.dataDelivery = event;
     this.setCity = this.currentTab;
+    console.log(this.setCity);
 
     return await this.modalComponentGeneratePassengerSP.open().then(
       (resp: any) => {
         console.log(resp);
+        console.log(this.isAssign);
 
         if (resp === true || resp === 1) {
-          this.isDeliveryPassenger = false;
-          this.dataListGosend(this.params);
-          console.log('User closes or esc');
+          if (this.isAssign === true) {
+            this.isDeliveryPassenger = false;
+            this.dataListGosend(this.params);
+            console.log('User closes or esc after submit');
+          } else {
+            this.isDeliveryPassenger = false;
+            console.log('User closes or esc');
+          }
         }
       },
       () => {

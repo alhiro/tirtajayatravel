@@ -891,7 +891,7 @@
 <!-- begin:: Modal generate SP Package-->
 <app-modal-full #modalGeneratePackageSP [modalConfig]="modalConfigGenerateSP" [modalClass]="addClass">
   @if (isDeliveryPackage) {
-  <app-package [delivery]="dataDelivery" [setCity]="setCity"></app-package>
+  <app-package [delivery]="dataDelivery" [setCity]="setCity" (isAssignSP)="handleEventAssign($event)"></app-package>
   }
 </app-modal-full>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
@@ -900,7 +900,7 @@
 <!-- begin:: Modal generate SP Passenger -->
 <app-modal-full #modalGeneratePassengerSP [modalConfig]="modalConfigGenerateSP" [modalClass]="addClass">
   @if (isDeliveryPassenger) {
-  <app-passenger [delivery]="dataDelivery"></app-passenger>
+  <app-passenger [delivery]="dataDelivery" [setCity]="setCity" (isAssignSP)="handleEventAssign($event)"></app-passenger>
   }
 </app-modal-full>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
