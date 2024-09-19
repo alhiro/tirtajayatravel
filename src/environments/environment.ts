@@ -15,7 +15,7 @@ export const environment = {
   USERDATA_KEY: 'authf649fc9a5f55',
   version: env['npm_package_version'] + '-dev',
   serverUrl: 'http://localhost:8080/api',
-  defaultLanguage: 'en-US',
+  defaultLanguage: 'id-ID',
   supportedLanguages: ['en-US', 'id-ID'],
 };
 

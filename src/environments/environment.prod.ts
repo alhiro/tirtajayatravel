@@ -10,6 +10,6 @@ export const environment = {
   production: true,
   version: env['npm_package_version'],
   serverUrl: 'https://tirtajaya.vip/api',
-  defaultLanguage: 'en-US',
+  defaultLanguage: 'id-ID',
   supportedLanguages: ['en-US', 'id-ID'],
 };

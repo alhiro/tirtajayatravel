@@ -18,13 +18,28 @@ export class UserInnerComponent implements OnInit, OnDestroy {
 
   levelrule!: number;
   username!: string;
+  initials: string = '';
 
   constructor(private authenticationService: AuthenticationService, private router: Router, private utils: Utils) {
     this.levelrule = this.utils.getLevel();
     this.username = this.utils.getUsername();
+    console.log(this.username);
+    this.initials = this.getInitials(this.username);
   }
 
   ngOnInit(): void {}
+
+  getInitials(name: string): string {
+    const parts = name.split(' ');
+
+    if (parts.length > 1) {
+      return parts[0][0] + parts[parts.length - 1][0];
+    } else if (parts.length > 0 && parts[0].length > 1) {
+      return parts[0][0] + parts[0][1];
+    } else {
+      return 'N/A';
+    }
+  }
 
   logout() {
     // document.location.reload();
