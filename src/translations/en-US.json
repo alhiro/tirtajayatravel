@@ -112,5 +112,45 @@
         "ADD_MESSAGE": "Customer has been created"
       }
     }
-  }
+  },
+
+  "Layout Builder": "Layout Builder",
+  "Booking": "Booking",
+  "Package": "Package",
+  "Transaction": "Transaction",
+  "Passenger": "Passenger",
+  "Departure": "Departure",
+  "Schedule Delivery": "Schedule Delivery",
+  "Finance": "Finance",
+  "Deposit": "Deposit",
+  "Daily": "Daily",
+  "Cash Out": "Cash Out",
+  "List": "List",
+  "Recapitulation": "Recapitulation",
+  "Spareparts": "Spareparts",
+  "Recapitulation Finance": "Recapitulation Finance",
+  "Commission": "Commission",
+  "Courier Commission": "Courier Commission",
+  "Garage": "Garage",
+  "Schedule": "Schedule",
+  "Apps": "Apps",
+  "Chat": "Chat",
+  "Private Chat": "Private Chat",
+  "Group Chat": "Group Chat",
+  "User Management": "User Management",
+  "Users": "Users",
+  "Roles": "Roles",
+  "Permissions": "Permissions",
+  "Master": "Master",
+  "Category": "Category",
+  "Sub Category": "Sub Category",
+  "Customer": "Customer",
+  "Employee": "Employee",
+  "Car": "Car",
+  "Mutation": "Mutation",
+  "BCA": "BCA",
+  "Mandiri": "Mandiri",
+
+  "Performance Overview": "Performance Overview",
+  "Orders from all transactions": "Orders from all transaction"
 }

@@ -15,102 +15,142 @@
   "Version": "Versi",
 
   "TRANSLATOR": {
-    "SELECT": "Select your language"
+    "SELECT": "Pilih Bahasa"
   },
   "MENU": {
-    "NEW": "new",
-    "ACTIONS": "Actions",
-    "CREATE_POST": "Create New Post",
-    "PAGES": "Pages",
-    "FEATURES": "Features",
-    "APPS": "Apps",
-    "DASHBOARD": "Dashboard"
+    "NEW": "Baru",
+    "ACTIONS": "Pilih",
+    "CREATE_POST": "Buat Pos",
+    "PAGES": "Halaman",
+    "FEATURES": "Fitur",
+    "APPS": "Aplikasi",
+    "DASHBOARD": "Beranda"
   },
   "AUTH": {
     "GENERAL": {
-      "OR": "Or",
+      "OR": "Atau",
       "SUBMIT_BUTTON": "Submit",
-      "NO_ACCOUNT": "Dont have an account?",
-      "SIGNUP_BUTTON": "Sign Up",
-      "FORGOT_BUTTON": "Forgot Password",
-      "BACK_BUTTON": "Back",
-      "PRIVACY": "Privacy",
-      "LEGAL": "Legal",
-      "CONTACT": "Contact"
+      "NO_ACCOUNT": "Belum punya akun?",
+      "SIGNUP_BUTTON": "Daftar",
+      "FORGOT_BUTTON": "Lupa kata sandi",
+      "BACK_BUTTON": "Kembali",
+      "PRIVACY": "Pribadi",
+      "LEGAL": "Resmi",
+      "CONTACT": "Kontak"
     },
     "LOGIN": {
-      "TITLE": "Login Account",
-      "BUTTON": "Sign In"
+      "TITLE": "Masuk Akun",
+      "BUTTON": "Masuk"
     },
     "FORGOT": {
-      "TITLE": "Forgotten Password?",
-      "DESC": "Enter your email to reset your password",
-      "SUCCESS": "Your account has been successfully reset."
+      "TITLE": "Lupa Kata Sandi?",
+      "DESC": "Masukan email untuk mereset kata sandi",
+      "SUCCESS": "Akun Anda telah berhasil di reset."
     },
     "REGISTER": {
-      "TITLE": "Sign Up",
-      "DESC": "Enter your details to create your account",
-      "SUCCESS": "Your account has been successfuly registered."
+      "TITLE": "Daftar",
+      "DESC": "Masukan data untuk membuat akun",
+      "SUCCESS": "Akun Anda telah berhasil dibuat."
     },
     "INPUT": {
       "EMAIL": "Email",
-      "FULLNAME": "Fullname",
-      "PASSWORD": "Password",
-      "CONFIRM_PASSWORD": "Confirm Password",
-      "USERNAME": "Username"
+      "FULLNAME": "Nama Lengkap",
+      "PASSWORD": "Kata Sandi",
+      "CONFIRM_PASSWORD": "Konfirmasi Kata Sandi",
+      "USERNAME": "Nama Pengguna"
     },
     "VALIDATION": {
-      "INVALID": "{{name}} is not valid",
-      "REQUIRED": "{{name}} is required",
-      "MIN_LENGTH": "{{name}} minimum length is {{min}}",
-      "AGREEMENT_REQUIRED": "Accepting terms & conditions are required",
-      "NOT_FOUND": "The requested {{name}} is not found",
-      "INVALID_LOGIN": "The login detail is incorrect",
-      "REQUIRED_FIELD": "Required field",
-      "MIN_LENGTH_FIELD": "Minimum field length:",
-      "MAX_LENGTH_FIELD": "Maximum field length:",
-      "INVALID_FIELD": "Field is not valid"
+      "INVALID": "{{name}} tidak valid",
+      "REQUIRED": "{{name}} diperlukan",
+      "MIN_LENGTH": "{{name}} panjang minimum adalah {{min}}",
+      "AGREEMENT_REQUIRED": "Menerima syarat & ketentuan berlaku",
+      "NOT_FOUND": "Permintaan {{name}} tidak ditemukan",
+      "INVALID_LOGIN": "Detail login salah",
+      "REQUIRED_FIELD": "Wajib diisi",
+      "MIN_LENGTH_FIELD": "Panjang minimum:",
+      "MAX_LENGTH_FIELD": "Panjang maksimum:",
+      "INVALID_FIELD": "Masukan tidak valid"
     }
   },
   "ECOMMERCE": {
     "COMMON": {
-      "SELECTED_RECORDS_COUNT": "Selected records count: ",
-      "ALL": "All",
-      "SUSPENDED": "Suspended",
-      "ACTIVE": "Active",
+      "SELECTED_RECORDS_COUNT": "Jumlah catatan yang dipilih: ",
+      "ALL": "Semua",
+      "SUSPENDED": "Ditangguhkan",
+      "ACTIVE": "Aktif",
       "FILTER": "Filter",
-      "BY_STATUS": "by Status",
-      "BY_TYPE": "by Type",
-      "BUSINESS": "Business",
-      "INDIVIDUAL": "Individual",
-      "SEARCH": "Search",
-      "IN_ALL_FIELDS": "in all fields"
+      "BY_STATUS": "berdasarkan Status",
+      "BY_TYPE": "berdasarkan Jenis",
+      "BUSINESS": "Bisnis",
+      "INDIVIDUAL": "Individu",
+      "SEARCH": "Cari",
+      "IN_ALL_FIELDS": "di semua bidang"
     },
     "ECOMMERCE": "eCommerce",
     "CUSTOMERS": {
-      "CUSTOMERS": "Customers",
-      "CUSTOMERS_LIST": "Customers list",
-      "NEW_CUSTOMER": "New Customer",
+      "CUSTOMERS": "Pelanggan",
+      "CUSTOMERS_LIST": "Daftar pelanggan",
+      "NEW_CUSTOMER": "Pelanggan Baru",
       "DELETE_CUSTOMER_SIMPLE": {
-        "TITLE": "Customer Delete",
-        "DESCRIPTION": "Are you sure to permanently delete this customer?",
-        "WAIT_DESCRIPTION": "Customer is deleting...",
-        "MESSAGE": "Customer has been deleted"
+        "TITLE": "Hapus Pelanggan",
+        "DESCRIPTION": "Apakah Anda yakin ingin menghapus pelanggan ini secara permanen?",
+        "WAIT_DESCRIPTION": "Pelanggan sedang dihapus...",
+        "MESSAGE": "Pelanggan telah dihapus"
       },
       "DELETE_CUSTOMER_MULTY": {
-        "TITLE": "Customers Delete",
-        "DESCRIPTION": "Are you sure to permanently delete selected customers?",
-        "WAIT_DESCRIPTION": "Customers are deleting...",
-        "MESSAGE": "Selected customers have been deleted"
+        "TITLE": "Hapus Pelanggan",
+        "DESCRIPTION": "Apakah Anda yakin ingin menghapus pelanggan yang dipilih secara permanen?",
+        "WAIT_DESCRIPTION": "Pelanggan sedang dihapus...",
+        "MESSAGE": "Pelanggan yang dipilih telah dihapus"
       },
       "UPDATE_STATUS": {
-        "TITLE": "Status has been updated for selected customers",
-        "MESSAGE": "Selected customers status have successfully been updated"
+        "TITLE": "Status telah diperbarui untuk pelanggan yang dipilih",
+        "MESSAGE": "Status pelanggan yang dipilih telah berhasil diperbarui"
       },
       "EDIT": {
-        "UPDATE_MESSAGE": "Customer has been updated",
-        "ADD_MESSAGE": "Customer has been created"
+        "UPDATE_MESSAGE": "Pelanggan telah diperbarui",
+        "ADD_MESSAGE": "Pelanggan telah dibuat"
       }
     }
-  }
+  },
+
+  "Layout Builder": "Ubah Layout",
+  "Booking": "Pemesanan",
+  "Package": "Paket",
+  "Transaction": "Transaksi",
+  "Passenger": "Penumpang",
+  "Departure": "Keberangkatan",
+  "Schedule Delivery": "Jadwal Berangkat",
+  "Finance": "Keuangan",
+  "Deposit": "Setoran",
+  "Daily": "Harian",
+  "Cash Out": "Pengeluaran",
+  "List": "Daftar",
+  "Recapitulation": "Rekapitulasi",
+  "Spareparts": "Suku Cadang",
+  "Recapitulation Finance": "Rekapitulasi Keuangan",
+  "Commission": "Komisi",
+  "Courier Commission": "Komisi Kurir",
+  "Garage": "Garasi",
+  "Schedule": "Jadwal",
+  "Apps": "Aplikasi",
+  "Chat": "Percakapan",
+  "Private Chat": "Percakapan Pribadi",
+  "Group Chat": "Percakapan Grup",
+  "User Management": "Manajemen User",
+  "Users": "User",
+  "Roles": "Peran",
+  "Permissions": "Izin",
+  "Master": "Master",
+  "Category": "Kategori",
+  "Sub Category": "Sub Kategori",
+  "Customer": "Kustomer",
+  "Employee": "Karyawan",
+  "Car": "Mobil",
+  "Mutation": "Mutasi",
+  "BCA": "BCA",
+  "Mandiri": "Mandiri",
+
+  "Performance Overview": "Performa Transaksi",
+  "Orders from all transactions": "Pesanan dari semua transaksi"
 }
