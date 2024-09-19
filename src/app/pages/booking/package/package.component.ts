@@ -52,6 +52,7 @@ import * as moment from 'moment';
 import { Utils } from '@app/@shared';
 import { GoSendModel } from './models/gosend';
 import Swal from 'sweetalert2';
+import { TranslateService } from '@ngx-translate/core';
 
 interface EventObject {
   event: string;
@@ -240,7 +241,8 @@ export class PackageComponent implements OnInit, OnDestroy {
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
     private localService: LocalService,
-    private utils: Utils
+    private utils: Utils,
+    private translate: TranslateService
   ) {
     this.initForm();
 
@@ -378,18 +380,32 @@ export class PackageComponent implements OnInit, OnDestroy {
     this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = false;
 
-    this.columns = [
-      // { key: 'package_id', title: 'No' },
-      { key: 'resi_number', title: 'Number Resi' },
-      { key: 'level', title: 'Level' },
-      { key: 'book_date', title: 'Send Date' },
-      { key: 'sender_id', title: 'Sender' },
-      { key: 'recipient_id', title: 'Recipient' },
-      { key: 'cost', title: 'Cost' },
-      { key: 'admin', title: 'Admin' },
-      { key: '', title: 'Status' },
-      { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
-    ];
+    this.translate
+      .get([
+        'TABLE.RESI_NUMBER',
+        'TABLE.LEVEL',
+        'TABLE.SEND_DATE',
+        'TABLE.SENDER',
+        'TABLE.RECIPIENT',
+        'TABLE.COST',
+        'TABLE.ADMIN',
+        'TABLE.STATUS',
+        'TABLE.ACTION',
+      ])
+      .subscribe((translations: any) => {
+        this.columns = [
+          // { key: 'package_id', title: 'No' },
+          { key: 'resi_number', title: translations['TABLE.RESI_NUMBER'] },
+          { key: 'level', title: translations['TABLE.LEVEL'] },
+          { key: 'book_date', title: translations['TABLE.SEND_DATE'] },
+          { key: 'sender_id', title: translations['TABLE.SENDER'] },
+          { key: 'recipient_id', title: translations['TABLE.RECIPIENT'] },
+          { key: 'cost', title: translations['TABLE.COST'] },
+          { key: 'admin', title: translations['TABLE.ADMIN'] },
+          { key: 'status', title: translations['TABLE.STATUS'] },
+          { key: '', title: translations['TABLE.ACTION'], cssClass: { includeHeader: true, name: 'text-end' } },
+        ];
+      });
   }
 
   ngOnDestroy(): void {
@@ -1091,18 +1107,14 @@ export class PackageComponent implements OnInit, OnDestroy {
       this.isRequest = false;
     }
 
-    this.modelCustomer = event.sender?.customer;
-    const getdAddressCustomer = this.modelCustomer?.addresses.find(
-      (val: AddressModel) => val.telp === event.sender?.telp
-    );
+    this.modelCustomer = event.sender;
+    const getdAddressCustomer = this.modelCustomer;
     this.modelAddressId = getdAddressCustomer;
     // console.log(this.modelAddressId);
     // this.selectedAddress = getdAddressCustomer;
 
-    this.modelRecipient = event.recipient?.customer;
-    const getdAddressRecipient = this.modelRecipient?.addresses.find(
-      (val: AddressModel) => val.telp === event.recipient?.telp
-    );
+    this.modelRecipient = event.recipient;
+    const getdAddressRecipient = this.modelRecipient;
     this.modelAddressIdRecipient = getdAddressRecipient;
     // console.log(this.modelAddressIdRecipient);
     // this.selectedAddressRecipient = getdAddressRecipient;
@@ -1288,66 +1300,76 @@ export class PackageComponent implements OnInit, OnDestroy {
       status_package: 'Cancel',
     });
 
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'You can revert it back by edit service in more action!',
-      icon: 'info',
-      showCancelButton: true,
-      confirmButtonColor: '#D8A122',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, Cancel it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // edit package
-        this.isLoading = true;
-        this.packageService
-          .patch(this.form.value)
-          .pipe(
-            finalize(() => {
-              this.form.markAsPristine();
-              this.isLoading = false;
-            })
-          )
-          .subscribe(
-            async (resp: any) => {
-              if (resp) {
-                this.snackbar.open(resp.message, '', {
-                  panelClass: 'snackbar-success',
-                  duration: 5000,
-                });
+    this.translate
+      .get(['SWAL.ARE_YOU_SURE', 'SWAL.REVERT_TEXT', 'SWAL.YES_CANCEL_IT', 'SWAL.BACK_BUTTON'])
+      .subscribe((translations) => {
+        Swal.fire({
+          title: translations['SWAL.ARE_YOU_SURE'],
+          text: translations['SWAL.REVERT_TEXT'],
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#D8A122',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: translations['SWAL.YES_CANCEL_IT'],
+          cancelButtonText: translations['SWAL.BACK_BUTTON'],
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // edit package
+            this.isLoading = true;
+            this.packageService
+              .patch(this.form.value)
+              .pipe(
+                finalize(() => {
+                  this.form.markAsPristine();
+                  this.isLoading = false;
+                })
+              )
+              .subscribe(
+                async (resp: any) => {
+                  if (resp) {
+                    this.snackbar.open(resp.message, '', {
+                      panelClass: 'snackbar-success',
+                      duration: 5000,
+                    });
 
-                this.dataList(this.params);
-                await this.modalComponent.dismiss();
-              } else {
-                this.isLoading = false;
-              }
-            },
-            (error: any) => {
-              console.log(error);
-              this.isLoading = false;
-              this.handlerResponseService.failedResponse(error);
-            }
-          );
-      }
-    });
+                    this.dataList(this.params);
+                    await this.modalComponent.dismiss();
+                  } else {
+                    this.isLoading = false;
+                  }
+                },
+                (error: any) => {
+                  console.log(error);
+                  this.isLoading = false;
+                  this.handlerResponseService.failedResponse(error);
+                }
+              );
+          }
+        });
+      });
   }
 
   async openModalDelete(event: PackageModel) {
     this.form.patchValue(event);
 
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.dataDelete();
-      }
-    });
+    this.translate
+      .get(['SWAL.ARE_YOU_SURE', 'SWAL.REVERT_WARNING', 'SWAL.CONFIRM_DELETE', 'SWAL.BACK_BUTTON'])
+      .subscribe((translations) => {
+        Swal.fire({
+          title: translations['SWAL.ARE_YOU_SURE'],
+          text: translations['SWAL.REVERT_WARNING'],
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: translations['SWAL.CONFIRM_DELETE'],
+          cancelButtonText: translations['SWAL.BACK_BUTTON'],
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.dataDelete();
+          }
+        });
+      });
   }
 
   dataDelete() {

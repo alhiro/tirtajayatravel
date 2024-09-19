@@ -2,17 +2,59 @@
 <div class="card">
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-3 mb-1">
+      <!-- <span class="card-label fw-bolder fs-3 mb-1">
         @if (currentTab === 'Malang') { Package Table Malang } @else if (currentTab === 'Surabaya') { Package Table
         Surabaya } @else if (currentTab === 'Move') { Package Table Move } @else if (currentTab === 'Cancel') { Package
         Table Cancel } @else if (currentTab === 'History') { Package Table Complete }
+      </span> -->
+      <span class="card-label fw-bolder fs-3 mb-1">
+        <ng-container [ngSwitch]="currentTab">
+          <ng-container *ngSwitchCase="'Malang'">
+            {{ 'PACKAGE.TITLE' | translate : { title: 'Malang' } }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'Surabaya'">
+            {{ 'PACKAGE.TITLE' | translate : { title: 'Surabaya' } }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'Move'">
+            {{ 'PACKAGE.TITLE' | translate : { title: 'Pindah' } }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'Cancel'">
+            {{ 'PACKAGE.TITLE' | translate : { title: 'Batal' } }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'History'">
+            {{ 'PACKAGE.TITLE' | translate : { title: 'Selesai' } }}
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            {{ 'PACKAGE.NO_DATA' | translate }}
+          </ng-container>
+        </ng-container>
       </span>
-      <span class="text-muted mt-1 fw-bold fs-7">
+      <!-- <span class="text-muted mt-1 fw-bold fs-7">
         @if (currentTab === 'Malang') { Have {{ dataLengthMalang | number }} items } @else if (currentTab ===
         'Surabaya') { Have {{ dataLengthSurabaya | number }} items } @else if (currentTab === 'Move') { Have
         {{ dataLengthMove | number }} items } @else if (currentTab === 'Cancel') { Have
         {{ dataLengthCancel | number }} items } @else if (currentTab === 'History') { Have
         {{ dataLengthHistory | number }} items }
+      </span> -->
+      <span class="text-muted mt-1 fw-bold fs-7">
+        <ng-container [ngSwitch]="currentTab">
+          <ng-container *ngSwitchCase="'Malang'">
+            {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLengthMalang | number } }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'Surabaya'">
+            {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLengthSurabaya | number } }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'Move'">
+            {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLengthMove | number } }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'Cancel'">
+            {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLengthCancel | number } }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'History'">
+            {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLengthHistory | number } }}
+          </ng-container>
+          <ng-container *ngSwitchDefault> - </ng-container>
+        </ng-container>
       </span>
     </h3>
 
@@ -44,14 +86,16 @@
 
       <div class="col text-end">
         <div ngbDropdown placement="bottom-end" class="d-inline-block">
-          <button type="button" class="btn btn-sm btn-light" id="otherspackage" ngbDropdownToggle>More Action</button>
+          <button type="button" class="btn btn-sm btn-light" id="otherspackage" ngbDropdownToggle translate>
+            More Action
+          </button>
           <div ngbDropdownMenu aria-labelledby="otherspackage">
             <ul class="px-2 mb-0">
               <li class="nav-item dropdown-item" (click)="setCurrentTab('Cancel')" [style.cursor]="'pointer'">
-                <a class="nav-link" [class.active]="currentTab === 'Cancel'" data-toggle="tab">Cancel</a>
+                <a class="nav-link" [class.active]="currentTab === 'Cancel'" data-toggle="tab" translate>Cancel</a>
               </li>
               <li class="nav-item dropdown-item" (click)="setCurrentTab('History')" [style.cursor]="'pointer'">
-                <a class="nav-link" [class.active]="currentTab === 'History'" data-toggle="tab">Completed</a>
+                <a class="nav-link" [class.active]="currentTab === 'History'" data-toggle="tab" translate>Completed</a>
               </li>
               <li class="nav-item dropdown-item" (click)="datepicker.toggle()">
                 <button class="btn btn-primary w-100 p-1 fs-7 fw-normal">
@@ -94,13 +138,18 @@
 
           <ng-template #footerTemplate>
             <hr class="my-0" />
-            <button class="btn btn-primary btn-sm m-2 p-1 px-4 float-start" (click)="resetFilterDate(datepicker)">
+            <button
+              class="btn btn-primary btn-sm m-2 p-1 px-4 float-start"
+              (click)="resetFilterDate(datepicker)"
+              translate
+            >
               Reset
             </button>
             <button
               class="btn btn-warning btn-sm m-2 p-1 px-4 float-end"
               [disabled]="configuration.isLoading"
               (click)="printFilterDate(datepicker)"
+              translate
             >
               Print
             </button>
@@ -135,7 +184,7 @@
               <td>
                 <span
                   class="text-gray-900 fw-bolder text-hover-primary fs-6 cursor-pointer"
-                  ngbTooltip="Edit Package"
+                  [ngbTooltip]="'TOOLTIP.EDIT_PACKAGE' | translate"
                   (click)="openModalEdit(row)"
                 >
                   {{ row.resi_number }}
@@ -180,7 +229,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Edit Package"
+                  [ngbTooltip]="'TOOLTIP.EDIT_PACKAGE' | translate"
                   (click)="openModalEdit(row)"
                 >
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
@@ -191,7 +240,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Print Package"
+                  [ngbTooltip]="'TOOLTIP.PRINT_PACKAGE' | translate"
                   (click)="openModalPrint(row)"
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
@@ -202,7 +251,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Cancel Package"
+                  [ngbTooltip]="'TOOLTIP.CANCEL_PACKAGE' | translate"
                   (click)="openModalCancel(row)"
                 >
                   <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
@@ -213,7 +262,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Delete Package"
+                  [ngbTooltip]="'TOOLTIP.DELETE_PACKAGE' | translate"
                   (click)="openModalDelete(row)"
                 >
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
@@ -225,7 +274,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Print Package"
+                  [ngbTooltip]="'TOOLTIP.PRINT_PACKAGE' | translate"
                   (click)="openModalPrint(row)"
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
@@ -241,7 +290,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Remove Driver"
+                  [ngbTooltip]="'TOOLTIP.REMOVE_DRIVER' | translate"
                   (click)="removeDriverSP(row)"
                 >
                   <app-keenicon name="minus" class="fs-md-3 text-danger"></app-keenicon>
@@ -253,7 +302,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Assign Package"
+                  [ngbTooltip]="'TOOLTIP.ASSIGN_PACKAGE' | translate"
                   (click)="assignDriverSP(row)"
                 >
                   <app-keenicon name="plus" class="fs-md-3 text-primary"></app-keenicon>
@@ -331,7 +380,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Edit Package"
+                  [ngbTooltip]="'TOOLTIP.EDIT_PACKAGE' | translate"
                   (click)="openModalEdit(row)"
                 >
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
@@ -342,7 +391,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Print Package"
+                  [ngbTooltip]="'TOOLTIP.PRINT_PACKAGE' | translate"
                   (click)="openModalPrint(row)"
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
@@ -353,7 +402,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Cancel Package"
+                  [ngbTooltip]="'TOOLTIP.CANCEL_PACKAGE' | translate"
                   (click)="openModalCancel(row)"
                 >
                   <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
@@ -364,7 +413,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Delete Package"
+                  [ngbTooltip]="'TOOLTIP.DELETE_PACKAGE' | translate"
                   (click)="openModalDelete(row)"
                 >
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
@@ -376,7 +425,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Print Package"
+                  [ngbTooltip]="'TOOLTIP.PRINT_PACKAGE' | translate"
                   (click)="openModalPrint(row)"
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
@@ -392,7 +441,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Remove Driver"
+                  [ngbTooltip]="'TOOLTIP.REMOVE_DRIVER' | translate"
                   (click)="removeDriverSP(row)"
                 >
                   <app-keenicon name="minus" class="fs-md-3 text-danger"></app-keenicon>
@@ -404,7 +453,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Assign Package"
+                  [ngbTooltip]="'TOOLTIP.ASSIGN_PACKAGE' | translate"
                   (click)="assignDriverSP(row)"
                 >
                   <app-keenicon name="plus" class="fs-md-3 text-primary"></app-keenicon>
@@ -480,7 +529,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Delete Package"
+                  [ngbTooltip]="'TOOLTIP.DELETE_PACKAGE' | translate"
                   (click)="openModalDelete(row)"
                 >
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
@@ -554,7 +603,7 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  ngbTooltip="Detail Package"
+                  [ngbTooltip]="'TOOLTIP.DETAIL_PACKAGE' | translate"
                 >
                   <app-keenicon name="eye" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
@@ -646,16 +695,16 @@
                   [ngbTypeahead]="searchDataCustomer"
                   [resultTemplate]="rt"
                   [inputFormatter]="formatterCustomer"
-                  placeholder="Customer search"
+                  placeholder="'PLACEHOLDER.CUSTOMER.SEARCH' | translate"
                 />
                 <ng-template #rt let-r="result" let-t="term">
                   {{ r.name }} - {{ r.address }} - {{ r.telp }}
                 </ng-template>
 
                 @if (searching) {
-                <small class="form-text text-muted">Searching. Please wait...</small>
+                <small class="form-text text-muted" translate>Searching. Please wait...</small>
                 } @if (searchFailed) {
-                <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+                <div class="invalid-feedback" translate>Sorry, suggestions could not be loaded.</div>
                 }
               </div>
 
@@ -713,6 +762,7 @@
                 <div
                   class="btn btn-primary btn-sm py-1 fs-8 cursor-pointer my-3"
                   (click)="openModalNewAddress(modelCustomer)"
+                  translate
                 >
                   Add New Address
                 </div>
@@ -727,7 +777,7 @@
               @if (modelCustomer) {
               <div class="d-flex flex-center flex-column py-5 pt-0">
                 <!--begin::Name-->
-                <h4 class="card-title">Choose Sender:</h4>
+                <h4 class="card-title" translate>Choose Sender:</h4>
                 <!--begin::Position-->
                 <div class="mb-1">
                   <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{{ modelCustomer?.name }} </a>
@@ -738,7 +788,7 @@
                 </div>
                 } @else { }
 
-                <div>Address:</div>
+                <div translate>Address:</div>
                 <div class="mb-9 text-center">
                   @if (modelAddressId) {
                   <div>
@@ -822,6 +872,7 @@
                 <div
                   class="btn btn-primary btn-sm py-1 fs-8 cursor-pointer my-3"
                   (click)="openModalNewAddress(modelCustomer)"
+                  translate
                 >
                   Add New Address
                 </div>
@@ -836,7 +887,7 @@
               @if (modelRecipient) {
               <div class="d-flex flex-center flex-column py-5 pt-0">
                 <!--begin::Name-->
-                <h4 class="card-title">Choose Recipient:</h4>
+                <h4 class="card-title" translate>Choose Recipient:</h4>
                 <!--begin::Position-->
                 <div class="mb-1">
                   <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{{ modelRecipient?.name }} </a>
@@ -847,7 +898,7 @@
                 </div>
                 }
 
-                <div>Address:</div>
+                <div translate>Address:</div>
                 <div class="mb-9">
                   @if (modelRecipient?.addresses?.length > 0) { @if (selectedAddressRecipient) {
                   <div>{{ selectedAddressRecipient.address }}</div>
@@ -919,6 +970,7 @@
                 <div
                   class="btn btn-primary btn-sm py-1 fs-8 cursor-pointer my-3"
                   (click)="openModalNewAddress(modelCustomer)"
+                  translate
                 >
                   Add New Address
                 </div>
@@ -933,7 +985,7 @@
               @if (modelCustomer) {
               <div class="d-flex flex-center flex-column py-5 pt-0">
                 <!--begin::Name-->
-                <h4 class="card-title">Choose Recipient:</h4>
+                <h4 class="card-title" translate>Choose Recipient:</h4>
                 <!--begin::Position-->
                 <div class="mb-1">
                   <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{{ modelCustomer?.name }} </a>
@@ -1028,7 +1080,7 @@
                   data-allow-clear="true"
                   formControlName="category_id"
                 >
-                  <option value="" disabled selected>Select category</option>
+                  <option value="" disabled selected translate>Select category</option>
                   @for (value of category; track value) {
                   <option [value]="value.category_id">{{ value.name }}</option>
                   }
@@ -1037,7 +1089,7 @@
 
               <div class="mb-2">
                 <div class="d-flex">
-                  <label class="form-label fw-bold" [attr.for]="request">Special Request </label>
+                  <label class="form-label fw-bold" [attr.for]="request" translate>Special Request </label>
                   <label class="form-check form-check-sm form-check-solid me-5 mx-2">
                     <input
                       class="form-check-input"
@@ -1059,7 +1111,7 @@
                   data-allow-clear="true"
                   formControlName="request"
                 >
-                  <option value="" disabled selected>Select request</option>
+                  <option value="" disabled selected translate>Select Request</option>
                   @for (value of request; track value) {
                   <option [value]="value.name">{{ value.name }}</option>
                   }
@@ -1102,7 +1154,7 @@
                 </select>
               </label> -->
               <div class="mb-4">
-                <label class="form-label fw-bold">Payment status:</label>
+                <label class="form-label fw-bold" translate>Payment status:</label>
                 <div class="d-flex">
                   <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
                     <input
@@ -1157,7 +1209,7 @@
                 </div>
               </div>
               <div class="mb-4">
-                <label class="form-label fw-bold">Origin From:</label>
+                <label class="form-label fw-bold" translate>Origin From:</label>
                 <div class="d-flex">
                   <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
                     <input
@@ -1366,16 +1418,16 @@
           [ngbTypeahead]="searchDataEmployee"
           [resultTemplate]="rt"
           [inputFormatter]="formatter"
-          placeholder="Employee search"
+          placeholder="'PLACEHOLDER.EMPLOYEE.SEARCH' | translate"
         />
         <ng-template #rt let-r="result" let-t="term">
           {{ r.name }}
         </ng-template>
 
         @if (searchingEmployee) {
-        <small class="form-text text-muted">Searching. Please wait...</small>
+        <small class="form-text text-muted" translate>Searching. Please wait...</small>
         } @if (searchFailedEmployee) {
-        <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+        <div class="invalid-feedback" translate>Sorry, suggestions could not be loaded.</div>
         } @if (modelEmployee) {
         <!--begin::Details toggle-->
         <div class="d-flex flex-stack fs-4 py-3">
@@ -1395,11 +1447,11 @@
         <!--begin::Details content-->
         <div id="kt_user_view_details" class="collapse show">
           <div class="pb-5 fs-6">
-            <div class="fw-bold">Name</div>
+            <div class="fw-bold" translate>Name</div>
             <div class="text-gray-600">{{ modelEmployee?.name }}</div>
-            <div class="fw-bold mt-3">Telp</div>
+            <div class="fw-bold mt-3" translate>Telp</div>
             <div class="text-gray-600">{{ modelEmployee?.telp }}</div>
-            <div class="fw-bold mt-3">Photo</div>
+            <div class="fw-bold mt-3" translate>Photo</div>
             <!-- <div class="text-gray-600">
                   <img class="full-width" src="../../../../assets/media/avatars/300-1.jpg"/>
                 </div> -->
@@ -1419,16 +1471,16 @@
           [ngbTypeahead]="searchDataCar"
           [resultTemplate]="rt"
           [inputFormatter]="formatter"
-          placeholder="Car search"
+          placeholder="'PLACEHOLDER.CAR.SEARCH' | translate"
         />
         <ng-template #rt let-r="result" let-t="term">
           {{ r.name }}
         </ng-template>
 
         @if (searchingCar) {
-        <small class="form-text text-muted">Searching. Please wait...</small>
+        <small class="form-text text-muted" translate>Searching. Please wait...</small>
         } @if (searchFailedCar) {
-        <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+        <div class="invalid-feedback" translate>Sorry, suggestions could not be loaded.</div>
         } @if (modelCar) {
         <!--begin::Details toggle-->
         <div class="d-flex flex-stack fs-4 py-3">
@@ -1448,13 +1500,13 @@
         <!--begin::Details content-->
         <div id="kt_user_view_details" class="collapse show">
           <div class="pb-5 fs-6">
-            <div class="fw-bold">Name</div>
+            <div class="fw-bold" translate>Name</div>
             <div class="text-gray-600">{{ this.modelCar?.name }}</div>
-            <div class="fw-bold mt-3">Plat Number</div>
+            <div class="fw-bold mt-3" translate>Plat Number</div>
             <div class="text-gray-600">{{ this.modelCar?.number_plat }}</div>
-            <div class="fw-bold mt-3">Car Number</div>
+            <div class="fw-bold mt-3" translate>Car Number</div>
             <div class="text-gray-600">{{ this.modelCar?.car_number }}</div>
-            <div class="fw-bold mt-3">Photo</div>
+            <div class="fw-bold mt-3" translate>Photo</div>
             <!-- <div class="text-gray-600">
                   <img class="full-width" src="../../../../assets/media/stock/600x400/img-10.jpg"/>
                 </div> -->

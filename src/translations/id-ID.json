@@ -152,5 +152,86 @@
   "Mandiri": "Mandiri",
 
   "Performance Overview": "Performa Transaksi",
-  "Orders from all transactions": "Pesanan dari semua transaksi"
+  "Orders from all transactions": "Pesanan dari semua transaksi",
+
+  "PACKAGE": {
+    "TITLE": "Tabel Paket {{ title }}",
+    "LENGTH": "Ada {{ dataLength }} data",
+    "NO_DATA": "Tidak ada data yang tersedia"
+  },
+
+  "More Action": "Menu Lainnya",
+  "Cancel": "Batal",
+  "Completed": "Selesai",
+  "Filter Date": "Filter Tanggal",
+
+  "Reset": "Reset",
+  "Print": "Cetak",
+
+  "TABLE": {
+    "RESI_NUMBER": "No Resi",
+    "LEVEL": "Level",
+    "SEND_DATE": "Tgl Kirim",
+    "SENDER": "Pengirim",
+    "RECIPIENT": "Penerima",
+    "COST": "BIaya",
+    "ADMIN": "Admin",
+    "STATUS": "Status",
+    "ACTION": "Action"
+  },
+
+  "Searching. Please wait...": "Sedang Mencari. Silahkan menunggu...",
+  "Sorry, suggestions could not be loaded.": "Maaf, data tidak ditemukan.",
+  "Choose Sender:": "Pilih Pengirim",
+  "Address:": " Alamat:",
+  "Choose Recipient:": "Pilih Penerima",
+  "Cost": "Biaya",
+  "Amount Koli": "Jumlah Koli",
+  "Select category": "Pilih kategori",
+  "Special Request": "Permintaan Khusus",
+  "Select Request": "Pilih Permintaan",
+  "Request Description": "Keterangan Permintaan",
+  "Description": "Deskripsi",
+  "Payment status:": "Status Pembayaran",
+  "Origin From:": "Asal Dari:",
+  "Submit": "SIMPAN",
+
+  "Name": "Nama",
+  "Address": "Alamat",
+  "Discount": "Diskon",
+  "Plat Number": "Nomor Plat",
+  "Car Number": "Nomor Mobil",
+  "Description Name": "Nama Deskripsi",
+  "Add New Address": "Tambah Alamat Baru",
+
+  "TOOLTIP": {
+    "EDIT_PACKAGE": "Ubah Paket",
+    "PRINT_PACKAGE": "Cetak Paket",
+    "CANCEL_PACKAGE": "Batal Paket",
+    "DELETE_PACKAGE": "Hapus Paket",
+    "REMOVE_DRIVER": "Hapus Driver",
+    "ASSIGN_PACKAGE": "Tambah Paket",
+    "DETAIL_PACKAGE": "Detail Paket"
+  },
+
+  "PLACEHOLDER": {
+    "CUSTOMER": {
+      "SEARCH": "Cari kustomer"
+    },
+    "EMPLOYEE": {
+      "SEARCH": "Cari Karyawan"
+    },
+    "CAR": {
+      "SEARCH": "Cari Mobil"
+    }
+  },
+
+  "SWAL": {
+    "ARE_YOU_SURE": "Apakah Anda Yakin?",
+    "REVERT_TEXT": "Kamu bisa mengubahnya kembali di menu lainnya (Batal)",
+    "YES_CANCEL_IT": "Iya, Batalkan",
+    "REVERT_WARNING": "Kamu tidak akan bisa mengembalikannya!",
+    "CONFIRM_DELETE": "Iya, Hapuskan",
+    "BACK_BUTTON": "Kembali"
+  }
 }
