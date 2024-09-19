@@ -431,6 +431,12 @@ export class CustomerComponent implements OnInit {
   async openModalNew() {
     this.isCreate = true;
     this.clearForm();
+
+    this.form.patchValue({
+      company_id: '',
+      business_id: '',
+    });
+
     return await this.modalComponent.open();
   }
 

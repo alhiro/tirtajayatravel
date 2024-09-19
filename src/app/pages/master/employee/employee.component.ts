@@ -88,8 +88,8 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     this.city = this.localService.getCity();
     this.level = this.localService.getPosition();
 
-    this.configuration.resizeColumn = true;
-    this.configuration.fixedColumnWidth = false;
+    this.configuration.resizeColumn = false;
+    this.configuration.fixedColumnWidth = true;
     this.configuration.orderEnabled = false;
     this.configuration.horizontalScroll = false;
 
@@ -183,6 +183,12 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   async openModalNew() {
     this.isCreate = true;
     this.clearForm();
+
+    this.form.patchValue({
+      city_id: '',
+      level_id: '',
+    });
+
     return await this.modalComponent.open();
   }
 
