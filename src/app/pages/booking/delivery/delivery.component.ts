@@ -226,7 +226,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       // { key: 'category_sub_id', title: 'No' },
       { key: 'send_date', title: 'Departure Date' },
       { key: 'name', title: 'Driver' },
-      { key: 'telp', title: 'Telp' },
+      { key: '', title: 'No SP' },
       { key: 'description', title: 'Description' },
       { key: '', title: 'Items' },
       { key: 'car', title: 'Car' },
@@ -253,6 +253,15 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       { key: 'recipient_id', title: 'Recipient' },
       { key: 'origin_form', title: 'From' },
     ];
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+
+    sessionStorage.removeItem('printsp');
+    sessionStorage.removeItem('detailsp');
+    sessionStorage.removeItem('type');
   }
 
   private initForm() {
@@ -288,11 +297,6 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       box: '',
       bsd_box: '',
     });
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 
   setCurrentTab(tab: string) {

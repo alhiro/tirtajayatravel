@@ -391,6 +391,10 @@ export class PassengerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+
+    sessionStorage.removeItem('city');
+    sessionStorage.removeItem('printlist');
+    sessionStorage.removeItem('printlistdate');
   }
 
   private initForm() {

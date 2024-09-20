@@ -111,7 +111,17 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.employee?.telp }}</span>
+                <span class="text-gray-900 d-block">
+                  @if (row?.packages?.length > 0) { @if (row.status === 'Reguler') {
+                  {{ row.sp_passenger }}
+                  } @else {
+                  {{ row.sp_package }}
+                  } } @if (row?.passengers?.length > 0) { @if (row.status === 'Reguler') {
+                  {{ row.sp_passenger }}
+                  } @else {
+                  {{ row.sp_package }}
+                  } }
+                </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
