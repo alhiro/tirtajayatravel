@@ -277,7 +277,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       this.fromDate = date;
     } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
       this.toDate = date;
-      datepicker.close(); // Close datepicker popup
+      // datepicker.close(); // Close datepicker popup
 
       // const valueBookFromDate = new Date(
       //   Date.UTC(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day, 0, 0)
@@ -293,15 +293,15 @@ export class PackageComponent implements OnInit, OnDestroy {
       this.startDate = startDate;
       this.endDate = endDate;
 
-      const params = {
-        limit: this.pagination.limit,
-        page: this.pagination.offset,
-        search: this.pagination.search,
-        startDate: this.startDate,
-        endDate: this.endDate,
-      };
-      console.log(params);
-      this.dataList(params);
+      // const params = {
+      //   limit: this.pagination.limit,
+      //   page: this.pagination.offset,
+      //   search: this.pagination.search,
+      //   startDate: this.startDate,
+      //   endDate: this.endDate,
+      // };
+      // console.log(params);
+      // this.dataList(params);
     } else {
       this.toDate = null;
       this.fromDate = date;
@@ -317,13 +317,13 @@ export class PackageComponent implements OnInit, OnDestroy {
 
   printFilterDate(datepicker: any) {
     if (this.currentTab === 'Malang') {
-      console.log(this.data);
-      sessionStorage.setItem('city', JSON.stringify('Malang'));
-      sessionStorage.setItem('printlist', JSON.stringify(this.data));
+      // console.log(this.data);
+      sessionStorage.setItem('city', JSON.stringify(1));
+      // sessionStorage.setItem('printlist', JSON.stringify(this.data));
     } else if (this.currentTab === 'Surabaya') {
-      console.log(this.dataSurabaya);
-      sessionStorage.setItem('city', JSON.stringify('Surabaya'));
-      sessionStorage.setItem('printlist', JSON.stringify(this.dataSurabaya));
+      // console.log(this.dataSurabaya);
+      sessionStorage.setItem('city', JSON.stringify(2));
+      // sessionStorage.setItem('printlist', JSON.stringify(this.dataSurabaya));
     }
 
     const dateRange = {
@@ -557,6 +557,39 @@ export class PackageComponent implements OnInit, OnDestroy {
 
   setCurrentTab(tab: string) {
     this.currentTab = tab;
+    console.log(this.currentTab);
+
+    // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
+    if (this.currentTab === 'Malang') {
+      this.pagination.count =
+        this.pagination.count === -1 ? (this.data ? this.dataLengthMalang : 0) : this.pagination.count;
+      this.pagination = { ...this.pagination };
+      this.dataLengthMalang === 0
+        ? (this.configuration.horizontalScroll = false)
+        : (this.configuration.horizontalScroll = true);
+      console.log(this.data);
+    } else if (this.currentTab === 'Surabaya') {
+      this.pagination.count =
+        this.pagination.count === -1 ? (this.dataSurabaya ? this.dataLengthSurabaya : 0) : this.pagination.count;
+      this.pagination = { ...this.pagination };
+      this.dataLengthSurabaya === 0
+        ? (this.configuration.horizontalScroll = false)
+        : (this.configuration.horizontalScroll = true);
+    } else if (this.currentTab === 'Cancel') {
+      this.pagination.count =
+        this.pagination.count === -1 ? (this.dataCancel ? this.dataLengthCancel : 0) : this.pagination.count;
+      this.pagination = { ...this.pagination };
+      this.dataLengthCancel === 0
+        ? (this.configuration.horizontalScroll = false)
+        : (this.configuration.horizontalScroll = true);
+    } else if (this.currentTab === 'History') {
+      this.pagination.count =
+        this.pagination.count === -1 ? (this.dataHistory ? this.dataLengthHistory : 0) : this.pagination.count;
+      this.pagination = { ...this.pagination };
+      this.dataLengthHistory === 0
+        ? (this.configuration.horizontalScroll = false)
+        : (this.configuration.horizontalScroll = true);
+    }
   }
 
   checkRequest() {
@@ -660,18 +693,31 @@ export class PackageComponent implements OnInit, OnDestroy {
             this.pagination.count =
               this.pagination.count === -1 ? (this.data ? this.dataLengthMalang : 0) : this.pagination.count;
             this.pagination = { ...this.pagination };
+            this.dataLengthMalang === 0
+              ? (this.configuration.horizontalScroll = false)
+              : (this.configuration.horizontalScroll = true);
+            console.log(this.data);
           } else if (this.currentTab === 'Surabaya') {
             this.pagination.count =
               this.pagination.count === -1 ? (this.dataSurabaya ? this.dataLengthSurabaya : 0) : this.pagination.count;
             this.pagination = { ...this.pagination };
+            this.dataLengthSurabaya === 0
+              ? (this.configuration.horizontalScroll = false)
+              : (this.configuration.horizontalScroll = true);
           } else if (this.currentTab === 'Cancel') {
             this.pagination.count =
               this.pagination.count === -1 ? (this.dataCancel ? this.dataLengthCancel : 0) : this.pagination.count;
             this.pagination = { ...this.pagination };
+            this.dataLengthCancel === 0
+              ? (this.configuration.horizontalScroll = false)
+              : (this.configuration.horizontalScroll = true);
           } else if (this.currentTab === 'History') {
             this.pagination.count =
               this.pagination.count === -1 ? (this.dataHistory ? this.dataLengthHistory : 0) : this.pagination.count;
             this.pagination = { ...this.pagination };
+            this.dataLengthHistory === 0
+              ? (this.configuration.horizontalScroll = false)
+              : (this.configuration.horizontalScroll = true);
           }
 
           this.configuration.isLoading = false;
@@ -1112,15 +1158,13 @@ export class PackageComponent implements OnInit, OnDestroy {
       this.isRequest = false;
     }
 
-    this.modelCustomer = event.sender;
-    const getdAddressCustomer = this.modelCustomer;
-    this.modelAddressId = getdAddressCustomer;
+    this.modelCustomer = event.sender.customer;
+    this.modelAddressId = event.sender;
     // console.log(this.modelAddressId);
     // this.selectedAddress = getdAddressCustomer;
 
-    this.modelRecipient = event.recipient;
-    const getdAddressRecipient = this.modelRecipient;
-    this.modelAddressIdRecipient = getdAddressRecipient;
+    this.modelRecipient = event.recipient.customer;
+    this.modelAddressIdRecipient = event.recipient;
     // console.log(this.modelAddressIdRecipient);
     // this.selectedAddressRecipient = getdAddressRecipient;
 
@@ -1378,10 +1422,10 @@ export class PackageComponent implements OnInit, OnDestroy {
   }
 
   dataDelete() {
-    console.log(this.formAddress.value);
+    console.log(this.form.value);
     this.isLoading = true;
     const passSubscr = this.packageService
-      .delete(this.formAddress.value)
+      .delete(this.form.value)
       .pipe(
         finalize(() => {
           this.form.markAsPristine();

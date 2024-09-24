@@ -102,6 +102,21 @@ export class HttpService {
     ) as Observable<any>;
   }
 
+  packageListAll(param: PaginationContext): Observable<any> {
+    return this.commonApi.get(
+      '/package/list-all?limit=' +
+        param.limit +
+        '&page=' +
+        param.page +
+        '&search=' +
+        param.search +
+        '&startDate=' +
+        param.startDate +
+        '&endDate=' +
+        param.endDate
+    ) as Observable<any>;
+  }
+
   packageEdit(param: PackageModel): Observable<any> {
     const body = {
       package_id: param.package_id,
@@ -391,10 +406,32 @@ export class HttpService {
     return this.commonApi.post('/go-send/create', body) as Observable<any>;
   }
 
+  SpDelete(param: GoSendModel): Observable<any> {
+    const body = {
+      go_send_id: param.go_send_id,
+    };
+    return this.commonApi.delete('/go-send/delete', body) as Observable<any>;
+  }
+
   // Passenger
   passengerList(param: PaginationContext): Observable<any> {
     return this.commonApi.get(
       '/passenger/list?limit=' +
+        param.limit +
+        '&page=' +
+        param.page +
+        '&search=' +
+        param.search +
+        '&startDate=' +
+        param.startDate +
+        '&endDate=' +
+        param.endDate
+    ) as Observable<any>;
+  }
+
+  passengerListAll(param: PaginationContext): Observable<any> {
+    return this.commonApi.get(
+      '/passenger/list-all?limit=' +
         param.limit +
         '&page=' +
         param.page +

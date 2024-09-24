@@ -34,6 +34,8 @@ import * as moment from 'moment';
 import { Utils } from '@app/@shared';
 import { PassengerService } from '../passenger/passenger.service';
 import { PassengerModel } from '../passenger/models/passenger.model';
+import Swal from 'sweetalert2';
+import { TranslateService } from '@ngx-translate/core';
 
 interface EventObject {
   event: string;
@@ -187,7 +189,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     private handlerResponseService: HandlerResponseService,
     private localService: LocalService,
     private utils: Utils,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) {
     this.initForm();
 
@@ -975,4 +978,61 @@ export class DeliveryComponent implements OnInit, OnDestroy {
           )
       )
     );
+
+  async openModalDelete(event: GoSendModel) {
+    this.formSP.patchValue(event);
+    console.log(this.formSP.value);
+
+    this.translate
+      .get(['SWAL.ARE_YOU_SURE', 'SWAL.REVERT_WARNING', 'SWAL.CONFIRM_DELETE', 'SWAL.BACK_BUTTON'])
+      .subscribe((translations) => {
+        Swal.fire({
+          title: translations['SWAL.ARE_YOU_SURE'],
+          text: translations['SWAL.REVERT_WARNING'],
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: translations['SWAL.CONFIRM_DELETE'],
+          cancelButtonText: translations['SWAL.BACK_BUTTON'],
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.deleteDeliery();
+          }
+        });
+      });
+  }
+
+  deleteDeliery() {
+    this.isLoading = true;
+    const subscr = this.packageService
+      .deleteSP(this.formSP.value)
+      .pipe(
+        finalize(() => {
+          this.formSP.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 5000,
+            });
+
+            this.dataListGosend(this.params);
+            await this.modalComponent.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+    this.unsubscribe.push(subscr);
+  }
 }

@@ -159,8 +159,8 @@ export class BsdComponent implements OnInit, OnDestroy {
     this.city = this.localService.getCity();
     this.level = this.localService.getPosition();
 
-    this.configuration.resizeColumn = true;
-    this.configuration.fixedColumnWidth = false;
+    this.configuration.resizeColumn = false;
+    this.configuration.fixedColumnWidth = true;
     this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = false;
 

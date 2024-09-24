@@ -8,11 +8,11 @@
             <div class="menu-content px-0 text-center">
               <h3 class="card-title align-items-start flex-column mb-2">
                 <span class="card-label fw-bolder fs-2">
-                  @if (city === 'Malang') { LIST SEMUA PAKET MALANG } @else { LIST SEMUA PAKET SURABAYA }
+                  @if (city === 1) { LIST SEMUA PAKET MALANG } @else { LIST SEMUA PAKET SURABAYA }
                 </span>
               </h3>
-              @if (fromDate && endDate) {
-              <span class="card-label fw-bolder fs-5"> PERIODE: {{ fromDate }} - {{ endDate }} </span>
+              @if (startDate && endDate) {
+              <span class="card-label fw-bolder fs-5"> PERIODE: {{ startDateDisplay }} - {{ endDateDisplay }} </span>
               }
             </div>
           </div>
@@ -33,72 +33,132 @@
           [columns]="columns"
           tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
         >
-          <ng-template let-row let-index="index">
+          <ng-template let-row let-index="index" ngx-table-row>
             <!-- <td>
               <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
             </td> -->
-            <td>
-              <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
+            <td
+              [ngClass]="{
+                'soft-orange-bg': row.status_package === 'Cancel',
+                'transparent-bg': row.status_package !== 'Cancel'
+              }"
+            >
+              <span class="text-gray-900 fw-bolder fs-7">
                 {{ row.resi_number }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-orange-bg': row.status_package === 'Cancel',
+                'transparent-bg': row.status_package !== 'Cancel'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-orange-bg': row.status_package === 'Cancel',
+                'transparent-bg': row.status_package !== 'Cancel'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.origin_from }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-orange-bg': row.status_package === 'Cancel',
+                'transparent-bg': row.status_package !== 'Cancel'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.status }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-orange-bg': row.status_package === 'Cancel',
+                'transparent-bg': row.status_package !== 'Cancel'
+              }"
+            >
               @if (row.level === 'Normal') {
               <span class="badge badge-light-primary">Normal</span>
               } @else if (row.level === 'Urgent') {
               <span class="badge badge-light-danger">Urgent</span>
               }
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-orange-bg': row.status_package === 'Cancel',
+                'transparent-bg': row.status_package !== 'Cancel'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.description }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-orange-bg': row.status_package === 'Cancel',
+                'transparent-bg': row.status_package !== 'Cancel'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.koli }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-orange-bg': row.status_package === 'Cancel',
+                'transparent-bg': row.status_package !== 'Cancel'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.book_date | date : 'yyyy/MM/dd H:mm:ss' : 'GMT' }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-orange-bg': row.status_package === 'Cancel',
+                'transparent-bg': row.status_package !== 'Cancel'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.updated_by ? row.updated_by : row.created_by }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-orange-bg': row.status_package === 'Cancel',
+                'transparent-bg': row.status_package !== 'Cancel'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.sender?.name }} <br />
                 {{ row.sender?.address }} <br />
                 {{ row.sender?.telp }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-orange-bg': row.status_package === 'Cancel',
+                'transparent-bg': row.status_package !== 'Cancel'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.recipient?.name }}<br />
                 {{ row.recipient?.address }}<br />
                 {{ row.recipient?.telp }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-orange-bg': row.status_package === 'Cancel',
+                'transparent-bg': row.status_package !== 'Cancel'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.createdAt | date : 'yyyy/MM/dd H:mm:ss' : 'GMT' }}
               </span>

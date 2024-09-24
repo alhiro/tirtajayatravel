@@ -245,7 +245,7 @@
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                <a
+                <!-- <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
@@ -255,7 +255,7 @@
                   (click)="openModalCancel(row)"
                 >
                   <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
-                </a>
+                </a> -->
                 <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
@@ -396,7 +396,7 @@
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                <a
+                <!-- <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
@@ -406,7 +406,7 @@
                   (click)="openModalCancel(row)"
                 >
                   <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
-                </a>
+                </a> -->
                 <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
@@ -695,7 +695,7 @@
                   [ngbTypeahead]="searchDataCustomer"
                   [resultTemplate]="rt"
                   [inputFormatter]="formatterCustomer"
-                  placeholder="'PLACEHOLDER.CUSTOMER.SEARCH' | translate"
+                  [placeholder]="'PLACEHOLDER.CUSTOMER.SEARCH' | translate"
                 />
                 <ng-template #rt let-r="result" let-t="term">
                   {{ r.name }} - {{ r.address }} - {{ r.telp }}
@@ -712,7 +712,6 @@
               <div class="d-flex flex-center flex-column py-5 pt-2">
                 <!--begin::Info-->
                 <!--begin::Info heading-->
-                @if (modelCustomer.addresses) {
                 <!-- <label class="d-block full-width">
                   <select
                     class="form-select form-control"
@@ -766,7 +765,6 @@
                 >
                   Add New Address
                 </div>
-                }
                 <!--end::Info heading-->
                 <!--end::Info-->
               </div>
@@ -920,7 +918,6 @@
               <div class="d-flex flex-center flex-column py-5 pt-2">
                 <!--begin::Info-->
                 <!--begin::Info heading-->
-                @if (modelCustomer.addresses) {
                 <!-- <label class="d-block full-width">
                   <select
                     class="form-select form-control"
@@ -974,7 +971,6 @@
                 >
                   Add New Address
                 </div>
-                }
                 <!--end::Info heading-->
                 <!--end::Info-->
               </div>
@@ -1418,7 +1414,7 @@
           [ngbTypeahead]="searchDataEmployee"
           [resultTemplate]="rt"
           [inputFormatter]="formatter"
-          placeholder="'PLACEHOLDER.EMPLOYEE.SEARCH' | translate"
+          [placeholder]="'PLACEHOLDER.EMPLOYEE.SEARCH' | translate"
         />
         <ng-template #rt let-r="result" let-t="term">
           {{ r.name }}
@@ -1471,7 +1467,7 @@
           [ngbTypeahead]="searchDataCar"
           [resultTemplate]="rt"
           [inputFormatter]="formatter"
-          placeholder="'PLACEHOLDER.CAR.SEARCH' | translate"
+          [placeholder]="'PLACEHOLDER.CAR.SEARCH' | translate"
         />
         <ng-template #rt let-r="result" let-t="term">
           {{ r.name }}

@@ -25,6 +25,17 @@ export class PassengerService {
     );
   }
 
+  listAll(context: PaginationContext): Observable<PassengerModel> {
+    return this.httpService.passengerListAll(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   edit(context: PassengerModel): Observable<PassengerModel> {
     return this.httpService.passengerEdit(context).pipe(
       map((result) => {

@@ -25,6 +25,17 @@ export class PackageService {
     );
   }
 
+  listAll(context: PaginationContext): Observable<PackageModel> {
+    return this.httpService.packageListAll(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   edit(context: PackageModel): Observable<PackageModel> {
     return this.httpService.packageEdit(context).pipe(
       map((result) => {
@@ -159,6 +170,17 @@ export class PackageService {
 
   createSP(context: any): Observable<any> {
     return this.httpService.spCreate(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
+  deleteSP(context: GoSendModel): Observable<GoSendModel> {
+    return this.httpService.SpDelete(context).pipe(
       map((result) => {
         if (!result) {
           return result;
