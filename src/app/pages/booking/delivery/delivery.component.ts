@@ -245,6 +245,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       { key: 'destination_id', title: 'Destination' },
       { key: 'status', title: 'Status' },
       { key: 'position', title: 'Seat' },
+      { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
 
     this.columnsPackage = [
@@ -255,6 +256,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       { key: 'sender_id', title: 'Sender' },
       { key: 'recipient_id', title: 'Recipient' },
       { key: 'origin_form', title: 'From' },
+      { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
   }
 
@@ -445,6 +447,13 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.dataDetail = val;
     this.dataDetailPackages = val?.packages;
     this.dataDetailPassenger = val?.passengers;
+
+    this.dataDetailPackages?.length > 0
+      ? (this.configuration.horizontalScroll = false)
+      : (this.configuration.horizontalScroll = true);
+    this.dataDetailPassenger?.length > 0
+      ? (this.configuration.horizontalScroll = false)
+      : (this.configuration.horizontalScroll = true);
 
     return await this.modalComponentDetail.open().then(
       (resp: any) => {

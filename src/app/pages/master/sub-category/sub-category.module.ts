@@ -7,6 +7,7 @@ import { SubCategoryComponent } from './sub-category.component';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { TableModule } from 'ngx-easy-table';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [SubCategoryComponent],
@@ -23,6 +24,7 @@ import { TableModule } from 'ngx-easy-table';
     SharedModule,
     ModalsModule,
     DropdownMenusModule,
+    NgbTooltipModule,
   ],
 })
 export class SubCategoryModule {}

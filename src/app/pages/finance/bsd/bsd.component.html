@@ -53,11 +53,7 @@
               <td>
                 <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
                   <span class="text-gray-900 d-block">
-                    <span>{{ row.employee?.name }}</span
-                    ><br />
-                    <!-- <span>{{ row.car.name }}</span><br />
-                    <span>{{ row.car.number_plat }}</span><br /> -->
-                    <span>{{ row.car?.car_number }}</span>
+                    <span>{{ row.employee?.name }}</span> <span>({{ row.car?.car_number }})</span>
                   </span>
                 </span>
               </td>
@@ -70,13 +66,18 @@
                 @if (row.bsd) {
                 <div class="d-flex">
                   <div
-                    class="btn btn-primary py-2 px-4 text-light fw-bolder text-hover-light cursor-pointer"
+                    class="btn btn-primary py-2 px-4 text-light fw-bolder text-hover-light cursor-pointer d-flex"
                     (click)="openModalEditBSD(row, 'Package')"
+                    [ngbTooltip]="'Edit BSD' | translate"
                   >
-                    <app-keenicon name="pencil" class="fs-md-5 text-light"></app-keenicon>
-                    <span class="fs-6">{{ row.bsd }}</span>
+                    <app-keenicon name="pencil" class="fs-md-5 text-light d-block m-0"></app-keenicon> &nbsp;
+                    <span class="fs-6"> {{ row.bsd }}</span>
                   </div>
-                  <div class="px-5 cursor-pointer" (click)="printBSD(row, 'Package')">
+                  <div
+                    class="px-5 cursor-pointer"
+                    (click)="printBSD(row, 'Package')"
+                    [ngbTooltip]="'Print BSD' | translate"
+                  >
                     <app-keenicon name="printer" class="fs-md-1 text-primary"></app-keenicon>
                   </div>
                 </div>
@@ -86,10 +87,10 @@
                 @if (row.bsd_passenger) {
                 <div class="d-flex">
                   <div
-                    class="btn btn-primary py-2 px-4 text-light fw-bolder text-hover-light cursor-pointer"
+                    class="btn btn-primary py-2 px-4 text-light fw-bolder text-hover-light cursor-pointer d-flex"
                     (click)="openModalEditBSD(row, 'Passenger')"
                   >
-                    <app-keenicon name="pencil" class="fs-md-5 text-light"></app-keenicon>
+                    <app-keenicon name="pencil" class="fs-md-5 text-light d-block m-0"></app-keenicon> &nbsp;
                     <span class="fs-6">{{ row.bsd_passenger }}</span>
                   </div>
                   <div class="px-5 cursor-pointer" (click)="printBSD(row, 'Passenger')">
@@ -149,11 +150,7 @@
               <td>
                 <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
                   <span class="text-gray-900 d-block">
-                    <span>{{ row.employee?.name }}</span
-                    ><br />
-                    <!-- <span>{{ row.car.name }}</span><br />
-                    <span>{{ row.car.number_plat }}</span><br /> -->
-                    <span>{{ row.car?.car_number }}</span>
+                    <span>{{ row.employee?.name }}</span> <span>({{ row.car?.car_number }})</span>
                   </span>
                 </span>
               </td>
@@ -362,9 +359,9 @@
 
 <!-- begin:: Modal BSD -->
 <app-modal-full #modalBSD [modalConfig]="modalConfigEditBsd">
-  <div class="my-3">
+  <div class="my-3 mt-0">
     <!-- begin::Header -->
-    <div class="card-header border-0 pt-5 text-center">
+    <div class="card-header border-0 text-center">
       <div class="card-toolbar">
         <ul class="nav nav-pills nav-pills-sm nav-dark-75" style="display: inline-flex">
           <li class="nav-item" (click)="setCurrentTabModal('Cost')" [style.cursor]="'pointer'">
@@ -396,7 +393,7 @@
                     class="form-control"
                     formControlName="parking_passenger"
                     autocomplete="parking_passenger"
-                    [placeholder]="'Paring Passeknger Cost' | translate"
+                    [placeholder]="'Parking Passenger Cost' | translate"
                   />
                   <span hidden translate>Parking Passenger</span>
                 </label>

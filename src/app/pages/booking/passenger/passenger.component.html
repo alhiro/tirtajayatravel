@@ -15,7 +15,7 @@
         {{ dataLengthHistory | number }} items }
       </span>
     </h3>
-    @if (username === 'admin_11' && levelrule === 8) {
+    @if (!delivery) { @if (username === 'admin_11' && levelrule === 8) {
     <div class="card-toolbar">
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
@@ -40,15 +40,14 @@
       </div>
       <!-- end::Menu -->
 
-      @if (!delivery) {
       <div class="col text-end">
         <div ngbDropdown placement="bottom-end" class="d-inline-block">
           <button type="button" class="btn btn-sm btn-light" id="othersPassenger" ngbDropdownToggle>More Action</button>
           <div ngbDropdownMenu aria-labelledby="othersPassenger">
             <ul class="px-2 mb-0">
               <!-- <li class="nav-item dropdown-item" (click)="setCurrentTab('Move')" [style.cursor]="'pointer'">
-                  <a class="nav-link" [class.active]="currentTab === 'Move'" data-toggle="tab">Move</a>
-                </li> -->
+                    <a class="nav-link" [class.active]="currentTab === 'Move'" data-toggle="tab">Move</a>
+                  </li> -->
               <li class="nav-item dropdown-item" (click)="setCurrentTab('Cancel')" [style.cursor]="'pointer'">
                 <a class="nav-link" [class.active]="currentTab === 'Cancel'" data-toggle="tab">Cancel</a>
               </li>
@@ -109,8 +108,8 @@
           </ng-template>
         </div>
       </div>
-      }
     </div>
+    }
   </div>
   <!-- end::Header -->
   <!-- begin::Body -->
@@ -339,6 +338,9 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.created_by }}</span>
+              </td>
+              <td>
+                <span class="badge badge-light-primary">{{ row.status_passenger }}</span>
               </td>
               @if (!delivery) {
               <td class="text-end">

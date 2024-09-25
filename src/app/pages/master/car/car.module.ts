@@ -9,6 +9,7 @@ import { SharedModule } from '../../../_metronic/shared/shared.module';
 import { DropdownMenusModule } from '../../../_metronic/partials/content/dropdown-menus/dropdown-menus.module';
 import { ModalsModule } from '@app/_metronic/partials';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [CarComponent],
@@ -24,6 +25,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     TableModule,
     ModalsModule,
     ReactiveFormsModule,
+    NgbTooltipModule,
   ],
 })
 export class CarModule {}

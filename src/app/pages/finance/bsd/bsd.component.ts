@@ -383,6 +383,7 @@ export class BsdComponent implements OnInit, OnDestroy {
           );
           this.dataLengthBSDList = dataBSDList?.length;
           this.dataBSDList = dataBSDList;
+          console.log(this.dataLengthBSDList);
 
           const dataBSDDone = response.data?.filter(
             (data: GoSendModel) => data.bsd !== null || data.bsd_passenger !== null
@@ -395,7 +396,13 @@ export class BsdComponent implements OnInit, OnDestroy {
             this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
           this.pagination = { ...this.pagination };
           this.configuration.isLoading = false;
-          this.configuration.horizontalScroll = true;
+
+          dataBSDList?.length > 0
+            ? (this.configuration.horizontalScroll = false)
+            : (this.configuration.horizontalScroll = true);
+          dataBSDDone?.length > 0
+            ? (this.configuration.horizontalScroll = false)
+            : (this.configuration.horizontalScroll = true);
           this.cdr.detectChanges();
         } else {
           this.configuration.horizontalScroll = false;

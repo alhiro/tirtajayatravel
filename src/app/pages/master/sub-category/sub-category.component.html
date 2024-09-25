@@ -49,12 +49,18 @@
             <span class="text-gray-900 d-block">{{ row.updatedAt | date : 'yyyy/MM/dd hh:mm:ss' }}</span>
           </td>
           <td class="text-end">
-            <div class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-              <app-keenicon name="pencil" class="fs-3" (click)="openModalEdit(row)"></app-keenicon>
+            <div
+              class="btn btn-icon btn-light btn-hover-primary btn-sm me-1"
+              [ngbTooltip]="'Edit Sub Category' | translate"
+            >
+              <app-keenicon name="pencil" class="fs-3 text-primary" (click)="openModalEdit(row)"></app-keenicon>
             </div>
-            <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
-              <app-keenicon name="trash" class="fs-3"></app-keenicon>
-            </a>
+            <div
+              class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+              [ngbTooltip]="'Delete Sub Category' | translate"
+            >
+              <app-keenicon name="trash" class="fs-3 text-danger"></app-keenicon>
+            </div>
           </td>
         </ng-template>
       </ngx-table>

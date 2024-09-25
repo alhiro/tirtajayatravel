@@ -404,7 +404,10 @@ export class CustomerComponent implements OnInit {
         console.log(this.pagination);
 
         this.configuration.isLoading = false;
-        this.configuration.horizontalScroll = true;
+
+        response?.length > 0
+          ? (this.configuration.horizontalScroll = false)
+          : (this.configuration.horizontalScroll = true);
         this.cdr.detectChanges();
       });
   }
@@ -419,7 +422,10 @@ export class CustomerComponent implements OnInit {
         this.dataLengthAddress = this.dataAddress.length;
 
         this.configurationAddress.isLoading = false;
-        this.configurationAddress.horizontalScroll = true;
+
+        this.dataAddress.length > 0
+          ? (this.configurationAddress.horizontalScroll = false)
+          : (this.configurationAddress.horizontalScroll = true);
         this.cdr.detectChanges();
       });
   }
