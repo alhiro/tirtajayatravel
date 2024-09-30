@@ -87,6 +87,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   public searchFailedCar = false;
 
   public configuration: Config = { ...DefaultConfig };
+  public configurationDetail: Config = { ...DefaultConfig };
   @Input() cssClass!: '';
   currentTab = 'Malang';
   currentDisplay: boolean = false;
@@ -220,16 +221,21 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.city = this.localService.getCity();
     this.level = this.localService.getPosition();
 
-    // this.configuration.resizeColumn = true;
-    // this.configuration.fixedColumnWidth = false;
+    this.configuration.resizeColumn = false;
+    this.configuration.fixedColumnWidth = false;
     this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = false;
+
+    this.configurationDetail.resizeColumn = false;
+    this.configurationDetail.fixedColumnWidth = true;
+    this.configurationDetail.horizontalScroll = false;
+    this.configurationDetail.orderEnabled = false;
 
     this.columns = [
       // { key: 'category_sub_id', title: 'No' },
       { key: 'send_date', title: 'Departure Date' },
       { key: 'name', title: 'Driver' },
-      { key: '', title: 'No SP' },
+      // { key: '', title: 'No SP' },
       { key: 'description', title: 'Description' },
       { key: '', title: 'Items' },
       { key: 'car', title: 'Car' },
@@ -362,7 +368,14 @@ export class DeliveryComponent implements OnInit, OnDestroy {
             this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
           this.pagination = { ...this.pagination };
           this.configuration.isLoading = false;
-          this.configuration.horizontalScroll = true;
+
+          this.dataLengthMalang === 0
+            ? (this.configuration.horizontalScroll = false)
+            : (this.configuration.horizontalScroll = true);
+
+          this.dataLengthSurabaya === 0
+            ? (this.configuration.horizontalScroll = false)
+            : (this.configuration.horizontalScroll = true);
           this.cdr.detectChanges();
         } else {
           this.configuration.horizontalScroll = false;
@@ -449,11 +462,11 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.dataDetailPassenger = val?.passengers;
 
     this.dataDetailPackages?.length > 0
-      ? (this.configuration.horizontalScroll = false)
-      : (this.configuration.horizontalScroll = true);
+      ? (this.configurationDetail.horizontalScroll = false)
+      : (this.configurationDetail.horizontalScroll = true);
     this.dataDetailPassenger?.length > 0
-      ? (this.configuration.horizontalScroll = false)
-      : (this.configuration.horizontalScroll = true);
+      ? (this.configurationDetail.horizontalScroll = false)
+      : (this.configurationDetail.horizontalScroll = true);
 
     return await this.modalComponentDetail.open().then(
       (resp: any) => {
@@ -794,14 +807,14 @@ export class DeliveryComponent implements OnInit, OnDestroy {
             tap(() => (this.searchFailedEmployee = false)),
             map((response: any) => {
               if (response) {
-                let city: any;
-                if (this.currentTab === 'Malang') {
-                  city = 1;
-                } else if (this.currentTab === 'Surabaya') {
-                  city = 2;
-                }
+                // let city: any;
+                // if (this.currentTab === 'Malang') {
+                //   city = 1;
+                // } else if (this.currentTab === 'Surabaya') {
+                //   city = 2;
+                // }
 
-                const kurir = response.data.filter((val: any) => val.level_id === 5 && val.city_id === city);
+                const kurir = response.data.filter((val: any) => val.level_id === 5);
                 tap(() => (this.searchingEmployee = false));
                 return kurir.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
               }

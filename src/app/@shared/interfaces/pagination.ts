@@ -1,10 +1,17 @@
 export interface PaginationContext {
   limit: any;
   page: any;
-  search: any;
+  search: string;
   startDate: any;
   endDate: any;
 }
+export const defaultPage: PaginationContext = {
+  limit: 10,
+  page: 1,
+  search: '',
+  startDate: '',
+  endDate: '',
+};
 
 // Pagination
 export interface Pagination {

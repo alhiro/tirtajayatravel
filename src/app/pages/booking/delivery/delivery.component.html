@@ -110,7 +110,7 @@
                   {{ row.employee?.name }}
                 </span>
               </td>
-              <td>
+              <!-- <td>
                 <span class="text-gray-900 d-block">
                   @if (row.status === 'Reguler') {
                   {{ row.sp_passenger }}
@@ -118,41 +118,27 @@
                   {{ row.sp_package }}
                   }
                 </span>
-              </td>
+              </td> -->
               <td>
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  @if (row?.packages?.length > 0) { @if (row.status === 'Reguler') {
-                  <img
-                    style="width: 25px; cursor: pointer"
-                    src="../../../../assets/media/box.png"
-                    alt="{{ row.sp_passenger }}"
-                    ngbTooltip="{{ row.sp_passenger }}"
-                  />
-                  } @else {
+                  @if (row?.packages?.length > 0) {
                   <img
                     style="width: 25px; cursor: pointer"
                     src="../../../../assets/media/box.png"
                     alt="{{ row.sp_package }}"
                     ngbTooltip="{{ row.sp_package }}"
                   />
-                  } } @if (row?.passengers?.length > 0) { @if (row.status === 'Reguler') {
+                  } @if (row?.passengers?.length > 0) {
                   <img
                     style="width: 22px; cursor: pointer"
                     src="../../../../assets/media/avatars/blank.png"
                     alt="{{ row.sp_passenger }}"
                     ngbTooltip="{{ row.sp_passenger }}"
                   />
-                  } @else {
-                  <img
-                    style="width: 22px; cursor: pointer"
-                    src="../../../../assets/media/avatars/blank.png"
-                    alt="{{ row.sp_package }}"
-                    ngbTooltip="{{ row.sp_package }}"
-                  />
-                  } }
+                  }
                 </span>
               </td>
               <td>
@@ -273,7 +259,7 @@
                   {{ row.employee?.name }}
                 </span>
               </td>
-              <td>
+              <!-- <td>
                 <span class="text-gray-900 d-block">
                   @if (row.status === 'Reguler') {
                   {{ row.sp_passenger }}
@@ -281,7 +267,7 @@
                   {{ row.sp_package }}
                   }
                 </span>
-              </td>
+              </td> -->
               <td>
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
               </td>
@@ -714,7 +700,7 @@
     <!-- begin::Table -->
     <ngx-table
       #table
-      [configuration]="configuration"
+      [configuration]="configurationDetail"
       [data]="dataDetailPassenger"
       [columns]="columnsPassenger"
       [pagination]="pagination"
@@ -833,7 +819,7 @@
     <!-- begin::Table -->
     <ngx-table
       #table
-      [configuration]="configuration"
+      [configuration]="configurationDetail"
       [data]="dataDetailPackages"
       [columns]="columnsPackage"
       [pagination]="pagination"

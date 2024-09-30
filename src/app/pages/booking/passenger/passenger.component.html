@@ -105,6 +105,13 @@
             >
               Print
             </button>
+            <button
+              class="btn btn-warning btn-sm m-2 p-1 px-4 float-end"
+              [disabled]="configuration.isLoading"
+              (click)="printFilterSelected(datepicker)"
+            >
+              Filter
+            </button>
           </ng-template>
         </div>
       </div>
@@ -489,6 +496,9 @@
               <td>
                 <span class="text-gray-900 d-block">{{ row.created_by }}</span>
               </td>
+              <td>
+                <span class="badge badge-light-warning">{{ row.status_passenger }}</span>
+              </td>
               <td class="text-end">
                 <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
@@ -583,6 +593,9 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.created_by }}</span>
+              </td>
+              <td>
+                <span class="badge badge-light-success">{{ row.status_passenger }}</span>
               </td>
               <td class="text-end">
                 <a

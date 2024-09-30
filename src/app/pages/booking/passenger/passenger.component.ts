@@ -268,6 +268,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
       this.toDate = date;
       // datepicker.close(); // Close datepicker popup
 
+      console.log('select from date & to date');
+
       // const valueBookFromDate = new Date(
       //   Date.UTC(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day, 0, 0)
       // ).toISOString();
@@ -294,6 +296,14 @@ export class PassengerComponent implements OnInit, OnDestroy {
     } else {
       this.toDate = null;
       this.fromDate = date;
+
+      const valueBookFromDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      const valueBookToDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookToDate);
+      this.startDate = startDate;
+      this.endDate = endDate;
+
+      console.log('select from date & to date is null');
     }
   }
 
@@ -301,6 +311,21 @@ export class PassengerComponent implements OnInit, OnDestroy {
     this.fromDate = this.calendar.getToday();
     this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
     this.dataList(this.params);
+    datepicker.close();
+  }
+
+  printFilterSelected(datepicker: any) {
+    this.params = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      startDate: this.startDate,
+      endDate: this.endDate,
+    };
+
+    this.dataList(this.params);
+    console.log(this.params);
+
     datepicker.close();
   }
 
@@ -355,7 +380,22 @@ export class PassengerComponent implements OnInit, OnDestroy {
     }
 
     this.dataCategory();
+
+    const valueBookFromDate = moment().utc().startOf('day').format('YYYY-MM-DD HH:mm:ss');
+    const valueBookToDate = moment().utc().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+    this.startDate = valueBookFromDate;
+    this.endDate = valueBookToDate;
+
+    this.params = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      startDate: this.startDate,
+      endDate: this.endDate,
+    };
+
     this.dataList(this.params);
+
     this.company = this.localService.getCompany();
     this.business = this.localService.getBusiness();
     this.request = this.localService.getRequest();
@@ -593,14 +633,15 @@ export class PassengerComponent implements OnInit, OnDestroy {
     this.pagination.limit = obj.value.limit ? obj.value.limit : this.pagination.limit;
     this.pagination.offset = obj.value.page ? obj.value.page : this.pagination.offset;
     this.pagination = { ...this.pagination };
-    const params = {
+
+    this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search: this.pagination.search,
-      startDate: this.pagination.startDate,
-      endDate: this.pagination.endDate,
+      startDate: this.startDate,
+      endDate: this.endDate,
     }; // see https://github.com/typicode/json-server
-    this.dataList(params);
+    this.dataList(this.params);
   }
 
   private dataList(params: PaginationContext): void {

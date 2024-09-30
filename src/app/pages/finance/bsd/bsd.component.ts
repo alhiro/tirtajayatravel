@@ -71,6 +71,7 @@ export class BsdComponent implements OnInit, OnDestroy {
 
   public modelEmployee: any;
   public modelCar: any;
+  public modelDriver: any;
 
   public searchFailed = false;
   public searchingEmployee = false;
@@ -112,6 +113,9 @@ export class BsdComponent implements OnInit, OnDestroy {
 
   isLoading = false;
 
+  public selected = new Set();
+  public groupCheckedBsdList: any;
+
   get fsp() {
     return this.formSP.controls;
   }
@@ -133,6 +137,7 @@ export class BsdComponent implements OnInit, OnDestroy {
   addClass = 'modal-clean';
   @ViewChild('modalSP') private modalComponentSP!: ModalFullComponent;
   @ViewChild('modalBSD') private modalComponentBSD!: ModalFullComponent;
+  @ViewChild('modalBSDGroup') private modalComponentBSDGroup!: ModalFullComponent;
 
   dataDelivery!: GoSendModel;
 
@@ -392,15 +397,20 @@ export class BsdComponent implements OnInit, OnDestroy {
           this.dataBSDDone = dataBSDDone;
 
           // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-          this.pagination.count =
-            this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
-          this.pagination = { ...this.pagination };
-          this.configuration.isLoading = false;
+          if (this.currentTab === 'Done') {
+            this.pagination.count =
+              this.pagination.count === -1 ? (this.dataBSDList ? this.dataLengthBSDList : 0) : this.pagination.count;
+            this.pagination = { ...this.pagination };
+          } else if (this.currentTab === 'List') {
+            this.pagination.count =
+              this.pagination.count === -1 ? (this.dataBSDDone ? this.dataLengthBSDDone : 0) : this.pagination.count;
+            this.pagination = { ...this.pagination };
+          }
 
-          dataBSDList?.length > 0
+          this.dataLengthBSDList === 0
             ? (this.configuration.horizontalScroll = false)
             : (this.configuration.horizontalScroll = true);
-          dataBSDDone?.length > 0
+          this.dataLengthBSDDone === 0
             ? (this.configuration.horizontalScroll = false)
             : (this.configuration.horizontalScroll = true);
           this.cdr.detectChanges();
@@ -523,14 +533,14 @@ export class BsdComponent implements OnInit, OnDestroy {
             tap(() => (this.searchFailedEmployee = false)),
             map((response: any) => {
               if (response) {
-                let city: any;
-                if (this.currentTab === 'Malang') {
-                  city = 1;
-                } else if (this.currentTab === 'Surabaya') {
-                  city = 2;
-                }
+                // let city: any;
+                // if (this.currentTab === 'Malang') {
+                //   city = 1;
+                // } else if (this.currentTab === 'Surabaya') {
+                //   city = 2;
+                // }
 
-                const kurir = response.data.filter((val: any) => val.level_id === 5 && val.city_id === city);
+                const kurir = response.data.filter((val: any) => val.level_id === 5);
                 tap(() => (this.searchingEmployee = false));
                 return kurir.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
               }
@@ -889,5 +899,66 @@ export class BsdComponent implements OnInit, OnDestroy {
     sessionStorage.setItem('printbsd', JSON.stringify(val));
     sessionStorage.setItem('type', JSON.stringify(item));
     window.open('#/finance/bsd/tirta-jaya/printbsd', '_blank');
+  }
+
+  searchDataDriver: any = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+      switchMap((term) =>
+        this.deliveryService
+          .driver({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+            startDate: this.params.startDate,
+            endDate: this.params.endDate,
+          })
+          .pipe(
+            map((response: any) => {
+              if (response) {
+                this.params = {
+                  limit: this.params.limit,
+                  page: this.params.page,
+                  search: term,
+                  startDate: this.params.startDate,
+                  endDate: this.params.endDate,
+                };
+                this.dataListBSD(this.params);
+              }
+            }),
+            catchError((err) => {
+              console.log(err);
+              this.handlerResponseService.failedResponse(err);
+              return of([]);
+            })
+          )
+      )
+    );
+
+  onChangeChecked(value: any) {
+    const index = this.dataBSDList.indexOf(value);
+    if (this.selected.has(index)) {
+      this.selected.delete(index);
+
+      console.log(this.selected);
+      console.log(index);
+      console.log(value);
+    } else {
+      this.selected.add(index);
+
+      console.log(this.selected);
+      console.log(index);
+      console.log(value);
+
+      // this.groupCheckedBsdList.push(value);
+      // console.log(this.groupCheckedBsdList);
+    }
+  }
+
+  async openModalAddSPGroup() {
+    console.log(this.groupCheckedBsdList);
+
+    return await this.modalComponentBSDGroup.open();
   }
 }

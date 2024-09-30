@@ -5,33 +5,43 @@
   >
   @if (type ==='Passenger') {
   <div class="m-0">
-    <div class="card-header border-0" style="display: flex; justify-content: space-between">
+    <div class="card-header border-0">
       <div class="card-toolbar">
         <div class="col">
           <!-- begin::Menu -->
           <div class="menu-item">
-            <div class="menu-content px-0">
-              <h2 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">
+            <div class="menu-content px-0 mb-3">
+              <h1 class="card-title text-center">
+                <span class="card-label fw-bolder fs-2 mb-1">
                   @if (detail?.city_id === 1) { SURAT PENGANTAR PENUMPANG MALANG } @else { SURAT PENGANTAR PENUMPANG
                   SURABAYA }
                 </span>
-              </h2>
+              </h1>
             </div>
           </div>
           <!-- end::Menu -->
         </div>
       </div>
       <div class="card-toolbar">
-        <div class="col text-end">
+        <div class="row">
           <!-- begin::Menu -->
-          <div class="menu-item px-3">
-            <div class="menu-content px-3 py-3">
-              <span>Send Date: {{ detail?.send_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span
-              ><br />
-              <h3>
+          <div class="col-md-4">
+            <div class="menu-content px-3">
+              <span
+                ><b>{{ detail?.employee?.name }} | {{ detail?.car?.car_number }}</b></span
+              >
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="menu-content px-3 text-center">
+              <span><b>Send Date</b>: {{ detail?.send_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="menu-content px-3 text-end">
+              <h4>
                 <b>{{ detail?.sp_passenger }}</b>
-              </h3>
+              </h4>
             </div>
           </div>
           <!-- end::Menu -->
@@ -57,12 +67,8 @@
               </td> -->
             <td>
               <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
-                {{ row.resi_number }}
-              </span>
-            </td>
-            <td>
-              <span class="text-gray-900 d-block">
-                {{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}
+                {{ row.resi_number }}<br />
+                ({{ row.book_date | date : 'H:mm' : 'GMT' }})
               </span>
             </td>
             <td>
@@ -91,12 +97,27 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
+                {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
                 {{ row.status }}
               </span>
             </td>
             <td>
               <span class="text-gray-900 d-block">
+                {{ row.total_passenger | number }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
                 {{ row.position }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.description }}
               </span>
             </td>
           </ng-template>
@@ -105,42 +126,51 @@
       </div>
       <!-- end::Table container -->
 
-      <!-- <div class="mt-7">
-          <span>Total Cost: {{ totalCost | currency : 'Rp ' : true : '1.0-2' }}</span
-          ><br />
-          <span>Total Koli: {{ totalKoli | number }}</span>
-        </div> -->
+      <div class="mt-7">
+        <span><b>Total Tariff</b>: {{ totalTariff | currency : 'Rp ' : true : '1.0-2' }}</span
+        ><br />
+        <span><b>Total Passenger</b>: {{ totalPassenger | number }}</span>
+      </div>
     </div>
   </div>
   } @if (type ==='Package') {
   <div class="m-0">
-    <div class="card-header border-0" style="display: flex; justify-content: space-between">
+    <div class="card-header border-0">
       <div class="card-toolbar">
         <div class="col">
           <!-- begin::Menu -->
           <div class="menu-item">
-            <div class="menu-content px-0">
-              <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">
+            <div class="menu-content px-0 mb-3">
+              <h1 class="card-title text-center">
+                <span class="card-label fw-bolder fs-2 mb-1">
                   @if (detail?.city_id === 1) { SURAT PENGANTAR PAKET MALANG } @else { SURAT PENGANTAR PAKET SURABAYA }
                 </span>
-              </h3>
+              </h1>
             </div>
           </div>
           <!-- end::Menu -->
         </div>
       </div>
       <div class="card-toolbar">
-        <div class="col text-end">
+        <div class="row">
           <!-- begin::Menu -->
-          <div class="menu-item px-3">
-            <div class="menu-content px-3 py-3">
-              <span>Send Date: {{ detail?.send_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span
-              ><br />
-              <span>{{ detail?.employee?.name }} | {{ detail?.car?.car_number }}</span>
-              <h3>
+          <div class="col-md-4">
+            <div class="menu-content px-3">
+              <span
+                ><b>{{ detail?.employee?.name }} | {{ detail?.car?.car_number }}</b></span
+              >
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="menu-content px-3 text-center">
+              <span><b>Send Date</b>: {{ detail?.send_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="menu-content px-3 text-end">
+              <h4>
                 <b>{{ detail?.sp_package }}</b>
-              </h3>
+              </h4>
             </div>
           </div>
           <!-- end::Menu -->
@@ -211,9 +241,9 @@
       <!-- end::Table container -->
 
       <div class="mt-7">
-        <span>Total Cost: {{ totalCost | currency : 'Rp ' : true : '1.0-2' }}</span
+        <span><b>Total Cost</b>: {{ totalCost | currency : 'Rp ' : true : '1.0-2' }}</span
         ><br />
-        <span>Total Koli: {{ totalKoli | number }}</span>
+        <span><b>Total Koli</b>: {{ totalKoli | number }}</span>
       </div>
     </div>
   </div>

@@ -22,6 +22,8 @@ export class PrintspComponent implements OnInit, OnDestroy {
 
   public totalCost: any;
   public totalKoli: any;
+  public totalTariff: any;
+  public totalPassenger: any;
 
   constructor(private router: Router) {}
 
@@ -38,11 +40,13 @@ export class PrintspComponent implements OnInit, OnDestroy {
     this.columnsPassenger = [
       // { key: 'category_sub_id', title: 'No' },
       { key: 'resi_number', title: 'Resi Number' },
-      { key: 'sp_package', title: 'SP' },
       { key: 'waybill_id', title: 'Waybill' },
       { key: 'destination_id', title: 'Destination' },
+      { key: 'tariff', title: 'Tariff' },
       { key: 'status', title: 'Status' },
+      { key: 'total_passenger', title: 'Total Passenger' },
       { key: 'position', title: 'Seat' },
+      { key: 'description', title: 'Description' },
     ];
 
     this.columnsPackage = [
@@ -76,8 +80,12 @@ export class PrintspComponent implements OnInit, OnDestroy {
     this.detail = objDetail;
     this.type = objType;
     this.data = objData;
+
     this.totalCost = this.data?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
     this.totalKoli = this.data?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
+
+    this.totalTariff = this.data?.reduce((acc: any, item: any) => acc + Number(item?.tariff), 0);
+    this.totalPassenger = this.data?.reduce((acc: any, item: any) => acc + Number(item?.total_passenger), 0);
     console.log(this.totalCost);
     console.log(this.data);
   }

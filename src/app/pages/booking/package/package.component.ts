@@ -305,6 +305,12 @@ export class PackageComponent implements OnInit, OnDestroy {
     } else {
       this.toDate = null;
       this.fromDate = date;
+
+      const valueBookFromDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      const valueBookToDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookToDate);
+      this.startDate = startDate;
+      this.endDate = endDate;
     }
   }
 

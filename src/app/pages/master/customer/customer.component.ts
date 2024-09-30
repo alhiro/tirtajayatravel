@@ -346,11 +346,11 @@ export class CustomerComponent implements OnInit {
                 this.inputCustomer = term;
 
                 const params = {
-                  limit: this.pagination.limit,
-                  page: this.pagination.offset,
+                  limit: this.params.limit,
+                  page: this.params.page,
                   search: this.inputCustomer,
-                  startDate: this.pagination.startDate,
-                  endDate: this.pagination.endDate,
+                  startDate: this.params.startDate,
+                  endDate: this.params.endDate,
                 };
                 this.dataList(params);
               }
