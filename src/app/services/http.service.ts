@@ -3,7 +3,7 @@ import { CommonApiService } from './common-api/common-api.service';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@env/environment.prod';
-import { Dates, PaginationContext } from '@app/@shared/interfaces/pagination';
+import { Dates, ExtendedPaginationContext, PaginationContext } from '@app/@shared/interfaces/pagination';
 import { CategoryModel } from '@app/pages/master/category/models/category.model';
 import { SubCategoryModel } from '@app/pages/master/sub-category/models/subcategory.model';
 import { EmployeeyModel } from '@app/pages/master/employee/models/employee.model';
@@ -87,7 +87,7 @@ export class HttpService {
 
   // BOOKING
   // Packager
-  packageList(param: PaginationContext): Observable<any> {
+  packageList(param: ExtendedPaginationContext): Observable<any> {
     return this.commonApi.get(
       '/package/list?limit=' +
         param.limit +
@@ -98,7 +98,11 @@ export class HttpService {
         '&startDate=' +
         param.startDate +
         '&endDate=' +
-        param.endDate
+        param.endDate +
+        '&city=' +
+        param.city +
+        '&status=' +
+        param.status
     ) as Observable<any>;
   }
 
@@ -382,6 +386,34 @@ export class HttpService {
     return this.commonApi.put('/go-send/update', body) as Observable<any>;
   }
 
+  SpEditGroup(params: GoSendModel[]): Observable<any> {
+    const body = params.map((param) => ({
+      go_send_id: param.go_send_id,
+      employee_id: param.employee_id,
+      car_id: param.car_id,
+      city_id: param.city_id,
+      package_id: param.package_id,
+      passenger_id: param.passenger_id,
+      cost_id: param.cost_id,
+      telp: param.telp,
+      send_time: param.send_time,
+      send_date: param.send_date,
+      sp_number: param.sp_number,
+      sp_package: param.sp_package,
+      sp_passenger: param.sp_passenger,
+      bsd: param.bsd,
+      bsd_passenger: param.bsd_passenger,
+      bsd_date: param.bsd_date,
+      box: param.box,
+      bsd_box: param.bsd_box,
+      description: param.description,
+      status: param.status,
+      packages: param.packages,
+      passengers: param.passengers,
+    }));
+    return this.commonApi.put('/go-send/update-group', body) as Observable<any>;
+  }
+
   spCreate(param: GoSendModel): Observable<any> {
     const body = {
       employee_id: param.employee_id,
@@ -414,7 +446,7 @@ export class HttpService {
   }
 
   // Passenger
-  passengerList(param: PaginationContext): Observable<any> {
+  passengerList(param: ExtendedPaginationContext): Observable<any> {
     return this.commonApi.get(
       '/passenger/list?limit=' +
         param.limit +
@@ -425,7 +457,11 @@ export class HttpService {
         '&startDate=' +
         param.startDate +
         '&endDate=' +
-        param.endDate
+        param.endDate +
+        '&city=' +
+        param.city +
+        '&status=' +
+        param.status
     ) as Observable<any>;
   }
 

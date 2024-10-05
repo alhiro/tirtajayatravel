@@ -3,16 +3,29 @@
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
       <span class="card-label fw-bolder fs-3 mb-1">
-        @if (currentTab === 'Malang') { Passenger Table Malang } @else if (currentTab === 'Surabaya') { Passenger Table
-        Surabaya } @else if (currentTab === 'Move') { Passenger Table Move } @else if (currentTab === 'Cancel') {
-        Passenger Table Cancel } @else if (currentTab === 'History') { Passenger Table History }
+        <ng-container [ngSwitch]="currentTab">
+          <ng-container *ngSwitchCase="'Malang'">
+            {{ 'PASSENGER.TITLE' | translate : { title: 'Malang' } }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'Surabaya'">
+            {{ 'PASSENGER.TITLE' | translate : { title: 'Surabaya' } }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'Move'">
+            {{ 'PASSENGER.TITLE' | translate : { title: 'Pindah' } }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'Cancel'">
+            {{ 'PASSENGER.TITLE' | translate : { title: 'Batal' } }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'History'">
+            {{ 'PASSENGER.TITLE' | translate : { title: 'Selesai' } }}
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            {{ 'PASSENGER.NO_DATA' | translate }}
+          </ng-container>
+        </ng-container>
       </span>
       <span class="text-muted mt-1 fw-bold fs-7">
-        @if (currentTab === 'Malang') { Have {{ dataLengthMalang | number }} items } @else if (currentTab ===
-        'Surabaya') { Have {{ dataLengthSurabaya | number }} items } @else if (currentTab === 'Move') { Have
-        {{ dataLengthMove | number }} items } @else if (currentTab === 'Cancel') { Have
-        {{ dataLengthCancel | number }} items } @else if (currentTab === 'History') { Have
-        {{ dataLengthHistory | number }} items }
+        {{ 'PASSENGER.LENGTH' | translate : { dataLength: dataLength | number } }}
       </span>
     </h3>
     @if (!delivery) { @if (username === 'admin_11' && levelrule === 8) {
@@ -280,7 +293,7 @@
           <ngx-table
             #table
             [configuration]="configuration"
-            [data]="dataSurabaya"
+            [data]="data"
             [columns]="columns"
             [pagination]="pagination"
             (event)="eventEmitted($event)"
@@ -430,7 +443,7 @@
           <ngx-table
             #table
             [configuration]="configuration"
-            [data]="dataCancel"
+            [data]="data"
             [columns]="columns"
             [pagination]="pagination"
             (event)="eventEmitted($event)"
@@ -528,7 +541,7 @@
           <ngx-table
             #table
             [configuration]="configuration"
-            [data]="dataHistory"
+            [data]="data"
             [columns]="columns"
             [pagination]="pagination"
             (event)="eventEmitted($event)"

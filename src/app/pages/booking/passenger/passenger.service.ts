@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PaginationContext } from '@app/@shared/interfaces/pagination';
+import { ExtendedPaginationContext, PaginationContext } from '@app/@shared/interfaces/pagination';
 import { HttpService } from '@app/services/http.service';
 import { Observable, map } from 'rxjs';
 import { PassengerModel } from './models/passenger.model';
@@ -14,7 +14,7 @@ import { GoSendModel } from '../package/models/gosend';
 export class PassengerService {
   constructor(private httpService: HttpService) {}
 
-  list(context: PaginationContext): Observable<PassengerModel> {
+  list(context: ExtendedPaginationContext): Observable<PassengerModel> {
     return this.httpService.passengerList(context).pipe(
       map((result) => {
         if (!result) {

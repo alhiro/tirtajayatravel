@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '@app/services/http.service';
 import { Observable, map } from 'rxjs';
-import { PaginationContext } from '@app/@shared/interfaces/pagination';
+import { ExtendedPaginationContext, PaginationContext } from '@app/@shared/interfaces/pagination';
 import { PackageModel } from './models/package.model';
 import { RecipientModel } from './models/recipient.model';
 import { SenderModel } from './models/sender.model';
@@ -14,7 +14,7 @@ import { GoSendModel } from './models/gosend';
 export class PackageService {
   constructor(private httpService: HttpService) {}
 
-  list(context: PaginationContext): Observable<PackageModel> {
+  list(context: ExtendedPaginationContext): Observable<PackageModel> {
     return this.httpService.packageList(context).pipe(
       map((result) => {
         if (!result) {
@@ -159,6 +159,17 @@ export class PackageService {
 
   editSP(context: GoSendModel): Observable<GoSendModel> {
     return this.httpService.SpEdit(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
+  editSPGroup(context: GoSendModel[]): Observable<GoSendModel> {
+    return this.httpService.SpEditGroup(context).pipe(
       map((result) => {
         if (!result) {
           return result;

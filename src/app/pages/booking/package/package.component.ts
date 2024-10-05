@@ -25,7 +25,7 @@ import {
 } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { PackageService } from './package.service';
-import { PaginationContext } from '@app/@shared/interfaces/pagination';
+import { ExtendedPagination, ExtendedPaginationContext, PaginationContext } from '@app/@shared/interfaces/pagination';
 import { ModalComponent, ModalConfig, ModalXlComponent } from '@app/_metronic/partials';
 
 import { PackageModel } from './models/package.model';
@@ -76,13 +76,10 @@ export class PackageComponent implements OnInit, OnDestroy {
   public columns!: Columns[];
   public defaultAddressCustomer: any;
   public defaultAddressRecipient: any;
+
   public dataRow: any;
   public data: any;
-  public dataCustomer: any;
-  public dataSurabaya: any;
-  public dataMove: any;
-  public dataCancel: any;
-  public dataHistory: any;
+
   public company: any;
   public business: any;
   public category: any;
@@ -90,12 +87,15 @@ export class PackageComponent implements OnInit, OnDestroy {
   public status: any;
   public statusPackage: any;
   public city: any;
+
+  public dataLength = 0;
   public dataLengthMalang!: number;
   public dataLengthSurabaya!: number;
   public dataLengthMove!: number;
   public dataLengthCancel!: number;
   public dataLengthHistory!: number;
   public dataLengthCustomer!: number;
+
   public toggledRows = new Set<number>();
 
   public isCreate = false;
@@ -135,6 +135,8 @@ export class PackageComponent implements OnInit, OnDestroy {
     search: '',
     startDate: '',
     endDate: '',
+    city: 'Malang',
+    status: 'Progress',
   };
   public params = {
     limit: 10,
@@ -142,6 +144,8 @@ export class PackageComponent implements OnInit, OnDestroy {
     search: '',
     startDate: '',
     endDate: '',
+    city: 'Malang',
+    status: 'Progress',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -279,29 +283,14 @@ export class PackageComponent implements OnInit, OnDestroy {
       this.toDate = date;
       // datepicker.close(); // Close datepicker popup
 
-      // const valueBookFromDate = new Date(
-      //   Date.UTC(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day, 0, 0)
-      // ).toISOString();
-
-      // const valueBookToDate = new Date(
-      //   Date.UTC(this.toDate.year, this.toDate.month - 1, this.toDate.day, 23, 59)
-      // ).toISOString();
-
       const valueBookFromDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
       const valueBookToDate = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
       const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookToDate);
       this.startDate = startDate;
       this.endDate = endDate;
 
-      // const params = {
-      //   limit: this.pagination.limit,
-      //   page: this.pagination.offset,
-      //   search: this.pagination.search,
-      //   startDate: this.startDate,
-      //   endDate: this.endDate,
-      // };
       // console.log(params);
-      // this.dataList(params);
+      // this.dataList(this.params);
     } else {
       this.toDate = null;
       this.fromDate = date;
@@ -380,9 +369,8 @@ export class PackageComponent implements OnInit, OnDestroy {
     this.statusPackage = this.localService.getStatusPackage();
     this.city = this.localService.getCity();
 
-    // this.configuration.resizeColumn = true;
-    // this.configuration.fixedColumnWidth = false;
-    this.configuration.showDetailsArrow = true;
+    this.configuration.resizeColumn = false;
+    this.configuration.fixedColumnWidth = true;
     this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = false;
 
@@ -565,36 +553,50 @@ export class PackageComponent implements OnInit, OnDestroy {
     this.currentTab = tab;
     console.log(this.currentTab);
 
-    // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
     if (this.currentTab === 'Malang') {
-      this.pagination.count =
-        this.pagination.count === -1 ? (this.data ? this.dataLengthMalang : 0) : this.pagination.count;
-      this.pagination = { ...this.pagination };
-      this.dataLengthMalang === 0
-        ? (this.configuration.horizontalScroll = false)
-        : (this.configuration.horizontalScroll = true);
-      console.log(this.data);
+      this.params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.pagination.startDate,
+        endDate: this.pagination.endDate,
+        city: this.currentTab,
+        status: 'Progress',
+      };
+      this.dataList(this.params);
     } else if (this.currentTab === 'Surabaya') {
-      this.pagination.count =
-        this.pagination.count === -1 ? (this.dataSurabaya ? this.dataLengthSurabaya : 0) : this.pagination.count;
-      this.pagination = { ...this.pagination };
-      this.dataLengthSurabaya === 0
-        ? (this.configuration.horizontalScroll = false)
-        : (this.configuration.horizontalScroll = true);
+      this.params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.pagination.startDate,
+        endDate: this.pagination.endDate,
+        city: this.currentTab,
+        status: 'Progress',
+      };
+      this.dataList(this.params);
     } else if (this.currentTab === 'Cancel') {
-      this.pagination.count =
-        this.pagination.count === -1 ? (this.dataCancel ? this.dataLengthCancel : 0) : this.pagination.count;
-      this.pagination = { ...this.pagination };
-      this.dataLengthCancel === 0
-        ? (this.configuration.horizontalScroll = false)
-        : (this.configuration.horizontalScroll = true);
+      this.params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.pagination.startDate,
+        endDate: this.pagination.endDate,
+        city: '',
+        status: 'Cancel',
+      };
+      this.dataList(this.params);
     } else if (this.currentTab === 'History') {
-      this.pagination.count =
-        this.pagination.count === -1 ? (this.dataHistory ? this.dataLengthHistory : 0) : this.pagination.count;
-      this.pagination = { ...this.pagination };
-      this.dataLengthHistory === 0
-        ? (this.configuration.horizontalScroll = false)
-        : (this.configuration.horizontalScroll = true);
+      this.params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.pagination.startDate,
+        endDate: this.pagination.endDate,
+        city: '',
+        status: 'Completed',
+      };
+      this.dataList(this.params);
     }
   }
 
@@ -636,131 +638,40 @@ export class PackageComponent implements OnInit, OnDestroy {
     this.pagination.limit = obj.value.limit ? obj.value.limit : this.pagination.limit;
     this.pagination.offset = obj.value.page ? obj.value.page : this.pagination.offset;
     this.pagination = { ...this.pagination };
-    const params = {
+    this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search: this.pagination.search,
       startDate: this.pagination.startDate,
       endDate: this.pagination.endDate,
+      city: this.currentTab,
+      status: this.pagination.status,
     }; // see https://github.com/typicode/json-server
-    this.dataList(params);
+    this.dataList(this.params);
   }
 
-  private dataList(params: PaginationContext): void {
+  private dataList(params: ExtendedPaginationContext): void {
     this.configuration.isLoading = true;
     this.packageService
       .list(params)
-      .pipe(
-        takeUntil(this.ngUnsubscribe),
-        finalize(() => {
-          this.configuration.isLoading = false;
-        })
-      )
+      .pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
-        // count malang or surabaya
-        if (response.data.length > 0) {
-          const malangData = response.data?.filter(
-            (data: PackageModel) => data.city_id === 1 && data.status_package === 'Progress'
-          );
-          const surabayaData = response.data?.filter(
-            (data: PackageModel) => data.city_id === 2 && data.status_package === 'Progress'
-          );
-          const cancelData = response.data?.filter((data: PackageModel) => data.status_package === 'Cancel');
-          const historyData = response.data?.filter((data: PackageModel) => data.status_package === 'Completed');
+        this.dataLength = response.length;
+        this.data = response.data;
+        // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
 
-          this.dataLengthMalang = malangData?.length;
-          this.dataLengthSurabaya = surabayaData?.length;
-          this.dataLengthCancel = cancelData?.length;
-          this.dataLengthHistory = historyData?.length;
+        this.pagination.count =
+          this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
+        this.pagination = { ...this.pagination };
 
-          if (
-            this.dataLengthMalang > 0 ||
-            this.dataLengthSurabaya > 0 ||
-            this.dataLengthCancel > 0 ||
-            this.dataLengthHistory > 0
-          ) {
-            this.configuration.horizontalScroll = true;
+        this.configuration.isLoading = false;
 
-            this.data = malangData;
-            this.dataSurabaya = surabayaData;
-            this.dataCancel = cancelData;
-            this.dataHistory = historyData;
-          } else {
-            this.configuration.horizontalScroll = false;
-
-            this.data = [];
-            this.dataSurabaya = [];
-            this.dataCancel = [];
-            this.dataHistory = [];
-          }
-
-          // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-          if (this.currentTab === 'Malang') {
-            this.pagination.count =
-              this.pagination.count === -1 ? (this.data ? this.dataLengthMalang : 0) : this.pagination.count;
-            this.pagination = { ...this.pagination };
-            this.dataLengthMalang === 0
-              ? (this.configuration.horizontalScroll = false)
-              : (this.configuration.horizontalScroll = true);
-            console.log(this.data);
-          } else if (this.currentTab === 'Surabaya') {
-            this.pagination.count =
-              this.pagination.count === -1 ? (this.dataSurabaya ? this.dataLengthSurabaya : 0) : this.pagination.count;
-            this.pagination = { ...this.pagination };
-            this.dataLengthSurabaya === 0
-              ? (this.configuration.horizontalScroll = false)
-              : (this.configuration.horizontalScroll = true);
-          } else if (this.currentTab === 'Cancel') {
-            this.pagination.count =
-              this.pagination.count === -1 ? (this.dataCancel ? this.dataLengthCancel : 0) : this.pagination.count;
-            this.pagination = { ...this.pagination };
-            this.dataLengthCancel === 0
-              ? (this.configuration.horizontalScroll = false)
-              : (this.configuration.horizontalScroll = true);
-          } else if (this.currentTab === 'History') {
-            this.pagination.count =
-              this.pagination.count === -1 ? (this.dataHistory ? this.dataLengthHistory : 0) : this.pagination.count;
-            this.pagination = { ...this.pagination };
-            this.dataLengthHistory === 0
-              ? (this.configuration.horizontalScroll = false)
-              : (this.configuration.horizontalScroll = true);
-          }
-
-          this.configuration.isLoading = false;
-          this.cdr.detectChanges();
-        } else {
-          this.configuration.horizontalScroll = false;
-
-          this.dataLengthMalang = 0;
-          this.dataLengthSurabaya = 0;
-          this.dataLengthCancel = 0;
-          this.dataLengthHistory = 0;
-
-          this.data = [];
-          this.dataSurabaya = [];
-          this.dataCancel = [];
-          this.dataHistory = [];
-        }
+        response?.length > 0
+          ? (this.configuration.horizontalScroll = true)
+          : (this.configuration.horizontalScroll = false);
+        this.cdr.detectChanges();
       });
   }
-
-  // search2 = (text$: Observable<string>) =>
-  //   text$.pipe(
-  //       debounceTime(200),
-  //       distinctUntilChanged(),
-  //       tap(() => (this.searchFailed = true)),
-  //       map((term: any) => {
-  //         term.length < 2 ? [] : this.dataListCustomer(this.params, term);
-
-  //         // return this.dataCustomer.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1)
-  //       }),
-  //       switchMap(() => this.dataCustomer),
-  //       catchError((err) => {
-  //         console.error('err', err);
-  //         return of(undefined);
-  //       }),
-  //       tap(() => (this.searchFailed = false)),
-  //   );
 
   searchDataEmployee = (text$: Observable<string>) =>
     text$.pipe(

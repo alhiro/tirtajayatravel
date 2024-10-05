@@ -24,7 +24,7 @@ import {
   OperatorFunction,
 } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { PaginationContext } from '@app/@shared/interfaces/pagination';
+import { ExtendedPagination, ExtendedPaginationContext, PaginationContext } from '@app/@shared/interfaces/pagination';
 import { ModalComponent, ModalConfig, ModalXlComponent } from '@app/_metronic/partials';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -88,6 +88,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
   public payment: any;
   public statusPassenger: any;
   public city: any;
+
+  public dataLength!: number;
   public dataLengthMalang!: number;
   public dataLengthSurabaya!: number;
   public dataLengthMove!: number;
@@ -133,6 +135,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
     search: '',
     startDate: '',
     endDate: '',
+    city: 'Malang',
+    status: 'Progress',
   };
   public params = {
     limit: 10,
@@ -140,6 +144,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
     search: '',
     startDate: '',
     endDate: '',
+    city: 'Malang',
+    status: 'Progress',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -321,6 +327,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
       search: this.pagination.search,
       startDate: this.startDate,
       endDate: this.endDate,
+      city: this.currentTab,
+      status: this.pagination.status,
     };
 
     this.dataList(this.params);
@@ -392,6 +400,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
       search: this.pagination.search,
       startDate: this.startDate,
       endDate: this.endDate,
+      city: this.currentTab,
+      status: this.pagination.status,
     };
 
     this.dataList(this.params);
@@ -405,9 +415,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
     this.statusPassenger = this.localService.getStatusPassenger();
     this.city = this.localService.getCity();
 
-    // this.configuration.resizeColumn = true;
-    // this.configuration.fixedColumnWidth = false;
-    this.configuration.showDetailsArrow = true;
+    this.configuration.resizeColumn = false;
+    this.configuration.fixedColumnWidth = true;
     this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = false;
 
@@ -570,36 +579,50 @@ export class PassengerComponent implements OnInit, OnDestroy {
   setCurrentTab(tab: string) {
     this.currentTab = tab;
 
-    // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
     if (this.currentTab === 'Malang') {
-      this.pagination.count =
-        this.pagination.count === -1 ? (this.data ? this.dataLengthMalang : 0) : this.pagination.count;
-      this.pagination = { ...this.pagination };
-      this.dataLengthMalang === 0
-        ? (this.configuration.horizontalScroll = false)
-        : (this.configuration.horizontalScroll = true);
-      console.log(this.data);
+      this.params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        city: this.currentTab,
+        status: 'Progress',
+      };
+      this.dataList(this.params);
     } else if (this.currentTab === 'Surabaya') {
-      this.pagination.count =
-        this.pagination.count === -1 ? (this.dataSurabaya ? this.dataLengthSurabaya : 0) : this.pagination.count;
-      this.pagination = { ...this.pagination };
-      this.dataLengthSurabaya === 0
-        ? (this.configuration.horizontalScroll = false)
-        : (this.configuration.horizontalScroll = true);
+      this.params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        city: this.currentTab,
+        status: 'Progress',
+      };
+      this.dataList(this.params);
     } else if (this.currentTab === 'Cancel') {
-      this.pagination.count =
-        this.pagination.count === -1 ? (this.dataCancel ? this.dataLengthCancel : 0) : this.pagination.count;
-      this.pagination = { ...this.pagination };
-      this.dataLengthCancel === 0
-        ? (this.configuration.horizontalScroll = false)
-        : (this.configuration.horizontalScroll = true);
+      this.params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        city: '',
+        status: 'Cancel',
+      };
+      this.dataList(this.params);
     } else if (this.currentTab === 'History') {
-      this.pagination.count =
-        this.pagination.count === -1 ? (this.dataHistory ? this.dataLengthHistory : 0) : this.pagination.count;
-      this.pagination = { ...this.pagination };
-      this.dataLengthHistory === 0
-        ? (this.configuration.horizontalScroll = false)
-        : (this.configuration.horizontalScroll = true);
+      this.params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        city: '',
+        status: 'Completed',
+      };
+      this.dataList(this.params);
     }
   }
 
@@ -640,6 +663,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
       search: this.pagination.search,
       startDate: this.startDate,
       endDate: this.endDate,
+      city: this.currentTab,
+      status: this.pagination.status,
     }; // see https://github.com/typicode/json-server
     this.dataList(this.params);
   }
@@ -648,117 +673,24 @@ export class PassengerComponent implements OnInit, OnDestroy {
     this.configuration.isLoading = true;
     this.passengerService
       .list(params)
-      .pipe(
-        takeUntil(this.ngUnsubscribe),
-        finalize(() => {
-          this.configuration.isLoading = false;
-        })
-      )
+      .pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
-        // count malang or surabaya
-        if (response.data.length > 0) {
-          const malangData = response.data?.filter(
-            (data: PassengerModel) => data.city_id === 1 && data.status_passenger === 'Progress'
-          );
-          const surabayaData = response.data?.filter(
-            (data: PassengerModel) => data.city_id === 2 && data.status_passenger === 'Progress'
-          );
-          const cancelData = response.data?.filter((data: PassengerModel) => data.status_passenger === 'Cancel');
-          const historyData = response.data?.filter((data: PassengerModel) => data.status_passenger === 'Completed');
+        this.dataLength = response.length;
+        this.data = response.data;
+        // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
 
-          this.dataLengthMalang = malangData?.length;
-          this.dataLengthSurabaya = surabayaData?.length;
-          this.dataLengthCancel = cancelData?.length;
-          this.dataLengthHistory = historyData?.length;
+        this.pagination.count =
+          this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
+        this.pagination = { ...this.pagination };
 
-          if (
-            this.dataLengthMalang > 0 ||
-            this.dataLengthSurabaya > 0 ||
-            this.dataLengthCancel > 0 ||
-            this.dataLengthHistory > 0
-          ) {
-            this.configuration.horizontalScroll = true;
+        this.configuration.isLoading = false;
 
-            this.data = malangData;
-            this.dataSurabaya = surabayaData;
-            this.dataCancel = cancelData;
-            this.dataHistory = historyData;
-          } else {
-            this.configuration.horizontalScroll = false;
-
-            this.data = [];
-            this.dataSurabaya = [];
-            this.dataCancel = [];
-            this.dataHistory = [];
-          }
-
-          // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-          if (this.currentTab === 'Malang') {
-            this.pagination.count =
-              this.pagination.count === -1 ? (this.data ? this.dataLengthMalang : 0) : this.pagination.count;
-            this.pagination = { ...this.pagination };
-            this.dataLengthMalang === 0
-              ? (this.configuration.horizontalScroll = false)
-              : (this.configuration.horizontalScroll = true);
-            console.log(this.data);
-          } else if (this.currentTab === 'Surabaya') {
-            this.pagination.count =
-              this.pagination.count === -1 ? (this.dataSurabaya ? this.dataLengthSurabaya : 0) : this.pagination.count;
-            this.pagination = { ...this.pagination };
-            this.dataLengthSurabaya === 0
-              ? (this.configuration.horizontalScroll = false)
-              : (this.configuration.horizontalScroll = true);
-          } else if (this.currentTab === 'Cancel') {
-            this.pagination.count =
-              this.pagination.count === -1 ? (this.dataCancel ? this.dataLengthCancel : 0) : this.pagination.count;
-            this.pagination = { ...this.pagination };
-            this.dataLengthCancel === 0
-              ? (this.configuration.horizontalScroll = false)
-              : (this.configuration.horizontalScroll = true);
-          } else if (this.currentTab === 'History') {
-            this.pagination.count =
-              this.pagination.count === -1 ? (this.dataHistory ? this.dataLengthHistory : 0) : this.pagination.count;
-            this.pagination = { ...this.pagination };
-            this.dataLengthHistory === 0
-              ? (this.configuration.horizontalScroll = false)
-              : (this.configuration.horizontalScroll = true);
-          }
-
-          this.configuration.isLoading = false;
-          this.cdr.detectChanges();
-        } else {
-          this.configuration.horizontalScroll = false;
-
-          this.dataLengthMalang = 0;
-          this.dataLengthSurabaya = 0;
-          this.dataLengthCancel = 0;
-          this.dataLengthHistory = 0;
-
-          this.data = [];
-          this.dataSurabaya = [];
-          this.dataCancel = [];
-          this.dataHistory = [];
-        }
+        response?.length > 0
+          ? (this.configuration.horizontalScroll = true)
+          : (this.configuration.horizontalScroll = false);
+        this.cdr.detectChanges();
       });
   }
-
-  // search2 = (text$: Observable<string>) =>
-  //   text$.pipe(
-  //       debounceTime(200),
-  //       distinctUntilChanged(),
-  //       tap(() => (this.searchFailed = true)),
-  //       map((term: any) => {
-  //         term.length < 2 ? [] : this.dataListCustomer(this.params, term);
-
-  //         // return this.dataCustomer.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1)
-  //       }),
-  //       switchMap(() => this.dataCustomer),
-  //       catchError((err) => {
-  //         console.error('err', err);
-  //         return of(undefined);
-  //       }),
-  //       tap(() => (this.searchFailed = false)),
-  //   );
 
   searchDataEmployee = (text$: Observable<string>) =>
     text$.pipe(

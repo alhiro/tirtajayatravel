@@ -29,15 +29,10 @@
           </ng-container>
         </ng-container>
       </span>
-      <!-- <span class="text-muted mt-1 fw-bold fs-7">
-        @if (currentTab === 'Malang') { Have {{ dataLengthMalang | number }} items } @else if (currentTab ===
-        'Surabaya') { Have {{ dataLengthSurabaya | number }} items } @else if (currentTab === 'Move') { Have
-        {{ dataLengthMove | number }} items } @else if (currentTab === 'Cancel') { Have
-        {{ dataLengthCancel | number }} items } @else if (currentTab === 'History') { Have
-        {{ dataLengthHistory | number }} items }
-      </span> -->
       <span class="text-muted mt-1 fw-bold fs-7">
-        <ng-container [ngSwitch]="currentTab">
+        {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLength | number } }}
+
+        <!-- <ng-container [ngSwitch]="currentTab">
           <ng-container *ngSwitchCase="'Malang'">
             {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLengthMalang | number } }}
           </ng-container>
@@ -54,7 +49,7 @@
             {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLengthHistory | number } }}
           </ng-container>
           <ng-container *ngSwitchDefault> - </ng-container>
-        </ng-container>
+        </ng-container> -->
       </span>
     </h3>
 
@@ -326,7 +321,7 @@
           <ngx-table
             #table
             [configuration]="configuration"
-            [data]="dataSurabaya"
+            [data]="data"
             [columns]="columns"
             [pagination]="pagination"
             (event)="eventEmitted($event)"
@@ -477,7 +472,7 @@
           <ngx-table
             #table
             [configuration]="configuration"
-            [data]="dataCancel"
+            [data]="data"
             [columns]="columns"
             [pagination]="pagination"
             (event)="eventEmitted($event)"
@@ -551,7 +546,7 @@
           <ngx-table
             #table
             [configuration]="configuration"
-            [data]="dataHistory"
+            [data]="data"
             [columns]="columns"
             [pagination]="pagination"
             (event)="eventEmitted($event)"

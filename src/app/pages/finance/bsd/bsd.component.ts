@@ -8,11 +8,13 @@ import {
   debounceTime,
   distinctUntilChanged,
   finalize,
+  forkJoin,
   map,
   of,
   switchMap,
   takeUntil,
   tap,
+  throwError,
 } from 'rxjs';
 import { DeliveryService } from '../../booking/delivery/delivery.service';
 import { PaginationContext } from '@app/@shared/interfaces/pagination';
@@ -82,7 +84,12 @@ export class BsdComponent implements OnInit, OnDestroy {
   public isPaymentPassenger!: boolean;
   public isSpPassenger!: boolean;
 
+  public totalTariffPassenger: any;
+  public totalPassenger: any;
+
   public configuration: Config = { ...DefaultConfig };
+  public configurationGroup: Config = { ...DefaultConfig };
+
   @Input() cssClass!: '';
   currentTab = 'Done';
   currentDisplay: boolean = false;
@@ -114,7 +121,9 @@ export class BsdComponent implements OnInit, OnDestroy {
   isLoading = false;
 
   public selected = new Set();
-  public groupCheckedBsdList: any;
+  public groupCheckedBsdList: any[] = [];
+  public groupCheckedPackages: any[] = [];
+  public groupCheckedPassengers: any[] = [];
 
   get fsp() {
     return this.formSP.controls;
@@ -130,7 +139,12 @@ export class BsdComponent implements OnInit, OnDestroy {
     closeButtonLabel: 'Cancel',
   };
   modalConfigEditBsd: ModalConfig = {
-    modalTitle: 'Edit BSD',
+    modalTitle: 'Edit BSD Driver',
+    // dismissButtonLabel: 'Submit',
+    // closeButtonLabel: 'Cancel',
+  };
+  modalConfigEditBsdGroup: ModalConfig = {
+    modalTitle: 'Add BSD Driver',
     // dismissButtonLabel: 'Submit',
     // closeButtonLabel: 'Cancel',
   };
@@ -168,6 +182,12 @@ export class BsdComponent implements OnInit, OnDestroy {
     this.configuration.fixedColumnWidth = true;
     this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = false;
+
+    this.configurationGroup.resizeColumn = false;
+    this.configurationGroup.fixedColumnWidth = true;
+    this.configurationGroup.horizontalScroll = false;
+    this.configurationGroup.orderEnabled = false;
+    this.configurationGroup.paginationEnabled = false;
 
     this.columnsDone = [
       // { key: 'go_send_id', title: 'No' },
@@ -388,7 +408,6 @@ export class BsdComponent implements OnInit, OnDestroy {
           );
           this.dataLengthBSDList = dataBSDList?.length;
           this.dataBSDList = dataBSDList;
-          console.log(this.dataLengthBSDList);
 
           const dataBSDDone = response.data?.filter(
             (data: GoSendModel) => data.bsd !== null || data.bsd_passenger !== null
@@ -399,20 +418,21 @@ export class BsdComponent implements OnInit, OnDestroy {
           // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
           if (this.currentTab === 'Done') {
             this.pagination.count =
-              this.pagination.count === -1 ? (this.dataBSDList ? this.dataLengthBSDList : 0) : this.pagination.count;
-            this.pagination = { ...this.pagination };
-          } else if (this.currentTab === 'List') {
-            this.pagination.count =
               this.pagination.count === -1 ? (this.dataBSDDone ? this.dataLengthBSDDone : 0) : this.pagination.count;
             this.pagination = { ...this.pagination };
-          }
 
-          this.dataLengthBSDList === 0
-            ? (this.configuration.horizontalScroll = false)
-            : (this.configuration.horizontalScroll = true);
-          this.dataLengthBSDDone === 0
-            ? (this.configuration.horizontalScroll = false)
-            : (this.configuration.horizontalScroll = true);
+            this.dataLengthBSDDone === 0
+              ? (this.configuration.horizontalScroll = false)
+              : (this.configuration.horizontalScroll = true);
+          } else if (this.currentTab === 'List') {
+            this.pagination.count =
+              this.pagination.count === -1 ? (this.dataBSDList ? this.dataLengthBSDList : 0) : this.pagination.count;
+            this.pagination = { ...this.pagination };
+
+            this.dataLengthBSDList === 0
+              ? (this.configuration.horizontalScroll = false)
+              : (this.configuration.horizontalScroll = true);
+          }
           this.cdr.detectChanges();
         } else {
           this.configuration.horizontalScroll = false;
@@ -566,21 +586,21 @@ export class BsdComponent implements OnInit, OnDestroy {
     if (item.check_payment) {
       this.formPackage.patchValue({
         check_payment: true,
-        sender_id: item.sender.sender_id,
-        recipient_id: item.recipient.recipient_id,
+        // sender_id: item.sender.sender_id,
+        // recipient_id: item.recipient.recipient_id,
       });
     } else {
       this.formPackage.patchValue({
         check_payment: false,
-        sender_id: item.sender.sender_id,
-        recipient_id: item.recipient.recipient_id,
+        // sender_id: item.sender.sender_id,
+        // recipient_id: item.recipient.recipient_id,
       });
     }
     console.log(this.formPackage.value);
   }
 
   checkSp(item: PackageModel, event: Event) {
-    console.log(item);
+    // console.log(item);
     const target = event.target as HTMLInputElement;
     item.check_sp = target.checked;
 
@@ -589,25 +609,28 @@ export class BsdComponent implements OnInit, OnDestroy {
     if (item.check_sp) {
       item.agent_commission = item.cost * 0.15;
 
+      // const dataPackages = this.groupCheckedBsdList.map(item => item?.packages).flat();
+
       this.formPackage.patchValue({
         check_sp: true,
         check_date_sp: new Date(),
         agent_commission: item.cost * 0.15,
-        sender_id: item.sender.sender_id,
-        recipient_id: item.recipient.recipient_id,
       });
+
+      this.groupCheckedPackages.push(this.formPackage.value);
+
+      // update to server package by click checked
     } else {
       item.agent_commission = 0;
 
       this.formPackage.patchValue({
-        check_sp: false,
-        check_date_sp: new Date(),
         agent_commission: 0,
-        sender_id: item.sender.sender_id,
-        recipient_id: item.recipient.recipient_id,
       });
+
+      this.groupCheckedPackages = this.groupCheckedPackages.filter((value: any) => value !== item);
     }
     console.log(this.formPackage.value);
+    console.log(this.groupCheckedPackages);
   }
 
   checkPaymentPassenger(item: PassengerModel, event: Event) {
@@ -644,14 +667,16 @@ export class BsdComponent implements OnInit, OnDestroy {
         check_date_sp: new Date(),
         agent_commission: item.tariff * 0.15,
       });
+
+      this.groupCheckedPassengers.push(this.formPassenger.value);
     } else {
       item.agent_commission = 0;
 
       this.formPassenger.patchValue({
-        check_sp: false,
-        check_date_sp: new Date(),
         agent_commission: 0,
       });
+
+      this.groupCheckedPassengers = this.groupCheckedPassengers.filter((value: any) => value !== item);
     }
     console.log(this.formPassenger.value);
   }
@@ -751,77 +776,12 @@ export class BsdComponent implements OnInit, OnDestroy {
 
     if (costId) {
       console.log('update cost');
-
       // update cost
-      this.bsdService
-        .costEdit(this.formCost.value)
-        .pipe(
-          finalize(() => {
-            this.formCost.markAsPristine();
-            this.isLoading = false;
-          })
-        )
-        .subscribe(
-          async (resp: any) => {
-            if (resp) {
-              this.snackbar.open(resp.message, '', {
-                panelClass: 'snackbar-success',
-                duration: 10000,
-              });
-
-              this.dataListBSD(this.params);
-              await this.modalComponentBSD.dismiss();
-            } else {
-              this.isLoading = false;
-            }
-          },
-          (error: any) => {
-            console.log(error);
-            this.isLoading = false;
-            this.handlerResponseService.failedResponse(error);
-          }
-        );
+      this.updateCost();
     } else {
       console.log('create new cost');
-
       // create new cost and update gosend cost_id
-      this.bsdService
-        .costCreate(this.formCost.value)
-        .pipe(
-          switchMap((respCost: any) => {
-            console.log('Response from respCost:');
-            console.log(respCost);
-            this.formSP.patchValue({
-              cost_id: respCost.data.cost_id,
-            });
-            console.log(this.formSP.value);
-            return this.packageService.editSP(this.formSP.value);
-          }),
-          finalize(() => {
-            this.formCost.markAsPristine();
-            this.isLoading = false;
-          })
-        )
-        .subscribe(
-          async (resp: any) => {
-            if (resp) {
-              this.snackbar.open(resp.message, '', {
-                panelClass: 'snackbar-success',
-                duration: 10000,
-              });
-
-              this.dataListBSD(this.params);
-              await this.modalComponentBSD.dismiss();
-            } else {
-              this.isLoading = false;
-            }
-          },
-          (error: any) => {
-            console.log(error);
-            this.isLoading = false;
-            this.handlerResponseService.failedResponse(error);
-          }
-        );
+      this.createCost();
     }
   }
 
@@ -830,68 +790,14 @@ export class BsdComponent implements OnInit, OnDestroy {
       console.log('Package');
       console.log(this.formPackage.value);
       // update package
-      this.packageService
-        .patch(this.formPackage.value)
-        .pipe(
-          finalize(() => {
-            this.formCost.markAsPristine();
-            this.isLoading = false;
-          })
-        )
-        .subscribe(
-          async (resp: any) => {
-            if (resp) {
-              this.snackbar.open(resp.message, '', {
-                panelClass: 'snackbar-success',
-                duration: 10000,
-              });
-
-              this.dataListBSD(this.params);
-              await this.modalComponentBSD.dismiss();
-            } else {
-              this.isLoading = false;
-            }
-          },
-          (error: any) => {
-            console.log(error);
-            this.isLoading = false;
-            this.handlerResponseService.failedResponse(error);
-          }
-        );
+      this.updatePackage();
     }
 
     if (this.type === 'Passenger') {
       console.log('Passenger');
       console.log(this.formPassenger.value);
       // update passenger
-      this.passengerService
-        .patch(this.formPassenger.value)
-        .pipe(
-          finalize(() => {
-            this.formCost.markAsPristine();
-            this.isLoading = false;
-          })
-        )
-        .subscribe(
-          async (resp: any) => {
-            if (resp) {
-              this.snackbar.open(resp.message, '', {
-                panelClass: 'snackbar-success',
-                duration: 10000,
-              });
-
-              this.dataListBSD(this.params);
-              await this.modalComponentBSD.dismiss();
-            } else {
-              this.isLoading = false;
-            }
-          },
-          (error: any) => {
-            console.log(error);
-            this.isLoading = false;
-            this.handlerResponseService.failedResponse(error);
-          }
-        );
+      this.updatePassenger();
     }
   }
 
@@ -937,28 +843,279 @@ export class BsdComponent implements OnInit, OnDestroy {
     );
 
   onChangeChecked(value: any) {
+    console.log(value);
     const index = this.dataBSDList.indexOf(value);
+
     if (this.selected.has(index)) {
+      // If the item is already selected, remove it from both the Set and the array
       this.selected.delete(index);
-
-      console.log(this.selected);
-      console.log(index);
-      console.log(value);
+      this.groupCheckedBsdList = this.groupCheckedBsdList.filter((item: any) => item !== value);
     } else {
+      // If the item is not selected, add it to the Set and array
       this.selected.add(index);
-
-      console.log(this.selected);
-      console.log(index);
-      console.log(value);
-
-      // this.groupCheckedBsdList.push(value);
-      // console.log(this.groupCheckedBsdList);
+      this.groupCheckedBsdList.push(value);
     }
+    console.log(this.groupCheckedBsdList);
   }
 
   async openModalAddSPGroup() {
-    console.log(this.groupCheckedBsdList);
+    const dataPackages = this.groupCheckedBsdList.map((item) => item?.packages).flat();
+    const filterPackagesMlg = dataPackages.filter((packageItem) => packageItem.city_id === 1);
+    this.dataMalangPackage = filterPackagesMlg;
+    const filterPackagesSby = dataPackages.filter((packageItem) => packageItem.city_id === 2);
+    this.dataSurabayaPackage = filterPackagesSby;
+    console.log(this.dataMalangPackage);
+    console.log(this.dataSurabayaPackage);
+
+    const dataPassengers = this.groupCheckedBsdList.map((item) => item?.passengers).flat();
+    const dataPassengersMlg = dataPassengers.filter((passengerItem) => passengerItem.city_id === 1);
+    this.dataMalangPassenger = dataPassengersMlg;
+    const dataPassengersSby = dataPassengers.filter((passengerItem) => passengerItem.city_id === 2);
+    this.dataSurabayaPassenger = dataPassengersSby;
+    console.log(this.dataMalangPassenger);
+    console.log(this.dataSurabayaPassenger);
+
+    this.totalTariffPassenger = this.utils.sumTotal(
+      this.dataMalangPassenger.map((data: PassengerModel) => data.tariff)
+    );
+    this.totalPassenger = this.utils.sumTotal(
+      this.dataMalangPassenger.map((data: PassengerModel) => data.total_passenger)
+    );
 
     return await this.modalComponentBSDGroup.open();
+  }
+
+  addBsdGroup() {
+    this.isLoading = true;
+
+    // Check if both forms are valid
+    if (this.formCost.valid && this.formSP.valid) {
+      const costData = this.formCost.value;
+      const spData = this.groupCheckedBsdList;
+
+      // Start with creating the cost
+      this.createCostGroup(costData)
+        .pipe(
+          switchMap((costResponse: any) => {
+            // If cost creation is successful, get the cost_id
+            const cost_id = costResponse.data.cost_id;
+
+            // Patch the form or modify spData to include cost_id
+            // this.formSP.patchValue({ cost_id: cost_id });
+            this.groupCheckedBsdList = spData.map((item) => {
+              return {
+                ...item,
+                cost_id: cost_id,
+                bsd_date: new Date(),
+                packages: this.groupCheckedPackages,
+                passengers: this.groupCheckedPassengers,
+              };
+            });
+            console.log(this.groupCheckedBsdList);
+
+            // Now proceed with the updateGosend using the updated spData
+            return this.updateGosendGroup(this.groupCheckedBsdList).pipe(
+              catchError((error) => {
+                // If updateGosendGroup fails, throw an error to stop the process
+                console.error('Gosend update failed:', error);
+                this.isLoading = false;
+                this.handlerResponseService.failedResponse(error);
+                return throwError(() => new Error('Update Gosend failed')); // Stop further execution
+              })
+            );
+          }),
+          catchError((error) => {
+            // Handle error in cost creation
+            console.error('Cost save failed:', error);
+            this.isLoading = false;
+            this.handlerResponseService.failedResponse(error);
+            return of(null); // Return observable to cancel the further process
+          }),
+          finalize(() => {
+            // Final cleanup for createCost and updateGosend
+            this.formCost.markAsPristine();
+            this.formSP.markAsPristine();
+            this.isLoading = false;
+          })
+        )
+        .subscribe({
+          next: async (gosendResponse) => {
+            if (gosendResponse === null) {
+              this.snackbar.open('Operation canceled due to Gosend save failure', '', {
+                panelClass: 'snackbar-error',
+                duration: 10000,
+              });
+              return;
+            }
+
+            // If both createCost and updateGosend succeed, show success
+            console.log('Cost saved successfully');
+            console.log('SP saved successfully');
+            console.log('Cost group save response:', gosendResponse);
+            this.snackbar.open('BSD Driver success created', '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataListBSD(this.params);
+            await this.modalComponentBSDGroup.dismiss();
+          },
+          error: (err) => {
+            console.error('Unexpected error:', err);
+            this.handlerResponseService.failedResponse(err);
+          },
+          complete: () => {
+            this.isLoading = false;
+            console.log('Process completed successfully');
+          },
+        });
+    }
+  }
+
+  createCostGroup(data: any) {
+    // API call to save Cost
+    return this.bsdService.costCreate(data);
+  }
+
+  updateGosendGroup(data: GoSendModel[]) {
+    // API call to edit Go send
+    return this.packageService.editSPGroup(data);
+  }
+
+  updatePackage() {
+    // update package
+    this.packageService
+      .patch(this.formPackage.value)
+      .pipe(
+        finalize(() => {
+          this.formCost.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataListBSD(this.params);
+            await this.modalComponentBSD.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  updatePassenger() {
+    // update passenger
+    this.passengerService
+      .patch(this.formPassenger.value)
+      .pipe(
+        finalize(() => {
+          this.formCost.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataListBSD(this.params);
+            await this.modalComponentBSD.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  createCost() {
+    // create new cost and update gosend cost_id
+    this.bsdService
+      .costCreate(this.formCost.value)
+      .pipe(
+        switchMap((respCost: any) => {
+          console.log('Response from respCost:');
+          console.log(respCost);
+          this.formSP.patchValue({
+            cost_id: respCost.data.cost_id,
+          });
+          console.log(this.formSP.value);
+          return this.packageService.editSP(this.formSP.value);
+        }),
+        finalize(() => {
+          this.formCost.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataListBSD(this.params);
+            await this.modalComponentBSD.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  updateCost() {
+    // update cost
+    this.bsdService
+      .costEdit(this.formCost.value)
+      .pipe(
+        finalize(() => {
+          this.formCost.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataListBSD(this.params);
+            await this.modalComponentBSD.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
   }
 }

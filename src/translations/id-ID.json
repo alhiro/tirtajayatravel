@@ -160,6 +160,12 @@
     "NO_DATA": "Tidak ada data yang tersedia"
   },
 
+  "PASSENGER": {
+    "TITLE": "Tabel Penumpang {{ title }}",
+    "LENGTH": "Ada {{ dataLength }} data",
+    "NO_DATA": "Tidak ada data yang tersedia"
+  },
+
   "More Action": "Menu Lainnya",
   "Cancel": "Batal",
   "Completed": "Selesai",

@@ -222,7 +222,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.level = this.localService.getPosition();
 
     this.configuration.resizeColumn = false;
-    this.configuration.fixedColumnWidth = false;
+    this.configuration.fixedColumnWidth = true;
     this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = false;
 
@@ -461,10 +461,10 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.dataDetailPackages = val?.packages;
     this.dataDetailPassenger = val?.passengers;
 
-    this.dataDetailPackages?.length > 0
+    this.dataDetailPackages?.length === 0
       ? (this.configurationDetail.horizontalScroll = false)
       : (this.configurationDetail.horizontalScroll = true);
-    this.dataDetailPassenger?.length > 0
+    this.dataDetailPassenger?.length === 0
       ? (this.configurationDetail.horizontalScroll = false)
       : (this.configurationDetail.horizontalScroll = true);
 
