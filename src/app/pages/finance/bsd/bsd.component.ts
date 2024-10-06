@@ -17,7 +17,7 @@ import {
   throwError,
 } from 'rxjs';
 import { DeliveryService } from '../../booking/delivery/delivery.service';
-import { PaginationContext } from '@app/@shared/interfaces/pagination';
+import { ExtendedPaginationContext, PaginationContext } from '@app/@shared/interfaces/pagination';
 import { ModalComponent, ModalConfig, ModalFullComponent } from '@app/_metronic/partials';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -34,6 +34,7 @@ import { BsdService } from './bsd.service';
 import { PackageModel } from '@app/pages/booking/package/models/package.model';
 import { PassengerService } from '@app/pages/booking/passenger/passenger.service';
 import { PassengerModel } from '@app/pages/booking/passenger/models/passenger.model';
+import { DatePipe } from '@angular/common';
 
 interface EventObject {
   event: string;
@@ -47,6 +48,7 @@ interface EventObject {
   selector: 'app-bsd',
   templateUrl: './bsd.component.html',
   styleUrls: ['./bsd.component.scss'],
+  providers: [DatePipe],
 })
 export class BsdComponent implements OnInit, OnDestroy {
   public dataMalangPackage: any;
@@ -66,10 +68,8 @@ export class BsdComponent implements OnInit, OnDestroy {
   public level: any;
   public toggledRows = new Set<number>();
 
-  public dataBSDList: any;
-  public dataBSDDone: any;
-  public dataLengthBSDList!: number;
-  public dataLengthBSDDone!: number;
+  public data: any;
+  public dataLength: any;
 
   public modelEmployee: any;
   public modelCar: any;
@@ -97,19 +97,20 @@ export class BsdComponent implements OnInit, OnDestroy {
   currentDisplayModal: boolean = false;
 
   public pagination = {
-    limit: 10,
-    offset: 0,
+    limit: 20,
+    offset: 1,
     count: -1,
     search: '',
     startDate: '',
     endDate: '',
   };
   public params = {
-    limit: 10,
+    limit: 20,
     page: 1,
     search: '',
     startDate: '',
     endDate: '',
+    status: 'bsdDone',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -168,7 +169,8 @@ export class BsdComponent implements OnInit, OnDestroy {
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
     private localService: LocalService,
-    private utils: Utils
+    private utils: Utils,
+    private datePipe: DatePipe
   ) {
     this.initForm();
   }
@@ -257,6 +259,10 @@ export class BsdComponent implements OnInit, OnDestroy {
       bsd_date: '',
       box: '',
       bsd_box: '',
+      car: [{ value: '', disabled: true }],
+      car_no: [{ value: '', disabled: true }],
+      send_date_city1: [{ value: '', disabled: true }],
+      send_date_city2: [{ value: '', disabled: true }],
     });
 
     this.formPackage = this.formBuilder.group({
@@ -350,6 +356,29 @@ export class BsdComponent implements OnInit, OnDestroy {
 
   setCurrentTab(tab: string) {
     this.currentTab = tab;
+    console.log(this.currentTab);
+
+    if (this.currentTab === 'Done') {
+      this.params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.pagination.startDate,
+        endDate: this.pagination.endDate,
+        status: 'bsdDone',
+      };
+      this.dataListBSD(this.params);
+    } else if (this.currentTab === 'List') {
+      this.params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.pagination.startDate,
+        endDate: this.pagination.endDate,
+        status: 'bsdList',
+      };
+      this.dataListBSD(this.params);
+    }
   }
 
   setCurrentDisplay() {
@@ -384,7 +413,7 @@ export class BsdComponent implements OnInit, OnDestroy {
     this.dataListBSD(params);
   }
 
-  private dataListBSD(params: PaginationContext): void {
+  private dataListBSD(params: ExtendedPaginationContext): void {
     this.configuration.isLoading = true;
     this.packageService
       .listSP(params)
@@ -397,51 +426,42 @@ export class BsdComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((response: any) => {
-        if (response) {
-          this.configuration.isLoading = false;
+        const combinedData: any = [];
 
-          const dataBSDList = response.data?.filter(
-            (data: any) =>
-              (data.packages.length > 0 || data.passengers.length > 0) &&
-              data.bsd === null &&
-              data.bsd_passenger === null
+        response.data.forEach((item: any) => {
+          // Check if there's an existing item in the combined array with the same bsd
+          const existing = combinedData.find(
+            (combinedItem: any) => combinedItem.bsd === item.bsd || combinedItem.bsd_passenger === item.bsd_passenger
           );
-          this.dataLengthBSDList = dataBSDList?.length;
-          this.dataBSDList = dataBSDList;
 
-          const dataBSDDone = response.data?.filter(
-            (data: GoSendModel) => data.bsd !== null || data.bsd_passenger !== null
-          );
-          this.dataLengthBSDDone = dataBSDDone?.length;
-          this.dataBSDDone = dataBSDDone;
-
-          // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-          if (this.currentTab === 'Done') {
-            this.pagination.count =
-              this.pagination.count === -1 ? (this.dataBSDDone ? this.dataLengthBSDDone : 0) : this.pagination.count;
-            this.pagination = { ...this.pagination };
-
-            this.dataLengthBSDDone === 0
-              ? (this.configuration.horizontalScroll = false)
-              : (this.configuration.horizontalScroll = true);
-          } else if (this.currentTab === 'List') {
-            this.pagination.count =
-              this.pagination.count === -1 ? (this.dataBSDList ? this.dataLengthBSDList : 0) : this.pagination.count;
-            this.pagination = { ...this.pagination };
-
-            this.dataLengthBSDList === 0
-              ? (this.configuration.horizontalScroll = false)
-              : (this.configuration.horizontalScroll = true);
+          if (existing) {
+            //If exists, merge the packages and passengers
+            existing.packages = [...existing.packages, ...item.packages];
+            existing.passengers = [...existing.passengers, ...item.passengers];
+          } else {
+            // If not exists, add a new item
+            combinedData.push({
+              ...item,
+              packages: [...item.packages],
+              passengers: [...item.passengers],
+            });
           }
-          this.cdr.detectChanges();
-        } else {
-          this.configuration.horizontalScroll = false;
+        });
 
-          this.dataLengthBSDList = 0;
-          this.dataLengthBSDDone = 0;
-          this.dataBSDList = [];
-          this.dataBSDDone = [];
-        }
+        this.dataLength = combinedData.length;
+        this.data = combinedData;
+
+        // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
+        this.pagination.count =
+          this.pagination.count === -1 ? (this.data ? this.data.length : 0) : this.pagination.count;
+        this.pagination = { ...this.pagination };
+
+        this.configuration.isLoading = false;
+
+        response?.length > 0
+          ? (this.configuration.horizontalScroll = true)
+          : (this.configuration.horizontalScroll = false);
+        this.cdr.detectChanges();
       });
   }
 
@@ -577,108 +597,155 @@ export class BsdComponent implements OnInit, OnDestroy {
   formatter = (result: { name: string; car_number: string }) => result.car_number;
 
   checkPayment(item: PackageModel, event: Event) {
-    console.log(item);
     const target = event.target as HTMLInputElement;
     item.check_payment = target.checked;
 
     this.formPackage.patchValue(item);
 
     if (item.check_payment) {
-      this.formPackage.patchValue({
-        check_payment: true,
-        // sender_id: item.sender.sender_id,
-        // recipient_id: item.recipient.recipient_id,
+      const dataPackages = this.groupCheckedBsdList.map((item) => item?.packages).flat();
+      dataPackages.map((val) => {
+        if (val.package_id === item.package_id) {
+          return {
+            ...item,
+            check_payment: true,
+          }; // Update the object if matches
+        }
+        return item; // Return the other items unchanged
       });
+
+      this.groupCheckedPackages = dataPackages;
+      console.log(this.groupCheckedPackages);
     } else {
-      this.formPackage.patchValue({
-        check_payment: false,
-        // sender_id: item.sender.sender_id,
-        // recipient_id: item.recipient.recipient_id,
+      const dataPackages = this.groupCheckedBsdList.map((item) => item?.packages).flat();
+      dataPackages.map((val) => {
+        if (val.package_id === item.package_id) {
+          return {
+            ...item,
+            check_payment: 0,
+          }; // Update the object if matches
+        }
+        return item; // Return the other items unchanged
       });
+
+      this.groupCheckedPackages = dataPackages;
+      console.log(this.groupCheckedPackages);
     }
-    console.log(this.formPackage.value);
   }
 
   checkSp(item: PackageModel, event: Event) {
-    // console.log(item);
     const target = event.target as HTMLInputElement;
     item.check_sp = target.checked;
-
-    this.formPackage.patchValue(item);
 
     if (item.check_sp) {
       item.agent_commission = item.cost * 0.15;
 
-      // const dataPackages = this.groupCheckedBsdList.map(item => item?.packages).flat();
-
-      this.formPackage.patchValue({
-        check_sp: true,
-        check_date_sp: new Date(),
-        agent_commission: item.cost * 0.15,
+      const dataPackages = this.groupCheckedBsdList.map((item) => item?.packages).flat();
+      dataPackages.map((val) => {
+        if (val.package_id === item.package_id) {
+          return {
+            ...item,
+            check_sp: true,
+            agent_commission: item.cost * 0.15,
+          }; // Update the object if matches
+        }
+        return item; // Return the other items unchanged
       });
 
-      this.groupCheckedPackages.push(this.formPackage.value);
-
-      // update to server package by click checked
+      this.groupCheckedPackages = dataPackages;
+      console.log(this.groupCheckedPackages);
     } else {
       item.agent_commission = 0;
 
-      this.formPackage.patchValue({
-        agent_commission: 0,
+      const dataPackages = this.groupCheckedBsdList.map((item) => item?.packages).flat();
+      dataPackages.map((val) => {
+        if (val.package_id === item.package_id) {
+          return {
+            ...item,
+            agent_commission: 0,
+          }; // Update the object if matches
+        }
+        return item; // Return the other items unchanged
       });
 
-      this.groupCheckedPackages = this.groupCheckedPackages.filter((value: any) => value !== item);
+      this.groupCheckedPackages = dataPackages;
+      console.log(this.groupCheckedPackages);
     }
-    console.log(this.formPackage.value);
-    console.log(this.groupCheckedPackages);
   }
 
   checkPaymentPassenger(item: PassengerModel, event: Event) {
-    console.log(item);
     const target = event.target as HTMLInputElement;
-    item.check_sp = target.checked;
+    item.check_payment_passenger = target.checked;
 
-    this.formPassenger.patchValue(item);
-
-    if (item.check_sp) {
-      this.formPassenger.patchValue({
-        check_payment: true,
+    if (item.check_payment_passenger) {
+      const dataPassengers = this.groupCheckedBsdList.map((item) => item?.passengers).flat();
+      dataPassengers.map((val) => {
+        if (val.passenger_id === item.passenger_id) {
+          return {
+            ...item,
+            check_payment: true,
+          }; // Update the object if matches
+        }
+        return item; // Return the other items unchanged
       });
+
+      this.groupCheckedPassengers = dataPassengers;
+      console.log(this.groupCheckedPassengers);
     } else {
-      this.formPassenger.patchValue({
-        check_payment: false,
+      const dataPassengers = this.groupCheckedBsdList.map((item) => item?.passengers).flat();
+      dataPassengers.map((val) => {
+        if (val.passenger_id === item.passenger_id) {
+          return {
+            ...item,
+            check_payment: true,
+          }; // Update the object if matches
+        }
+        return item; // Return the other items unchanged
       });
+
+      this.groupCheckedPassengers = dataPassengers;
+      console.log(this.groupCheckedPassengers);
     }
-    console.log(this.formPassenger.value);
   }
 
   checkSpPassenger(item: PassengerModel, event: Event) {
-    console.log(item);
     const target = event.target as HTMLInputElement;
-    item.check_sp = target.checked;
+    item.check_sp_passenger = target.checked;
 
-    this.formPassenger.patchValue(item);
-
-    if (item.check_sp) {
+    if (item.check_sp_passenger) {
       item.agent_commission = item.tariff * 0.15;
 
-      this.formPassenger.patchValue({
-        check_sp: true,
-        check_date_sp: new Date(),
-        agent_commission: item.tariff * 0.15,
+      const dataPassengers = this.groupCheckedBsdList.map((item) => item?.passengers).flat();
+      dataPassengers.map((val) => {
+        if (val.passenger_id === item.passenger_id) {
+          return {
+            ...item,
+            check_sp: true,
+            agent_commission: item.tariff * 0.15,
+          }; // Update the object if matches
+        }
+        return item; // Return the other items unchanged
       });
 
-      this.groupCheckedPassengers.push(this.formPassenger.value);
+      this.groupCheckedPassengers = dataPassengers;
+      console.log(this.groupCheckedPassengers);
     } else {
       item.agent_commission = 0;
 
-      this.formPassenger.patchValue({
-        agent_commission: 0,
+      const dataPassengers = this.groupCheckedBsdList.map((item) => item?.passengers).flat();
+      dataPassengers.map((val) => {
+        if (val.passenger_id === item.passenger_id) {
+          return {
+            ...item,
+            agent_commission: 0,
+          }; // Update the object if matches
+        }
+        return item; // Return the other items unchanged
       });
 
-      this.groupCheckedPassengers = this.groupCheckedPassengers.filter((value: any) => value !== item);
+      this.groupCheckedPassengers = dataPassengers;
+      console.log(this.groupCheckedPassengers);
     }
-    console.log(this.formPassenger.value);
   }
 
   // Function to calculate agent_commission for a list
@@ -829,6 +896,7 @@ export class BsdComponent implements OnInit, OnDestroy {
                   search: term,
                   startDate: this.params.startDate,
                   endDate: this.params.endDate,
+                  status: 'bsdList',
                 };
                 this.dataListBSD(this.params);
               }
@@ -844,7 +912,7 @@ export class BsdComponent implements OnInit, OnDestroy {
 
   onChangeChecked(value: any) {
     console.log(value);
-    const index = this.dataBSDList.indexOf(value);
+    const index = this.data.indexOf(value);
 
     if (this.selected.has(index)) {
       // If the item is already selected, remove it from both the Set and the array
@@ -859,6 +927,13 @@ export class BsdComponent implements OnInit, OnDestroy {
   }
 
   async openModalAddSPGroup() {
+    this.formSP.patchValue({
+      car: this.groupCheckedBsdList[0].car.name,
+      car_no: this.groupCheckedBsdList[0].car.car_number,
+      send_date_city1: this.datePipe.transform(this.groupCheckedBsdList[0].send_date, 'dd-MM-yyyy, HH:mm'),
+      send_date_city2: this.datePipe.transform(this.groupCheckedBsdList[1].send_date, 'dd-MM-yyyy, HH:mm'),
+    });
+
     const dataPackages = this.groupCheckedBsdList.map((item) => item?.packages).flat();
     const filterPackagesMlg = dataPackages.filter((packageItem) => packageItem.city_id === 1);
     this.dataMalangPackage = filterPackagesMlg;

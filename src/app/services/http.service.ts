@@ -345,7 +345,7 @@ export class HttpService {
     ) as Observable<any>;
   }
 
-  SpList(param: PaginationContext): Observable<any> {
+  SpList(param: ExtendedPaginationContext): Observable<any> {
     return this.commonApi.get(
       '/go-send/list?limit=' +
         param.limit +
@@ -356,7 +356,9 @@ export class HttpService {
         '&startDate=' +
         param.startDate +
         '&endDate=' +
-        param.endDate
+        param.endDate +
+        '&status=' +
+        param.status
     ) as Observable<any>;
   }
 

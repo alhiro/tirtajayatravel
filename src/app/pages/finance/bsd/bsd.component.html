@@ -5,10 +5,7 @@
       <span class="card-label fw-bolder fs-3 mb-1">
         @if (currentTab === 'Done') { BSD (Done) } @else if (currentTab === 'List') { BSD (List) }
       </span>
-      <span class="text-muted mt-1 fw-bold fs-7">
-        @if (currentTab === 'Done') { Have {{ dataLengthBSDDone | number }} items } @else if (currentTab === 'List') {
-        Have {{ dataLengthBSDList | number }} items }
-      </span>
+      <span class="text-muted mt-1 fw-bold fs-7"> Have {{ dataLength | number }} items </span>
     </h3>
     <div class="card-toolbar" style="width: 33%">
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
@@ -61,7 +58,7 @@
           <ngx-table
             #table
             [configuration]="configuration"
-            [data]="dataBSDDone"
+            [data]="data"
             [columns]="columnsDone"
             [pagination]="pagination"
             (event)="eventEmitted($event)"
@@ -89,7 +86,7 @@
                   <div
                     class="btn btn-primary py-2 px-4 text-light fw-bolder text-hover-light cursor-pointer d-flex"
                     (click)="openModalEditBSD(row, 'Package')"
-                    [ngbTooltip]="'Edit BSD' | translate"
+                    [ngbTooltip]="'Edit BSD Package' | translate"
                   >
                     <app-keenicon name="pencil" class="fs-md-5 text-light d-block m-0"></app-keenicon> &nbsp;
                     <span class="fs-6"> {{ row.bsd }}</span>
@@ -97,7 +94,7 @@
                   <div
                     class="px-5 cursor-pointer"
                     (click)="printBSD(row, 'Package')"
-                    [ngbTooltip]="'Print BSD' | translate"
+                    [ngbTooltip]="'Print BSD Package' | translate"
                   >
                     <app-keenicon name="printer" class="fs-md-1 text-primary"></app-keenicon>
                   </div>
@@ -110,11 +107,16 @@
                   <div
                     class="btn btn-primary py-2 px-4 text-light fw-bolder text-hover-light cursor-pointer d-flex"
                     (click)="openModalEditBSD(row, 'Passenger')"
+                    [ngbTooltip]="'Edit BSD Passenger' | translate"
                   >
                     <app-keenicon name="pencil" class="fs-md-5 text-light d-block m-0"></app-keenicon> &nbsp;
                     <span class="fs-6">{{ row.bsd_passenger }}</span>
                   </div>
-                  <div class="px-5 cursor-pointer" (click)="printBSD(row, 'Passenger')">
+                  <div
+                    class="px-5 cursor-pointer"
+                    (click)="printBSD(row, 'Passenger')"
+                    [ngbTooltip]="'Print BSD Passenger' | translate"
+                  >
                     <app-keenicon name="printer" class="fs-md-1 text-primary"></app-keenicon>
                   </div>
                 </div>
@@ -152,7 +154,7 @@
           <ngx-table
             #table
             [configuration]="configuration"
-            [data]="dataBSDList"
+            [data]="data"
             [columns]="columnsList"
             [pagination]="pagination"
             (event)="eventEmitted($event)"
@@ -200,7 +202,7 @@
                       <input
                         class="form-check-input"
                         type="checkbox"
-                        [checked]="selected.has(dataBSDList.indexOf(row))"
+                        [checked]="selected.has(data.indexOf(row))"
                         (change)="onChangeChecked(row)"
                       />
                     </label>
@@ -619,7 +621,6 @@
             <div class="m-0">
               <!-- begin::Body -->
               <div class="card-body py-3">
-                @if (dataMalangPassenger?.length > 0) {
                 <!-- begin::Table container -->
                 <div class="table-responsive">
                   <!-- begin::Table -->
@@ -665,7 +666,7 @@
                             <input
                               class="form-check-input"
                               type="checkbox"
-                              [checked]="row.check_payment"
+                              [checked]="row.check_payment_passenger"
                               (change)="checkPaymentPassenger(row, $event)"
                             />
                           </label>
@@ -682,7 +683,7 @@
                             <input
                               class="form-check-input"
                               type="checkbox"
-                              [checked]="row.check_sp"
+                              [checked]="row.check_sp_passenger"
                               (change)="checkSpPassenger(row, $event)"
                             />
                           </label>
@@ -698,7 +699,6 @@
                   <!-- end::Table -->
                 </div>
                 <!-- end::Table container -->
-                } @if (dataSurabayaPassenger?.length > 0) {
                 <!-- begin::Table container -->
                 <div class="table-responsive mt-7">
                   <!-- begin::Table -->
@@ -758,14 +758,12 @@
                   <!-- end::Table -->
                 </div>
                 <!-- end::Table container -->
-                }
               </div>
             </div>
             } @if (type ==='Package') {
             <div class="m-0">
               <!-- begin::Body -->
               <div class="card-body py-3">
-                @if (dataMalangPackage?.length > 0) {
                 <!-- begin::Table container -->
                 <div class="table-responsive">
                   <!-- begin::Table -->
@@ -849,7 +847,6 @@
                   <!-- end::Table -->
                 </div>
                 <!-- end::Table container -->
-                } @if (dataSurabayaPackage?.length > 0) {
                 <!-- begin::Table container -->
                 <div class="table-responsive mt-7">
                   <!-- begin::Table -->
@@ -916,7 +913,6 @@
                   <!-- end::Table -->
                 </div>
                 <!-- end::Table container -->
-                }
               </div>
             </div>
             }
@@ -939,8 +935,70 @@
 <app-modal-full #modalBSDGroup [modalConfig]="modalConfigEditBsdGroup">
   <div class="my-3 mt-0">
     <div class="card-body">
+      <form [formGroup]="formSP" novalidate>
+        <!-- begin::Table container -->
+        <h3 class="mb-0">Detail Driver</h3>
+        <hr />
+        <div class="row">
+          <div class="col-md-4">
+            <span class="fw-bold">Driver Name</span>
+            <label class="d-block mb-4 mt-1">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="car"
+                autocomplete="car"
+                [placeholder]="'Driver Name' | translate"
+              />
+              <span hidden translate>Send Date City 1</span>
+            </label>
+          </div>
+          <div class="col-md-4">
+            <span class="fw-bold">Car Number</span>
+            <label class="d-block mb-4">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="car_no"
+                autocomplete="car_no"
+                [placeholder]="'Car Number' | translate"
+              />
+              <span hidden translate>Car Number</span>
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <span class="fw-bold">Send Date City 1</span>
+            <label class="d-block mb-4 mt-1">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="send_date_city1"
+                autocomplete="send_date_city1"
+                [placeholder]="'Send Date City 1' | translate"
+              />
+              <span hidden translate>Send Date City 1</span>
+            </label>
+          </div>
+          <div class="col-md-4">
+            <span class="fw-bold">Send Date City 2</span>
+            <label class="d-block mb-4">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="send_date_city2"
+                autocomplete="send_date_city2"
+                [placeholder]="'Send Date City 2' | translate"
+              />
+              <span hidden translate>Send Date City 2</span>
+            </label>
+          </div>
+        </div>
+      </form>
+
       <form [formGroup]="formCost" novalidate>
-        <h3>Detail Cost</h3>
+        <h3 class="mb-0 mt-5">Detail Cost</h3>
         <hr />
         <div class="row">
           <div class="col-md-4">
@@ -1208,7 +1266,7 @@
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          [checked]="row.check_payment"
+                          [checked]="row.check_payment_passenger"
                           (change)="checkPaymentPassenger(row, $event)"
                         />
                       </label>
@@ -1225,7 +1283,7 @@
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          [checked]="row.check_sp"
+                          [checked]="row.check_sp_passenger"
                           (change)="checkSpPassenger(row, $event)"
                         />
                       </label>

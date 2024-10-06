@@ -30,7 +30,9 @@ export class PassengerModel {
   position!: string;
   charter!: string;
   check_payment!: boolean;
+  check_payment_passenger!: boolean;
   check_sp!: boolean;
+  check_sp_passenger!: boolean;
   check_date_sp!: Date;
 
   setPackage(_passenger: unknown) {

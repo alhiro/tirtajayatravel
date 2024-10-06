@@ -146,7 +146,7 @@ export class PackageService {
     );
   }
 
-  listSP(context: PaginationContext): Observable<PackageModel> {
+  listSP(context: ExtendedPaginationContext): Observable<PackageModel> {
     return this.httpService.SpList(context).pipe(
       map((result) => {
         if (!result) {
