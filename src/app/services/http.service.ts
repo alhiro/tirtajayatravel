@@ -357,6 +357,8 @@ export class HttpService {
         param.startDate +
         '&endDate=' +
         param.endDate +
+        '&city=' +
+        param.city +
         '&status=' +
         param.status
     ) as Observable<any>;

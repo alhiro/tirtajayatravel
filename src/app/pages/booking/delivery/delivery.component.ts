@@ -15,7 +15,7 @@ import {
   tap,
 } from 'rxjs';
 import { DeliveryService } from './delivery.service';
-import { PaginationContext } from '@app/@shared/interfaces/pagination';
+import { ExtendedPaginationContext, PaginationContext } from '@app/@shared/interfaces/pagination';
 import { ModalComponent, ModalConfig, ModalFullComponent } from '@app/_metronic/partials';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -96,11 +96,13 @@ export class DeliveryComponent implements OnInit, OnDestroy {
 
   public pagination = {
     limit: 10,
-    offset: 0,
+    offset: 1,
     count: -1,
     search: '',
     startDate: '',
     endDate: '',
+    city: 'Malang',
+    status: '',
   };
   public params = {
     limit: 10,
@@ -108,6 +110,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     search: '',
     startDate: '',
     endDate: '',
+    city: 'Malang',
+    status: '',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -312,6 +316,30 @@ export class DeliveryComponent implements OnInit, OnDestroy {
 
   setCurrentTab(tab: string) {
     this.currentTab = tab;
+
+    if (this.currentTab === 'Malang') {
+      this.params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.pagination.startDate,
+        endDate: this.pagination.endDate,
+        city: this.currentTab,
+        status: '',
+      };
+      this.dataListGosend(this.params);
+    } else if (this.currentTab === 'Surabaya') {
+      this.params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.pagination.startDate,
+        endDate: this.pagination.endDate,
+        city: this.currentTab,
+        status: '',
+      };
+      this.dataListGosend(this.params);
+    }
   }
 
   setCurrentDisplay() {
@@ -329,62 +357,45 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.pagination.limit = obj.value.limit ? obj.value.limit : this.pagination.limit;
     this.pagination.offset = obj.value.page ? obj.value.page : this.pagination.offset;
     this.pagination = { ...this.pagination };
-    const params = {
+    this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search: this.pagination.search,
       startDate: this.pagination.startDate,
       endDate: this.pagination.endDate,
+      city: this.currentTab,
+      status: this.pagination.status,
     }; // see https://github.com/typicode/json-server
-    this.dataListGosend(params);
+    this.dataListGosend(this.params);
   }
 
-  private dataListGosend(params: PaginationContext): void {
+  private dataListGosend(params: ExtendedPaginationContext): void {
     this.configuration.isLoading = true;
     this.packageService
       .listSP(params)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((response: any) => {
-        if (response) {
-          const malangData = response.data?.filter(
-            (data: GoSendModel) => data.city_id === 1 && data.bsd === null && data.bsd_passenger === null
-          );
-          const surabayaData = response.data?.filter(
-            (data: GoSendModel) => data.city_id === 2 && data.bsd === null && data.bsd_passenger === null
-          );
-
-          // sample filter nested objects
-          // const courses = [1, 6, 3];
-          // const r = response.data.filter(d => d.courses.every(c => courses.includes(c.id)));
-          // console.log(r);
-
-          this.dataLengthMalang = malangData?.length;
-          this.dataLengthSurabaya = surabayaData?.length;
-          this.data = malangData;
-          this.dataSurabaya = surabayaData;
-
-          // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-          this.pagination.count =
-            this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
-          this.pagination = { ...this.pagination };
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        catchError((err) => {
           this.configuration.isLoading = false;
+          this.handlerResponseService.failedResponse(err);
+          return of([]);
+        })
+      )
+      .subscribe((response: any) => {
+        this.dataLength = response.length;
+        this.data = response.data;
 
-          this.dataLengthMalang === 0
-            ? (this.configuration.horizontalScroll = false)
-            : (this.configuration.horizontalScroll = true);
+        // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
+        this.pagination.count =
+          this.pagination.count === -1 ? (this.data ? this.data.length : 0) : this.pagination.count;
+        this.pagination = { ...this.pagination };
 
-          this.dataLengthSurabaya === 0
-            ? (this.configuration.horizontalScroll = false)
-            : (this.configuration.horizontalScroll = true);
-          this.cdr.detectChanges();
-        } else {
-          this.configuration.horizontalScroll = false;
+        this.configuration.isLoading = false;
 
-          this.dataLengthMalang = 0;
-          this.dataLengthSurabaya = 0;
-          this.data = [];
-          this.dataSurabaya = [];
-        }
+        response?.length > 0
+          ? (this.configuration.horizontalScroll = true)
+          : (this.configuration.horizontalScroll = false);
+        this.cdr.detectChanges();
       });
   }
 

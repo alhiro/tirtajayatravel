@@ -409,6 +409,7 @@ export class BsdComponent implements OnInit, OnDestroy {
       search: this.pagination.search,
       startDate: this.pagination.startDate,
       endDate: this.pagination.endDate,
+      status: this.currentTab,
     }; // see https://github.com/typicode/json-server
     this.dataListBSD(params);
   }
@@ -426,30 +427,30 @@ export class BsdComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((response: any) => {
-        const combinedData: any = [];
+        // const combinedData: any = [];
 
-        response.data.forEach((item: any) => {
-          // Check if there's an existing item in the combined array with the same bsd
-          const existing = combinedData.find(
-            (combinedItem: any) => combinedItem.bsd === item.bsd || combinedItem.bsd_passenger === item.bsd_passenger
-          );
+        // response.data.forEach((item: any) => {
+        //   // Check if there's an existing item in the combined array with the same bsd
+        //   const existing = combinedData.find(
+        //     (combinedItem: any) => combinedItem.bsd === item.bsd || combinedItem.bsd_passenger === item.bsd_passenger
+        //   );
 
-          if (existing) {
-            //If exists, merge the packages and passengers
-            existing.packages = [...existing.packages, ...item.packages];
-            existing.passengers = [...existing.passengers, ...item.passengers];
-          } else {
-            // If not exists, add a new item
-            combinedData.push({
-              ...item,
-              packages: [...item.packages],
-              passengers: [...item.passengers],
-            });
-          }
-        });
+        //   if (existing) {
+        //     //If exists, merge the packages and passengers
+        //     existing.packages = [...existing.packages, ...item.packages];
+        //     existing.passengers = [...existing.passengers, ...item.passengers];
+        //   } else {
+        //     // If not exists, add a new item
+        //     combinedData.push({
+        //       ...item,
+        //       packages: [...item.packages],
+        //       passengers: [...item.passengers],
+        //     });
+        //   }
+        // });
 
-        this.dataLength = combinedData.length;
-        this.data = combinedData;
+        this.dataLength = response.length;
+        this.data = response.data;
 
         // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
         this.pagination.count =
