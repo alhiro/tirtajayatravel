@@ -623,7 +623,6 @@ export class BsdComponent implements OnInit, OnDestroy {
         if (val.package_id === item.package_id) {
           return {
             ...item,
-            check_payment: 0,
           }; // Update the object if matches
         }
         return item; // Return the other items unchanged
@@ -698,7 +697,6 @@ export class BsdComponent implements OnInit, OnDestroy {
         if (val.passenger_id === item.passenger_id) {
           return {
             ...item,
-            check_payment: true,
           }; // Update the object if matches
         }
         return item; // Return the other items unchanged

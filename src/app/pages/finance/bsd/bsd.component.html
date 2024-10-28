@@ -931,7 +931,7 @@
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
 <!-- end:: Modal BSD -->
 
-<!-- begin:: Modal BSD -->
+<!-- begin:: Modal BSD Group -->
 <app-modal-full #modalBSDGroup [modalConfig]="modalConfigEditBsdGroup">
   <div class="my-3 mt-0">
     <div class="card-body">
@@ -1268,13 +1268,14 @@
                           type="checkbox"
                           [checked]="row.check_payment_passenger"
                           (change)="checkPaymentPassenger(row, $event)"
+                          [disabled]="row.payment === 'Lunas (Transfer)'"
                         />
                       </label>
                     </span>
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      {{ row.payment }}
+                      {{ row.tariff }}
                     </span>
                   </td>
                   <td>
@@ -1285,6 +1286,7 @@
                           type="checkbox"
                           [checked]="row.check_sp_passenger"
                           (change)="checkSpPassenger(row, $event)"
+                          [disabled]="row.payment === 'Lunas (Transfer)'"
                         />
                       </label>
                     </span>
@@ -1325,7 +1327,12 @@
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      {{ row.koli }}
+                      {{ row.discount | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="text-gray-900 d-block">
+                      {{ row.status }}
                     </span>
                   </td>
                   <td>
@@ -1335,17 +1342,33 @@
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon>
+                      <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          [checked]="row.check_payment_passenger"
+                          (change)="checkPaymentPassenger(row, $event)"
+                          [disabled]="row.payment === 'Lunas (Transfer)'"
+                        />
+                      </label>
                     </span>
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      {{ row.payment }}
+                      {{ row.tariff }}
                     </span>
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon>
+                      <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          [checked]="row.check_sp_passenger"
+                          (change)="checkSpPassenger(row, $event)"
+                          [disabled]="row.payment === 'Lunas (Transfer)'"
+                        />
+                      </label>
                     </span>
                   </td>
                   <td>
@@ -1417,6 +1440,7 @@
                           type="checkbox"
                           [checked]="row.check_payment"
                           (change)="checkPayment(row, $event)"
+                          [disabled]="row.status === 'Lunas (Transfer)' || row.status === 'Customer (Bulanan)'"
                         />
                       </label>
                     </span>
@@ -1434,6 +1458,7 @@
                           type="checkbox"
                           [checked]="row.check_sp"
                           (change)="checkSp(row, $event)"
+                          [disabled]="row.status === 'Lunas (Transfer)' || row.status === 'Customer (Bulanan)'"
                         />
                       </label>
                     </span>
@@ -1469,6 +1494,16 @@
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
+                      {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="text-gray-900 d-block">
+                      {{ row.discount | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="text-gray-900 d-block">
                       {{ row.recipient?.address }}
                     </span>
                   </td>
@@ -1490,6 +1525,7 @@
                           type="checkbox"
                           [checked]="row.check_payment"
                           (change)="checkPayment(row, $event)"
+                          [disabled]="row.status === 'Lunas (Transfer)' || row.status === 'Customer (Bulanan)'"
                         />
                       </label>
                     </span>
@@ -1507,6 +1543,7 @@
                           type="checkbox"
                           [checked]="row.check_sp"
                           (change)="checkSp(row, $event)"
+                          [disabled]="row.status === 'Lunas (Transfer)' || row.status === 'Customer (Bulanan)'"
                         />
                       </label>
                     </span>

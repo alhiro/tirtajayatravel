@@ -1237,50 +1237,55 @@
                   <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
                     <input
                       class="form-check-input"
-                      type="radio"
+                      type="checkbox"
                       value="Depan"
                       name="position"
-                      formControlName="position"
+                      (change)="onCheckboxPosition($event)"
+                      [checked]="selectPosition.includes('Depan')"
                     />
                     <span class="form-check-label text-gray-900">Depan</span>
                   </label>
                   <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
                     <input
                       class="form-check-input"
-                      type="radio"
+                      type="checkbox"
                       value="Tengah Kiri"
                       name="position"
-                      formControlName="position"
+                      (change)="onCheckboxPosition($event)"
+                      [checked]="selectPosition.includes('Tengah Kiri')"
                     />
                     <span class="form-check-label text-gray-900">Tengah Kiri</span>
                   </label>
                   <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
                     <input
                       class="form-check-input"
-                      type="radio"
+                      type="checkbox"
                       value="Tengah"
                       name="position"
-                      formControlName="position"
+                      (change)="onCheckboxPosition($event)"
+                      [checked]="selectPosition.includes('Tengah')"
                     />
                     <span class="form-check-label text-gray-900">Tengah</span>
                   </label>
                   <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
                     <input
                       class="form-check-input"
-                      type="radio"
+                      type="checkbox"
                       value="Tengah Kanan"
                       name="position"
-                      formControlName="position"
+                      (change)="onCheckboxPosition($event)"
+                      [checked]="selectPosition.includes('Tengah Kanan')"
                     />
                     <span class="form-check-label text-gray-900">Tengah Kanan</span>
                   </label>
                   <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
                     <input
                       class="form-check-input"
-                      type="radio"
+                      type="checkbox"
                       value="Belakang"
                       name="position"
-                      formControlName="position"
+                      (change)="onCheckboxPosition($event)"
+                      [checked]="selectPosition.includes('Belakang')"
                     />
                     <span class="form-check-label text-gray-900">Belakang</span>
                   </label>

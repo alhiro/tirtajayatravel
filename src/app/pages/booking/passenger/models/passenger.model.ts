@@ -27,7 +27,7 @@ export class PassengerModel {
   resi_number!: string;
   cancel!: boolean;
   move!: boolean;
-  position!: string;
+  position!: any;
   charter!: string;
   check_payment!: boolean;
   check_payment_passenger!: boolean;

@@ -107,6 +107,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
   public selectedAddress: any[] = [];
   public selectedAddressDestination: any[] = [];
+  public selectPosition: any[] = [];
   public searchCustomer!: string;
   public modelCustomer: any;
   public modelDestination: any;
@@ -1001,6 +1002,17 @@ export class PassengerComponent implements OnInit, OnDestroy {
     this.form.reset();
   }
 
+  onCheckboxPosition(event: any) {
+    const checkbox = event.target as HTMLInputElement;
+    const value = checkbox.value;
+
+    if (checkbox.checked) {
+      this.selectPosition.push(value);
+    } else {
+      this.selectPosition = this.selectPosition.filter((item) => item !== value);
+    }
+  }
+
   async openModalNew() {
     this.isCreate = true;
     this.clearForm();
@@ -1026,6 +1038,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
       status: '',
       payment: '',
       status_passenger: 'Progress',
+      position: this.selectPosition,
     });
 
     return await this.modalComponent.open();
@@ -1153,6 +1166,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
     this.selectedAddressDestination = event.destinations === null ? [] : event.destinations;
     console.log(this.selectedAddressDestination);
 
+    this.selectPosition = event.position;
+
     this.form.patchValue(event);
     // this.formWaybill.patchValue({waybill_id: event.waybill_id});
     // this.formDestination.patchValue({destination_id: event.destination_id});
@@ -1206,6 +1221,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
         : this.modelCustomer?.customer_id,
       waybills: this.selectedAddress,
       destinations: this.selectedAddressDestination,
+      position: this.selectPosition,
     });
     console.log(this.modelCustomer);
     console.log(this.modelDestination);
@@ -1697,13 +1713,13 @@ export class PassengerComponent implements OnInit, OnDestroy {
     console.log(updateSP);
 
     // send data to package
-    this.isLoading = true;
+    this.configuration.isLoading = true;
     this.passengerService
       .patch(updateSP)
       .pipe(
         finalize(() => {
           this.form.markAsPristine();
-          this.isLoading = false;
+          this.configuration.isLoading = false;
         })
       )
       .subscribe(
@@ -1718,13 +1734,13 @@ export class PassengerComponent implements OnInit, OnDestroy {
             this.isAssignSP.emit(true);
             await this.modalComponentSP.dismiss();
           } else {
-            this.isLoading = false;
+            this.configuration.isLoading = false;
             this.isAssignSP.emit(false);
           }
         },
         (error: any) => {
           console.log(error);
-          this.isLoading = false;
+          this.configuration.isLoading = false;
           this.isAssignSP.emit(false);
           this.handlerResponseService.failedResponse(error);
         }
@@ -1742,13 +1758,13 @@ export class PassengerComponent implements OnInit, OnDestroy {
     console.log(updateSP);
 
     // send data to package
-    this.isLoading = true;
+    this.configuration.isLoading = true;
     this.passengerService
       .patch(updateSP)
       .pipe(
         finalize(() => {
           this.form.markAsPristine();
-          this.isLoading = false;
+          this.configuration.isLoading = false;
         })
       )
       .subscribe(
@@ -1762,12 +1778,12 @@ export class PassengerComponent implements OnInit, OnDestroy {
             this.dataList(this.params);
             await this.modalComponentSP.dismiss();
           } else {
-            this.isLoading = false;
+            this.configuration.isLoading = false;
           }
         },
         (error: any) => {
           console.log(error);
-          this.isLoading = false;
+          this.configuration.isLoading = false;
           this.handlerResponseService.failedResponse(error);
         }
       );

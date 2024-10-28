@@ -38,6 +38,19 @@ export class HandlerResponseService {
         break;
 
       case StatusCode.FORBIDDEN:
+        // go to login
+        this.snackbar.open(error.error.message, '', {
+          panelClass: 'snackbar-error',
+          duration: 5000,
+        });
+        this.utils.clearAllLocalstorage();
+
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 3000);
+        break;
+
+      case StatusCode.UNAVAILABLE:
         // show dialog
         this.snackbar.open(error.error.message, '', {
           panelClass: 'snackbar-error',

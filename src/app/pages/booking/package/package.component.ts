@@ -361,6 +361,17 @@ export class PackageComponent implements OnInit, OnDestroy {
     }
 
     this.dataCategory();
+
+    this.params = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      startDate: '',
+      endDate: '',
+      city: this.currentTab,
+      status: this.pagination.status,
+    };
+
     this.dataList(this.params);
     this.company = this.localService.getCompany();
     this.business = this.localService.getBusiness();
