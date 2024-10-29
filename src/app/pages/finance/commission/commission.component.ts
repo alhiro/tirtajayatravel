@@ -14,7 +14,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { PaginationContext } from '@app/@shared/interfaces/pagination';
+import { ExtendedPaginationContext, PaginationContext } from '@app/@shared/interfaces/pagination';
 import { ModalConfig, ModalComponent } from '@app/_metronic/partials';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -69,16 +69,20 @@ export class CommissionComponent implements OnInit, OnDestroy {
     limit: 10,
     offset: 1,
     count: -1,
-    search: 'Recipient',
+    search: '',
     startDate: '',
     endDate: '',
+    city: 'Malang',
+    status: 'Completed',
   };
   public params = {
     limit: 10,
     page: 1,
-    search: 'Recipient',
+    search: '',
     startDate: '',
     endDate: '',
+    city: 'Malang',
+    status: 'Completed',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -110,6 +114,9 @@ export class CommissionComponent implements OnInit, OnDestroy {
   hoveredDate: NgbDate | null = null;
   fromDate: NgbDate | null = this.calendar.getToday();
   toDate: NgbDate | null = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
+
+  startDate: any;
+  endDate: any;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -147,6 +154,43 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.formatDateNow(getDate);
   }
 
+  printFilterSelected(datepicker: any) {
+    this.params = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      city: this.currentTab,
+      status: this.pagination.status,
+    };
+
+    this.dataList(this.params);
+    console.log(this.params);
+
+    datepicker.close();
+  }
+
+  printFilterDate(datepicker: any) {
+    if (this.currentTab === 'Malang') {
+      // console.log(this.data);
+      sessionStorage.setItem('city', JSON.stringify(1));
+      // sessionStorage.setItem('printlist', JSON.stringify(this.data));
+    } else if (this.currentTab === 'Surabaya') {
+      // console.log(this.dataSurabaya);
+      sessionStorage.setItem('city', JSON.stringify(2));
+      // sessionStorage.setItem('printlist', JSON.stringify(this.dataSurabaya));
+    }
+
+    const dateRange = {
+      fromDate: this.startDate,
+      toDate: this.endDate,
+    };
+    console.log(dateRange);
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    window.open('#/finance/commission/package/printcommission', '_blank');
+  }
+
   onDateChange(date: NgbDateStruct): void {
     this.receivedDate = date;
   }
@@ -160,35 +204,25 @@ export class CommissionComponent implements OnInit, OnDestroy {
       this.fromDate = date;
     } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
       this.toDate = date;
-      datepicker.close(); // Close datepicker popup
-
-      // const valueBookFromDate = new Date(
-      //   Date.UTC(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day, 0, 0)
-      // ).toISOString();
-
-      // const valueBookToDate = new Date(
-      //   Date.UTC(this.toDate.year, this.toDate.month - 1, this.toDate.day, 23, 59)
-      // ).toISOString();
+      // datepicker.close(); // Close datepicker popup
 
       const valueBookFromDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
       const valueBookToDate = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
       const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookToDate);
+      this.startDate = startDate;
+      this.endDate = endDate;
 
-      this.pagination.startDate = startDate;
-      this.pagination.endDate = endDate;
-
-      const params = {
-        limit: this.pagination.limit,
-        page: this.pagination.offset,
-        search: this.pagination.search,
-        startDate: startDate,
-        endDate: endDate,
-      };
-      console.log(params);
-      this.dataList(params);
+      // console.log(params);
+      // this.dataList(this.params);
     } else {
       this.toDate = null;
       this.fromDate = date;
+
+      const valueBookFromDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      const valueBookToDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookToDate);
+      this.startDate = startDate;
+      this.endDate = endDate;
     }
   }
 
@@ -240,15 +274,19 @@ export class CommissionComponent implements OnInit, OnDestroy {
     const inputDate = new Date();
     const { startDate, endDate } = this.utils.singleDate(inputDate);
 
-    const params = {
-      limit: 10,
-      page: 1,
-      search: '',
-      startDate: startDate,
-      endDate: endDate,
+    this.startDate = startDate;
+    this.endDate = endDate;
+
+    this.params = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      city: this.currentTab,
+      status: this.pagination.status,
     };
-    console.log(params);
-    this.dataList(params);
+    this.dataList(this.params);
   }
 
   ngOnDestroy(): void {
@@ -365,6 +403,30 @@ export class CommissionComponent implements OnInit, OnDestroy {
 
   setCurrentTab(tab: string) {
     this.currentTab = tab;
+
+    if (this.currentTab === 'Malang') {
+      this.params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        city: this.currentTab,
+        status: this.pagination.status,
+      };
+      this.dataList(this.params);
+    } else if (this.currentTab === 'Surabaya') {
+      this.params = {
+        limit: this.pagination.limit,
+        page: this.pagination.offset,
+        search: this.pagination.search,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        city: this.currentTab,
+        status: this.pagination.status,
+      };
+      this.dataList(this.params);
+    }
   }
 
   checkLevel(event: Event) {
@@ -387,17 +449,19 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.pagination.limit = obj.value.limit ? obj.value.limit : this.pagination.limit;
     this.pagination.offset = obj.value.page ? obj.value.page : this.pagination.offset;
     this.pagination = { ...this.pagination };
-    const params = {
+    this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search: this.pagination.search,
       startDate: this.pagination.startDate,
       endDate: this.pagination.endDate,
+      city: this.currentTab,
+      status: this.pagination.status,
     }; // see https://github.com/typicode/json-server
-    this.dataList(params);
+    this.dataList(this.params);
   }
 
-  private dataList(params: PaginationContext): void {
+  private dataList(params: ExtendedPaginationContext): void {
     this.configuration.isLoading = true;
     this.packageService
       .list(params)

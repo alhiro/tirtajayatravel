@@ -35,6 +35,7 @@ import { PrintPackageComponent } from '@app/pages/booking/package/printPackage/p
 import { PrintListPackageComponent } from '@app/pages/booking/package/printList/printList.component';
 import { PrintListPassengerComponent } from '@app/pages/booking/passenger/printList/printList.component';
 import { PrintdepositComponent } from '@app/pages/finance/deposit/printdeposit/printdeposit.component';
+import { PrintcommissionComponent } from '@app/pages/finance/commission/printcommission/printcommission.component';
 
 const routes: Routes = [
   {
@@ -79,6 +80,15 @@ const routes: Routes = [
     component: PrintdepositComponent,
     loadChildren: () =>
       import('../../pages/finance/deposit/printdeposit/printdeposit.module').then((m) => m.PrintDepositModule),
+  },
+  // print commission
+  {
+    path: 'finance/commission/package/printcommission',
+    component: PrintcommissionComponent,
+    loadChildren: () =>
+      import('../../pages/finance/commission/printcommission/printcommission.module').then(
+        (m) => m.PrintCommissionModule
+      ),
   },
 ];
 

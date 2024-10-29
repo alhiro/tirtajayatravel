@@ -68,6 +68,21 @@
             <button class="btn btn-primary btn-sm m-2 p-1 px-4 float-start" (click)="resetFilterDate(datepicker)">
               Reset
             </button>
+
+            <button
+              class="btn btn-primary btn-sm m-2 p-1 px-4 float-end"
+              [disabled]="configuration.isLoading"
+              (click)="printFilterDate(datepicker)"
+            >
+              Print
+            </button>
+            <button
+              class="btn btn-warning btn-sm m-2 p-1 px-4 float-end"
+              [disabled]="configuration.isLoading"
+              (click)="printFilterSelected(datepicker)"
+            >
+              Filter
+            </button>
           </ng-template>
         </div>
       </div>
@@ -114,7 +129,11 @@
                   @if (row.recipient?.received_by) {
                   {{ row.recipient?.received_by }}
                   } @else {
-                  <div class="btn btn-info btn-sm px-3 p-1 cursor-pointer" (click)="openModalEdit(row)">
+                  <div
+                    class="btn btn-primary btn-sm px-3 p-2 cursor-pointer"
+                    (click)="openModalEdit(row)"
+                    ngbTooltip="Receive By"
+                  >
                     <app-keenicon name="send" class="p-1 text-light fs-7"></app-keenicon> Receive
                   </div>
                   }
@@ -122,12 +141,12 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{
-                  row.recipient?.received_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT'
+                  row.recipient?.received_date | date : 'yyyy/MM/dd' : 'GMT'
                 }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{
-                  row.recipient?.check_date_sp | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT'
+                  row.recipient?.check_date_sp | date : 'yyyy/MM/dd' : 'GMT'
                 }}</span>
               </td>
               <td>
@@ -143,6 +162,7 @@
                   data-bs-placement="top"
                   title="Edit"
                   (click)="openModalEdit(row)"
+                  ngbTooltip="Edit Receive"
                 >
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
@@ -193,7 +213,11 @@
                   @if (row.recipient?.received_by) {
                   {{ row.recipient?.received_by }}
                   } @else {
-                  <div class="btn btn-info btn-sm px-3 p-1 cursor-pointer" (click)="openModalEdit(row)">
+                  <div
+                    class="btn btn-info btn-sm px-3 p-1 cursor-pointer"
+                    (click)="openModalEdit(row)"
+                    ngbTooltip="Receive By"
+                  >
                     <app-keenicon name="send" class="p-1 text-light fs-7"></app-keenicon> Receive
                   </div>
                   }
@@ -201,12 +225,12 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{
-                  row.recipient?.received_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT'
+                  row.recipient?.received_date | date : 'yyyy/MM/dd' : 'GMT'
                 }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{
-                  row.recipient?.check_date_sp | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT'
+                  row.recipient?.check_date_sp | date : 'yyyy/MM/dd' : 'GMT'
                 }}</span>
               </td>
               <td>
@@ -222,6 +246,7 @@
                   data-bs-placement="top"
                   title="Edit"
                   (click)="openModalEdit(row)"
+                  ngbTooltip="Edit Receive"
                 >
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
