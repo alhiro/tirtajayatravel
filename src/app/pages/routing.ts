@@ -49,6 +49,10 @@ const Routing: Routes = [
     path: 'finance/commission/package',
     loadChildren: () => import('./finance/commission/commission.module').then((m) => m.CommissionModule),
   },
+  {
+    path: 'finance/piutang/bill',
+    loadChildren: () => import('./finance/piutang/piutang.module').then((m) => m.PiutangModule),
+  },
 
   // Garage
   {

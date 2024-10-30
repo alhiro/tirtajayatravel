@@ -1,1 +1,100 @@
-<p>printcommission works!</p>
+<div class="p-10">
+  <div class="m-0">
+    <div class="card-header border-0 pt-5">
+      <div class="card-toolbar">
+        <div class="col">
+          <!-- begin::Menu -->
+          <div class="menu-item">
+            <div class="menu-content px-0 text-center">
+              <h3 class="card-title align-items-start flex-column mb-2">
+                <span class="card-label fw-bolder fs-2">
+                  @if (city === 1) { PENCAIRAN KOMISI PAKET MALANG } @else { PENCAIRAN KOMISI PAKET SURABAYA }
+                </span>
+              </h3>
+              @if (startDate && endDate) {
+              <span class="card-label fw-bolder fs-5">
+                HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' : 'GMT' }}
+              </span>
+              }
+            </div>
+          </div>
+          <!-- end::Menu -->
+        </div>
+      </div>
+    </div>
+    <!-- end::Header -->
+    <!-- begin::Body -->
+    <div class="card-body py-3">
+      <!-- begin::Table container -->
+      <div class="table-responsive">
+        <!-- begin::Table -->
+        <ngx-table
+          #table
+          [configuration]="configuration"
+          [data]="data"
+          [columns]="columns"
+          tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+        >
+          <ng-template let-row let-index="index" ngx-table-row>
+            <!-- <td>
+                <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
+              </td> -->
+            <td>
+              <span class="text-gray-900 fw-bolder fs-7">
+                {{ row.resi_number }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.book_date | date : 'yyyy/MM/dd H:mm:ss' : 'GMT' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.sender?.name }} <br />
+                {{ row.sender?.address }} <br />
+                {{ row.sender?.telp }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.recipient?.name }}<br />
+                {{ row.recipient?.address }}<br />
+                {{ row.recipient?.telp }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.status }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.updated_by ? row.updated_by : row.created_by }}
+              </span>
+            </td>
+          </ng-template>
+        </ngx-table>
+        <!-- end::Table -->
+      </div>
+      <!-- end::Table container -->
+
+      <div class="mt-7">
+        <span
+          ><b>TOTAL SETORAN KOMISI PAKET: {{ totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
+        ><br />
+      </div>
+      <div class="mt-1">
+        @for (admin of groupAdmin; track admin) {
+        <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span
+        ><br />
+        }
+      </div>
+    </div>
+  </div>
+</div>

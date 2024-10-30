@@ -172,22 +172,17 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   printFilterDate(datepicker: any) {
-    if (this.currentTab === 'Malang') {
-      // console.log(this.data);
-      sessionStorage.setItem('city', JSON.stringify(1));
-      // sessionStorage.setItem('printlist', JSON.stringify(this.data));
-    } else if (this.currentTab === 'Surabaya') {
-      // console.log(this.dataSurabaya);
-      sessionStorage.setItem('city', JSON.stringify(2));
-      // sessionStorage.setItem('printlist', JSON.stringify(this.dataSurabaya));
-    }
-
-    const dateRange = {
+    const paramRange = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
       fromDate: this.startDate,
       toDate: this.endDate,
+      city: this.currentTab === 'Malang' ? JSON.stringify(1) : JSON.stringify(2),
+      status: this.pagination.status,
     };
-    console.log(dateRange);
-    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    console.log(paramRange);
+    sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
     window.open('#/finance/commission/package/printcommission', '_blank');
   }
 

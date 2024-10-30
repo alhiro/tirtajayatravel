@@ -13,9 +13,9 @@ import { CashoutService } from '../cashout/cashout.service';
 })
 export class RecapitulationComponent implements OnInit {
   public data: any[] = [];
-  public totalSetoran: any;
-  public totalCommission: any;
-  public totalOmzet: any;
+  public totalSetoran: any = 0;
+  public totalCommission: any = 0;
+  public totalOmzet: any = 0;
 
   @ViewChild('table') table!: APIDefinition;
   public columns!: Columns[];
