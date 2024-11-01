@@ -214,4 +214,14 @@ export class RecapitulationComponent implements OnInit {
         }
       });
   }
+
+  piutangData() {}
+
+  revenueData() {}
+
+  bsdPnpData() {}
+
+  bsdPktData() {}
+
+  bbmData() {}
 }

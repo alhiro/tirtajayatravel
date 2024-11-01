@@ -14,12 +14,12 @@ interface GroupedDataCost {
 }
 
 @Component({
-  selector: 'app-printcommission',
-  templateUrl: './printcommission.component.html',
-  styleUrls: ['./printcommission.component.scss'],
+  selector: 'app-printpiutang',
+  templateUrl: './printpiutang.component.html',
+  styleUrls: ['./printpiutang.component.scss'],
   providers: [{ provide: LOCALE_ID, useValue: 'id' }],
 })
-export class PrintcommissionComponent implements OnInit, OnDestroy {
+export class PrintpiutangComponent implements OnInit, OnDestroy {
   public data: any;
   public city: any;
   public status: any;
@@ -103,6 +103,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
       status: this.status,
     };
     this.dataListFilter(this.params);
+    console.log(this.params);
   }
 
   private dataListFilter(params: ExtendedPaginationContext): void {

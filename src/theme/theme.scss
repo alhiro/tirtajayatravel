@@ -146,3 +146,19 @@ tr:hover {
 .transparent-bg {
   background-color: transparent;
 }
+
+.table-custom {
+  font-size: 13px;
+}
+
+:host ::ng-deep {
+  ngx-table {
+    table {
+      font-size: 13px;
+    }
+  }
+}
+
+table {
+  font-size: 13px;
+}

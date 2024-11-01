@@ -9,9 +9,38 @@
     </h3>
     <div class="card-toolbar">
       <!-- begin::Menu -->
-      <div class="menu-item col text-end px-3">
-        <div class="menu-content px-3 py-3">
-          <div class="btn btn-info btn-sm px-4 cursor-pointer" (click)="datepicker.toggle()">Filter Date</div>
+      <div class="menu-item col d-flex text-end">
+        <div class="menu-content p-0">
+          <div class="btn btn-info btn-sm cursor-pointer" (click)="datepicker.toggle()">Filter Date</div>
+        </div>
+
+        <div class="menu-content p-0 px-3">
+          <div class="btn btn-info btn-sm cursor-pointer" (click)="datepicker.toggle()">Print</div>
+        </div>
+
+        <div ngbDropdown placement="bottom-end" class="d-inline-block">
+          <button type="button" class="btn btn-sm btn-light" id="otherspackage" ngbDropdownToggle translate>
+            More Action
+          </button>
+          <div ngbDropdownMenu aria-labelledby="otherspackage">
+            <ul class="px-2 mb-0">
+              <li class="nav-item dropdown-item" (click)="piutangData()" [style.cursor]="'pointer'">
+                <a class="nav-link" data-toggle="tab" translate>Piutang</a>
+              </li>
+              <li class="nav-item dropdown-item" (click)="revenueData()" [style.cursor]="'pointer'">
+                <a class="nav-link" data-toggle="tab" translate>Revenue</a>
+              </li>
+              <li class="nav-item dropdown-item" (click)="bsdPnpData()" [style.cursor]="'pointer'">
+                <a class="nav-link" data-toggle="tab" translate>BSD PNP</a>
+              </li>
+              <li class="nav-item dropdown-item" (click)="bsdPktData()" [style.cursor]="'pointer'">
+                <a class="nav-link" data-toggle="tab" translate>BSD PKT</a>
+              </li>
+              <li class="nav-item dropdown-item" (click)="bbmData()" [style.cursor]="'pointer'">
+                <a class="nav-link" data-toggle="tab" translate>BBM</a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
       <!-- end::Menu -->
@@ -44,6 +73,49 @@
             </span>
           </ng-template>
         </div>
+
+        <!-- <ng-template #footerTemplate>
+          <hr class="my-0" />
+          <div class="float-start">
+            <button
+              class="btn btn-primary btn-sm m-2 p-1 px-4"
+              translate
+            >
+              Piutang
+            </button>
+            <button
+              class="btn btn-primary btn-sm m-2 p-1 px-4"
+              translate
+            >
+              Revenue
+            </button>
+            <button
+              class="btn btn-primary btn-sm m-2 p-1 px-4"
+              translate
+            >
+              BSD PNP
+            </button>
+            <button
+              class="btn btn-primary btn-sm m-2 p-1 px-4"
+              translate
+            >
+              BSD PKT
+            </button>
+            <button
+              class="btn btn-primary btn-sm m-2 p-1 px-4"
+              translate
+            >
+              BBM
+            </button>
+            <button
+              class="btn btn-warning btn-sm m-2 p-1 px-4"
+              [disabled]="configuration.isLoading"
+              translate
+            >
+              Deposit
+            </button>
+          </div>
+        </ng-template> -->
       </div>
     </div>
   </div>

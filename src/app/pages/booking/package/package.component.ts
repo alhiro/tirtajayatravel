@@ -206,7 +206,7 @@ export class PackageComponent implements OnInit, OnDestroy {
   @ViewChild('datepicker') datePicker!: any;
 
   @Input() cssClass!: '';
-  currentTab!: string;
+  currentTab = 'Malang';
 
   minDate: any;
   bookdate!: NgbDateStruct;

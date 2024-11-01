@@ -27,6 +27,8 @@ import * as moment from 'moment';
 import { Utils } from '@app/@shared';
 import { PackageService } from '@app/pages/booking/package/package.service';
 import { PackageModel } from '@app/pages/booking/package/models/package.model';
+import Swal from 'sweetalert2';
+import { TranslateService } from '@ngx-translate/core';
 
 interface EventObject {
   event: string;
@@ -52,10 +54,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
   public dataRow: any;
   public data: any;
   public dataCustomer: any;
-  public dataSurabaya: any;
 
-  public dataLengthMalang!: number;
-  public dataLengthSurabaya!: number;
+  public dataLength!: number;
 
   public toggledRows = new Set<number>();
 
@@ -104,7 +104,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
   @ViewChild('datepicker') datePicker!: any;
 
   @Input() cssClass!: '';
-  currentTab!: string;
+  currentTab = 'Malang';
 
   minDate: any;
   receivedDate!: NgbDateStruct;
@@ -129,7 +129,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
-    private utils: Utils
+    private utils: Utils,
+    private translate: TranslateService
   ) {
     this.initForm();
 
@@ -257,12 +258,14 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.columns = [
       // { key: 'received_id', title: 'No' },
       { key: 'resi_number', title: 'Resi Number' },
-      { key: 'cost', title: 'Cost' },
+      { key: 'sender_id', title: 'Sender' },
       { key: 'recipient_id', title: 'Recipient' },
       { key: 'received_by', title: 'Received By' },
       { key: 'received_date', title: 'Received Date' },
-      { key: 'check_date_sp', title: 'Check' },
       { key: 'courier', title: 'Courier' },
+      { key: 'cost', title: 'Cost' },
+      { key: 'agent_commission', title: 'Commission' },
+      { key: 'check_date_sp', title: 'Check' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
 
@@ -290,41 +293,6 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   private initForm() {
-    this.form = this.formBuilder.group({
-      package_id: [''],
-      sender_id: [''],
-      recipient_id: [''],
-      city_id: [''],
-      employee_id: [''],
-      category_id: [''],
-      go_send_id: [''],
-      description: [''],
-      cost: [''],
-      discount: [''],
-      payment: [''],
-      koli: [''],
-      origin_from: [''],
-      level: [''],
-      request: [''],
-      request_description: [''],
-      note: [''],
-      status: [''],
-      status_package: [''],
-      resi_number: [''],
-      photo: [''],
-      print: [''],
-      move_time: [''],
-      receivedDate: [''],
-      send_date: [''],
-      check_payment: [''],
-      check_sp: [''],
-      check_date_sp: [''],
-      taking_time: [''],
-      taking_by: [''],
-      taking_status: [''],
-      office: [''],
-    });
-
     this.form = this.formBuilder.group({
       package_id: [''],
       sender_id: [''],
@@ -470,18 +438,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
         console.log(response);
         // count malang or surabaya
         if (response.data.length > 0) {
-          const malangData = response.data?.filter(
-            (data: PackageModel) => data.city_id === 1 && data.status_package === 'Completed'
-          );
-          const surabayaData = response.data?.filter(
-            (data: PackageModel) => data.city_id === 2 && data.status_package === 'Completed'
-          );
-
-          this.dataLengthMalang = malangData?.length;
-          this.dataLengthSurabaya = surabayaData?.length;
-
-          this.data = malangData;
-          this.dataSurabaya = surabayaData;
+          this.data = response.data;
+          this.dataLength = response.data?.length;
 
           // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
           this.pagination.count =
@@ -492,12 +450,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
         } else {
           this.configuration.horizontalScroll = false;
-
-          this.dataLengthMalang = 0;
-          this.dataLengthSurabaya = 0;
-
           this.data = [];
-          this.dataSurabaya = [];
+          this.dataLength = 0;
         }
       });
   }
@@ -588,7 +542,131 @@ export class CommissionComponent implements OnInit, OnDestroy {
       .editRecipient(this.formRecipient.value)
       .pipe(
         finalize(() => {
+          this.formRecipient.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 5000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponent.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  async openModalEditPayment(event: PackageModel) {
+    console.log(event);
+    this.form.patchValue(event);
+
+    this.translate
+      .get(['SWAL.ARE_YOU_SURE', 'SWAL.REVERT_WARNING', 'SWAL.CONFIRM_SUBMIT', 'SWAL.BACK_BUTTON'])
+      .subscribe((translations) => {
+        Swal.fire({
+          title: translations['SWAL.ARE_YOU_SURE'],
+          text: translations['SWAL.REVERT_WARNING'],
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: translations['SWAL.CONFIRM_SUBMIT'],
+          cancelButtonText: translations['SWAL.BACK_BUTTON'],
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.dataEditPayment();
+          }
+        });
+      });
+  }
+
+  dataEditPayment() {
+    // send data to update bayar tujuan
+    this.form.patchValue({
+      check_payment: true,
+    });
+    console.log(this.form.value);
+
+    this.isLoading = true;
+    this.packageService
+      .editRecipient(this.form.value)
+      .pipe(
+        finalize(() => {
           this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 5000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponent.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  async openModalEditCommission(event: PackageModel) {
+    console.log(event);
+    this.formRecipient.patchValue(event?.recipient);
+
+    this.translate
+      .get(['SWAL.ARE_YOU_SURE', 'SWAL.REVERT_WARNING', 'SWAL.CONFIRM_SUBMIT', 'SWAL.BACK_BUTTON'])
+      .subscribe((translations) => {
+        Swal.fire({
+          title: translations['SWAL.ARE_YOU_SURE'],
+          text: translations['SWAL.REVERT_WARNING'],
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: translations['SWAL.CONFIRM_SUBMIT'],
+          cancelButtonText: translations['SWAL.BACK_BUTTON'],
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.dataEditCommission();
+          }
+        });
+      });
+  }
+
+  dataEditCommission() {
+    // send data to update commission
+    this.formRecipient.patchValue({
+      date_payment: new Date(),
+    });
+    console.log(this.formRecipient.value);
+
+    this.isLoading = true;
+    this.packageService
+      .editRecipient(this.formRecipient.value)
+      .pipe(
+        finalize(() => {
+          this.formRecipient.markAsPristine();
           this.isLoading = false;
         })
       )

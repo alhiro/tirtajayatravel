@@ -238,6 +238,7 @@
     "YES_CANCEL_IT": "Iya, Batalkan",
     "REVERT_WARNING": "Kamu tidak akan bisa mengembalikannya!",
     "CONFIRM_DELETE": "Iya, Hapuskan",
-    "BACK_BUTTON": "Kembali"
+    "BACK_BUTTON": "Kembali",
+    "CONFIRM_SUBMIT": "Iya, Lanjutkan"
   }
 }

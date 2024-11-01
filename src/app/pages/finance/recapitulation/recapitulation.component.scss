@@ -60,10 +60,14 @@
   ngx-table {
     table {
       font-size: 12px;
+
+      tbody {
+        tr {
+          &:last-child {
+            font-weight: bold;
+          }
+        }
+      }
     }
   }
-}
-
-table {
-  font-size: 12px;
 }

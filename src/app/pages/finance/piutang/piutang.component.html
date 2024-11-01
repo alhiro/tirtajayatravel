@@ -1,1 +1,239 @@
-<p>piutang works!</p>
+<!-- begin::Header -->
+<div class="card">
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">
+        <ng-container [ngSwitch]="currentTab">
+          <ng-container *ngSwitchCase="'Malang'">
+            {{ 'Bill Package Malang' | translate : { title: 'Malang' } }}
+          </ng-container>
+          <ng-container *ngSwitchCase="'Surabaya'">
+            {{ 'Bill Package Surabaya' | translate : { title: 'Surabaya' } }}
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            {{ 'PACKAGE.NO_DATA' | translate }}
+          </ng-container>
+        </ng-container>
+      </span>
+      <span class="text-muted mt-1 fw-bold fs-7">
+        {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLength | number } }}
+      </span>
+    </h3>
+    @if (username === 'admin_11' && levelrule === 8) {
+    <div class="card-toolbar">
+      <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+        <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
+          <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Malang'" data-toggle="tab">Malang</a>
+        </li>
+        <li class="nav-item" (click)="setCurrentTab('Surabaya')" [style.cursor]="'pointer'">
+          <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Surabaya'" data-toggle="tab">Surabaya</a>
+        </li>
+      </ul>
+    </div>
+    }
+    <div class="card-toolbar">
+      <!-- begin::Menu -->
+      <div class="menu-item px-3">
+        <div class="menu-content px-0">
+          <div class="btn btn-info btn-sm py-2 px-4 cursor-pointer" (click)="datepicker.toggle()">Filter Date</div>
+        </div>
+      </div>
+      <!-- end::Menu -->
+
+      <div class="col text-end">
+        <div class="dp-hidden position-absolute">
+          <div class="input-group">
+            <input
+              name="datepicker"
+              class="form-control hide-datepicker"
+              ngbDatepicker
+              #datepicker="ngbDatepicker"
+              [autoClose]="'outside'"
+              (dateSelect)="onDateSelection($event, datepicker)"
+              [displayMonths]="2"
+              [dayTemplate]="t"
+              outsideDays="hidden"
+              [startDate]="fromDate!"
+              [footerTemplate]="footerTemplate"
+              tabindex="-1"
+            />
+            <ng-template #t let-date let-focused="focused">
+              <span
+                class="custom-day"
+                [class.focused]="focused"
+                [class.range]="isRange(date)"
+                [class.faded]="isHovered(date) || isInside(date)"
+                (mouseenter)="hoveredDate = date"
+                (mouseleave)="hoveredDate = null"
+              >
+                {{ date.day }}
+              </span>
+            </ng-template>
+          </div>
+
+          <ng-template #footerTemplate>
+            <hr class="my-0" />
+            <button class="btn btn-primary btn-sm m-2 p-1 px-4 float-start" (click)="resetFilterDate(datepicker)">
+              Reset
+            </button>
+
+            <button
+              class="btn btn-primary btn-sm m-2 p-1 px-4 float-end"
+              [disabled]="configuration.isLoading"
+              (click)="printFilterDate(datepicker)"
+            >
+              Print
+            </button>
+            <button
+              class="btn btn-warning btn-sm m-2 p-1 px-4 float-end"
+              [disabled]="configuration.isLoading"
+              (click)="printFilterSelected(datepicker)"
+            >
+              Filter
+            </button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <div class="tab-content mt-5" id="tabPackage">
+      <!--begin::Tap pane-->
+      <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Malang' }">
+        <!-- begin::Table container -->
+        <div class="table-responsive">
+          <!-- begin::Table -->
+          <ngx-table
+            #table
+            [configuration]="configuration"
+            [data]="data"
+            [columns]="columns"
+            [pagination]="pagination"
+            (event)="eventEmitted($event)"
+            tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+          >
+            <ng-template let-row let-index="index">
+              <!-- <td>
+                      <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
+                    </td> -->
+              <td>
+                <span class="text-gray-900 d-block">
+                  {{ row.resi_number }}
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd' : 'GMT' }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.sender?.name }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">
+                  {{ row.recipient?.name }} <br />
+                  {{ row.recipient?.address }}
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.status }}</span>
+              </td>
+              <td class="text-end">
+                @if (row.check_payment) {
+                {{ row.updated_by }}
+                } @else {
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Edit"
+                  (click)="openModalEdit(row)"
+                  ngbTooltip="Accept Payment"
+                >
+                  <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+                }
+              </td>
+            </ng-template>
+          </ngx-table>
+          <!-- end::Table -->
+        </div>
+        <!-- end::Table container -->
+      </div>
+      <!--end::Tap pane-->
+
+      <!--begin::Tap pane-->
+      <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Surabaya' }">
+        <!-- begin::Table container -->
+        <div class="table-responsive">
+          <!-- begin::Table -->
+          <ngx-table
+            #table
+            [configuration]="configuration"
+            [data]="data"
+            [columns]="columns"
+            [pagination]="pagination"
+            (event)="eventEmitted($event)"
+            tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+          >
+            <ng-template let-row let-index="index">
+              <!-- <td>
+                      <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
+                    </td> -->
+              <td>
+                <span class="text-gray-900 d-block">
+                  {{ row.resi_number }}
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd' : 'GMT' }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.sender?.name }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">
+                  {{ row.recipient?.name }} <br />
+                  {{ row.recipient?.address }}
+                </span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{ row.status }}</span>
+              </td>
+              <td class="text-end">
+                @if (row.check_payment) {
+                {{ row.updated_by }}
+                } @else {
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Edit"
+                  (click)="openModalEdit(row)"
+                  ngbTooltip="Accept Payment"
+                >
+                  <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+                }
+              </td>
+            </ng-template>
+          </ngx-table>
+          <!-- end::Table -->
+        </div>
+        <!-- end::Table container -->
+      </div>
+      <!--end::Tap pane-->
+    </div>
+  </div>
+</div>
+<!-- begin::Body -->
