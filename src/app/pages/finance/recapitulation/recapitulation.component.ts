@@ -31,6 +31,25 @@ export class RecapitulationComponent implements OnInit {
 
   public configuration: Config = { ...DefaultConfig };
 
+  public pagination = {
+    limit: '',
+    offset: '',
+    count: -1,
+    search: '',
+    startDate: '',
+    endDate: '',
+    city: 'Malang',
+    status: 'Completed',
+  };
+  public params = {
+    limit: '',
+    page: '',
+    search: '',
+    startDate: '',
+    endDate: '',
+    city: 'Malang',
+    status: 'Completed',
+  };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(private cashoutService: CashoutService, private utils: Utils, private readonly cdr: ChangeDetectorRef) {}
@@ -215,7 +234,35 @@ export class RecapitulationComponent implements OnInit {
       });
   }
 
-  piutangData() {}
+  printRecapitulation() {
+    const paramRange = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: '',
+      status: this.pagination.status,
+    };
+    console.log(paramRange);
+    sessionStorage.setItem('printrecapitulation', JSON.stringify(paramRange));
+    window.open('#/finance/recapitulation/deposit/printrecapitulation', '_blank');
+  }
+
+  piutangData() {
+    const paramRange = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: '',
+      status: this.pagination.status,
+    };
+    console.log(paramRange);
+    sessionStorage.setItem('printrecapitulation', JSON.stringify(paramRange));
+    window.open('#/finance/recapitulation/deposit/printpiutang', '_blank');
+  }
 
   revenueData() {}
 

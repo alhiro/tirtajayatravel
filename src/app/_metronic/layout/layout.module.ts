@@ -37,6 +37,7 @@ import { PrintListPassengerComponent } from '@app/pages/booking/passenger/printL
 import { PrintdepositComponent } from '@app/pages/finance/deposit/printdeposit/printdeposit.component';
 import { PrintcommissionComponent } from '@app/pages/finance/commission/printcommission/printcommission.component';
 import { PrintpiutangComponent } from '@app/pages/finance/piutang/printpiutang/printpiutang.component';
+import { PrintrecapitulationComponent } from '@app/pages/finance/recapitulation/printrecapitulation/printrecapitulation.component';
 
 const routes: Routes = [
   {
@@ -97,6 +98,24 @@ const routes: Routes = [
     component: PrintpiutangComponent,
     loadChildren: () =>
       import('../../pages/finance/piutang/printpiutang/printpiutang.module').then((m) => m.PrintPiutangModule),
+  },
+  // print recapitulation
+  {
+    path: 'finance/recapitulation/deposit/printrecapitulation',
+    component: PrintrecapitulationComponent,
+    loadChildren: () =>
+      import('../../pages/finance/recapitulation/printrecapitulation/printrecapitulation.module').then(
+        (m) => m.PrintrecapitulationModule
+      ),
+  },
+  // print recapitulation piutang
+  {
+    path: 'finance/recapitulation/deposit/printpiutang',
+    component: PrintrecapitulationComponent,
+    loadChildren: () =>
+      import('../../pages/finance/recapitulation/printrecapitulation/printrecapitulation.module').then(
+        (m) => m.PrintrecapitulationModule
+      ),
   },
 ];
 
