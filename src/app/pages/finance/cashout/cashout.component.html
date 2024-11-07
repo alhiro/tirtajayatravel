@@ -3,7 +3,7 @@
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
       <span class="card-label fw-bolder fs-3 mb-1">
-        @if (currentTab === 'Malang') { Cashout Table Malang } @else if (currentTab === 'Surabaya') { SCashout Table
+        @if (currentTab === 'Malang') { Cashout Table Malang } @else if (currentTab === 'Surabaya') { Cashout Table
         Surabaya }
       </span>
       <span class="text-muted mt-1 fw-bold fs-7">
@@ -25,20 +25,20 @@
     }
     <div class="card-toolbar">
       <!-- begin::Menu -->
-      <div class="menu-item px-0">
-        <div class="menu-content px-3 py-0">
-          <a class="btn btn-info btn-sm px-4 cursor-pointer" (click)="datepicker.toggle()"> Filter Date </a>
+      <div class="menu-item col d-flex text-end">
+        <div class="menu-item px-0">
+          <div class="menu-content px-3 py-0">
+            <a class="btn btn-info btn-sm px-4 cursor-pointer" (click)="datepicker.toggle()"> Filter Date </a>
+          </div>
         </div>
-      </div>
 
-      <div class="menu-item px-0">
-        <div class="menu-content px-0 py-0">
-          <a class="btn btn-primary btn-sm px-4 cursor-pointer" (click)="openModalNew()"> Create </a>
+        <div class="menu-item px-0">
+          <div class="menu-content px-0 py-0">
+            <a class="btn btn-primary btn-sm px-4 cursor-pointer" (click)="openModalNew()"> Create </a>
+          </div>
         </div>
-      </div>
-      <!-- end::Menu -->
+        <!-- end::Menu -->
 
-      <div class="d-block">
         <div class="dp-hidden position-absolute">
           <div class="input-group">
             <input

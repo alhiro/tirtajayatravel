@@ -597,11 +597,20 @@ export class BsdComponent implements OnInit, OnDestroy {
 
   formatter = (result: { name: string; car_number: string }) => result.car_number;
 
+  checkPaymentEditMalang() {}
+
+  checkSpEditMalang() {}
+
+  checkPaymentEditSurabaya() {}
+
+  checkSpEditSurabaya() {}
+
   checkPayment(item: PackageModel, event: Event) {
     const target = event.target as HTMLInputElement;
     item.check_payment = target.checked;
 
     this.formPackage.patchValue(item);
+    console.log(this.formPackage.value);
 
     if (item.check_payment) {
       const dataPackages = this.groupCheckedBsdList.map((item) => item?.packages).flat();
@@ -637,8 +646,11 @@ export class BsdComponent implements OnInit, OnDestroy {
     const target = event.target as HTMLInputElement;
     item.check_sp = target.checked;
 
+    this.formPackage.patchValue(item);
+    console.log(this.formPackage.value);
+
     if (item.check_sp) {
-      item.agent_commission = item.cost * 0.15;
+      // ;item.agent_commission = item.cost * 0.15
 
       const dataPackages = this.groupCheckedBsdList.map((item) => item?.packages).flat();
       dataPackages.map((val) => {
@@ -646,7 +658,7 @@ export class BsdComponent implements OnInit, OnDestroy {
           return {
             ...item,
             check_sp: true,
-            agent_commission: item.cost * 0.15,
+            // agent_commission: item.cost * 0.15,
           }; // Update the object if matches
         }
         return item; // Return the other items unchanged
@@ -655,14 +667,14 @@ export class BsdComponent implements OnInit, OnDestroy {
       this.groupCheckedPackages = dataPackages;
       console.log(this.groupCheckedPackages);
     } else {
-      item.agent_commission = 0;
+      // item.agent_commission = 0;
 
       const dataPackages = this.groupCheckedBsdList.map((item) => item?.packages).flat();
       dataPackages.map((val) => {
         if (val.package_id === item.package_id) {
           return {
             ...item,
-            agent_commission: 0,
+            // agent_commission: 0,
           }; // Update the object if matches
         }
         return item; // Return the other items unchanged
@@ -675,9 +687,12 @@ export class BsdComponent implements OnInit, OnDestroy {
 
   checkPaymentPassenger(item: PassengerModel, event: Event) {
     const target = event.target as HTMLInputElement;
-    item.check_payment_passenger = target.checked;
+    item.check_payment = target.checked;
 
-    if (item.check_payment_passenger) {
+    this.formPassenger.patchValue(item);
+    console.log(this.formPassenger.value);
+
+    if (item.check_payment) {
       const dataPassengers = this.groupCheckedBsdList.map((item) => item?.passengers).flat();
       dataPassengers.map((val) => {
         if (val.passenger_id === item.passenger_id) {
@@ -709,10 +724,13 @@ export class BsdComponent implements OnInit, OnDestroy {
 
   checkSpPassenger(item: PassengerModel, event: Event) {
     const target = event.target as HTMLInputElement;
-    item.check_sp_passenger = target.checked;
+    item.check_sp = target.checked;
 
-    if (item.check_sp_passenger) {
-      item.agent_commission = item.tariff * 0.15;
+    this.formPassenger.patchValue(item);
+    console.log(this.formPassenger.value);
+
+    if (item.check_sp) {
+      // item.agent_commission = item.tariff * 0.15;
 
       const dataPassengers = this.groupCheckedBsdList.map((item) => item?.passengers).flat();
       dataPassengers.map((val) => {
@@ -720,7 +738,7 @@ export class BsdComponent implements OnInit, OnDestroy {
           return {
             ...item,
             check_sp: true,
-            agent_commission: item.tariff * 0.15,
+            /// agent_commission: item.tariff * 0.15,
           }; // Update the object if matches
         }
         return item; // Return the other items unchanged
@@ -729,14 +747,14 @@ export class BsdComponent implements OnInit, OnDestroy {
       this.groupCheckedPassengers = dataPassengers;
       console.log(this.groupCheckedPassengers);
     } else {
-      item.agent_commission = 0;
+      // item.agent_commission = 0;
 
       const dataPassengers = this.groupCheckedBsdList.map((item) => item?.passengers).flat();
       dataPassengers.map((val) => {
         if (val.passenger_id === item.passenger_id) {
           return {
             ...item,
-            agent_commission: 0,
+            // agent_commission: 0,
           }; // Update the object if matches
         }
         return item; // Return the other items unchanged
@@ -929,8 +947,8 @@ export class BsdComponent implements OnInit, OnDestroy {
     this.formSP.patchValue({
       car: this.groupCheckedBsdList[0].car.name,
       car_no: this.groupCheckedBsdList[0].car.car_number,
-      send_date_city1: this.datePipe.transform(this.groupCheckedBsdList[0].send_date, 'dd-MM-yyyy, HH:mm'),
-      send_date_city2: this.datePipe.transform(this.groupCheckedBsdList[1].send_date, 'dd-MM-yyyy, HH:mm'),
+      send_date_city1: this.datePipe.transform(this.groupCheckedBsdList[0]?.send_date, 'dd-MM-yyyy, HH:mm'),
+      send_date_city2: this.datePipe.transform(this.groupCheckedBsdList[1]?.send_date, 'dd-MM-yyyy, HH:mm'),
     });
 
     const dataPackages = this.groupCheckedBsdList.map((item) => item?.packages).flat();

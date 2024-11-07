@@ -481,9 +481,9 @@ export class CommissionComponent implements OnInit, OnDestroy {
                   city = 2;
                 }
 
-                const kurir = response.data.filter((val: any) => val.level_id === 5 && val.city_id === city);
+                // const kurir = response.data.filter((val: any) => val.level_id === 5 && val.city_id === city);
                 tap(() => (this.searchingEmployee = false));
-                return kurir.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+                return response.data.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
               }
             }),
             catchError(() => {

@@ -198,9 +198,9 @@
               <td>
                 <div class="form-group text-end">
                   <span class="text-gray-900 d-block">
-                    <label class="form-check form-check-sm form-check-solid me-5 mx-2" style="display: inline-flex">
+                    <label class="form-check form-check-sm form-check-solid m-0 p-0" style="display: inline-flex">
                       <input
-                        class="form-check-input"
+                        class="form-check-input f-none"
                         type="checkbox"
                         [checked]="selected.has(data.indexOf(row))"
                         (change)="onChangeChecked(row)"
@@ -662,28 +662,31 @@
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                          <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                            @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Lunas (Kantor)' || row.payment
+                            === 'Piutang') {
                             <input
-                              class="form-check-input"
+                              class="form-check-input f-none"
                               type="checkbox"
-                              [checked]="row.check_payment_passenger"
+                              [checked]="row.check_payment"
                               (change)="checkPaymentPassenger(row, $event)"
                             />
+                            } @else if (row.payment === 'Lunas (Transfer)') { ^ } @else { * }
                           </label>
                         </span>
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ row.payment }}
+                          {{ row.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                         </span>
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                          <label class="form-check form-check-sm form-check-solid m-0 p-0">
                             <input
-                              class="form-check-input"
+                              class="form-check-input f-none"
                               type="checkbox"
-                              [checked]="row.check_sp_passenger"
+                              [checked]="row.check_sp"
                               (change)="checkSpPassenger(row, $event)"
                             />
                           </label>
@@ -720,22 +723,17 @@
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ row.tariff }}
+                          {{ row.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                         </span>
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ row.koli }}
+                          {{ row.discount | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                         </span>
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ row.payment }}
-                        </span>
-                      </td>
-                      <td>
-                        <span class="text-gray-900 d-block">
-                          <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon>
+                          {{ row.status }}
                         </span>
                       </td>
                       <td>
@@ -745,7 +743,34 @@
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon>
+                          <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                            @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Lunas (Kantor)' || row.payment
+                            === 'Piutang') {
+                            <input
+                              class="form-check-input f-none"
+                              type="checkbox"
+                              [checked]="row.check_payment"
+                              (change)="checkPaymentPassenger(row, $event)"
+                            />
+                            } @else if (row.payment === 'Lunas (Transfer)') { ^ } @else { * }
+                          </label>
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                            <input
+                              class="form-check-input f-none"
+                              type="checkbox"
+                              [checked]="row.check_sp"
+                              (change)="checkSpPassenger(row, $event)"
+                            />
+                          </label>
                         </span>
                       </td>
                       <td>
@@ -810,13 +835,16 @@
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                          <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                            @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Lunas (Kantor)' || row.status
+                            === 'Piutang') {
                             <input
-                              class="form-check-input"
+                              class="form-check-input f-none"
                               type="checkbox"
                               [checked]="row.check_payment"
                               (change)="checkPayment(row, $event)"
                             />
+                            } @else if (row.status === 'Lunas (Transfer)') { ^ } @else { * }
                           </label>
                         </span>
                       </td>
@@ -827,9 +855,9 @@
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                          <label class="form-check form-check-sm form-check-solid m-0 p-0">
                             <input
-                              class="form-check-input"
+                              class="form-check-input f-none"
                               type="checkbox"
                               [checked]="row.check_sp"
                               (change)="checkSp(row, $event)"
@@ -868,6 +896,16 @@
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
+                          {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.discount | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
                           {{ row.recipient?.address }}
                         </span>
                       </td>
@@ -883,13 +921,16 @@
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                          <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                            @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Lunas (Kantor)' || row.status
+                            === 'Piutang') {
                             <input
-                              class="form-check-input"
+                              class="form-check-input f-none"
                               type="checkbox"
-                              [checked]="row.check_sp"
-                              (change)="checkSp(row, $event)"
+                              [checked]="row.check_payment"
+                              (change)="checkPayment(row, $event)"
                             />
+                            } @else if (row.status === 'Lunas (Transfer)') { ^ } @else { * }
                           </label>
                         </span>
                       </td>
@@ -900,7 +941,14 @@
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          <!-- <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon> -->
+                          <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                            <input
+                              class="form-check-input f-none"
+                              type="checkbox"
+                              [checked]="row.check_sp"
+                              (change)="checkSp(row, $event)"
+                            />
+                          </label>
                         </span>
                       </td>
                       <td>
@@ -1262,29 +1310,41 @@
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                      <!-- <label class="form-check form-check-sm form-check-solid m-0 p-0">
                         <input
-                          class="form-check-input"
+                          class="form-check-input f-none"
                           type="checkbox"
-                          [checked]="row.check_payment_passenger"
+                          [checked]="row.check_payment"
                           (change)="checkPaymentPassenger(row, $event)"
                           [disabled]="row.payment === 'Lunas (Transfer)'"
                         />
+                      </label> -->
+
+                      <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                        @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Lunas (Kantor)' || row.payment ===
+                        'Piutang') {
+                        <input
+                          class="form-check-input f-none"
+                          type="checkbox"
+                          [checked]="row.check_payment"
+                          (change)="checkPaymentPassenger(row, $event)"
+                        />
+                        } @else if (row.payment === 'Lunas (Transfer)') { ^ } @else { * }
                       </label>
                     </span>
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      {{ row.tariff }}
+                      {{ row.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                     </span>
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                      <label class="form-check form-check-sm form-check-solid m-0 p-0">
                         <input
-                          class="form-check-input"
+                          class="form-check-input f-none"
                           type="checkbox"
-                          [checked]="row.check_sp_passenger"
+                          [checked]="row.check_sp"
                           (change)="checkSpPassenger(row, $event)"
                           [disabled]="row.payment === 'Lunas (Transfer)'"
                         />
@@ -1322,7 +1382,7 @@
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      {{ row.tariff }}
+                      {{ row.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                     </span>
                   </td>
                   <td>
@@ -1342,29 +1402,41 @@
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                      <!-- <label class="form-check form-check-sm form-check-solid m-0 p-0">
                         <input
-                          class="form-check-input"
+                          class="form-check-input f-none"
                           type="checkbox"
-                          [checked]="row.check_payment_passenger"
+                          [checked]="row.check_payment"
                           (change)="checkPaymentPassenger(row, $event)"
                           [disabled]="row.payment === 'Lunas (Transfer)'"
                         />
+                      </label> -->
+
+                      <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                        @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Lunas (Kantor)' || row.payment ===
+                        'Piutang') {
+                        <input
+                          class="form-check-input f-none"
+                          type="checkbox"
+                          [checked]="row.check_payment"
+                          (change)="checkPaymentPassenger(row, $event)"
+                        />
+                        } @else if (row.payment === 'Lunas (Transfer)') { ^ } @else { * }
                       </label>
                     </span>
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      {{ row.tariff }}
+                      {{ row.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                     </span>
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                      <label class="form-check form-check-sm form-check-solid m-0 p-0">
                         <input
-                          class="form-check-input"
+                          class="form-check-input f-none"
                           type="checkbox"
-                          [checked]="row.check_sp_passenger"
+                          [checked]="row.check_sp"
                           (change)="checkSpPassenger(row, $event)"
                           [disabled]="row.payment === 'Lunas (Transfer)'"
                         />
@@ -1434,14 +1506,26 @@
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                      <!-- <label class="form-check form-check-sm form-check-solid m-0 p-0">
                         <input
-                          class="form-check-input"
+                          class="form-check-input f-none"
                           type="checkbox"
                           [checked]="row.check_payment"
                           (change)="checkPayment(row, $event)"
                           [disabled]="row.status === 'Lunas (Transfer)' || row.status === 'Customer (Bulanan)'"
                         />
+                      </label> -->
+
+                      <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                        @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Lunas (Kantor)' || row.status ===
+                        'Piutang') {
+                        <input
+                          class="form-check-input f-none"
+                          type="checkbox"
+                          [checked]="row.check_payment"
+                          (change)="checkPayment(row, $event)"
+                        />
+                        } @else if (row.status === 'Lunas (Transfer)') { ^ } @else { * }
                       </label>
                     </span>
                   </td>
@@ -1452,9 +1536,9 @@
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                      <label class="form-check form-check-sm form-check-solid m-0 p-0">
                         <input
-                          class="form-check-input"
+                          class="form-check-input f-none"
                           type="checkbox"
                           [checked]="row.check_sp"
                           (change)="checkSp(row, $event)"
@@ -1519,14 +1603,26 @@
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                      <!-- <label class="form-check form-check-sm form-check-solid m-0 p-0">
                         <input
-                          class="form-check-input"
+                          class="form-check-input f-none"
                           type="checkbox"
                           [checked]="row.check_payment"
                           (change)="checkPayment(row, $event)"
                           [disabled]="row.status === 'Lunas (Transfer)' || row.status === 'Customer (Bulanan)'"
                         />
+                      </label> -->
+
+                      <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                        @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Lunas (Kantor)' || row.status ===
+                        'Piutang') {
+                        <input
+                          class="form-check-input f-none"
+                          type="checkbox"
+                          [checked]="row.check_payment"
+                          (change)="checkPayment(row, $event)"
+                        />
+                        } @else if (row.status === 'Lunas (Transfer)') { ^ } @else { * }
                       </label>
                     </span>
                   </td>
@@ -1537,9 +1633,9 @@
                   </td>
                   <td>
                     <span class="text-gray-900 d-block">
-                      <label class="form-check form-check-sm form-check-solid me-5 mx-2">
+                      <label class="form-check form-check-sm form-check-solid m-0 p-0">
                         <input
-                          class="form-check-input"
+                          class="form-check-input f-none"
                           type="checkbox"
                           [checked]="row.check_sp"
                           (change)="checkSp(row, $event)"

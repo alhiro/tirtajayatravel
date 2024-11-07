@@ -211,10 +211,10 @@ export class CashoutComponent implements OnInit {
     this.type = this.localService.getType();
     this.dataList(this.params);
 
-    this.configuration.resizeColumn = true;
-    this.configuration.fixedColumnWidth = false;
-    this.configuration.orderEnabled = false;
+    this.configuration.resizeColumn = false;
+    this.configuration.fixedColumnWidth = true;
     this.configuration.horizontalScroll = false;
+    this.configuration.orderEnabled = false;
 
     this.columns = [
       // { key: 'cashout_id', title: 'No' },
@@ -291,7 +291,10 @@ export class CashoutComponent implements OnInit {
           this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
         this.pagination = { ...this.pagination };
         this.configuration.isLoading = false;
-        this.configuration.horizontalScroll = true;
+
+        response?.length > 0
+          ? (this.configuration.horizontalScroll = true)
+          : (this.configuration.horizontalScroll = false);
         this.cdr.detectChanges();
       });
   }

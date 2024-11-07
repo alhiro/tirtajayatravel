@@ -1,4 +1,4 @@
-<div class="p-10">
+<div class="p-5">
   <span class="small"
     >{{ data?.updated_by ? data?.updated_by : data?.created_by }},
     {{ nowDate | date : 'EEEE yyyy/MM/dd H:mm:ss a' }}</span
@@ -26,27 +26,32 @@
       <!--begin::Row-->
       <div class="row g-5 g-xl-10">
         <!--begin::Col-->
-        <div class="col-md-4 col-lg-4 col-xl-4 col-xxl-3">
+        <div class="col-md-4 col-lg-4 col-xl-4 col-xxl-4">
           <!--begin::Card body-->
           <div class="card-body pt-0">
-            <span>Driver: {{ data?.employee?.name }} - ({{ data?.car?.car_number }})</span>
+            <span
+              ><b>Driver:</b> {{ data?.employee?.name }} - <b>({{ data?.car?.car_number }})</b></span
+            >
           </div>
           <!--end::Card body-->
         </div>
         <!--end::Col-->
 
         <!--begin::Col-->
-        <div class="col-md-4 col-lg-4 col-xl-4 col-xxl-3">
+        <div class="col-md-4 col-lg-4 col-xl-4 col-xxl-4">
           <!--begin::Card body-->
+          <!-- <div class="card-body pt-0 text-center">
+            <span><b>No Mobil</b>: {{ data?.car?.car_number }}</span>
+          </div> -->
           <div class="card-body pt-0 text-center">
-            <span>Send Date: {{ data?.send_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
+            <span><b>Tanggal Jemput</b>: {{ data?.send_date | date : 'dd/MM/yyyy, H:mm:ss a' : 'GMT' }}</span>
           </div>
           <!--end::Card body-->
         </div>
         <!--end::Col-->
 
         <!--begin::Col-->
-        <div class="col-md-4 col-lg-4 col-xl-4 col-xxl-3">
+        <div class="col-md-4 col-lg-4 col-xl-4 col-xxl-4">
           <!--begin::Card body-->
           <div class="card-body pt-0 text-end">
             <span class="fs-5">
@@ -61,7 +66,7 @@
 
       @if (dataMalangPassenger.length > 0) {
       <!-- begin::Table container -->
-      <div class="table-responsive">
+      <div class="table-responsive table-custom mb-7">
         <!-- begin::Table -->
         <ngx-table
           #table
@@ -81,22 +86,12 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.tariff }}
+                {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}
               </span>
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.koli }}
-              </span>
-            </td>
-            <td>
-              <span class="text-gray-900 d-block">
-                {{ row.payment }}
-              </span>
-            </td>
-            <td>
-              <span class="text-gray-900 d-block">
-                <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon>
+                {{ row.total_passenger | number }}
               </span>
             </td>
             <td>
@@ -106,12 +101,34 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon>
+                <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                  @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Lunas (Kantor)' || row.payment ===
+                  'Piutang') {
+                  <input
+                    class="form-check-input f-none"
+                    type="checkbox"
+                    [checked]="row.check_payment"
+                    [disabled]="true"
+                  />
+                  } @else if (row.payment === 'Lunas (Transfer)') { ^ } @else { * }
+                </label>
               </span>
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.agent_commission }}
+                {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                  <input class="form-check-input f-none" type="checkbox" [checked]="row.check_sp" [disabled]="true" />
+                </label>
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.agent_commission | currency : 'Rp ' : true : '1.0-2' }}
               </span>
             </td>
           </ng-template>
@@ -121,7 +138,7 @@
       <!-- end::Table container -->
       } @if (dataSurabayaPassenger.length > 0) {
       <!-- begin::Table container -->
-      <div class="table-responsive mt-7">
+      <div class="table-responsive table-custom mb-7">
         <!-- begin::Table -->
         <ngx-table
           #table
@@ -141,22 +158,12 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.tariff }}
+                {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}
               </span>
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.koli }}
-              </span>
-            </td>
-            <td>
-              <span class="text-gray-900 d-block">
-                {{ row.payment }}
-              </span>
-            </td>
-            <td>
-              <span class="text-gray-900 d-block">
-                <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon>
+                {{ row.total_passenger | number }}
               </span>
             </td>
             <td>
@@ -166,12 +173,33 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon>
+                <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                  @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Piutang') {
+                  <input
+                    class="form-check-input f-none"
+                    type="checkbox"
+                    [checked]="row.check_payment"
+                    [disabled]="true"
+                  />
+                  } @else if (row.payment === 'Lunas (Transfer)') { ^ } @else { * }
+                </label>
               </span>
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.agent_commission }}
+                {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                  <input class="form-check-input f-none" type="checkbox" [checked]="row.check_sp" [disabled]="true" />
+                </label>
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.agent_commission | currency : 'Rp ' : true : '1.0-2' }}
               </span>
             </td>
           </ng-template>
@@ -184,25 +212,56 @@
       <!--begin::Row-->
       <div class="row g-5 g-xl-10">
         <!--begin::Col-->
-        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+        <div class="col-md-5 col-lg-5 col-xl-5 col-xxl-5">
           <!--begin::Card body-->
-          <div class="card-body d-flex align-items-end pt-0">
+          <div class="card-body pt-0">
             <div class="mt-7">
               <b>Total Passengers</b>: {{ totalPassenger | number }}<br />
               <b>Total Remaining Payment</b>: {{ totalTariff | currency : 'Rp ' : true : '1.0-2' }}<br />
               <b>Total Commssion Driver</b>: {{ totalCommissionPassenger | currency : 'Rp ' : true : '1.0-2' }}
             </div>
 
-            <div class="mt-3">
-              <b>DEBET</b><br />
+            <div class="mt-7">
+              <b><u>DEBET</u></b
+              ><br />
               <b>Total Remaining Payment</b>: {{ totalTariff | currency : 'Rp ' : true : '1.0-2' }}<br />
               <b>Total Mandatory Deposit</b>: {{ mandatoryDeposit | currency : 'Rp ' : true : '1.0-2' }}<br />
               <b>Total Driver Deposit</b>: {{ depositDriver | currency : 'Rp ' : true : '1.0-2' }}<br />
               <b>Total Voluntary Deposit</b>: {{ voluntaryDeposit | currency : 'Rp ' : true : '1.0-2' }}
             </div>
+          </div>
+          <!--end::Card body-->
+        </div>
+        <!--end::Col-->
 
-            <hr />
+        <!--begin::Col-->
+        <div class="col-md-5 col-lg-5 col-xl-5 col-xxl-5">
+          <!--begin::Card body-->
+          <div class="card-body pt-0">
+            <div class="mt-7">
+              <b><u>KREDIT</u></b
+              ><br />
+              <b>Total Commission Driver</b>: {{ totalCommissionPassenger | currency : 'Rp ' : true : '1.0-2' }} <br />
+              <b>BBM</b>: {{ bbm | currency : 'Rp ' : true : '1.0-2' }}<br />
+              <b>Parking</b>: {{ totalParkingPassenger | currency : 'Rp ' : true : '1.0-2' }}<br />
+              <b>In Toll</b>: {{ inToll | currency : 'Rp ' : true : '1.0-2' }}<br />
+              <b>Out Toll</b>: {{ outToll | currency : 'Rp ' : true : '1.0-2' }}<br />
+              <b>Extra</b>: {{ extra | currency : 'Rp ' : true : '1.0-2' }}<br />
+              <b>Others</b>: {{ others | currency : 'Rp ' : true : '1.0-2' }}
+            </div>
+          </div>
+          <!--end::Card body-->
+        </div>
+        <!--end::Col-->
+      </div>
 
+      <hr />
+
+      <div class="row g-5 g-xl-10">
+        <!--begin::Col-->
+        <div class="col-md-5 col-lg-5 col-xl-5 col-xxl-5">
+          <!--begin::Card body-->
+          <div class="card-body pt-0">
             <div class="mt-0">
               <b>Old KM Full</b>: {{ oldFullKm | number }}<br />
               <b>Current KM Full</b>: {{ currentFullKm | number }}<br />
@@ -215,26 +274,24 @@
         <!--end::Col-->
 
         <!--begin::Col-->
-        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+        <div class="col-md-5 col-lg-5 col-xl-5 col-xxl-5">
           <!--begin::Card body-->
-          <div class="card-body d-flex align-items-end pt-0">
-            <div class="mt-3">
-              <b>KREDIT</b><br />
-              <b>Total Commssion Driver</b>: {{ totalCommissionPassenger | currency : 'Rp ' : true : '1.0-2' }} <br />
-              <b>BBM</b>: {{ bbm | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>Parking</b>: {{ totalParkingPassenger | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>In Toll</b>: {{ inToll | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>Out Toll</b>: {{ outToll | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>Extra</b>: {{ extra | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>Others</b>: {{ others | currency : 'Rp ' : true : '1.0-2' }}
-            </div>
-
-            <div class="mt-3">
+          <div class="card-body pt-0">
+            <div class="mt-0">
               <b>TOTAL DEBET</b>: {{ totalDebetPassenger | currency : 'Rp ' : true : '1.0-2' }}<br />
               <b>TOTAL KREDIT</b>: {{ totalKreditPassenger | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>TOTAL DEPOSIT OFFICE</b>: {{ totalDepositOffice | currency : 'Rp ' : true : '1.0-2' }}<br />
+              <b>TOTAL DEPOSIT OFFICE</b>:
+              <span [ngClass]="{ negative: totalDepositOffice < 0 }">
+                {{ totalDepositOffice | currency : 'Rp ' : true : '1.0-2' }}
+              </span>
+              <br />
               <span class="fs-1"
-                ><b>DRIVER DEPOSIT: {{ totalDepositDriverPassenger | currency : 'Rp ' : true : '1.0-2' }}</b></span
+                ><b
+                  >DRIVER DEPOSIT:
+                  <span [ngClass]="{ negative: totalDepositDriverPassenger < 0 }">
+                    {{ totalDepositDriverPassenger | currency : 'Rp ' : true : '1.0-2' }}
+                  </span>
+                </b></span
               >
             </div>
           </div>
@@ -271,7 +328,9 @@
         <div class="col-md-4 col-lg-4 col-xl-4 col-xxl-3">
           <!--begin::Card body-->
           <div class="card-body pt-0">
-            <span>Driver: {{ data?.employee?.name }} - ({{ data?.car?.car_number }})</span>
+            <span
+              ><b>Driver</b>: {{ data?.employee?.name }} - <b>({{ data?.car?.car_number }})</b></span
+            >
           </div>
           <!--end::Card body-->
         </div>
@@ -281,7 +340,7 @@
         <div class="col-md-4 col-lg-4 col-xl-4 col-xxl-3">
           <!--begin::Card body-->
           <div class="card-body pt-0 text-center">
-            <span>Send Date: {{ data?.send_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
+            <span><b>Tanggal Kirim</b>: {{ data?.send_date | date : 'dd/MM/yyyy, H:mm:ss a' : 'GMT' }}</span>
           </div>
           <!--end::Card body-->
         </div>
@@ -303,7 +362,7 @@
 
       @if (dataMalangPackage.length > 0) {
       <!-- begin::Table container -->
-      <div class="table-responsive">
+      <div class="table-responsive table-custom mb-7">
         <!-- begin::Table -->
         <ngx-table
           #table
@@ -338,7 +397,16 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                <!-- <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon> -->
+                <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                  @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') {
+                  <input
+                    class="form-check-input f-none"
+                    type="checkbox"
+                    [checked]="row.check_payment"
+                    [disabled]="true"
+                  />
+                  } @else if (row.status === 'Lunas (Transfer)') { ^ } @else { * }
+                </label>
               </span>
             </td>
             <td>
@@ -348,7 +416,9 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                <!-- <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon> -->
+                <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                  <input class="form-check-input f-none" type="checkbox" [checked]="row.check_sp" [disabled]="true" />
+                </label>
               </span>
             </td>
             <td>
@@ -363,7 +433,7 @@
       <!-- end::Table container -->
       } @if (dataSurabayaPackage.length > 0) {
       <!-- begin::Table container -->
-      <div class="table-responsive mt-7">
+      <div class="table-responsive table-custom mb-7">
         <!-- begin::Table -->
         <ngx-table
           #table
@@ -398,7 +468,16 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                <!-- <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon> -->
+                <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                  @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') {
+                  <input
+                    class="form-check-input f-none"
+                    type="checkbox"
+                    [checked]="row.check_payment"
+                    [disabled]="true"
+                  />
+                  } @else if (row.status === 'Lunas (Transfer)') { ^ } @else { * }
+                </label>
               </span>
             </td>
             <td>
@@ -408,7 +487,9 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                <!-- <app-keenicon name="check" class="fs-md-3 text-primary"></app-keenicon> -->
+                <label class="form-check form-check-sm form-check-solid m-0 p-0">
+                  <input class="form-check-input f-none" type="checkbox" [checked]="row.check_sp" [disabled]="true" />
+                </label>
               </span>
             </td>
             <td>
@@ -429,20 +510,25 @@
       </div>
 
       <div class="mt-3">
-        <b>DEBET</b><br />
+        <b><u>DEBET</u></b
+        ><br />
         <b>Total Deposit</b>: {{ totalCost | currency : 'Rp ' : true : '1.0-2' }}
       </div>
 
       <div class="mt-3">
-        <b>KREDIT</b><br />
-        <b>Total Commssion Driver</b>: {{ totalCommissionPackage | currency : 'Rp ' : true : '1.0-2' }} <br />
+        <b><u>KREDIT</u></b
+        ><br />
+        <b>Total Commission Driver</b>: {{ totalCommissionPackage | currency : 'Rp ' : true : '1.0-2' }} <br />
         <b>Parking</b>: {{ totalParkingPackage | currency : 'Rp ' : true : '1.0-2' }}
       </div>
 
       <div class="mt-3">
         <b>TOTAL DEBET</b>: {{ totalDebetPackage | currency : 'Rp ' : true : '1.0-2' }}<br />
         <b>TOTAL KREDIT</b>: {{ totalKreditPackage | currency : 'Rp ' : true : '1.0-2' }}<br />
-        <b>TOTAL DEPOSIT DRIVER</b>: {{ totalDepositDriverPackage | currency : 'Rp ' : true : '1.0-2' }}
+        <b>TOTAL DEPOSIT DRIVER</b>:
+        <span [ngClass]="{ negative: totalDepositDriverPackage < 0 }">
+          {{ totalDepositDriverPackage | currency : 'Rp ' : true : '1.0-2' }}
+        </span>
       </div>
     </div>
   </div>

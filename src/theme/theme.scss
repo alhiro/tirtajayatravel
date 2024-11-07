@@ -155,10 +155,70 @@ tr:hover {
   ngx-table {
     table {
       font-size: 13px;
+      display: table;
+    }
+  }
+}
+
+.table-custom {
+  width: 100%;
+  border-collapse: collapse;
+
+  ngx-table {
+    table {
+      display: table;
+
+      th {
+        background-color: #c0c0c0;
+        color: #000;
+        font-weight: bold;
+        padding: 3px !important;
+        text-align: center;
+        border: 1px solid #333333 !important;
+      }
+
+      td {
+        padding: 2px !important;
+        border: 1px solid #333333 !important;
+        text-align: center;
+      }
+    }
+  }
+}
+
+// Style tabel untuk cetakan
+@media print {
+  .table-custom {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      background-color: #c0c0c0;
+      color: #000;
+      font-weight: bold;
+      padding: 3px;
+      text-align: center;
+      border: 1px solid #333333;
+    }
+
+    td {
+      padding: 2px;
+      border: 1px solid #333333;
+      text-align: center;
     }
   }
 }
 
 table {
   font-size: 13px;
+}
+
+.negative {
+  color: red;
+}
+
+.f-none {
+  margin: 0 !important;
+  padding: 0 !important;
+  float: none !important;
 }

@@ -318,6 +318,19 @@ export class Utils {
       totalReminderPaymentPassenger,
     };
   }
+
+  calculateAverageKmPerLiter(kmFullLalu: number, kmFullSaatIni: number, fuelConsumed: number): number {
+    const selisihKm = kmFullSaatIni - kmFullLalu;
+    const averageKmPerLiter = selisihKm / fuelConsumed;
+    return averageKmPerLiter;
+  }
+
+  sumNumbers(...values: (number | string)[]): number {
+    return values
+      .map((val) => Number(val))
+      .filter((val) => !isNaN(val))
+      .reduce((acc, val) => acc + val, 0);
+  }
 }
 
 export function toInteger(value: any): number {

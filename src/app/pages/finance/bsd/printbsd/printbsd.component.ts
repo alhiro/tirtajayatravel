@@ -116,30 +116,65 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
     this.totalPassenger = this.utils.sumTotal(
       this.data?.passengers?.map((data: PassengerModel) => data.total_passenger)
     );
-    this.totalTariff = this.utils.sumTotal(this.data?.passengers?.map((data: PassengerModel) => data.tariff));
+
+    const filterPaymentPassenger = this.data?.passengers.filter(
+      (row: any) =>
+        row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Lunas (Kantor)' || row.payment === 'Piutang'
+    );
+    this.totalTariff = this.utils.sumTotal(filterPaymentPassenger?.map((data: PassengerModel) => data.tariff));
+
+    // Debet
+    this.mandatoryDeposit = this.data?.cost?.mandatory_deposit;
+    this.depositDriver = this.data?.cost?.driver_deposit;
+    this.voluntaryDeposit = this.data?.cost?.voluntary_deposit;
+    this.oldFullKm = this.data?.cost?.old_km;
+    this.currentFullKm = Number(this.data?.cost?.current_km) - Number(this.data?.cost?.old_km);
+    // Cost/L
+    this.differentInKm = Number(this.currentFullKm) - Number(this.oldFullKm);
+    this.averageKm = this.utils.calculateAverageKmPerLiter(this.oldFullKm, this.currentFullKm, this.bbm);
+
+    // Kredit
     this.totalCommissionPassenger = this.utils.sumTotal(
       this.data?.passengers?.map((data: PassengerModel) => data.agent_commission)
     );
-    this.totalDebetPassenger = this.totalTariff + this.mandatoryDeposit + this.depositDriver + this.voluntaryDeposit;
-    this.totalKreditPassenger =
-      this.totalCommissionPassenger +
-      this.bbm +
-      this.totalParkingPassenger +
-      this.inToll +
-      this.outToll +
-      this.overnight +
-      this.extra +
-      this.others;
-    this.totalDepositDriverPassenger = this.totalDebetPassenger - this.totalKreditPassenger;
+    this.bbm = this.data?.cost?.bbm;
+    this.totalParkingPassenger = this.data?.cost?.parking_passenger;
+    this.inToll = this.data?.cost?.toll_in;
+    this.outToll = this.data?.cost?.toll_out;
+    this.extra = this.data?.cost?.extra;
+    this.others = this.data?.cost?.others;
+
+    this.totalDebetPassenger = this.utils.sumNumbers(
+      this.totalTariff,
+      this.mandatoryDeposit,
+      this.depositDriver,
+      this.voluntaryDeposit
+    );
+    this.totalKreditPassenger = this.utils.sumNumbers(
+      this.totalCommissionPassenger,
+      this.bbm,
+      this.totalParkingPassenger,
+      this.inToll,
+      this.outToll,
+      this.overnight,
+      this.extra,
+      this.others
+    );
+    this.totalDepositDriverPassenger = Number(this.totalDebetPassenger) - Number(this.totalKreditPassenger);
+    this.totalDepositOffice = Number(this.totalTariff) - Number(this.totalKreditPassenger);
 
     // Package
-    this.totalCost = this.utils.sumTotal(this.data?.packages?.map((data: PackageModel) => data.cost));
+    const filterPaymentPackage = this.data?.packages.filter(
+      (row: any) =>
+        row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Lunas (Kantor)' || row.payment === 'Piutang'
+    );
+    this.totalCost = this.utils.sumTotal(filterPaymentPackage?.map((data: PackageModel) => data.cost));
     this.totalCommissionPackage = this.utils.sumTotal(
       this.data?.packages?.map((data: PackageModel) => data.agent_commission)
     );
     this.totalDebetPackage = this.totalCost;
-    this.totalKreditPackage = this.totalCommissionPackage + this.totalParkingPackage;
-    this.totalDepositDriverPackage = this.totalDebetPackage - this.totalKreditPackage;
+    this.totalKreditPackage = Number(this.totalCommissionPackage) + Number(this.totalParkingPackage);
+    this.totalDepositDriverPackage = Number(this.totalDebetPackage) - Number(this.totalKreditPackage);
   }
 
   ngOnDestroy() {

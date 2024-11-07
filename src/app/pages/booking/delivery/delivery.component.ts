@@ -825,9 +825,9 @@ export class DeliveryComponent implements OnInit, OnDestroy {
                 //   city = 2;
                 // }
 
-                const kurir = response.data.filter((val: any) => val.level_id === 5);
+                // const kurir = response.data.filter((val: any) => val.level_id === 5);
                 tap(() => (this.searchingEmployee = false));
-                return kurir.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+                return response.data.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
               }
             }),
             catchError(() => {
