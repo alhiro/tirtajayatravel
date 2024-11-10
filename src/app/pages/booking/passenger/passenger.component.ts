@@ -66,6 +66,7 @@ interface EventObject {
 })
 export class PassengerComponent implements OnInit, OnDestroy {
   public levelrule!: number;
+  public city_id!: number;
   public username!: string;
 
   @ViewChild('table') table!: APIDefinition;
@@ -87,7 +88,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
   public class: any;
   public payment: any;
   public statusPassenger: any;
-  public city: any;
+  public city: any = 'Malang';
 
   public dataLength!: number;
   public dataLengthMalang!: number;
@@ -248,13 +249,12 @@ export class PassengerComponent implements OnInit, OnDestroy {
     this.initForm();
 
     this.levelrule = this.utils.getLevel();
+    this.city_id = this.utils.getCity();
     this.username = this.utils.getUsername();
-    if (this.username === 'fomlg' && this.levelrule === 2) {
+    if (this.levelrule === 2 && this.city_id == 1) {
       this.currentTab = 'Malang';
-    } else if (this.username === 'fosby' && this.levelrule === 2) {
+    } else if (this.levelrule === 2 && this.city_id == 2) {
       this.currentTab = 'Surabaya';
-    } else if (this.username === 'admin_11' && this.levelrule === 8) {
-      this.currentTab = 'Malang';
     }
 
     // set min selected date
@@ -384,8 +384,6 @@ export class PassengerComponent implements OnInit, OnDestroy {
       this.currentTab = 'Malang';
     } else if (this.setCity === 'Surabaya') {
       this.currentTab = 'Surabaya';
-    } else {
-      this.currentTab = 'Malang';
     }
 
     this.dataCategory();
@@ -414,7 +412,6 @@ export class PassengerComponent implements OnInit, OnDestroy {
     this.class = this.localService.getClass();
     this.payment = this.localService.getPayment();
     this.statusPassenger = this.localService.getStatusPassenger();
-    this.city = this.localService.getCity();
 
     this.configuration.resizeColumn = false;
     this.configuration.fixedColumnWidth = true;
@@ -581,6 +578,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
     this.currentTab = tab;
 
     if (this.currentTab === 'Malang') {
+      this.city = 'Malang';
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
@@ -592,6 +590,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
       };
       this.dataList(this.params);
     } else if (this.currentTab === 'Surabaya') {
+      this.city = 'Surabaya';
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
@@ -603,24 +602,46 @@ export class PassengerComponent implements OnInit, OnDestroy {
       };
       this.dataList(this.params);
     } else if (this.currentTab === 'Cancel') {
+      let getCity = '';
+      if (this.levelrule === 2) {
+        if (this.city_id === 1) {
+          getCity = 'Malang';
+        } else {
+          getCity = 'Surabaya';
+        }
+      } else if (this.levelrule === 8) {
+        getCity = this.city;
+      }
+
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
         search: this.pagination.search,
         startDate: this.startDate,
         endDate: this.endDate,
-        city: '',
+        city: getCity,
         status: 'Cancel',
       };
       this.dataList(this.params);
     } else if (this.currentTab === 'History') {
+      let getCity = '';
+      if (this.levelrule === 2) {
+        if (this.city_id === 1) {
+          getCity = 'Malang';
+        } else {
+          getCity = 'Surabaya';
+        }
+      } else if (this.levelrule === 8) {
+        getCity = this.city;
+      }
+
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
         search: this.pagination.search,
         startDate: this.startDate,
         endDate: this.endDate,
-        city: '',
+        city: getCity,
         status: 'Completed',
       };
       this.dataList(this.params);
@@ -782,13 +803,15 @@ export class PassengerComponent implements OnInit, OnDestroy {
           .pipe(
             tap(() => (this.searchFailed = false)),
             map((response: any) => {
-              if (response) {
+              if (response.length > 0) {
                 tap(() => (this.searching = false));
                 return response.data.filter(
                   (val: any) =>
                     val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
                     val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
                 );
+              } else {
+                this.searchFailed = true;
               }
             }),
             catchError(() => {
@@ -818,13 +841,15 @@ export class PassengerComponent implements OnInit, OnDestroy {
           .pipe(
             tap(() => (this.searchFailedDestination = false)),
             map((response: any) => {
-              if (response) {
+              if (response.length > 0) {
                 tap(() => (this.searchingDestination = false));
                 return response.data.filter(
                   (val: any) =>
                     val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
                     val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
                 );
+              } else {
+                this.searchFailedDestination = true;
               }
             }),
             catchError(() => {
@@ -890,13 +915,15 @@ export class PassengerComponent implements OnInit, OnDestroy {
           .pipe(
             tap(() => (this.searchFailedSender = false)),
             map((response: any) => {
-              if (response) {
+              if (response.length > 0) {
                 tap(() => (this.searchingSender = false));
                 return response.data.filter(
                   (val: any) =>
                     val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
                     val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
                 );
+              } else {
+                this.searchFailedSender = true;
               }
             }),
             catchError(() => {
@@ -935,13 +962,15 @@ export class PassengerComponent implements OnInit, OnDestroy {
           .pipe(
             tap(() => (this.searchFailedDestination = false)),
             map((response: any) => {
-              if (response) {
+              if (response.length > 0) {
                 tap(() => (this.searchingDestination = false));
                 return response.data.filter(
                   (val: any) =>
                     val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
                     val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
                 );
+              } else {
+                this.searchFailedDestination = true;
               }
             }),
             catchError(() => {

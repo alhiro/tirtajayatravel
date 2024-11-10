@@ -44,6 +44,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
   public differentInKm = 0;
   public averageKm = 0;
   public bbm = 0;
+  public bbmTotal = 0;
   public totalParkingPassenger = 0;
   public inToll = 0;
   public outToll = 0;
@@ -117,10 +118,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
       this.data?.passengers?.map((data: PassengerModel) => data.total_passenger)
     );
 
-    const filterPaymentPassenger = this.data?.passengers.filter(
-      (row: any) =>
-        row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Lunas (Kantor)' || row.payment === 'Piutang'
-    );
+    const filterPaymentPassenger = this.data?.passengers.filter((row: any) => row.check_payment === true);
     this.totalTariff = this.utils.sumTotal(filterPaymentPassenger?.map((data: PassengerModel) => data.tariff));
 
     // Debet
@@ -138,6 +136,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
       this.data?.passengers?.map((data: PassengerModel) => data.agent_commission)
     );
     this.bbm = this.data?.cost?.bbm;
+    this.bbmTotal = this.data?.cost?.bbm_cost;
     this.totalParkingPassenger = this.data?.cost?.parking_passenger;
     this.inToll = this.data?.cost?.toll_in;
     this.outToll = this.data?.cost?.toll_out;
@@ -164,10 +163,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
     this.totalDepositOffice = Number(this.totalTariff) - Number(this.totalKreditPassenger);
 
     // Package
-    const filterPaymentPackage = this.data?.packages.filter(
-      (row: any) =>
-        row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Lunas (Kantor)' || row.payment === 'Piutang'
-    );
+    const filterPaymentPackage = this.data?.packages.filter((row: any) => row.check_payment === true);
     this.totalCost = this.utils.sumTotal(filterPaymentPackage?.map((data: PackageModel) => data.cost));
     this.totalCommissionPackage = this.utils.sumTotal(
       this.data?.packages?.map((data: PackageModel) => data.agent_commission)

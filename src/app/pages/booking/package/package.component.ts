@@ -70,6 +70,7 @@ interface EventObject {
 })
 export class PackageComponent implements OnInit, OnDestroy {
   public levelrule!: number;
+  public city_id!: number;
   public username!: string;
 
   @ViewChild('table') table!: APIDefinition;
@@ -86,7 +87,7 @@ export class PackageComponent implements OnInit, OnDestroy {
   public request: any;
   public status: any;
   public statusPackage: any;
-  public city: any;
+  public city: any = 'Malang';
 
   public dataLength = 0;
   public dataLengthMalang!: number;
@@ -251,13 +252,12 @@ export class PackageComponent implements OnInit, OnDestroy {
     this.initForm();
 
     this.levelrule = this.utils.getLevel();
+    this.city_id = this.utils.getCity();
     this.username = this.utils.getUsername();
-    if (this.username === 'fomlg' && this.levelrule === 2) {
+    if (this.levelrule === 2 && this.city_id == 1) {
       this.currentTab = 'Malang';
-    } else if (this.username === 'fosby' && this.levelrule === 2) {
+    } else if (this.levelrule === 2 && this.city_id == 2) {
       this.currentTab = 'Surabaya';
-    } else if (this.username === 'admin_11' && this.levelrule === 8) {
-      this.currentTab = 'Malang';
     }
 
     // set min selected date
@@ -356,8 +356,6 @@ export class PackageComponent implements OnInit, OnDestroy {
       this.currentTab = 'Malang';
     } else if (this.setCity === 'Surabaya') {
       this.currentTab = 'Surabaya';
-    } else {
-      this.currentTab = 'Malang';
     }
 
     this.dataCategory();
@@ -378,7 +376,6 @@ export class PackageComponent implements OnInit, OnDestroy {
     this.request = this.localService.getRequest();
     this.status = this.localService.getStatus();
     this.statusPackage = this.localService.getStatusPackage();
-    this.city = this.localService.getCity();
 
     this.configuration.resizeColumn = false;
     this.configuration.fixedColumnWidth = true;
@@ -565,6 +562,7 @@ export class PackageComponent implements OnInit, OnDestroy {
     console.log(this.currentTab);
 
     if (this.currentTab === 'Malang') {
+      this.city = 'Malang';
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
@@ -576,6 +574,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       };
       this.dataList(this.params);
     } else if (this.currentTab === 'Surabaya') {
+      this.city = 'Surabaya';
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
@@ -587,24 +586,46 @@ export class PackageComponent implements OnInit, OnDestroy {
       };
       this.dataList(this.params);
     } else if (this.currentTab === 'Cancel') {
+      let getCity = '';
+      if (this.levelrule === 2) {
+        if (this.city_id === 1) {
+          getCity = 'Malang';
+        } else {
+          getCity = 'Surabaya';
+        }
+      } else if (this.levelrule === 8) {
+        getCity = this.city;
+      }
+
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
         search: this.pagination.search,
         startDate: this.pagination.startDate,
         endDate: this.pagination.endDate,
-        city: '',
+        city: getCity,
         status: 'Cancel',
       };
       this.dataList(this.params);
     } else if (this.currentTab === 'History') {
+      let getCity = '';
+      if (this.levelrule === 2) {
+        if (this.city_id === 1) {
+          getCity = 'Malang';
+        } else {
+          getCity = 'Surabaya';
+        }
+      } else if (this.levelrule === 8) {
+        getCity = this.city;
+      }
+
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
         search: this.pagination.search,
         startDate: this.pagination.startDate,
         endDate: this.pagination.endDate,
-        city: '',
+        city: getCity,
         status: 'Completed',
       };
       this.dataList(this.params);
@@ -771,13 +792,15 @@ export class PackageComponent implements OnInit, OnDestroy {
           .pipe(
             tap(() => (this.searchFailed = false)),
             map((response: any) => {
-              if (response) {
+              if (response.length > 0) {
                 tap(() => (this.searching = false));
                 return response.data.filter(
                   (val: any) =>
                     val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
                     val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
                 );
+              } else {
+                this.searchFailed = true;
               }
             }),
             catchError(() => {
@@ -830,7 +853,7 @@ export class PackageComponent implements OnInit, OnDestroy {
 
   selectAddress() {
     if (this.modelCustomer) {
-      const getdAddress = this.modelCustomer?.addresses.find(
+      const getdAddress = this.modelCustomer?.addresses?.find(
         (val: AddressModel) => val.address_id === Number(this.modelAddressId.address_id)
       );
       this.selectedAddress = getdAddress;
@@ -858,13 +881,15 @@ export class PackageComponent implements OnInit, OnDestroy {
           .pipe(
             tap(() => (this.searchFailedSender = false)),
             map((response: any) => {
-              if (response) {
+              if (response.length > 0) {
                 tap(() => (this.searchingSender = false));
                 return response.data.filter(
                   (val: any) =>
                     val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
                     val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
                 );
+              } else {
+                this.searchFailedSender = true;
               }
             }),
             catchError(() => {
@@ -903,13 +928,15 @@ export class PackageComponent implements OnInit, OnDestroy {
           .pipe(
             tap(() => (this.searchFailedRecipient = false)),
             map((response: any) => {
-              if (response) {
+              if (response.length > 0) {
                 tap(() => (this.searchingRecipient = false));
                 return response.data.filter(
                   (val: any) =>
                     val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
                     val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
                 );
+              } else {
+                this.searchFailedRecipient = true;
               }
             }),
             catchError(() => {
@@ -923,7 +950,7 @@ export class PackageComponent implements OnInit, OnDestroy {
   };
 
   findDataRecipientByValue(value: any) {
-    return this.dataRecipientAddresses().find((val: AddressModel) => val.address_id === Number(value));
+    return this.dataRecipientAddresses()?.find((val: AddressModel) => val.address_id === Number(value));
   }
 
   selectAddressRecipient() {

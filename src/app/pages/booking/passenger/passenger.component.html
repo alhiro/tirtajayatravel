@@ -39,7 +39,24 @@
         </li>
       </ul>
     </div>
+    } @if (city_id === 1) {
+    <div class="card-toolbar">
+      <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+        <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
+          <a class="nav-link py-2 px-4 active" data-toggle="tab">Malang</a>
+        </li>
+      </ul>
+    </div>
+    } @else if (city_id === 2) {
+    <div class="card-toolbar">
+      <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+        <li class="nav-item" (click)="setCurrentTab('Surabaya')" [style.cursor]="'pointer'">
+          <a class="nav-link py-2 px-4 active" data-toggle="tab">Surabaya</a>
+        </li>
+      </ul>
+    </div>
     }
+
     <div class="card-toolbar">
       <!-- begin::Menu -->
       <div class="menu-item px-3">
@@ -723,7 +740,7 @@
                 }
               </div>
 
-              @if (modelCustomer) {
+              @if (modelCustomer?.customer_id) {
               <div class="d-flex flex-center flex-column py-5 pt-2">
                 <!--begin::Info-->
                 <!--begin::Info heading-->
@@ -744,28 +761,31 @@
                   </select>
                 </label> -->
 
-                <label class="d-block full-width">
-                  <input
-                    id="select-customer"
-                    type="text"
-                    class="form-control"
-                    [class.is-invalid]="searchFailed"
-                    [ngModelOptions]="{ standalone: true }"
-                    [(ngModel)]="modelAddressId"
-                    [ngbTypeahead]="searchAddressSender"
-                    (selectItem)="selectAddress($event)"
-                    [resultTemplate]="rt"
-                    [inputFormatter]="formatterCustomer"
-                    (focus)="focusSender$.next($any($event).target.value)"
-                    (click)="clickSender$.next($any($event).target.value)"
-                    #instance="ngbTypeahead"
-                    placeholder="Customer address passenger search"
-                  />
-                </label>
+                <input
+                  id="select-customer"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="searchFailedSender"
+                  [ngModelOptions]="{ standalone: true }"
+                  [(ngModel)]="modelAddressId"
+                  [ngbTypeahead]="searchAddressSender"
+                  (selectItem)="selectAddress($event)"
+                  [resultTemplate]="rt"
+                  [inputFormatter]="formatterCustomer"
+                  (focus)="focusSender$.next($any($event).target.value)"
+                  (click)="clickSender$.next($any($event).target.value)"
+                  #instance="ngbTypeahead"
+                  placeholder="Customer address passenger search"
+                />
 
                 <ng-template #rt let-r="result" let-t="term">
                   {{ r.name }} - {{ r.address }} - {{ r.telp }}
                 </ng-template>
+
+                @if (searchingSender) {
+                <small class="form-text text-muted">Searching. Please wait...</small>
+                } @if (searchFailedSender) {
+                <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
 
                 <div
                   class="btn btn-primary btn-sm py-1 fs-8 cursor-pointer my-3"
@@ -773,6 +793,8 @@
                 >
                   Add New Address
                 </div>
+                }
+
                 <!--end::Info heading-->
                 <!--end::Info-->
               </div>
@@ -780,7 +802,7 @@
 
               <!--begin::Summary-->
               <!--begin::Waybill Info-->
-              @if (modelCustomer) {
+              @if (modelCustomer?.customer_id) {
               <div class="d-flex flex-center flex-column py-5 pt-0">
                 <!--begin::Name-->
                 <h4 class="card-title">Choose Waybill:</h4>
@@ -804,7 +826,7 @@
                   </div>
                   } -->
 
-                  @if (selectedAddress) {
+                  @if (selectedAddress.length > 0) {
                   <table class="table mt-5 mb-0 table-custom">
                     <thead>
                       <tr>
@@ -951,7 +973,7 @@
               <!--end::Summary-->
               } @else {
               <!-- Same destination by customer relate address -->
-              @if (modelCustomer) {
+              @if (modelCustomer?.customer_id) {
               <div class="d-flex flex-center flex-column py-5 pt-2">
                 <!--begin::Info-->
                 <!--begin::Info heading-->
@@ -972,35 +994,40 @@
                   </select>
                 </label> -->
 
-                <label class="d-block full-width">
-                  <input
-                    id="select-customer"
-                    type="text"
-                    class="form-control"
-                    [class.is-invalid]="searchFailedDestination"
-                    [ngModelOptions]="{ standalone: true }"
-                    [(ngModel)]="modelAddressIdDestination"
-                    [ngbTypeahead]="searchAddressDestination"
-                    (selectItem)="selectAddressDestination($event)"
-                    [resultTemplate]="rt"
-                    [inputFormatter]="formatterCustomer"
-                    (focus)="focusDestination$.next($any($event).target.value)"
-                    (click)="clickDestination$.next($any($event).target.value)"
-                    #instance="ngbTypeahead"
-                    placeholder="Customer address destination search"
-                  />
-                </label>
+                <input
+                  id="select-customer"
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="searchFailedDestination"
+                  [ngModelOptions]="{ standalone: true }"
+                  [(ngModel)]="modelAddressIdDestination"
+                  [ngbTypeahead]="searchAddressDestination"
+                  (selectItem)="selectAddressDestination($event)"
+                  [resultTemplate]="rt"
+                  [inputFormatter]="formatterCustomer"
+                  (focus)="focusDestination$.next($any($event).target.value)"
+                  (click)="clickDestination$.next($any($event).target.value)"
+                  #instance="ngbTypeahead"
+                  placeholder="Customer address destination search"
+                />
 
                 <ng-template #rt let-r="result" let-t="term">
                   {{ r.name }} - {{ r.address }} - {{ r.telp }}
                 </ng-template>
 
+                @if (searchingDestination) {
+                <small class="form-text text-muted">Searching. Please wait...</small>
+                } @if (searchFailedDestination) {
+                <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+
                 <div
                   class="btn btn-primary btn-sm py-1 fs-8 cursor-pointer my-3"
                   (click)="openModalNewAddress(modelCustomer)"
+                  translate
                 >
                   Add New Address
                 </div>
+                }
                 <!--end::Info heading-->
                 <!--end::Info-->
               </div>
@@ -1008,7 +1035,7 @@
 
               <!--begin::Summary-->
               <!--begin::Waybill Info-->
-              @if (modelCustomer) {
+              @if (modelCustomer?.customer_id) {
               <div class="d-flex flex-center flex-column py-5 pt-0">
                 <!--begin::Name-->
                 <h4 class="card-title">Choose Destination:</h4>
@@ -1030,7 +1057,7 @@
                   {{ modelAddressIdDestination?.telp }}
                   } -->
 
-                  @if (selectedAddressDestination) {
+                  @if (selectedAddressDestination.length > 0) {
                   <table class="table mt-5 mb-0 table-custom">
                     <thead>
                       <tr>

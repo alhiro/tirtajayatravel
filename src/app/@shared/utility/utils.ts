@@ -42,6 +42,12 @@ export class Utils {
     return credentials?.level;
   }
 
+  getCity(): number {
+    const credentials =
+      JSON.parse(localStorage.getItem('credentials')!) || JSON.parse(sessionStorage.getItem('credentials')!);
+    return credentials?.city_id;
+  }
+
   getUUID(): string {
     const token = localStorage.getItem('UUID')! || sessionStorage.getItem('UUID')!;
     return token;

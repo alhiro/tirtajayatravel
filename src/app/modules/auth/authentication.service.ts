@@ -67,6 +67,7 @@ export class AuthenticationService {
         const auth = new AuthModel();
         auth.userName = decoded.username;
         auth.level = token!.level;
+        auth.city_id = token!.city_id;
         auth.authToken = token!.token;
         auth.refreshToken = token!.refresh_token;
         auth.expiresIn = token!.expired_reset_token;

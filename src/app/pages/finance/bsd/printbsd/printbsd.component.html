@@ -242,7 +242,7 @@
               <b><u>KREDIT</u></b
               ><br />
               <b>Total Commission Driver</b>: {{ totalCommissionPassenger | currency : 'Rp ' : true : '1.0-2' }} <br />
-              <b>BBM</b>: {{ bbm | currency : 'Rp ' : true : '1.0-2' }}<br />
+              <b>BBM</b>: {{ bbm | number }} L, ({{ bbmTotal | currency : 'Rp ' : true : '1.0-2' }})<br />
               <b>Parking</b>: {{ totalParkingPassenger | currency : 'Rp ' : true : '1.0-2' }}<br />
               <b>In Toll</b>: {{ inToll | currency : 'Rp ' : true : '1.0-2' }}<br />
               <b>Out Toll</b>: {{ outToll | currency : 'Rp ' : true : '1.0-2' }}<br />
@@ -266,7 +266,7 @@
               <b>Old KM Full</b>: {{ oldFullKm | number }}<br />
               <b>Current KM Full</b>: {{ currentFullKm | number }}<br />
               <b>Different In KM</b>: {{ differentInKm | number }}<br />
-              <b>Average KM/L</b>: {{ averageKm | number }}
+              <b>Average KM/L</b>: 1 : {{ averageKm | number }}
             </div>
           </div>
           <!--end::Card body-->

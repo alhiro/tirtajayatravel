@@ -16,12 +16,32 @@ export class UserInnerComponent implements OnInit, OnDestroy {
   langs = languages;
   private unsubscribe: Subscription[] = [];
 
-  levelrule!: number;
+  levelrule: string = '';
   username!: string;
   initials: string = '';
 
   constructor(private authenticationService: AuthenticationService, private router: Router, private utils: Utils) {
-    this.levelrule = this.utils.getLevel();
+    const rule = this.utils.getLevel();
+    if (rule === 1) {
+      this.levelrule = 'Supervisor';
+    } else if (rule === 2) {
+      this.levelrule = 'Front Office';
+    } else if (rule === 3) {
+      this.levelrule = 'Cashier';
+    } else if (rule === 4) {
+      this.levelrule = 'Finance';
+    } else if (rule === 5) {
+      this.levelrule = 'Driver';
+    } else if (rule === 6) {
+      this.levelrule = 'Garage';
+    } else if (rule === 7) {
+      this.levelrule = 'Owner';
+    } else if (rule === 8) {
+      this.levelrule = 'Administrator';
+    } else if (rule === 9) {
+      this.levelrule = 'Courier';
+    }
+
     this.username = this.utils.getUsername();
     console.log(this.username);
     this.initials = this.getInitials(this.username);
