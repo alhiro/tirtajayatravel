@@ -270,10 +270,10 @@ export class PackageComponent implements OnInit, OnDestroy {
     var getDate = new Date(minDate);
     this.formatDateNow(getDate);
 
-    // const valueBookFromDate = new Date(getDate.getFullYear(), getDate.getMonth() - 1, getDate.getDate());
-    // const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookFromDate);
-    // this.startDate = startDate;
-    // this.endDate = endDate;
+    const valueBookFromDate = new Date(getDate.getFullYear(), getDate.getMonth(), getDate.getDate());
+    const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookFromDate);
+    this.startDate = startDate;
+    this.endDate = endDate;
   }
 
   onDateSelection(date: NgbDate, datepicker: any) {
@@ -311,21 +311,45 @@ export class PackageComponent implements OnInit, OnDestroy {
   }
 
   printFilterDate(datepicker: any) {
-    if (this.currentTab === 'Malang') {
-      // console.log(this.data);
-      sessionStorage.setItem('city', JSON.stringify(1));
-      // sessionStorage.setItem('printlist', JSON.stringify(this.data));
-    } else if (this.currentTab === 'Surabaya') {
-      // console.log(this.dataSurabaya);
-      sessionStorage.setItem('city', JSON.stringify(2));
-      // sessionStorage.setItem('printlist', JSON.stringify(this.dataSurabaya));
+    let getCity = '';
+    if (this.levelrule === 2) {
+      if (this.city_id === 1) {
+        getCity = 'Malang';
+      } else {
+        getCity = 'Surabaya';
+      }
+    } else if (this.levelrule === 8) {
+      getCity = this.city;
     }
 
     const dateRange = {
       fromDate: this.startDate,
       toDate: this.endDate,
+      city: getCity,
+      status: '',
     };
-    console.log(dateRange);
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    window.open('#/booking/package/transaction/printlist', '_blank');
+  }
+
+  printFilterDatePayment(datepicker: any) {
+    let getCity = '';
+    if (this.levelrule === 2) {
+      if (this.city_id === 1) {
+        getCity = 'Malang';
+      } else {
+        getCity = 'Surabaya';
+      }
+    } else if (this.levelrule === 8) {
+      getCity = this.city;
+    }
+
+    const dateRange = {
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: getCity,
+      status: 'Lunas (Kantor)',
+    };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
     window.open('#/booking/package/transaction/printlist', '_blank');
   }
@@ -886,7 +910,8 @@ export class PackageComponent implements OnInit, OnDestroy {
                 return response.data.filter(
                   (val: any) =>
                     val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
-                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
+                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                    val.address.toLowerCase().indexOf(term.toLowerCase()) > -1
                 );
               } else {
                 this.searchFailedSender = true;
@@ -933,7 +958,8 @@ export class PackageComponent implements OnInit, OnDestroy {
                 return response.data.filter(
                   (val: any) =>
                     val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
-                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
+                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                    val.address.toLowerCase().indexOf(term.toLowerCase()) > -1
                 );
               } else {
                 this.searchFailedRecipient = true;

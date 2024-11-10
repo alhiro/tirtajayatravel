@@ -28,8 +28,8 @@ export class PrintListPassengerComponent implements OnInit, OnDestroy {
   public startDateDisplay: any;
   public endDateDisplay: any;
 
-  public totalCost: any;
-  public totalPassenger: any;
+  public totalCost: any = 0;
+  public totalPassenger: any = 0;
 
   public configuration: Config = { ...DefaultConfig };
   public columns!: Columns[];

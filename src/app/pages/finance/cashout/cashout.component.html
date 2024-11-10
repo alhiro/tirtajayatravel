@@ -43,7 +43,7 @@
           <div class="input-group">
             <input
               name="datepicker"
-              class="form-control"
+              class="form-control hide-datepicker"
               ngbDatepicker
               #datepicker="ngbDatepicker"
               [autoClose]="'outside'"
@@ -54,7 +54,6 @@
               [startDate]="fromDate!"
               [footerTemplate]="footerTemplate"
               tabindex="-1"
-              style="display: none"
             />
             <ng-template #t let-date let-focused="focused">
               <span
@@ -74,6 +73,15 @@
             <hr class="my-0" />
             <button class="btn btn-primary btn-sm m-2 p-1 px-4 float-start" (click)="resetFilterDate(datepicker)">
               Reset
+            </button>
+
+            <button
+              class="btn btn-warning btn-sm m-2 p-1 px-4 float-end"
+              [disabled]="configuration.isLoading"
+              (click)="printFilterSelected(datepicker)"
+              translate
+            >
+              Filter
             </button>
           </ng-template>
         </div>

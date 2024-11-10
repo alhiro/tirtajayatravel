@@ -1,4 +1,4 @@
-<div class="p-10">
+<div class="p-3">
   <div class="m-0">
     <div class="card-header border-0 pt-5">
       <div class="card-toolbar">
@@ -8,7 +8,9 @@
             <div class="menu-content px-0 text-center">
               <h3 class="card-title align-items-start flex-column mb-2">
                 <span class="card-label fw-bolder fs-2">
-                  @if (city === 1) { LIST SEMUA PAKET MALANG } @else { LIST SEMUA PAKET SURABAYA }
+                  @if (city === 1) { @if (status === 'Lunas (Kantor)') { LIST LUNAS PAKET MALANG } @else { LIST SEMUA
+                  PAKET MALANG } } @else { @if (status === 'Lunas (Kantor)') { LIST LUNAS PAKET SURABAYA } @else { LIST
+                  SEMUA PAKET SURABAYA } }
                 </span>
               </h3>
               @if (startDate && endDate) {
@@ -24,7 +26,7 @@
     <!-- begin::Body -->
     <div class="card-body py-3">
       <!-- begin::Table container -->
-      <div class="table-responsive">
+      <div class="table-responsive table-custom">
         <!-- begin::Table -->
         <ngx-table
           #table

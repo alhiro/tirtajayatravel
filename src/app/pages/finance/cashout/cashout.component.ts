@@ -73,6 +73,9 @@ export class CashoutComponent implements OnInit {
   totalCostMalang: any;
   totalCostSurabaya: any;
 
+  startDate: any;
+  endDate: any;
+
   calendar = inject(NgbCalendar);
   hoveredDate: NgbDate | null = null;
   fromDate: NgbDate | null = this.calendar.getToday();
@@ -123,6 +126,11 @@ export class CashoutComponent implements OnInit {
     };
     var getDate = new Date(minDate);
     this.formatDateNow(getDate);
+
+    const valueBookFromDate = new Date(getDate.getFullYear(), getDate.getMonth(), getDate.getDate());
+    const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookFromDate);
+    this.startDate = startDate;
+    this.endDate = endDate;
   }
 
   formatDateNow(event: any) {
@@ -156,28 +164,50 @@ export class CashoutComponent implements OnInit {
       this.fromDate = date;
     } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
       this.toDate = date;
-      datepicker.close(); // Close datepicker popup
+      // datepicker.close(); // Close datepicker popup
 
-      const valueBookFromDate = new Date(
-        Date.UTC(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day, 0, 0)
-      ).toISOString();
+      // const valueBookFromDate = new Date(
+      //   Date.UTC(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day, 0, 0)
+      // ).toISOString();
 
-      const valueBookToDate = new Date(
-        Date.UTC(this.toDate.year, this.toDate.month - 1, this.toDate.day, 23, 59)
-      ).toISOString();
+      // const valueBookToDate = new Date(
+      //   Date.UTC(this.toDate.year, this.toDate.month - 1, this.toDate.day, 23, 59)
+      // ).toISOString();
 
-      const params = {
-        limit: this.pagination.limit,
-        page: this.pagination.offset,
-        search: this.pagination.search,
-        startDate: valueBookFromDate,
-        endDate: valueBookToDate,
-      };
-      console.log(params);
-      this.dataList(params);
+      const valueBookFromDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      const valueBookToDate = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
+      const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookToDate);
+      this.startDate = startDate;
+      this.endDate = endDate;
+
+      // const params = {
+      //   limit: this.pagination.limit,
+      //   page: this.pagination.offset,
+      //   search: this.pagination.search,
+      //   startDate: startDate,
+      //   endDate: endDate,
+      // };
+      // console.log(params);
+      // this.dataList(params);
     } else {
       this.toDate = null;
       this.fromDate = date;
+
+      const valueBookFromDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      const valueBookToDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookToDate);
+      this.startDate = startDate;
+      this.endDate = endDate;
+
+      // const params = {
+      //   limit: this.pagination.limit,
+      //   page: this.pagination.offset,
+      //   search: this.pagination.search,
+      //   startDate: startDate,
+      //   endDate: endDate,
+      // };
+      // console.log(params);
+      // this.dataList(params);
     }
   }
 
@@ -185,6 +215,21 @@ export class CashoutComponent implements OnInit {
     this.fromDate = this.calendar.getToday();
     this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
     this.dataList(this.params);
+    datepicker.close();
+  }
+
+  printFilterSelected(datepicker: any) {
+    this.params = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      startDate: this.startDate,
+      endDate: this.endDate,
+    };
+
+    this.dataList(this.params);
+    console.log(this.params);
+
     datepicker.close();
   }
 

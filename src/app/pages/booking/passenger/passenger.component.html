@@ -72,17 +72,19 @@
 
       <div class="col text-end">
         <div ngbDropdown placement="bottom-end" class="d-inline-block">
-          <button type="button" class="btn btn-sm btn-light" id="othersPassenger" ngbDropdownToggle>More Action</button>
+          <button type="button" class="btn btn-sm btn-light" id="othersPassenger" ngbDropdownToggle translate>
+            More Action
+          </button>
           <div ngbDropdownMenu aria-labelledby="othersPassenger">
             <ul class="px-2 mb-0">
               <!-- <li class="nav-item dropdown-item" (click)="setCurrentTab('Move')" [style.cursor]="'pointer'">
                     <a class="nav-link" [class.active]="currentTab === 'Move'" data-toggle="tab">Move</a>
                   </li> -->
               <li class="nav-item dropdown-item" (click)="setCurrentTab('Cancel')" [style.cursor]="'pointer'">
-                <a class="nav-link" [class.active]="currentTab === 'Cancel'" data-toggle="tab">Cancel</a>
+                <a class="nav-link" [class.active]="currentTab === 'Cancel'" data-toggle="tab" translate>Cancel</a>
               </li>
               <li class="nav-item dropdown-item" (click)="setCurrentTab('History')" [style.cursor]="'pointer'">
-                <a class="nav-link" [class.active]="currentTab === 'History'" data-toggle="tab">Completed</a>
+                <a class="nav-link" [class.active]="currentTab === 'History'" data-toggle="tab" translate>Completed</a>
               </li>
               <li class="nav-item dropdown-item" (click)="datepicker.toggle()">
                 <button class="btn btn-primary w-100 p-1 fs-7 fw-normal">
@@ -132,6 +134,7 @@
               class="btn btn-warning btn-sm m-2 p-1 px-4 float-end"
               [disabled]="configuration.isLoading"
               (click)="printFilterDate(datepicker)"
+              translate
             >
               Print
             </button>
@@ -139,6 +142,7 @@
               class="btn btn-warning btn-sm m-2 p-1 px-4 float-end"
               [disabled]="configuration.isLoading"
               (click)="printFilterSelected(datepicker)"
+              translate
             >
               Filter
             </button>

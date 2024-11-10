@@ -33,7 +33,7 @@
         <span>Total Tariff: {{ value.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
       </div>
       <!-- begin::Table container -->
-      <div class="table-responsive mb-7">
+      <div class="table-responsive table-custom mb-7">
         <!-- begin::Table -->
         <ngx-table
           #table
@@ -164,7 +164,7 @@
             >
               @for (value of row.waybills; track value) {
               <span class="text-gray-900 d-block">
-                <ul>
+                <ul style="padding-left: 20px; text-align: left; margin: 0; list-style: decimal">
                   <li>
                     {{ value?.name }} <br />
                     {{ value?.address }}
@@ -181,7 +181,7 @@
             >
               @for (value of row.destinations; track value) {
               <span class="text-gray-900 d-block">
-                <ul>
+                <ul style="padding-left: 20px; text-align: left; margin: 0; list-style: decimal">
                   <li>
                     {{ value?.name }} <br />
                     {{ value?.address }}

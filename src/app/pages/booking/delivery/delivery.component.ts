@@ -975,32 +975,42 @@ export class DeliveryComponent implements OnInit, OnDestroy {
 
               if (response) {
                 if (term !== '') {
-                  const malangData = response.data?.filter(
-                    (data: GoSendModel) => data.city_id === 1 && data.bsd === null && data.bsd_passenger === null
-                  );
-                  const surabayaData = response.data?.filter(
-                    (data: GoSendModel) => data.city_id === 2 && data.bsd === null && data.bsd_passenger === null
-                  );
+                  // const malangData = response.data?.filter(
+                  //   (data: GoSendModel) => data.city_id === 1 && data.bsd === null && data.bsd_passenger === null
+                  // );
+                  // const surabayaData = response.data?.filter(
+                  //   (data: GoSendModel) => data.city_id === 2 && data.bsd === null && data.bsd_passenger === null
+                  // );
 
-                  this.dataLengthMalang = malangData?.length;
-                  this.dataLengthSurabaya = surabayaData?.length;
-                  this.data = malangData;
-                  this.dataSurabaya = surabayaData;
+                  // this.dataLengthMalang = malangData?.length;
+                  // this.dataLengthSurabaya = surabayaData?.length;
+                  // this.data = malangData;
+                  // this.dataSurabaya = surabayaData;
+
+                  // // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
+                  // this.pagination.count =
+                  //   this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
+                  // this.pagination = { ...this.pagination };
+                  // this.configuration.isLoading = false;
+
+                  this.dataLength = response.length;
+                  this.data = response.data;
 
                   // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
                   this.pagination.count =
-                    this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
+                    this.pagination.count === -1 ? (this.data ? this.data.length : 0) : this.pagination.count;
                   this.pagination = { ...this.pagination };
+
                   this.configuration.isLoading = false;
                   this.cdr.detectChanges();
                 } else {
                   this.dataListGosend(this.params);
                 }
               } else {
-                this.dataLengthMalang = 0;
-                this.dataLengthSurabaya = 0;
+                this.dataLength = 0;
+                // this.dataLengthSurabaya = 0;
                 this.data = [];
-                this.dataSurabaya = [];
+                // this.dataSurabaya = [];
               }
             }),
             catchError(() => {

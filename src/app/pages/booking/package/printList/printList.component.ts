@@ -19,6 +19,7 @@ interface GroupedDataCost {
 export class PrintListPackageComponent implements OnInit, OnDestroy {
   public data: any;
   public city: any;
+  public status: any;
   public groupAdmin: any;
 
   public startDate: any;
@@ -27,8 +28,8 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
   public endDateDisplay: any;
   public nowDate!: Date;
 
-  public totalCost: any;
-  public totalKoli: any;
+  public totalCost: any = 0;
+  public totalKoli: any = 0;
 
   public configuration: Config = { ...DefaultConfig };
   public columns!: Columns[];
@@ -72,12 +73,11 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
     this.nowDate = new Date();
     // this.getPrint();
 
-    const getCity: any = sessionStorage.getItem('city');
-    const objDataCity = JSON.parse(getCity);
     const getDataDate: any = sessionStorage.getItem('printlistdate');
     const objDataDate = JSON.parse(getDataDate);
 
-    this.city = objDataCity;
+    this.city = objDataDate.city;
+    this.status = objDataDate.status;
     this.startDate = objDataDate.fromDate;
     this.startDateDisplay = this.startDate?.split(' ')[0];
     this.endDate = objDataDate.toDate;
@@ -89,6 +89,8 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
       search: '',
       startDate: this.startDate,
       endDate: this.endDate,
+      city: this.city,
+      status: '',
     };
     this.dataListFilter(params);
   }
@@ -104,9 +106,12 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((response: any) => {
-        // count malang or surabaya
         if (response.data.length > 0) {
-          this.data = response.data?.filter((data: PackageModel) => data.city_id === this.city);
+          if (this.status === 'Lunas (Kantor)') {
+            this.data = response.data?.filter((data: PackageModel) => data.status === this.status);
+          } else {
+            this.data = response.data;
+          }
 
           this.totalCost = this.data?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
           this.totalKoli = this.data?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);

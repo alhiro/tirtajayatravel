@@ -74,8 +74,8 @@ export class DepositComponent implements OnInit {
   // cashout
   public dataCashoutMalang: any;
   public dataCashoutSurabaya: any;
-  public totalCostMalang: any;
-  public totalCostSurabaya: any;
+  public totalCostMalang: any = 0;
+  public totalCostSurabaya: any = 0;
   public cashoutOnderdilService = 0;
   public cashoutCourierMalang = 0;
   public cashoutCourierSurabaya = 0;
@@ -121,12 +121,13 @@ export class DepositComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.configuration.resizeColumn = true;
-    this.configuration.fixedColumnWidth = false;
+    this.configuration.resizeColumn = false;
+    this.configuration.fixedColumnWidth = true;
+    this.configuration.horizontalScroll = false;
+
     this.configuration.paginationEnabled = false;
     this.configuration.rows = 100;
     this.configuration.orderEnabled = false;
-    this.configuration.horizontalScroll = false;
 
     this.columnsPackage = [
       // { key: '', title: 'No.' },
@@ -269,22 +270,22 @@ export class DepositComponent implements OnInit {
           } = this.utils.sumCostPassengers(dataBSD);
 
           // Package
-          this.totalCost = totalPackagesCost;
-          this.totalCommissionPackage = totalCommissionPackage;
-          this.totalDebetPackage = this.totalCost;
+          this.totalCost = Number(totalPackagesCost);
+          this.totalCommissionPackage = Number(totalCommissionPackage);
+          this.totalDebetPackage = Number(this.totalCost);
           this.totalKreditPackage = Number(this.totalCommissionPackage) + Number(this.totalParkingPackage);
           this.totalDepositDriverPackage = Number(this.totalDebetPackage) - Number(this.totalKreditPackage);
 
-          this.totalPackagePaidMalang = totalPackagePaidMalang;
-          this.totalPackagePaidSurabaya = totalPackagePaidSurabaya;
-          this.totalPackageCodMalang = totalPackageCodMalang;
-          this.totalPackageCodSurabaya = totalPackageCodSurabaya;
+          this.totalPackagePaidMalang = Number(totalPackagePaidMalang);
+          this.totalPackagePaidSurabaya = Number(totalPackagePaidSurabaya);
+          this.totalPackageCodMalang = Number(totalPackageCodMalang);
+          this.totalPackageCodSurabaya = Number(totalPackageCodSurabaya);
 
-          this.totalPaymentMonthly = totalPaymentMonthly;
+          this.totalPaymentMonthly = Number(totalPaymentMonthly);
 
           // Passenger
-          this.totalTariff = totalPassengerCost;
-          this.totalCommissionPassenger = totalCommissionPassenger;
+          this.totalTariff = Number(totalPassengerCost);
+          this.totalCommissionPassenger = Number(totalCommissionPassenger);
           this.totalDebetPassenger =
             Number(this.totalTariff) +
             Number(this.mandatoryDeposit) +
@@ -301,12 +302,12 @@ export class DepositComponent implements OnInit {
             Number(this.others);
           this.totalDepositDriverPassenger = Number(this.totalDebetPassenger) - Number(this.totalKreditPassenger);
 
-          this.totalPassengerPaidMalang = totalPassengerPaidMalang;
-          this.totalPassengerPaidSurabaya = totalPassengerPaidSurabaya;
+          this.totalPassengerPaidMalang = Number(totalPassengerPaidMalang);
+          this.totalPassengerPaidSurabaya = Number(totalPassengerPaidSurabaya);
 
           // reminder payment transfer
-          this.totalReminderPaymentPackage = totalReminderPaymentPackage;
-          this.totalReminderPaymentPassenger = totalReminderPaymentPassenger;
+          this.totalReminderPaymentPackage = Number(totalReminderPaymentPackage);
+          this.totalReminderPaymentPassenger = Number(totalReminderPaymentPassenger);
           this.totalReminderPaymentTransfer =
             Number(this.totalReminderPaymentPackage) + Number(this.totalReminderPaymentPassenger);
 
@@ -336,12 +337,12 @@ export class DepositComponent implements OnInit {
             // cashin
             totalDepositDriverPackage: this.totalDepositDriverPackage,
             totalDepositDriverPassenger: this.totalDepositDriverPassenger,
-            totalPackagePaidMalang: totalPackagePaidMalang,
-            totalPackagePaidSurabaya: totalPackagePaidSurabaya,
-            totalPackageCodMalang: totalPackageCodMalang,
-            totalPackageCodSurabaya: totalPackageCodSurabaya,
-            totalPassengerPaidMalang: totalPassengerPaidMalang,
-            totalPassengerPaidSurabaya: totalPassengerPaidSurabaya,
+            totalPackagePaidMalang: Number(totalPackagePaidMalang),
+            totalPackagePaidSurabaya: Number(totalPackagePaidSurabaya),
+            totalPackageCodMalang: Number(totalPackageCodMalang),
+            totalPackageCodSurabaya: Number(totalPackageCodSurabaya),
+            totalPassengerPaidMalang: Number(totalPassengerPaidMalang),
+            totalPassengerPaidSurabaya: Number(totalPassengerPaidSurabaya),
             piutangTransition: this.piutangTransition,
             // cashout
             totalCostMalang: this.totalCostMalang,

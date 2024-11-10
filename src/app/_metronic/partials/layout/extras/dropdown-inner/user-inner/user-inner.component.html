@@ -30,12 +30,12 @@
   <div class="separator my-2"></div>
 
   <div class="menu-item px-5" placement="top-start" ngbTooltip="Coming soon">
-    <a class="menu-link px-0 py-3"> My Profile </a>
+    <a class="menu-link px-0 py-3" translate> My Profile </a>
   </div>
 
   <div class="menu-item px-5">
     <a class="menu-link px-0 py-3 cursor-pointer" placement="top-start" ngbTooltip="Coming soon">
-      <span class="menu-text">My Trip</span>
+      <span class="menu-text" translate>My Trip</span>
       <span class="menu-badge">
         <span class="badge badge-light-danger badge-circle fw-bolder fs-7">0</span>
       </span>
@@ -105,7 +105,7 @@
     data-kt-menu-flip="bottom"
   >
     <a class="menu-link px-0 py-3 cursor-pointer">
-      <span class="menu-title position-relative">
+      <span class="menu-title position-relative" translate>
         Language
         <span class="fs-8 rounded bg-light px-3 py-2 position-absolute translate-middle-y top-50 end-0">
           <!-- language{{ ' ' }}
@@ -128,10 +128,10 @@
   </div>
 
   <div class="menu-item px-5 my-1">
-    <a placement="top-start" ngbTooltip="Coming soon" class="menu-link px-0 py-3"> Account Settings </a>
+    <a placement="top-start" ngbTooltip="Coming soon" class="menu-link px-0 py-3" translate> Account Settings </a>
   </div>
 
   <div class="menu-item px-5">
-    <a class="menu-link px-0 py-3 cursor-pointer" (click)="logout()"> Sign Out </a>
+    <a class="menu-link px-0 py-3 cursor-pointer" (click)="logout()" translate> Sign Out </a>
   </div>
 </ng-container>

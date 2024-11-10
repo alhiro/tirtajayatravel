@@ -166,6 +166,12 @@
     "NO_DATA": "Tidak ada data yang tersedia"
   },
 
+  "My Profile": "Profil",
+  "My Trip": "Riwayat Aktifitas",
+  "Language": "Pilih Bahasa",
+  "Account Settings": "Ubah Akun",
+  "Sign Out": "Keluar",
+
   "More Action": "Menu Lainnya",
   "Cancel": "Batal",
   "Completed": "Selesai",
@@ -173,6 +179,8 @@
 
   "Reset": "Reset",
   "Print": "Cetak",
+  "Print Payment": "Cetak Lunas",
+  "Print All": "Cetak Semua",
 
   "TABLE": {
     "RESI_NUMBER": "No Resi",
@@ -180,10 +188,19 @@
     "SEND_DATE": "Tgl Kirim",
     "SENDER": "Pengirim",
     "RECIPIENT": "Penerima",
-    "COST": "BIaya",
+    "COST": "Biaya",
     "ADMIN": "Admin",
     "STATUS": "Status",
-    "ACTION": "Action"
+    "ACTION": "Action",
+
+    "BOOK_DATE": "Tanggal Berangkat",
+    "TOTAL_PASSENGER": "Total Penumpang",
+    "NAME": "Nama",
+    "PICKUP_ADDRESS": "Alamat Penjemputan",
+    "DESTINATION_ADDRESS": "Alamat Tujuan",
+    "DESCRIPTION": "Keterangan",
+    "CREATED_BY": "Admin",
+    "STATUS_PASSENGER": "Status Penumpang"
   },
 
   "Searching. Please wait...": "Sedang Mencari. Silahkan menunggu...",

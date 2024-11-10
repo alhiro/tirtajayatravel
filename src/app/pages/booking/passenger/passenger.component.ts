@@ -50,6 +50,7 @@ import { Utils, padNumber } from '@app/@shared';
 import * as moment from 'moment';
 import { GoSendModel } from '../package/models/gosend';
 import Swal from 'sweetalert2';
+import { TranslateService } from '@ngx-translate/core';
 
 interface EventObject {
   event: string;
@@ -244,7 +245,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
     private localService: LocalService,
-    private utils: Utils
+    private utils: Utils,
+    private translate: TranslateService
   ) {
     this.initForm();
 
@@ -418,21 +420,38 @@ export class PassengerComponent implements OnInit, OnDestroy {
     this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = false;
 
-    this.columns = [
-      // { key: 'passenger_id', title: 'No' },
-      { key: 'resi_number', title: 'Number Resi' },
-      { key: 'book_date', title: 'Book Date' },
-      { key: 'tariff', title: 'Price' },
-      { key: 'status', title: 'Status Payment' },
-      { key: 'total_passenger', title: 'Total Passenger' },
-      { key: 'waybill.name', title: 'Booking' },
-      { key: 'waybill_id', title: 'Pickup Address' },
-      { key: 'destination_id', title: 'Destination Address' },
-      { key: 'description', title: 'Description' },
-      { key: 'created_by', title: 'Created By' },
-      { key: 'status_passenger', title: 'Status' },
-      { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
-    ];
+    this.translate
+      .get([
+        'TABLE.RESI_NUMBER',
+        'TABLE.BOOK_DATE',
+        'TABLE.COST',
+        'TABLE.STATUS',
+        'TABLE.TOTAL_PASSENGER',
+        'TABLE.NAME',
+        'TABLE.PICKUP_ADDRESS',
+        'TABLE.DESTINATION_ADDRESS',
+        'TABLE.DESCRIPTION',
+        'TABLE.CREATED_BY',
+        'TABLE.STATUS_PASSENGER',
+        'TABLE.ACTION',
+      ])
+      .subscribe((translations: any) => {
+        this.columns = [
+          // { key: 'passenger_id', title: 'No' },
+          { key: 'resi_number', title: translations['TABLE.RESI_NUMBER'] },
+          { key: 'book_date', title: translations['TABLE.BOOK_DATE'] },
+          { key: 'tariff', title: translations['TABLE.COST'] },
+          { key: 'status', title: translations['TABLE.STATUS'] },
+          { key: 'total_passenger', title: translations['TABLE.TOTAL_PASSENGER'] },
+          { key: 'waybill.name', title: translations['TABLE.NAME'] },
+          { key: 'waybill_id', title: translations['TABLE.PICKUP_ADDRESS'] },
+          { key: 'destination_id', title: translations['TABLE.DESTINATION_ADDRESS'] },
+          { key: 'description', title: translations['TABLE.DESCRIPTION'] },
+          { key: 'created_by', title: translations['TABLE.CREATED_BY'] },
+          { key: 'status_passenger', title: translations['TABLE.STATUS_PASSENGER'] },
+          { key: '', title: translations['TABLE.ACTION'], cssClass: { includeHeader: true, name: 'text-end' } },
+        ];
+      });
   }
 
   ngOnDestroy(): void {
@@ -920,7 +939,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
                 return response.data.filter(
                   (val: any) =>
                     val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
-                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
+                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                    val.address.toLowerCase().indexOf(term.toLowerCase()) > -1
                 );
               } else {
                 this.searchFailedSender = true;
@@ -967,7 +987,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
                 return response.data.filter(
                   (val: any) =>
                     val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
-                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
+                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                    val.address.toLowerCase().indexOf(term.toLowerCase()) > -1
                 );
               } else {
                 this.searchFailedDestination = true;
@@ -1348,66 +1369,76 @@ export class PassengerComponent implements OnInit, OnDestroy {
       status_passenger: 'Cancel',
     });
 
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'You can revert it back by edit service in more action!',
-      icon: 'info',
-      showCancelButton: true,
-      confirmButtonColor: '#D8A122',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, Cancel it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // edit passenger
-        this.isLoading = true;
-        this.passengerService
-          .patch(this.form.value)
-          .pipe(
-            finalize(() => {
-              this.form.markAsPristine();
-              this.isLoading = false;
-            })
-          )
-          .subscribe(
-            async (resp: any) => {
-              if (resp) {
-                this.snackbar.open(resp.message, '', {
-                  panelClass: 'snackbar-success',
-                  duration: 5000,
-                });
+    this.translate
+      .get(['SWAL.ARE_YOU_SURE', 'SWAL.REVERT_TEXT', 'SWAL.YES_CANCEL_IT', 'SWAL.BACK_BUTTON'])
+      .subscribe((translations) => {
+        Swal.fire({
+          title: translations['SWAL.ARE_YOU_SURE'],
+          text: translations['SWAL.REVERT_TEXT'],
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#D8A122',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: translations['SWAL.YES_CANCEL_IT'],
+          cancelButtonText: translations['SWAL.BACK_BUTTON'],
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // edit passenger
+            this.isLoading = true;
+            this.passengerService
+              .patch(this.form.value)
+              .pipe(
+                finalize(() => {
+                  this.form.markAsPristine();
+                  this.isLoading = false;
+                })
+              )
+              .subscribe(
+                async (resp: any) => {
+                  if (resp) {
+                    this.snackbar.open(resp.message, '', {
+                      panelClass: 'snackbar-success',
+                      duration: 5000,
+                    });
 
-                this.dataList(this.params);
-                await this.modalComponent.dismiss();
-              } else {
-                this.isLoading = false;
-              }
-            },
-            (error: any) => {
-              console.log(error);
-              this.isLoading = false;
-              this.handlerResponseService.failedResponse(error);
-            }
-          );
-      }
-    });
+                    this.dataList(this.params);
+                    await this.modalComponent.dismiss();
+                  } else {
+                    this.isLoading = false;
+                  }
+                },
+                (error: any) => {
+                  console.log(error);
+                  this.isLoading = false;
+                  this.handlerResponseService.failedResponse(error);
+                }
+              );
+          }
+        });
+      });
   }
 
   async openModalDelete(event: PassengerModel) {
     this.form.patchValue(event);
 
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.dataDelete();
-      }
-    });
+    this.translate
+      .get(['SWAL.ARE_YOU_SURE', 'SWAL.REVERT_WARNING', 'SWAL.CONFIRM_DELETE', 'SWAL.BACK_BUTTON'])
+      .subscribe((translations) => {
+        Swal.fire({
+          title: translations['SWAL.ARE_YOU_SURE'],
+          text: translations['SWAL.REVERT_WARNING'],
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: translations['SWAL.CONFIRM_DELETE'],
+          cancelButtonText: translations['SWAL.BACK_BUTTON'],
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.dataDelete();
+          }
+        });
+      });
   }
 
   dataDelete() {
