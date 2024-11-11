@@ -357,12 +357,19 @@
           <!-- begin::Menu -->
           <div class="menu-item">
             <div class="menu-content mx-3">
-              <input
+              <!-- <input
                 class="form-control mx-3 p-2 px-5"
                 type="text"
                 id="addressSearch"
                 (input)="onChangeAddress($event, dataSelectedCustomer)"
                 placeholder="Search address..."
+              /> -->
+              <input
+                id="select-customer-address"
+                type="text"
+                class="form-control mx-3 p-2 px-5"
+                [ngbTypeahead]="searchDataCustomerAddress"
+                placeholder="Customer Address search"
               />
             </div>
           </div>

@@ -70,6 +70,7 @@ export class CustomerComponent implements OnInit {
   public dataAddress: any;
   public dataLengthAddress!: number;
   public dataSelectedCustomer: any;
+  public customer_id: any;
 
   public modelCustomer: any;
 
@@ -86,6 +87,13 @@ export class CustomerComponent implements OnInit {
 
   public pagination: Pagination = { ...defaultPagination };
   public params: Params = { ...defaultParams };
+
+  public paramCustomer = {
+    limit: 100,
+    page: 1,
+    search: '',
+    customer_id: 0,
+  };
 
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -284,31 +292,31 @@ export class CustomerComponent implements OnInit {
     this.ngUnsubscribe.complete();
   }
 
-  async onChangeAddress(event: Event, customer: CustomerModel): Promise<void> {
-    const value = (event.target as HTMLInputElement).value;
-    console.log(value);
-    console.log(customer);
+  // async onChangeAddress(event: Event, customer: CustomerModel): Promise<void> {
+  //   const value = (event.target as HTMLInputElement).value;
+  //   console.log(value);
+  //   console.log(customer);
 
-    this.dataListAddress({ customer_id: customer.customer_id });
+  //   this.dataListAddress({ customer_id: customer.customer_id });
 
-    this.tableAddress.apiEvent({
-      type: API.onGlobalSearch,
-      value: value,
-    });
+  //   this.tableAddress.apiEvent({
+  //     type: API.onGlobalSearch,
+  //     value: value,
+  //   });
 
-    const dataAddress =
-      value === ''
-        ? this.dataAddress
-        : this.dataAddress.filter(
-            (val: any) =>
-              val.name?.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
-              val.telp?.toLowerCase().indexOf(value.toLowerCase()) > -1
-          );
+  //   const dataAddress =
+  //     value === ''
+  //       ? this.dataAddress
+  //       : this.dataAddress.filter(
+  //           (val: any) =>
+  //             val.name?.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
+  //             val.telp?.toLowerCase().indexOf(value.toLowerCase()) > -1
+  //         );
 
-    console.log(dataAddress);
-    this.dataAddress = dataAddress;
-    this.dataLengthAddress = dataAddress.length;
-  }
+  //   console.log(dataAddress);
+  //   this.dataAddress = dataAddress;
+  //   this.dataLengthAddress = dataAddress.length;
+  // }
 
   // onChange(event: Event): void {
   //   console.log(event);
@@ -353,6 +361,34 @@ export class CustomerComponent implements OnInit {
                   endDate: this.params.endDate,
                 };
                 this.dataList(params);
+              }
+            }),
+            catchError((err) => {
+              console.log(err);
+              // this.handlerResponseService.failedResponse(err);
+              return of([]);
+            })
+          )
+      )
+    );
+
+  searchDataCustomerAddress: any = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+      switchMap((term) =>
+        this.customerService
+          .getAddressList({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+            customer_id: this.customer_id,
+          })
+          .pipe(
+            map((response: any) => {
+              if (response) {
+                this.dataAddress = response.data;
+                this.dataLengthAddress = this.dataAddress.length;
               }
             }),
             catchError((err) => {
@@ -412,13 +448,13 @@ export class CustomerComponent implements OnInit {
       });
   }
 
-  private dataListAddress(params: CustomerIdContext): any {
+  private dataListAddress(params: CustomerContext): any {
     this.configurationAddress.isLoading = true;
     this.customerService
-      .get(params)
+      .getAddressList(params)
       .pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
-        this.dataAddress = response.data.addresses;
+        this.dataAddress = response.data;
         this.dataLengthAddress = this.dataAddress.length;
 
         this.configurationAddress.isLoading = false;
@@ -537,7 +573,15 @@ export class CustomerComponent implements OnInit {
     this.dataSelectedCustomer = event;
 
     const id: CustomerIdContext = { customer_id: event.customer_id };
-    this.dataListAddress(id);
+    this.customer_id = event.customer_id;
+
+    this.paramCustomer = {
+      limit: 100,
+      page: 1,
+      search: '',
+      customer_id: this.customer_id,
+    };
+    this.dataListAddress(this.paramCustomer);
 
     return await this.modalComponentListAddress.open();
   }
@@ -578,7 +622,13 @@ export class CustomerComponent implements OnInit {
               duration: 5000,
             });
 
-            this.dataListAddress({ customer_id: resp?.data?.customer_id });
+            this.paramCustomer = {
+              limit: 100,
+              page: 1,
+              search: '',
+              customer_id: this.customer_id,
+            };
+            this.dataListAddress(this.paramCustomer);
             await this.modalComponentAddress.dismiss();
           } else {
             this.isLoading = false;
@@ -633,7 +683,14 @@ export class CustomerComponent implements OnInit {
               duration: 5000,
             });
 
-            this.dataListAddress({ customer_id: resp?.data?.customer_id });
+            this.paramCustomer = {
+              limit: 100,
+              page: 1,
+              search: '',
+              customer_id: this.customer_id,
+            };
+
+            this.dataListAddress(this.paramCustomer);
             await this.modalComponentAddress.dismiss();
           } else {
             this.isLoading = false;
@@ -685,8 +742,15 @@ export class CustomerComponent implements OnInit {
               duration: 5000,
             });
 
-            this.dataList(this.params);
-            await this.modalComponentListAddress.dismiss();
+            this.paramCustomer = {
+              limit: 100,
+              page: 1,
+              search: '',
+              customer_id: this.customer_id,
+            };
+
+            this.dataListAddress(this.paramCustomer);
+            await this.modalComponentAddress.dismiss();
           } else {
             this.isLoading = false;
           }

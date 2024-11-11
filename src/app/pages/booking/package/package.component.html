@@ -241,7 +241,6 @@
               </td>
               @if (!delivery) {
               <td class="text-end">
-                @if (username === 'admin_11' && levelrule === 8) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -286,19 +285,6 @@
                 >
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
                 </a>
-                } @else {
-                <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  [ngbTooltip]="'TOOLTIP.PRINT_PACKAGE' | translate"
-                  (click)="openModalPrint(row)"
-                >
-                  <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
-                </a>
-                }
               </td>
               } @else {
               <td class="text-end">
@@ -392,7 +378,6 @@
               </td>
               @if (!delivery) {
               <td class="text-end">
-                @if (username === 'admin_11' && levelrule === 8) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -437,19 +422,6 @@
                 >
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
                 </a>
-                } @else {
-                <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  [ngbTooltip]="'TOOLTIP.PRINT_PACKAGE' | translate"
-                  (click)="openModalPrint(row)"
-                >
-                  <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
-                </a>
-                }
               </td>
               } @else {
               <td class="text-end">
