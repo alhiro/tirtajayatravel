@@ -1,5 +1,5 @@
 <!-- CETAK UNTUK PENGIRIM -->
-<table width="973" style="border-collapse: collapse; table-layout: fixed; width: 732pt">
+<table width="973" style="border-collapse: collapse; table-layout: fixed; width: 732pt" id="pdf-content">
   <tbody>
     <tr height="12" style="mso-height-source: userset; height: 9pt">
       <td height="12" width="8" style="height: 9pt; width: 6pt"></td>
@@ -867,3 +867,17 @@
     </tr>
   </tbody>
 </table>
+
+<div class="float-object">
+  <a
+    class="btn btn-icon btn-primary btn-hover-light btn-sm cursor-pointer"
+    data-bs-toggle="tooltip"
+    data-bs-trigger="hover"
+    data-bs-dismiss-="click"
+    data-bs-placement="left"
+    [ngbTooltip]="'TOOLTIP.SHARE_PACKAGE' | translate"
+    (click)="openModalShare(data)"
+  >
+    <app-keenicon name="send" class="fs-md-3 text-light"></app-keenicon>
+  </a>
+</div>

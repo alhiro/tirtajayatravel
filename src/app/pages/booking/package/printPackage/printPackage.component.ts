@@ -1,4 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-printPackage',
@@ -26,6 +28,24 @@ export class PrintPackageComponent implements OnInit, OnDestroy {
     console.log(objData);
 
     this.data = objData;
+  }
+
+  openModalShare(value: any) {
+    const data = document.getElementById('pdf-content');
+    if (data) {
+      html2canvas(data, {
+        scale: 3,
+        useCORS: true,
+      }).then((canvas) => {
+        const imgWidth = 208;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        const contentDataURL = canvas.toDataURL('image/jpeg', 1.0);
+        const pdf = new jsPDF('p', 'mm', 'a4');
+
+        pdf.addImage(contentDataURL, 'JPEG', 0, 0, imgWidth, imgHeight, '', 'FAST');
+        pdf.save(`paket_${value.sender.name}, ${value.book_date}.pdf`);
+      });
+    }
   }
 
   ngOnDestroy() {

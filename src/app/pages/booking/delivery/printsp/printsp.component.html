@@ -52,7 +52,7 @@
     <!-- begin::Body -->
     <div class="card-body py-3">
       <!-- begin::Table container -->
-      <div class="table-responsive">
+      <div class="table-responsive table-custom">
         <!-- begin::Table -->
         <ngx-table
           #table
@@ -74,7 +74,7 @@
             <td>
               @for (value of row.waybills; track value) {
               <span class="text-gray-900 d-block">
-                <ul>
+                <ul style="padding-left: 20px; text-align: left; margin: 0; list-style: decimal">
                   <li>
                     {{ value?.name }} <br />
                     {{ value?.address }}
@@ -86,7 +86,7 @@
             <td>
               @for (value of row.destinations; track value) {
               <span class="text-gray-900 d-block">
-                <ul>
+                <ul style="padding-left: 20px; text-align: left; margin: 0; list-style: decimal">
                   <li>
                     {{ value?.name }} <br />
                     {{ value?.address }}
@@ -181,7 +181,7 @@
     <!-- begin::Body -->
     <div class="card-body py-3">
       <!-- begin::Table container -->
-      <div class="table-responsive">
+      <div class="table-responsive table-custom">
         <!-- begin::Table -->
         <ngx-table
           #table
@@ -215,9 +215,7 @@
               </span>
             </td>
             <td>
-              <span class="text-gray-900 d-block">
-                {{ row.note }}
-              </span>
+              <span class="text-gray-900 d-block"> {{ row.request_description }}, {{ row.request }} </span>
             </td>
             <td>
               <span class="text-gray-900 d-block">

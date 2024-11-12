@@ -457,7 +457,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       cost: [0],
       discount: [0],
       payment: [''],
-      koli: [1],
+      koli: [''],
       origin_from: [''],
       level: [''],
       request: [''],

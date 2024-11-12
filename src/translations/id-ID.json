@@ -230,6 +230,7 @@
   "TOOLTIP": {
     "EDIT_PACKAGE": "Ubah Paket",
     "PRINT_PACKAGE": "Cetak Paket",
+    "SHARE_PACKAGE": "Bagikan Paket",
     "CANCEL_PACKAGE": "Batal Paket",
     "DELETE_PACKAGE": "Hapus Paket",
     "REMOVE_DRIVER": "Hapus Driver",

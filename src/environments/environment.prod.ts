@@ -9,6 +9,7 @@ import { env } from './.env';
 export const environment = {
   production: true,
   version: env['npm_package_version'],
+  firebaseToken: env['FIREBASE_TOKEN'],
   serverUrl: 'https://tirtajaya.vip/api',
   defaultLanguage: 'id-ID',
   supportedLanguages: ['en-US', 'id-ID'],
