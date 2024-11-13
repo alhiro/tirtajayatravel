@@ -451,13 +451,13 @@ export class PackageComponent implements OnInit, OnDestroy {
       recipient_id: [''],
       city_id: [''],
       employee_id: [''],
-      category_id: [''],
+      category_id: [null],
       go_send_id: [''],
       description: [''],
-      cost: [0],
+      cost: [0, Validators.compose([Validators.required])],
       discount: [0],
       payment: [''],
-      koli: [''],
+      koli: ['', Validators.compose([Validators.required])],
       origin_from: [''],
       level: [''],
       request: [''],
@@ -1031,7 +1031,7 @@ export class PackageComponent implements OnInit, OnDestroy {
 
     this.form.patchValue({
       city_id: city,
-      category_id: '',
+      category_id: null,
       request: '',
       status: '',
       status_package: 'Progress',
@@ -1158,7 +1158,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       recipient_id: event.recipient_id,
       city_id: event.city_id,
       employee_id: event.employee_id,
-      category_id: event.category_id ? event.category_id : '',
+      category_id: event.category_id ? event.category_id : null,
       go_send_id: event.go_send_id,
       description: event.description,
       cost: event.cost,
@@ -1448,6 +1448,8 @@ export class PackageComponent implements OnInit, OnDestroy {
 
     this.formAddress.patchValue({
       customer_id: event.customer_id,
+      name: event.name,
+      telp: event.telp,
     });
 
     return await this.modalComponentAddress.open();

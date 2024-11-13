@@ -598,6 +598,8 @@ export class CustomerComponent implements OnInit {
 
     this.formAddress.patchValue({
       customer_id: event.customer_id,
+      name: event.name,
+      telp: event.telp,
     });
     return await this.modalComponentAddress.open();
   }

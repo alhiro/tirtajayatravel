@@ -1032,8 +1032,16 @@
                   formControlName="cost"
                   autocomplete="cost"
                   [placeholder]="'Cost' | translate"
+                  required
                 />
                 <span hidden translate>Cost</span>
+                <small
+                  [hidden]="form.controls['cost'].valid || form.controls['cost'].untouched"
+                  class="text-danger"
+                  translate
+                >
+                  Cost is required
+                </small>
               </label>
               <label class="d-block mb-4">
                 <input
@@ -1052,8 +1060,16 @@
                   formControlName="koli"
                   autocomplete="koli"
                   [placeholder]="'Koli' | translate"
+                  required
                 />
                 <span hidden translate>Amount Koli</span>
+                <small
+                  [hidden]="form.controls['koli'].valid || form.controls['koli'].untouched"
+                  class="text-danger"
+                  translate
+                >
+                  Koli is required
+                </small>
               </label>
               <label class="d-block mb-4">
                 <select

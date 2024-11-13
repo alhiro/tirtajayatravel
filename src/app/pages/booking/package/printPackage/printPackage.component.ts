@@ -48,6 +48,23 @@ export class PrintPackageComponent implements OnInit, OnDestroy {
     }
   }
 
+  downloadImageShare(value: any) {
+    const data = document.getElementById('pdf-content');
+    if (data) {
+      html2canvas(data, {
+        scale: 3,
+        useCORS: true,
+      }).then((canvas) => {
+        const imageDataURL = canvas.toDataURL('image/jpeg', 1.0);
+
+        const link = document.createElement('a');
+        link.href = imageDataURL;
+        link.download = `paket_${value.sender.name}, ${value.book_date}.jpg`;
+        link.click();
+      });
+    }
+  }
+
   ngOnDestroy() {
     sessionStorage.removeItem('printpackage');
   }

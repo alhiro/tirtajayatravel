@@ -215,6 +215,8 @@ export class HttpService {
       cost: param.cost,
       discount: param.discount,
       payment: param.payment,
+      agent_commission: param.agent_commission,
+      koli: param.koli,
       origin_from: param.origin_from,
       level: param.level,
       request: param.request,

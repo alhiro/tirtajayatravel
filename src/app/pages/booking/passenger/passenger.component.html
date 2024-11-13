@@ -1133,8 +1133,16 @@
                   formControlName="tariff"
                   autocomplete="tariff"
                   [placeholder]="'Cost' | translate"
+                  required
                 />
                 <span hidden translate>Cost</span>
+                <small
+                  [hidden]="form.controls['tariff'].valid || form.controls['tariff'].untouched"
+                  class="text-danger"
+                  translate
+                >
+                  Tariff is required
+                </small>
               </label>
               <label class="d-block mb-4">
                 <input
@@ -1153,8 +1161,16 @@
                   formControlName="total_passenger"
                   autocomplete="total_passenger"
                   [placeholder]="'Total Passenger' | translate"
+                  required
                 />
                 <span hidden translate>Total Passenger</span>
+                <small
+                  [hidden]="form.controls['total_passenger'].valid || form.controls['total_passenger'].untouched"
+                  class="text-danger"
+                  translate
+                >
+                  Total passenger is required
+                </small>
               </label>
               <label class="d-block mb-4">
                 <input
