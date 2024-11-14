@@ -87,6 +87,25 @@ export class HttpService {
 
   // BOOKING
   // Packager
+  searchPackage(param: ExtendedPaginationContext): Observable<any> {
+    return this.commonApi.get(
+      '/package/package-search?limit=' +
+        param.limit +
+        '&page=' +
+        param.page +
+        '&search=' +
+        param.search +
+        '&startDate=' +
+        param.startDate +
+        '&endDate=' +
+        param.endDate +
+        '&city=' +
+        param.city +
+        '&status=' +
+        param.status
+    ) as Observable<any>;
+  }
+
   packageList(param: ExtendedPaginationContext): Observable<any> {
     return this.commonApi.get(
       '/package/list?limit=' +

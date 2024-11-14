@@ -21,9 +21,13 @@ interface GroupedDataCost {
 })
 export class PrintcommissionComponent implements OnInit, OnDestroy {
   public data: any;
+  public dataPiutang: any;
+
   public city: any;
   public status: any;
-  public groupAdmin: any;
+
+  public groupAdminCommission: any;
+  public groupAdminPiutang: any;
 
   public startDate: any;
   public endDate: any;
@@ -31,8 +35,10 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
   public endDateDisplay: any;
   public nowDate!: Date;
 
-  public totalCost: any = 0;
-  public totalKoli: any;
+  public totalPiutang: any = 0;
+  public totalCommission: any = 0;
+  public totalKoli: any = 0;
+  public totalKoliPiutang: any = 0;
 
   public configuration: Config = { ...DefaultConfig };
   public columns!: Columns[];
@@ -74,6 +80,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
       { key: 'resi_number', title: 'Resi Number' },
       { key: 'book_date', title: 'Date' },
       { key: 'cost', title: 'Cost' },
+      { key: 'agent_commission', title: 'Commission' },
       { key: 'sender_id', title: 'Sender' },
       { key: 'recipient_id', title: 'Recipient' },
       { key: 'status', title: 'Status Payment' },
@@ -118,16 +125,35 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
       .subscribe((response: any) => {
         // count malang or surabaya
         if (response.data.length > 0) {
-          this.data = response.data?.filter(
-            (data: PackageModel) =>
-              data.city_id === this.city && (data.status === 'Lunas (Kantor)' || data.status === 'Bayar Tujuan (COD)')
-          );
+          // Data commission status lunas & bayar tujuan
+          this.data = response.data?.filter((data: PackageModel) => data.city_id === this.city);
 
-          this.totalCost = this.data?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
+          this.totalCommission = this.data?.reduce((acc: any, item: any) => acc + Number(item?.agent_commission), 0);
           this.totalKoli = this.data?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
 
-          const groupedDataCost: GroupedDataCost[] = Object.values(
+          const groupedDataCommission: GroupedDataCost[] = Object.values(
             this.data.reduce((acc: any, item: any) => {
+              if (!acc[item.created_by]) {
+                acc[item.created_by] = { id: Object.keys(acc).length + 1, admin: item.created_by, totalCost: 0 };
+              }
+              acc[item.created_by].totalCost += Number(item.agent_commission);
+              return acc;
+            }, {} as { [key: string]: GroupedDataCost })
+          );
+          this.groupAdminCommission = groupedDataCommission;
+          console.log(groupedDataCommission);
+
+          // Data piutang status bayar tujuan
+          this.dataPiutang = response.data?.filter(
+            (data: PackageModel) =>
+              data.city_id === this.city && (data.status === 'Piutang' || data.status === 'Bayar Tujuan (COD)')
+          );
+
+          this.totalPiutang = this.dataPiutang?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
+          this.totalKoliPiutang = this.dataPiutang?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
+
+          const groupedDataPiutang: GroupedDataCost[] = Object.values(
+            this.dataPiutang.reduce((acc: any, item: any) => {
               if (!acc[item.created_by]) {
                 acc[item.created_by] = { id: Object.keys(acc).length + 1, admin: item.created_by, totalCost: 0 };
               }
@@ -135,8 +161,8 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
               return acc;
             }, {} as { [key: string]: GroupedDataCost })
           );
-          this.groupAdmin = groupedDataCost;
-          console.log(groupedDataCost);
+          this.groupAdminPiutang = groupedDataPiutang;
+          console.log(groupedDataPiutang);
 
           this.configuration.isLoading = false;
           this.configuration.horizontalScroll = true;

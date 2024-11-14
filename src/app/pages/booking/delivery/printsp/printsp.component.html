@@ -213,7 +213,11 @@
               </span>
             </td>
             <td>
+              @if (row.origin_from === 'Kantor') {
+              <span class="text-gray-900 d-block"> {{ row.origin_from }} </span>
+              } @else {
               <span class="text-gray-900 d-block"> {{ row.origin_from }}, {{ row.sender?.address }} </span>
+              }
             </td>
             <td>
               <span class="text-gray-900 d-block">

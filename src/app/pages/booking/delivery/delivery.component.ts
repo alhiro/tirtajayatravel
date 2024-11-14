@@ -1003,7 +1003,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
                   // this.pagination = { ...this.pagination };
                   // this.configuration.isLoading = false;
 
-                  this.dataLength = response.length;
+                  this.dataLength = response.data.length;
                   this.data = response.data;
 
                   // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one

@@ -9,10 +9,12 @@ import { Utils } from '@app/@shared';
 export class SidebarMenuComponent implements OnInit {
   username!: string;
   levelrule!: number;
+  city_id!: number;
 
   constructor(private utils: Utils) {
     this.levelrule = this.utils.getLevel();
     this.username = this.utils.getUsername();
+    this.city_id = this.utils.getCity();
   }
 
   ngOnInit(): void {}

@@ -33,7 +33,7 @@
     }
     <div class="card-toolbar">
       <!-- begin::Menu -->
-      <div class="menu-item px-3">
+      <div class="menu-item">
         <div class="menu-content px-0">
           <div class="btn btn-info btn-sm py-2 px-4 cursor-pointer" (click)="datepicker.toggle()">Filter Date</div>
         </div>
@@ -124,6 +124,14 @@
                 </span>
               </td>
               <td>
+                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{
+                  row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2'
+                }}</span>
+              </td>
+              <td>
                 <span class="text-gray-900 d-block">
                   {{ row.sender?.name }} <br />
                   {{ row.sender?.address }}
@@ -138,7 +146,8 @@
               <td>
                 <span class="text-gray-900 d-block">
                   @if (row.recipient?.received_by) {
-                  {{ row.recipient?.received_by }}
+                  {{ row.recipient?.received_by }} <br />
+                  {{ row.recipient?.received_date | date : 'dd/MM/yyyy' : 'GMT' }}
                   } @else {
                   <div
                     class="btn btn-primary btn-sm px-3 p-1 cursor-pointer"
@@ -151,20 +160,10 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{
-                  row.recipient?.received_date | date : 'yyyy/MM/dd' : 'GMT'
-                }}</span>
-              </td>
-              <td>
                 <span class="text-gray-900 d-block">{{ row.recipient?.courier }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{
-                  row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2'
-                }}</span>
+                <span>{{ row.recipient?.date_payment | date : 'dd/MM/yyyy' : 'GMT' }} </span>
               </td>
               <td>
                 @if (row.recipient?.received_by) {
@@ -192,10 +191,6 @@
                 >
                   <app-keenicon name="bill" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                }
-              </td>
-              <td class="text-end">
-                @if (row.recipient?.received_by) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -242,6 +237,14 @@
                 </span>
               </td>
               <td>
+                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 d-block">{{
+                  row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2'
+                }}</span>
+              </td>
+              <td>
                 <span class="text-gray-900 d-block">
                   {{ row.sender?.name }} <br />
                   {{ row.sender?.address }}
@@ -256,10 +259,11 @@
               <td>
                 <span class="text-gray-900 d-block">
                   @if (row.recipient?.received_by) {
-                  {{ row.recipient?.received_by }}
+                  {{ row.recipient?.received_by }} <br />
+                  {{ row.recipient?.received_date | date : 'dd/MM/yyyy' : 'GMT' }}
                   } @else {
                   <div
-                    class="btn btn-info btn-sm px-3 p-1 cursor-pointer"
+                    class="btn btn-primary btn-sm px-3 p-1 cursor-pointer"
                     (click)="openModalEdit(row)"
                     ngbTooltip="Receive By"
                   >
@@ -269,44 +273,13 @@
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{
-                  row.recipient?.received_date | date : 'yyyy/MM/dd' : 'GMT'
-                }}</span>
-              </td>
-              <td>
                 <span class="text-gray-900 d-block">{{ row.recipient?.courier }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+                <span>{{ row.recipient?.date_payment | date : 'dd/MM/yyyy' : 'GMT' }} </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{
-                  row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2'
-                }}</span>
-              </td>
-              <td>
-                @if (row.recipient?.date_payment) {
-                <span>{{ row.recipient?.date_payment }} </span>
-                }
-                <br />
-                @if (row.check_payment) {
-                <span>{{ row.updated_by }}</span>
-                }
-              </td>
-              <td class="text-end">
                 @if (row.recipient?.received_by) {
-                <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Edit"
-                  (click)="openModalEdit(row)"
-                  ngbTooltip="Edit Receive"
-                >
-                  <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
-                </a>
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -330,6 +303,18 @@
                   ngbTooltip="Check Payment"
                 >
                   <app-keenicon name="bill" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Edit"
+                  (click)="openModalEdit(row)"
+                  ngbTooltip="Edit Receive"
+                >
+                  <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
                 }
               </td>

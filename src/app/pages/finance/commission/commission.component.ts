@@ -46,6 +46,7 @@ interface EventObject {
 export class CommissionComponent implements OnInit, OnDestroy {
   public levelrule!: number;
   public username!: string;
+  public city_id!: number;
 
   @ViewChild('table') table!: APIDefinition;
   public columns!: Columns[];
@@ -135,13 +136,12 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.initForm();
 
     this.levelrule = this.utils.getLevel();
+    this.city_id = this.utils.getCity();
     this.username = this.utils.getUsername();
-    if (this.username === 'fomlg' && this.levelrule === 2) {
+    if (this.levelrule === 2 && this.city_id == 1) {
       this.currentTab = 'Malang';
-    } else if (this.username === 'fosby' && this.levelrule === 2) {
+    } else if (this.levelrule === 2 && this.city_id == 2) {
       this.currentTab = 'Surabaya';
-    } else if (this.username === 'admin_11' && this.levelrule === 8) {
-      this.currentTab = 'Malang';
     }
 
     // set min selected date
@@ -258,14 +258,13 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.columns = [
       // { key: 'received_id', title: 'No' },
       { key: 'resi_number', title: 'Resi Number' },
+      { key: 'cost', title: 'Cost' },
+      { key: 'agent_commission', title: 'Commission' },
       { key: 'sender_id', title: 'Sender' },
       { key: 'recipient_id', title: 'Recipient' },
       { key: 'received_by', title: 'Received By' },
-      { key: 'received_date', title: 'Received Date' },
       { key: 'courier', title: 'Courier' },
-      { key: 'cost', title: 'Cost' },
-      { key: 'agent_commission', title: 'Commission' },
-      { key: 'check_date_sp', title: 'Check' },
+      { key: 'check_date_sp', title: 'Check Date' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
 
@@ -473,7 +472,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
           .pipe(
             tap(() => (this.searchFailedEmployee = false)),
             map((response: any) => {
-              if (response) {
+              if (response.length > 0) {
                 let city: any;
                 if (this.currentTab === 'Malang') {
                   city = 1;
@@ -484,6 +483,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
                 // const kurir = response.data.filter((val: any) => val.level_id === 5 && val.city_id === city);
                 tap(() => (this.searchingEmployee = false));
                 return response.data.filter((val: any) => val.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+              } else {
+                this.searchFailedEmployee = true;
               }
             }),
             catchError(() => {
@@ -570,7 +571,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
 
   async openModalEditPayment(event: PackageModel) {
     console.log(event);
-    this.form.patchValue(event);
+    this.formRecipient.patchValue(event?.recipient);
 
     this.translate
       .get(['SWAL.ARE_YOU_SURE', 'SWAL.REVERT_WARNING', 'SWAL.CONFIRM_SUBMIT', 'SWAL.BACK_BUTTON'])
@@ -594,14 +595,14 @@ export class CommissionComponent implements OnInit, OnDestroy {
 
   dataEditPayment() {
     // send data to update bayar tujuan
-    this.form.patchValue({
-      check_payment: true,
+    this.formRecipient.patchValue({
+      sign: 'true',
     });
-    console.log(this.form.value);
+    console.log(this.formRecipient.value);
 
     this.isLoading = true;
     this.packageService
-      .editRecipient(this.form.value)
+      .editRecipient(this.formRecipient.value)
       .pipe(
         finalize(() => {
           this.form.markAsPristine();

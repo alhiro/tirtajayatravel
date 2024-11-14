@@ -480,8 +480,8 @@ export class PiutangComponent implements OnInit, OnDestroy {
 
   dataEdit() {
     // send data to update check payment
-    this.form.patchValue({
-      check_payment: true,
+    this.formRecipient.patchValue({
+      sign: true,
     });
     console.log(this.form.value);
 

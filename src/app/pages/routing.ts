@@ -54,6 +54,13 @@ const Routing: Routes = [
     loadChildren: () => import('./finance/piutang/piutang.module').then((m) => m.PiutangModule),
   },
 
+  // Monitoring
+  {
+    path: 'monitoring/package',
+    loadChildren: () =>
+      import('./monitoring/monitoring-package/monitoring-package.module').then((m) => m.MonitoringPackageModule),
+  },
+
   // Garage
   {
     path: 'garage/schedule',

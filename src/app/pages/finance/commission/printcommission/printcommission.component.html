@@ -26,7 +26,7 @@
     <!-- begin::Body -->
     <div class="card-body py-3">
       <!-- begin::Table container -->
-      <div class="table-responsive">
+      <div class="table-responsive table-custom">
         <!-- begin::Table -->
         <ngx-table
           #table
@@ -52,6 +52,11 @@
             <td>
               <span class="text-gray-900 d-block">
                 {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
             <td>
@@ -86,11 +91,24 @@
 
       <div class="mt-7">
         <span
-          ><b>TOTAL SETORAN KOMISI PAKET: {{ totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
+          ><b>TOTAL SETORAN KOMISI PAKET: {{ totalCommission | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
         ><br />
       </div>
       <div class="mt-1">
-        @for (admin of groupAdmin; track admin) {
+        @for (admin of groupAdminCommission; track admin) {
+        <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span
+        ><br />
+        }
+      </div>
+      <div class="mt-7">
+        <span
+          ><b
+            >TOTAL SETORAN PELUNASAN PIUTANG PAKET: {{ totalPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+          ></span
+        ><br />
+      </div>
+      <div class="mt-1">
+        @for (admin of groupAdminPiutang; track admin) {
         <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span
         ><br />
         }

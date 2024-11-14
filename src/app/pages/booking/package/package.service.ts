@@ -14,6 +14,17 @@ import { GoSendModel } from './models/gosend';
 export class PackageService {
   constructor(private httpService: HttpService) {}
 
+  search(context: ExtendedPaginationContext): Observable<GoSendModel> {
+    return this.httpService.searchPackage(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   list(context: ExtendedPaginationContext): Observable<PackageModel> {
     return this.httpService.packageList(context).pipe(
       map((result) => {

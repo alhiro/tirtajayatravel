@@ -1,0 +1,206 @@
+<!-- begin::Header -->
+<div class="card">
+  <div class="card-header d-block">
+    <div class="input-group d-block">
+      <label class="d-block mt-5">
+        <input
+          id="select-gosend"
+          type="text"
+          class="form-control"
+          [(ngModel)]="searchGlobal"
+          [ngbTypeahead]="searchDataPackage"
+          [placeholder]="'Search name, address, no resi' | translate"
+        />
+        <span hidden translate>Search name, address, no resi</span>
+      </label>
+    </div>
+    <!-- <div class="mb-4 mt-4">
+      <div class="d-flex justify-content-center">
+        <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+          <input class="form-check-input" type="radio" value="Driver" name="typeSearch" [(ngModel)]="typeSearch" />
+          <span class="form-check-label text-gray-900">Driver</span>
+        </label>
+        <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+          <input class="form-check-input" type="radio" value="Package" name="typeSearch" [(ngModel)]="typeSearch" />
+          <span class="form-check-label text-gray-900">Package</span>
+        </label>
+        <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+          <input class="form-check-input" type="radio" value="Passenger" name="typeSearch" [(ngModel)]="typeSearch" />
+          <span class="form-check-label text-gray-900">Passenger</span>
+        </label>
+      </div>
+    </div>
+  </div> -->
+
+    <div class="card-header border-0 pt-5 p-0">
+      <h3 class="card-title align-items-start flex-column">
+        <span class="card-label fw-bolder fs-3 mb-1">
+          @if (currentTab === 'Malang') { Monitoring Paket Malang } @else if (currentTab === 'Surabaya') { Monitoring
+          Paket Surabaya }
+        </span>
+        <span class="text-muted mt-1 fw-bold fs-7"> Have {{ dataLength | number }} items </span>
+      </h3>
+      @if (username === 'admin_11' && levelrule === 8) {
+      <div class="card-toolbar">
+        <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+          <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
+            <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Malang'" data-toggle="tab">Malang</a>
+          </li>
+          <li class="nav-item" (click)="setCurrentTab('Surabaya')" [style.cursor]="'pointer'">
+            <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Surabaya'" data-toggle="tab">Surabaya</a>
+          </li>
+        </ul>
+      </div>
+      }
+    </div>
+    <!-- end::Header -->
+
+    <!-- begin::Body -->
+    <div class="card-body py-3 p-0">
+      <div class="tab-content mt-5" id="tabPackage">
+        <!--begin::Tap pane-->
+        <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Malang' }">
+          <!-- begin::Table container -->
+          <div class="table-responsive">
+            <!-- begin::Table -->
+            <ngx-table
+              #table
+              [configuration]="configuration"
+              [data]="data"
+              [columns]="columnsPackage"
+              [pagination]="pagination"
+              (event)="eventEmitted($event)"
+              tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+            >
+              <ng-template let-row let-index="index">
+                <!-- <td>
+                    <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
+                  </td> -->
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.resi_number }} <br />
+                    <div class="d-flex mt-1">
+                      <span class="badge badge-light-primary">{{ row.created_by }} </span> <br />
+                      <span class="badge badge-light-success">{{ row.book_date | date : 'dd/MM/yyyy' : 'GMT' }} </span>
+                    </div>
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    @if (row.level === 'Normal') {
+                    <span class="badge badge-light-primary">Normal</span>
+                    } @else if (row.level === 'Urgent') {
+                    <span class="badge badge-light-danger">Urgent</span>
+                    }
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">{{ row.recipient?.name }}</span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.recipient?.address }} <br />
+                    {{ row.recipient?.telp }} <br />
+                    {{ row.description }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    <div class="d-flex mb-1">
+                      <span class="badge badge-light-success">{{ row.created_at | date : 'H:mm' : 'GMT' }}</span>
+                      <app-keenicon name="arrow-right" class="fs-md-3"></app-keenicon>
+                      <span class="badge badge-light-danger">
+                        {{ row.book_date | date : 'H:mm' : 'GMT' }} | {{ row.book_date | date : 'dd' : 'GMT' }}
+                      </span>
+                    </div>
+                    <span class="badge badge-light-primary">
+                      {{ row.send_date ? (row.send_date | date : 'H:mm' : 'GMT') : '-' }} |
+                      {{ row.send_date ? (row.send_date | date : 'dd' : 'GMT') : '-' }} |
+                      {{ row.employee.name ? row.employee.name : '-' }} |
+                      {{ row.car.car_number ? row.car.car_number : '-' }}
+                    </span>
+                  </span>
+                </td>
+              </ng-template>
+            </ngx-table>
+            <!-- end::Table -->
+          </div>
+          <!-- end::Table container -->
+        </div>
+        <!--end::Tap pane-->
+
+        <!--begin::Tap pane-->
+        <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Surabaya' }">
+          <!-- begin::Table container -->
+          <div class="table-responsive">
+            <!-- begin::Table -->
+            <ngx-table
+              #table
+              [configuration]="configuration"
+              [data]="data"
+              [columns]="columnsPackage"
+              [pagination]="pagination"
+              (event)="eventEmitted($event)"
+              tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+            >
+              <ng-template let-row let-index="index">
+                <!-- <td>
+                    <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
+                  </td> -->
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.resi_number }} <br />
+                    <div class="d-flex mt-1">
+                      <span class="badge badge-light-primary">{{ row.created_by }} </span> <br />
+                      <span class="badge badge-light-success">{{ row.book_date | date : 'dd/MM/yyyy' : 'GMT' }} </span>
+                    </div>
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    @if (row.level === 'Normal') {
+                    <span class="badge badge-light-primary">Normal</span>
+                    } @else if (row.level === 'Urgent') {
+                    <span class="badge badge-light-danger">Urgent</span>
+                    }
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">{{ row.recipient?.name }}</span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.recipient?.address }} <br />
+                    {{ row.recipient?.telp }} <br />
+                    {{ row.description }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    <div class="d-flex mb-1">
+                      <span class="badge badge-light-success">{{ row.created_at | date : 'H:mm' : 'GMT' }}</span>
+                      <app-keenicon name="arrow-right" class="fs-md-3"></app-keenicon>
+                      <span class="badge badge-light-danger">
+                        {{ row.book_date | date : 'H:mm' : 'GMT' }} | {{ row.book_date | date : 'dd' : 'GMT' }}
+                      </span>
+                    </div>
+                    <span class="badge badge-light-primary">
+                      {{ row.send_date ? (row.send_date | date : 'H:mm' : 'GMT') : '-' }} |
+                      {{ row.send_date ? (row.send_date | date : 'dd' : 'GMT') : '-' }} |
+                      {{ row.employee.name ? row.employee.name : '-' }} |
+                      {{ row.car.car_number ? row.car.car_number : '-' }}
+                    </span>
+                  </span>
+                </td>
+              </ng-template>
+            </ngx-table>
+            <!-- end::Table -->
+          </div>
+          <!-- end::Table container -->
+        </div>
+        <!--end::Tap pane-->
+      </div>
+    </div>
+  </div>
+  <!-- begin::Body -->
+</div>
