@@ -265,6 +265,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
       { key: 'received_by', title: 'Received By' },
       { key: 'courier', title: 'Courier' },
       { key: 'check_date_sp', title: 'Check Date' },
+      { key: 'status', title: 'Status Payment' },
+      { key: 'admin', title: 'Admin' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
 
@@ -596,7 +598,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
   dataEditPayment() {
     // send data to update bayar tujuan
     this.formRecipient.patchValue({
-      sign: 'true',
+      sign: this.username,
     });
     console.log(this.formRecipient.value);
 

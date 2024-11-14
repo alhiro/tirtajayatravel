@@ -114,11 +114,16 @@
                       </span>
                     </div>
                     <span class="badge badge-light-primary">
-                      {{ row.send_date ? (row.send_date | date : 'H:mm' : 'GMT') : '-' }} |
-                      {{ row.send_date ? (row.send_date | date : 'dd' : 'GMT') : '-' }} |
+                      {{ row.go_send.send_date ? (row.go_send.send_date | date : 'H:mm' : 'GMT') : '-' }} |
+                      {{ row.go_send.send_date ? (row.go_send.send_date | date : 'dd' : 'GMT') : '-' }} |
                       {{ row.employee.name ? row.employee.name : '-' }} |
                       {{ row.car.car_number ? row.car.car_number : '-' }}
                     </span>
+                  </span>
+                </td>
+                <td>
+                  <span class="badge badge-light-primary">
+                    {{ row.status_package }}
                   </span>
                 </td>
               </ng-template>
@@ -185,11 +190,16 @@
                       </span>
                     </div>
                     <span class="badge badge-light-primary">
-                      {{ row.send_date ? (row.send_date | date : 'H:mm' : 'GMT') : '-' }} |
-                      {{ row.send_date ? (row.send_date | date : 'dd' : 'GMT') : '-' }} |
+                      {{ row.go_send.send_date ? (row.go_send.send_date | date : 'H:mm' : 'GMT') : '-' }} |
+                      {{ row.go_send.send_date ? (row.go_send.send_date | date : 'dd' : 'GMT') : '-' }} |
                       {{ row.employee.name ? row.employee.name : '-' }} |
                       {{ row.car.car_number ? row.car.car_number : '-' }}
                     </span>
+                  </span>
+                </td>
+                <td>
+                  <span class="badge badge-light-primary">
+                    {{ row.status_package }}
                   </span>
                 </td>
               </ng-template>

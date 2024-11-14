@@ -84,7 +84,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
       { key: 'sender_id', title: 'Sender' },
       { key: 'recipient_id', title: 'Recipient' },
       { key: 'status', title: 'Status Payment' },
-      { key: 'created_by', title: 'Admin' },
+      { key: 'sign', title: 'Admin' },
     ];
 
     this.nowDate = new Date();
@@ -126,17 +126,25 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         // count malang or surabaya
         if (response.data.length > 0) {
           // Data commission status lunas & bayar tujuan
-          this.data = response.data?.filter((data: PackageModel) => data.city_id === this.city);
+          this.data = response.data?.filter(
+            (data: PackageModel) =>
+              data.city_id === this.city &&
+              (data.status === 'Piutang' || data.status === 'Lunas (Kantor)' || data.status === 'Bayar Tujuan (COD)')
+          );
 
           this.totalCommission = this.data?.reduce((acc: any, item: any) => acc + Number(item?.agent_commission), 0);
           this.totalKoli = this.data?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
 
           const groupedDataCommission: GroupedDataCost[] = Object.values(
             this.data.reduce((acc: any, item: any) => {
-              if (!acc[item.created_by]) {
-                acc[item.created_by] = { id: Object.keys(acc).length + 1, admin: item.created_by, totalCost: 0 };
+              if (!acc[item.recipient.sign]) {
+                acc[item.recipient.sign] = {
+                  id: Object.keys(acc).length + 1,
+                  admin: item.recipient.sign,
+                  totalCost: 0,
+                };
               }
-              acc[item.created_by].totalCost += Number(item.agent_commission);
+              acc[item.recipient.sign].totalCost += Number(item.agent_commission);
               return acc;
             }, {} as { [key: string]: GroupedDataCost })
           );
@@ -154,10 +162,14 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
 
           const groupedDataPiutang: GroupedDataCost[] = Object.values(
             this.dataPiutang.reduce((acc: any, item: any) => {
-              if (!acc[item.created_by]) {
-                acc[item.created_by] = { id: Object.keys(acc).length + 1, admin: item.created_by, totalCost: 0 };
+              if (!acc[item.recipient.sign]) {
+                acc[item.recipient.sign] = {
+                  id: Object.keys(acc).length + 1,
+                  admin: item.recipient.sign,
+                  totalCost: 0,
+                };
               }
-              acc[item.created_by].totalCost += Number(item.cost);
+              acc[item.recipient.sign].totalCost += Number(item.cost);
               return acc;
             }, {} as { [key: string]: GroupedDataCost })
           );
