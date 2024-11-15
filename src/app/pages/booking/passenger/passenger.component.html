@@ -731,6 +731,11 @@
                   (selectItem)="selectCustomer($event)"
                   [resultTemplate]="rt"
                   [inputFormatter]="formatterCustomer"
+                  #customerInput
+                  (selectItem)="onCustomerSelect($event, customerInput)"
+                  (focus)="focusCustomer$.next($any($event).target.value)"
+                  (click)="clickCustomer$.next($any($event).target.value)"
+                  #instance="ngbTypeahead"
                   placeholder="Customer search"
                 />
                 <ng-template #rt let-r="result" let-t="term">
@@ -776,6 +781,8 @@
                   (selectItem)="selectAddress($event)"
                   [resultTemplate]="rt"
                   [inputFormatter]="formatterCustomer"
+                  #senderInput
+                  (selectItem)="onSenderSelect($event, senderInput)"
                   (focus)="focusSender$.next($any($event).target.value)"
                   (click)="clickSender$.next($any($event).target.value)"
                   #instance="ngbTypeahead"
@@ -1009,6 +1016,8 @@
                   (selectItem)="selectAddressDestination($event)"
                   [resultTemplate]="rt"
                   [inputFormatter]="formatterCustomer"
+                  #recipientInput
+                  (selectItem)="onRecipientSelect($event, recipientInput)"
                   (focus)="focusDestination$.next($any($event).target.value)"
                   (click)="clickDestination$.next($any($event).target.value)"
                   #instance="ngbTypeahead"
@@ -1355,7 +1364,7 @@
                     <input
                       class="form-check-input"
                       type="radio"
-                      value="Ambil"
+                      value="Carter"
                       name="charter"
                       formControlName="charter"
                     />

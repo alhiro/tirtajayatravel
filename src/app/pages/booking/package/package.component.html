@@ -686,6 +686,11 @@
                   [ngbTypeahead]="searchDataCustomer"
                   [resultTemplate]="rt"
                   [inputFormatter]="formatterCustomer"
+                  #customerInput
+                  (selectItem)="onCustomerSelect($event, customerInput)"
+                  (focus)="focusCustomer$.next($any($event).target.value)"
+                  (click)="clickCustomer$.next($any($event).target.value)"
+                  #instance="ngbTypeahead"
                   [placeholder]="'PLACEHOLDER.CUSTOMER.SEARCH' | translate"
                 />
                 <ng-template #rt let-r="result" let-t="term">
@@ -729,6 +734,8 @@
                   [ngbTypeahead]="searchAddressSender"
                   [resultTemplate]="rt"
                   [inputFormatter]="formatterCustomer"
+                  #senderInput
+                  (selectItem)="onSenderSelect($event, senderInput)"
                   (focus)="focusSender$.next($any($event).target.value)"
                   (click)="clickSender$.next($any($event).target.value)"
                   (change)="selectAddress()"
@@ -776,7 +783,7 @@
                 } @else { }
 
                 <div translate>Address:</div>
-                <div class="mb-9 text-center">
+                <div class="text-center">
                   @if (modelAddressId) {
                   <div>
                     {{ modelAddressId?.name }}<br />
@@ -934,6 +941,8 @@
                   [ngbTypeahead]="searchAddressRecipient"
                   [resultTemplate]="rt"
                   [inputFormatter]="formatterCustomer"
+                  #recipientInput
+                  (selectItem)="onRecipientSelect($event, recipientInput)"
                   (focus)="focusRecipient$.next($any($event).target.value)"
                   (click)="clickRecipient$.next($any($event).target.value)"
                   (change)="selectAddressRecipient()"
@@ -980,7 +989,7 @@
                 } @else { }
 
                 <div>Address:</div>
-                <div class="mb-9 text-center">
+                <div class="text-center">
                   @if (modelAddressIdRecipient) {
                   <div>
                     {{ modelAddressIdRecipient?.name }}<br />
@@ -1079,7 +1088,7 @@
                   data-allow-clear="true"
                   formControlName="category_id"
                 >
-                  <option value="" disabled selected translate>Select category</option>
+                  <option value="null" disabled selected translate>Select category</option>
                   @for (value of category; track value) {
                   <option [value]="value.category_id">{{ value.name }}</option>
                   }

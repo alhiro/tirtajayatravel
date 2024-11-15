@@ -226,6 +226,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
   @Input() setCity: any;
   @Output() isAssignSP = new EventEmitter<boolean>();
 
+  focusCustomer$ = new Subject<string>();
+  clickCustomer$ = new Subject<string>();
   focusSender$ = new Subject<string>();
   clickSender$ = new Subject<string>();
   focusDestination$ = new Subject<string>();
@@ -806,8 +808,12 @@ export class PassengerComponent implements OnInit, OnDestroy {
       tap(() => ((this.searchingCar = false), (this.modelAddressId = '')))
     );
 
-  searchDataCustomer = (text$: Observable<string>) =>
-    text$.pipe(
+  searchDataCustomer = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.clickCustomer$.pipe(filter(() => this.instance?.isPopupOpen()));
+    const inputFocus$ = this.focusCustomer$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
       debounceTime(500),
       distinctUntilChanged(),
       tap(() => (this.searching = true)),
@@ -842,7 +848,12 @@ export class PassengerComponent implements OnInit, OnDestroy {
       ),
       tap(() => ((this.searching = false), (this.modelAddressId = '')))
     );
+  };
   formatterCustomer = (result: { name: string }) => result.name;
+
+  onCustomerSelect(event: any, inputElement: HTMLInputElement) {
+    inputElement.blur();
+  }
 
   searchDataDestination = (text$: Observable<string>) =>
     text$.pipe(
@@ -956,6 +967,9 @@ export class PassengerComponent implements OnInit, OnDestroy {
       tap(() => (this.searchingSender = false))
     );
   };
+  onSenderSelect(event: any, inputElement: HTMLInputElement) {
+    inputElement.blur();
+  }
 
   dataDestinationAddresses() {
     return this.isDestinationDifferent ? this.modelDestination?.addresses : this.modelCustomer?.addresses;
@@ -1004,6 +1018,9 @@ export class PassengerComponent implements OnInit, OnDestroy {
       tap(() => (this.searchingDestination = false))
     );
   };
+  onRecipientSelect(event: any, inputElement: HTMLInputElement) {
+    inputElement.blur();
+  }
 
   findDatadestinationByValue(value: any) {
     return this.dataDestinationAddresses().find((val: AddressModel) => val.address_id === Number(value));
@@ -1084,10 +1101,9 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
     this.form.patchValue({
       city_id: city,
-      category_id: '',
-      request: '',
-      status: '',
-      payment: '',
+      charter: 'Reguler',
+      status: 'Biasa',
+      payment: 'Lunas (Kantor)',
       status_passenger: 'Progress',
       position: this.selectPosition,
     });

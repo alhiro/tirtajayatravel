@@ -108,6 +108,7 @@ export class PackageComponent implements OnInit, OnDestroy {
   public selectedAddress: any;
   public selectedAddressRecipient: any;
   public searchCustomer!: string;
+
   public modelCustomer: any;
   public modelRecipient: any;
   public modelAddress: any;
@@ -116,6 +117,7 @@ export class PackageComponent implements OnInit, OnDestroy {
   public modelAddressIdRecipient: any;
   public modelEmployee: any;
   public modelCar: any;
+
   public searching = false;
   public searchingSender = false;
   public searchingRecipient = false;
@@ -227,6 +229,8 @@ export class PackageComponent implements OnInit, OnDestroy {
   @Input() setCity: any;
   @Output() isAssignSP = new EventEmitter<boolean>();
 
+  focusCustomer$ = new Subject<string>();
+  clickCustomer$ = new Subject<string>();
   focusSender$ = new Subject<string>();
   clickSender$ = new Subject<string>();
   focusRecipient$ = new Subject<string>();
@@ -459,12 +463,12 @@ export class PackageComponent implements OnInit, OnDestroy {
       discount: [0],
       payment: [''],
       koli: ['', Validators.compose([Validators.required])],
-      origin_from: [''],
-      level: [''],
+      origin_from: ['Kantor'],
+      level: ['Normal'],
       request: [''],
       request_description: [''],
       note: [''],
-      status: [''],
+      status: ['Lunas (Kantor)'],
       status_package: [''],
       resi_number: [''],
       photo: [''],
@@ -800,8 +804,12 @@ export class PackageComponent implements OnInit, OnDestroy {
       tap(() => ((this.searchingCar = false), (this.modelAddressId = '')))
     );
 
-  searchDataCustomer = (text$: Observable<string>) =>
-    text$.pipe(
+  searchDataCustomer = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.clickCustomer$.pipe(filter(() => this.instance?.isPopupOpen()));
+    const inputFocus$ = this.focusCustomer$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
       debounceTime(500),
       distinctUntilChanged(),
       tap(() => (this.searching = true)),
@@ -819,6 +827,7 @@ export class PackageComponent implements OnInit, OnDestroy {
             map((response: any) => {
               if (response.length > 0) {
                 tap(() => (this.searching = false));
+
                 return response.data.filter(
                   (val: any) =>
                     val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
@@ -836,8 +845,15 @@ export class PackageComponent implements OnInit, OnDestroy {
       ),
       tap(() => ((this.searching = false), (this.modelAddressId = '')))
     );
-
+  };
   formatterCustomer = (result: { name: string }) => result.name;
+
+  onCustomerSelect(event: any, inputElement: HTMLInputElement) {
+    this.modelAddressId = event.item;
+    console.log('Selected Customer:', this.modelAddressId);
+
+    inputElement.blur();
+  }
 
   searchDataRecipient = (text$: Observable<string>) =>
     text$.pipe(
@@ -927,6 +943,9 @@ export class PackageComponent implements OnInit, OnDestroy {
       tap(() => (this.searchingSender = false))
     );
   };
+  onSenderSelect(event: any, inputElement: HTMLInputElement) {
+    inputElement.blur();
+  }
 
   dataRecipientAddresses() {
     return this.isDestinationDifferent ? this.modelRecipient?.addresses : this.modelCustomer?.addresses;
@@ -975,6 +994,9 @@ export class PackageComponent implements OnInit, OnDestroy {
       tap(() => (this.searchingRecipient = false))
     );
   };
+  onRecipientSelect(event: any, inputElement: HTMLInputElement) {
+    inputElement.blur();
+  }
 
   findDataRecipientByValue(value: any) {
     return this.dataRecipientAddresses()?.find((val: AddressModel) => val.address_id === Number(value));
@@ -1034,7 +1056,9 @@ export class PackageComponent implements OnInit, OnDestroy {
       city_id: city,
       category_id: null,
       request: '',
-      status: '',
+      level: 'Normal',
+      status: 'Lunas (Kantor)',
+      origin_from: 'Kantor',
       status_package: 'Progress',
     });
 
