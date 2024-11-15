@@ -157,6 +157,7 @@ export class PackageComponent implements OnInit, OnDestroy {
   formSP!: FormGroup;
 
   isLoading = false;
+  isLoadingAddress = false;
   isLoadingCustomer = false;
 
   get f() {
@@ -1457,13 +1458,13 @@ export class PackageComponent implements OnInit, OnDestroy {
 
   dataCreateAddress() {
     console.log(this.formAddress.value);
-    this.isLoading = true;
+    this.isLoadingAddress = true;
     const catSubscr = this.customerService
       .createAddress(this.formAddress.value)
       .pipe(
         finalize(() => {
           this.formAddress.markAsPristine();
-          this.isLoading = false;
+          this.isLoadingAddress = false;
         })
       )
       .subscribe(
@@ -1477,12 +1478,12 @@ export class PackageComponent implements OnInit, OnDestroy {
             this.dataList(this.params);
             await this.modalComponentAddress.dismiss();
           } else {
-            this.isLoading = false;
+            this.isLoadingAddress = false;
           }
         },
         (error: any) => {
           console.log(error);
-          this.isLoading = false;
+          this.isLoadingAddress = false;
           this.handlerResponseService.failedResponse(error);
         }
       );
@@ -1511,13 +1512,13 @@ export class PackageComponent implements OnInit, OnDestroy {
 
   dataEditAddress() {
     console.log(this.formAddress.value);
-    this.isLoading = true;
+    this.isLoadingAddress = true;
     const catSubscr = this.customerService
       .editAddress(this.formAddress.value)
       .pipe(
         finalize(() => {
           this.formAddress.markAsPristine();
-          this.isLoading = false;
+          this.isLoadingAddress = false;
         })
       )
       .subscribe(
@@ -1531,12 +1532,12 @@ export class PackageComponent implements OnInit, OnDestroy {
             this.dataList(this.params);
             await this.modalComponentAddress.dismiss();
           } else {
-            this.isLoading = false;
+            this.isLoadingAddress = false;
           }
         },
         (error: any) => {
           console.log(error);
-          this.isLoading = false;
+          this.isLoadingAddress = false;
           this.handlerResponseService.failedResponse(error);
         }
       );
