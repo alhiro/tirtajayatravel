@@ -494,7 +494,7 @@ export class HttpService {
     ) as Observable<any>;
   }
 
-  passengerListAll(param: PaginationContext): Observable<any> {
+  passengerListAll(param: ExtendedPaginationContext): Observable<any> {
     return this.commonApi.get(
       '/passenger/list-all?limit=' +
         param.limit +
@@ -505,7 +505,11 @@ export class HttpService {
         '&startDate=' +
         param.startDate +
         '&endDate=' +
-        param.endDate
+        param.endDate +
+        '&city=' +
+        param.city +
+        '&status=' +
+        param.status
     ) as Observable<any>;
   }
 

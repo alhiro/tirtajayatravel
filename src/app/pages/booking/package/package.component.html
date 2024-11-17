@@ -242,7 +242,7 @@
               @if (!delivery) {
               <td class="text-end">
                 <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
@@ -252,8 +252,9 @@
                 >
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
+                @if (row.print !== 1) {
                 <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
@@ -263,6 +264,8 @@
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
+                }
+
                 <!-- <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -275,7 +278,7 @@
                   <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
                 </a> -->
                 <a
-                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
@@ -290,7 +293,7 @@
               <td class="text-end">
                 @if (row.status_package === 'Delivery') {
                 <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
@@ -302,7 +305,7 @@
                 </a>
                 } @else {
                 <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
@@ -379,7 +382,7 @@
               @if (!delivery) {
               <td class="text-end">
                 <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
@@ -389,8 +392,9 @@
                 >
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
+                @if (row.print !== 1) {
                 <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
@@ -400,6 +404,7 @@
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
+                }
                 <!-- <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -412,7 +417,7 @@
                   <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
                 </a> -->
                 <a
-                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
@@ -427,7 +432,7 @@
               <td class="text-end">
                 @if (row.status_package === 'Delivery') {
                 <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
@@ -439,7 +444,7 @@
                 </a>
                 } @else {
                 <a
-                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
@@ -515,7 +520,7 @@
               </td>
               <td class="text-end">
                 <a
-                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
@@ -589,7 +594,7 @@
               </td>
               <td class="text-end">
                 <a
-                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"

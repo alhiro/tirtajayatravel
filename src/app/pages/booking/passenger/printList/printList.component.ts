@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { PassengerModel } from '../models/passenger.model';
 import { Subject, finalize, takeUntil } from 'rxjs';
-import { PaginationContext } from '@app/@shared/interfaces/pagination';
+import { ExtendedPaginationContext, PaginationContext } from '@app/@shared/interfaces/pagination';
 import { PassengerService } from '../passenger.service';
 
 interface GroupedData {
@@ -57,8 +57,7 @@ export class PrintListPassengerComponent implements OnInit, OnDestroy {
       // { key: 'category_sub_id', title: 'No' },
       { key: 'resi_number', title: 'Booking Code' },
       { key: 'created_by', title: 'Booker' },
-      { key: 'resi_number_new', title: 'Move To' },
-      { key: 'resi_number_old', title: 'Move From' },
+      { key: 'moveto', title: 'Move To' },
       { key: 'tariff', title: 'Tariff' },
       { key: 'status', title: 'Status' },
       { key: 'description', title: 'Description' },
@@ -73,12 +72,10 @@ export class PrintListPassengerComponent implements OnInit, OnDestroy {
     this.nowDate = new Date();
     // this.getPrint();
 
-    const getCity: any = sessionStorage.getItem('city');
-    const objDataCity = JSON.parse(getCity);
     const getDataDate: any = sessionStorage.getItem('printlistdate');
     const objDataDate = JSON.parse(getDataDate);
 
-    this.city = objDataCity;
+    this.city = objDataDate.city;
     this.startDate = objDataDate.fromDate;
     this.startDateDisplay = this.startDate?.split(' ')[0];
     this.endDate = objDataDate.toDate;
@@ -90,11 +87,13 @@ export class PrintListPassengerComponent implements OnInit, OnDestroy {
       search: '',
       startDate: this.startDate,
       endDate: this.endDate,
+      city: this.city,
+      status: '',
     };
     this.dataListFilter(params);
   }
 
-  private dataListFilter(params: PaginationContext): void {
+  private dataListFilter(params: ExtendedPaginationContext): void {
     this.configuration.isLoading = true;
     this.passengerService
       .listAll(params)
@@ -107,10 +106,15 @@ export class PrintListPassengerComponent implements OnInit, OnDestroy {
       .subscribe((response: any) => {
         // count malang or surabaya
         if (response.data.length > 0) {
-          this.data = response.data?.filter((data: PassengerModel) => data.city_id === this.city);
+          this.data = response.data;
 
-          this.totalCost = this.data?.reduce((acc: any, item: any) => acc + Number(item?.tariff), 0);
-          this.totalPassenger = this.data?.reduce((acc: any, item: any) => acc + Number(item?.total_passenger), 0);
+          const filterCost = response.data?.filter((data: PassengerModel) => data.status_passenger !== 'Cancel');
+          this.totalCost = filterCost?.reduce((acc: any, item: any) => acc + Number(item?.tariff), 0);
+          this.totalPassenger = filterCost?.reduce((acc: any, item: any) => acc + Number(item?.total_passenger), 0);
+
+          const cancelResi = this.data.find((status: any) => status.status_passenger === 'Cancel')?.resi_number || '';
+          const progressResi =
+            this.data.find((status: any) => status.status_passenger === 'Progress')?.resi_number || '';
 
           const resultGroup = this.data.reduce((acc: any, item: any) => {
             // Find the existing group by date
@@ -118,8 +122,8 @@ export class PrintListPassengerComponent implements OnInit, OnDestroy {
 
             if (existingGroup) {
               // If the group exists, update the totalCost and add the item
-              existingGroup.totalCost += item.tariff;
-              existingGroup.totalPassenger += item.total_passenger;
+              existingGroup.totalCost += Number(item.tariff);
+              existingGroup.totalPassenger += Number(item.total_passenger);
               existingGroup.items.push({
                 passenger_id: item.passenger_id,
                 waybill_id: item.waybill_id,
@@ -152,12 +156,13 @@ export class PrintListPassengerComponent implements OnInit, OnDestroy {
                 updated_by: item.updated_by,
                 createdAt: item.createdAt,
                 created_by: item.created_by,
+                moveto: item.status_passenger === 'Cancel' ? progressResi : cancelResi,
               });
             } else {
               // If the group does not exist, create a new one
               acc.push({
                 book_date: item.book_date,
-                totalCost: item.tariff,
+                totalCost: Number(item.tariff),
                 totalPassenger: item.total_passenger,
                 items: [
                   {
@@ -192,6 +197,7 @@ export class PrintListPassengerComponent implements OnInit, OnDestroy {
                     updated_by: item.updated_by,
                     createdAt: item.createdAt,
                     created_by: item.created_by,
+                    moveto: item.status_passenger === 'Cancel' ? progressResi : cancelResi,
                   },
                 ],
               });

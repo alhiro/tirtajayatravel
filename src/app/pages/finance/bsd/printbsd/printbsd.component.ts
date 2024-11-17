@@ -132,8 +132,9 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
     this.averageKm = this.utils.calculateAverageKmPerLiter(this.oldFullKm, this.currentFullKm, this.bbm);
 
     // Kredit
+    const filterCommissionPassenger = this.data?.passengers.filter((row: any) => row.check_sp === true);
     this.totalCommissionPassenger = this.utils.sumTotal(
-      this.data?.passengers?.map((data: PassengerModel) => data.agent_commission)
+      filterCommissionPassenger?.map((data: PassengerModel) => data.agent_commission)
     );
     this.bbm = this.data?.cost?.bbm;
     this.bbmTotal = this.data?.cost?.bbm_cost;
@@ -151,7 +152,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
     );
     this.totalKreditPassenger = this.utils.sumNumbers(
       this.totalCommissionPassenger,
-      this.bbm,
+      this.bbmTotal,
       this.totalParkingPassenger,
       this.inToll,
       this.outToll,
@@ -165,8 +166,10 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
     // Package
     const filterPaymentPackage = this.data?.packages.filter((row: any) => row.check_payment === true);
     this.totalCost = this.utils.sumTotal(filterPaymentPackage?.map((data: PackageModel) => data.cost));
+
+    const filterPaymentPackageSp = this.data?.packages.filter((row: any) => row.check_sp === true);
     this.totalCommissionPackage = this.utils.sumTotal(
-      this.data?.packages?.map((data: PackageModel) => data.agent_commission)
+      filterPaymentPackageSp?.map((data: PackageModel) => data.agent_commission)
     );
     this.totalDebetPackage = this.totalCost;
     this.totalKreditPackage = Number(this.totalCommissionPackage) + Number(this.totalParkingPackage);

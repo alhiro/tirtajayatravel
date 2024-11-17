@@ -663,15 +663,15 @@
                       <td>
                         <span class="text-gray-900 d-block">
                           <label class="form-check form-check-sm form-check-solid m-0 p-0">
-                            @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Lunas (Kantor)' || row.payment
-                            === 'Piutang') {
+                            @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Piutang') {
                             <input
                               class="form-check-input f-none"
                               type="checkbox"
                               [checked]="row.check_payment"
                               (change)="checkPaymentPassenger(row, $event)"
                             />
-                            } @else if (row.payment === 'Lunas (Transfer)') { ^ } @else { * }
+                            } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)') { ^ }
+                            @else { * }
                           </label>
                         </span>
                       </td>
@@ -744,15 +744,15 @@
                       <td>
                         <span class="text-gray-900 d-block">
                           <label class="form-check form-check-sm form-check-solid m-0 p-0">
-                            @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Lunas (Kantor)' || row.payment
-                            === 'Piutang') {
+                            @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Piutang') {
                             <input
                               class="form-check-input f-none"
                               type="checkbox"
                               [checked]="row.check_payment"
                               (change)="checkPaymentPassenger(row, $event)"
                             />
-                            } @else if (row.payment === 'Lunas (Transfer)') { ^ } @else { * }
+                            } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)') { ^ }
+                            @else { * }
                           </label>
                         </span>
                       </td>
@@ -836,15 +836,15 @@
                       <td>
                         <span class="text-gray-900 d-block">
                           <label class="form-check form-check-sm form-check-solid m-0 p-0">
-                            @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Lunas (Kantor)' || row.status
-                            === 'Piutang') {
+                            @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') {
                             <input
                               class="form-check-input f-none"
                               type="checkbox"
                               [checked]="row.check_payment"
                               (change)="checkPayment(row, $event)"
                             />
-                            } @else if (row.status === 'Lunas (Transfer)') { ^ } @else { * }
+                            } @else if (row.status === 'Lunas (Transfer)' || row.status === 'Lunas (Kantor)' ) { ^ }
+                            @else { * }
                           </label>
                         </span>
                       </td>
@@ -922,15 +922,15 @@
                       <td>
                         <span class="text-gray-900 d-block">
                           <label class="form-check form-check-sm form-check-solid m-0 p-0">
-                            @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Lunas (Kantor)' || row.status
-                            === 'Piutang') {
+                            @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') {
                             <input
                               class="form-check-input f-none"
                               type="checkbox"
                               [checked]="row.check_payment"
                               (change)="checkPayment(row, $event)"
                             />
-                            } @else if (row.status === 'Lunas (Transfer)') { ^ } @else { * }
+                            } @else if (row.status === 'Lunas (Transfer)' || row.status === 'Lunas (Kantor)') { ^ }
+                            @else { * }
                           </label>
                         </span>
                       </td>
@@ -1321,15 +1321,15 @@
                       </label> -->
 
                       <label class="form-check form-check-sm form-check-solid m-0 p-0">
-                        @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Lunas (Kantor)' || row.payment ===
-                        'Piutang') {
+                        @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Piutang') {
                         <input
                           class="form-check-input f-none"
                           type="checkbox"
                           [checked]="row.check_payment"
                           (change)="checkPaymentPassenger(row, $event)"
                         />
-                        } @else if (row.payment === 'Lunas (Transfer)') { ^ } @else { * }
+                        } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)') { ^ } @else
+                        { * }
                       </label>
                     </span>
                   </td>
@@ -1413,15 +1413,15 @@
                       </label> -->
 
                       <label class="form-check form-check-sm form-check-solid m-0 p-0">
-                        @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Lunas (Kantor)' || row.payment ===
-                        'Piutang') {
+                        @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Piutang') {
                         <input
                           class="form-check-input f-none"
                           type="checkbox"
                           [checked]="row.check_payment"
                           (change)="checkPaymentPassenger(row, $event)"
                         />
-                        } @else if (row.payment === 'Lunas (Transfer)') { ^ } @else { * }
+                        } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)') { ^ } @else
+                        { * }
                       </label>
                     </span>
                   </td>
@@ -1517,15 +1517,15 @@
                       </label> -->
 
                       <label class="form-check form-check-sm form-check-solid m-0 p-0">
-                        @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Lunas (Kantor)' || row.status ===
-                        'Piutang') {
+                        @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') {
                         <input
                           class="form-check-input f-none"
                           type="checkbox"
                           [checked]="row.check_payment"
                           (change)="checkPayment(row, $event)"
                         />
-                        } @else if (row.status === 'Lunas (Transfer)') { ^ } @else { * }
+                        } @else if (row.status === 'Lunas (Transfer)' || row.status === 'Lunas (Kantor)') { ^ } @else {
+                        * }
                       </label>
                     </span>
                   </td>
@@ -1614,15 +1614,15 @@
                       </label> -->
 
                       <label class="form-check form-check-sm form-check-solid m-0 p-0">
-                        @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Lunas (Kantor)' || row.status ===
-                        'Piutang') {
+                        @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') {
                         <input
                           class="form-check-input f-none"
                           type="checkbox"
                           [checked]="row.check_payment"
                           (change)="checkPayment(row, $event)"
                         />
-                        } @else if (row.status === 'Lunas (Transfer)') { ^ } @else { * }
+                        } @else if (row.status === 'Lunas (Transfer)' || row.status === 'Lunas (Kantor)') { ^ } @else {
+                        * }
                       </label>
                     </span>
                   </td>

@@ -102,15 +102,14 @@
             <td>
               <span class="text-gray-900 d-block">
                 <label class="form-check form-check-sm form-check-solid m-0 p-0">
-                  @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Lunas (Kantor)' || row.payment ===
-                  'Piutang') {
+                  @if (row.payment === 'Bayar Tujuan (CBA)' || row.payment === 'Piutang') {
                   <input
                     class="form-check-input f-none"
                     type="checkbox"
                     [checked]="row.check_payment"
                     [disabled]="true"
                   />
-                  } @else if (row.payment === 'Lunas (Transfer)') { ^ } @else { * }
+                  } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)') { ^ } @else { * }
                 </label>
               </span>
             </td>
@@ -181,7 +180,7 @@
                     [checked]="row.check_payment"
                     [disabled]="true"
                   />
-                  } @else if (row.payment === 'Lunas (Transfer)') { ^ } @else { * }
+                  } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)') { ^ } @else { * }
                 </label>
               </span>
             </td>
@@ -218,7 +217,7 @@
             <div class="mt-7">
               <b>Total Passengers</b>: {{ totalPassenger | number }}<br />
               <b>Total Remaining Payment</b>: {{ totalTariff | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>Total Commssion Driver</b>: {{ totalCommissionPassenger | currency : 'Rp ' : true : '1.0-2' }}
+              <b>Total Commission Driver</b>: {{ totalCommissionPassenger | currency : 'Rp ' : true : '1.0-2' }}
             </div>
 
             <div class="mt-7">
@@ -506,7 +505,7 @@
 
       <div class="mt-7">
         <b>Total Deposit</b>: {{ totalCost | currency : 'Rp ' : true : '1.0-2' }}<br />
-        <b>Total Commssion Driver</b>: {{ totalCommissionPackage | currency : 'Rp ' : true : '1.0-2' }}
+        <b>Total Commission Driver</b>: {{ totalCommissionPackage | currency : 'Rp ' : true : '1.0-2' }}
       </div>
 
       <div class="mt-3">

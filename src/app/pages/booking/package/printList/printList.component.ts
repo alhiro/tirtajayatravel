@@ -107,17 +107,23 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
       )
       .subscribe((response: any) => {
         if (response.data.length > 0) {
+          let filterData;
           if (this.status === 'Lunas (Kantor)') {
-            this.data = response.data?.filter((data: PackageModel) => data.status === this.status);
+            filterData = response.data?.filter(
+              (data: PackageModel) => data.status === 'Lunas (Kantor)' && data.status_package !== 'Cancel'
+            );
+            this.data = filterData;
           } else {
+            filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
             this.data = response.data;
           }
 
-          this.totalCost = this.data?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
-          this.totalKoli = this.data?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
+          // Count calculation total package except cancel
+          this.totalCost = filterData?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
+          this.totalKoli = filterData?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
 
           const groupedDataCost: GroupedDataCost[] = Object.values(
-            this.data.reduce((acc: any, item: any) => {
+            filterData.reduce((acc: any, item: any) => {
               if (!acc[item.created_by]) {
                 acc[item.created_by] = { id: Object.keys(acc).length + 1, admin: item.created_by, totalCost: 0 };
               }

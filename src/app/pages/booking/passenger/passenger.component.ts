@@ -344,19 +344,22 @@ export class PassengerComponent implements OnInit, OnDestroy {
   }
 
   printFilterDate(datepicker: any) {
-    if (this.currentTab === 'Malang') {
-      // console.log(this.data);
-      sessionStorage.setItem('city', JSON.stringify(1));
-      // sessionStorage.setItem('printlist', JSON.stringify(this.data));
-    } else if (this.currentTab === 'Surabaya') {
-      // console.log(this.dataSurabaya);
-      sessionStorage.setItem('city', JSON.stringify(2));
-      // sessionStorage.setItem('printlist', JSON.stringify(this.dataSurabaya));
+    let getCity = '';
+    if (this.levelrule === 2) {
+      if (this.city_id === 1) {
+        getCity = 'Malang';
+      } else {
+        getCity = 'Surabaya';
+      }
+    } else if (this.levelrule === 8) {
+      getCity = this.city;
     }
 
     const dateRange = {
       fromDate: this.startDate,
       toDate: this.endDate,
+      city: getCity,
+      status: '',
     };
     console.log(dateRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
@@ -449,7 +452,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
           { key: 'waybill.name', title: translations['TABLE.NAME'] },
           { key: 'waybill_id', title: translations['TABLE.PICKUP_ADDRESS'] },
           { key: 'destination_id', title: translations['TABLE.DESTINATION_ADDRESS'] },
-          { key: 'description', title: translations['TABLE.DESCRIPTION'] },
+          // { key: 'description', title: translations['TABLE.DESCRIPTION'] },
           { key: 'created_by', title: translations['TABLE.CREATED_BY'] },
           { key: 'status_passenger', title: translations['TABLE.STATUS_PASSENGER'] },
           { key: '', title: translations['TABLE.ACTION'], cssClass: { includeHeader: true, name: 'text-end' } },
@@ -728,10 +731,6 @@ export class PassengerComponent implements OnInit, OnDestroy {
         this.pagination = { ...this.pagination };
 
         this.configuration.isLoading = false;
-
-        response?.length > 0
-          ? (this.configuration.horizontalScroll = true)
-          : (this.configuration.horizontalScroll = false);
         this.cdr.detectChanges();
       });
   }
@@ -1104,6 +1103,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
       charter: 'Reguler',
       status: 'Biasa',
       payment: 'Lunas (Kantor)',
+      total_passenger: 1,
       status_passenger: 'Progress',
       position: this.selectPosition,
     });

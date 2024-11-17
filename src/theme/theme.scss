@@ -55,6 +55,7 @@
 .ngx-table {
   font-family: inherit !important;
   display: table !important;
+  font-size: 13px !important;
 }
 
 tr:hover {
@@ -159,6 +160,10 @@ tr:hover {
       display: table;
     }
   }
+}
+
+.text-gray-900 {
+  font-size: 12px;
 }
 
 .table-custom {

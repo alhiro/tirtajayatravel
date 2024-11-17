@@ -25,7 +25,7 @@ export class PassengerService {
     );
   }
 
-  listAll(context: PaginationContext): Observable<PassengerModel> {
+  listAll(context: ExtendedPaginationContext): Observable<PassengerModel> {
     return this.httpService.passengerListAll(context).pipe(
       map((result) => {
         if (!result) {

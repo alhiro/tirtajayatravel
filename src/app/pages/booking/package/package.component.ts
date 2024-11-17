@@ -726,10 +726,6 @@ export class PackageComponent implements OnInit, OnDestroy {
         this.pagination = { ...this.pagination };
 
         this.configuration.isLoading = false;
-
-        response?.length > 0
-          ? (this.configuration.horizontalScroll = true)
-          : (this.configuration.horizontalScroll = false);
         this.cdr.detectChanges();
       });
   }
@@ -1059,6 +1055,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       level: 'Normal',
       status: 'Lunas (Kantor)',
       origin_from: 'Kantor',
+      koli: 1,
       status_package: 'Progress',
     });
 
@@ -1344,6 +1341,42 @@ export class PackageComponent implements OnInit, OnDestroy {
   }
 
   openModalPrint(event: PackageModel) {
+    this.form.patchValue(event);
+
+    this.form.patchValue({
+      print: 1,
+    });
+
+    this.isLoading = true;
+    this.packageService
+      .patch(this.form.value)
+      .pipe(
+        finalize(() => {
+          this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            // this.snackbar.open(resp.message, '', {
+            //   panelClass: 'snackbar-success',
+            //   duration: 5000,
+            // });
+
+            this.dataList(this.params);
+            await this.modalComponent.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+
     sessionStorage.setItem('printpackage', JSON.stringify(event));
     window.open('#/booking/package/transaction/printpackage', '_blank');
   }

@@ -8,7 +8,8 @@
             <div class="menu-content px-0">
               <h3 class="card-title align-items-start flex-column mb-2">
                 <span class="card-label fw-bolder fs-2">
-                  @if (city === 1) { LIST TRANSAKSI PENUMPANG MALANG } @else { LIST TRANSAKSI PENUMPANG SURABAYA }
+                  @if (city === 'Malang') { LIST TRANSAKSI PENUMPANG MALANG } @else { LIST TRANSAKSI PENUMPANG SURABAYA
+                  }
                 </span>
               </h3>
               @if (startDate && endDate) {
@@ -72,20 +73,22 @@
                 'transparent-bg': row.status_passenger !== 'Cancel'
               }"
             >
-              <span class="text-gray-900 fw-bolder fs-7">
-                {{ row.resi_number_new }}
+              <span class="text-gray-900 fw-bolder fs-67">
+                @if (row.status_passenger === 'Cancel') {
+                {{ row.moveto }}
+                }
               </span>
             </td>
-            <td
+            <!-- <td
               [ngClass]="{
                 'soft-orange-bg': row.status_passenger === 'Cancel',
                 'transparent-bg': row.status_passenger !== 'Cancel'
               }"
             >
               <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
-                {{ row.resi_number_old }}
+             
               </span>
-            </td>
+            </td> -->
             <td
               [ngClass]="{
                 'soft-orange-bg': row.status_passenger === 'Cancel',

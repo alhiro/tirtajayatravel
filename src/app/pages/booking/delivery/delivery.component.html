@@ -95,7 +95,8 @@
               </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.send_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}
+                  {{ row.send_date | date : 'yyyy/MM/dd' : 'GMT' }} <br />
+                  {{ row.send_date | date : 'H:mm:ss a' : 'GMT' }}
                 </span>
               </td>
               <td>
@@ -117,7 +118,11 @@
                 </span>
               </td> -->
               <td>
-                <span class="text-gray-900 d-block">{{ row.description }}</span>
+                <span class="text-gray-900 d-block">
+                  {{ row.packages?.length > 0 ? row.packages?.length : 0 }} Paket,
+                  {{ row.passengers?.length ? row.passengers?.length : 0 }} Orang <br />
+                  {{ row.description }}
+                </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">

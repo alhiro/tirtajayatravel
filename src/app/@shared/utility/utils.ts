@@ -270,14 +270,20 @@ export class Utils {
         (data: any) => data.status === 'Lunas (Transfer)' || (data.status === 'Lunas (Kantor)' && data.check_payment)
       );
       const filterPaymentMonthly = data.packages?.filter((data: any) => data.status === 'Customer (Bulanan)');
-      totalPackagesCost += data.packages?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
-      totalCommissionPackage += data.packages?.reduce((sum: any, pkg: any) => sum + pkg.agent_commission, 0);
-      totalPackagePaidMalang += filterMalang?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
-      totalPackagePaidSurabaya += filterSurabaya?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
-      totalPackageCodMalang += filterCodMalang?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
-      totalPackageCodSurabaya += filterCodSurabaya?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
-      totalReminderPaymentPackage += filterReminderPayment?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
-      totalPaymentMonthly += filterPaymentMonthly?.reduce((sum: any, pkg: any) => sum + pkg.cost, 0);
+      totalPackagesCost += data.packages?.reduce((sum: any, pkg: any) => Number(sum) + Number(pkg.cost), 0);
+      totalCommissionPackage += data.packages?.reduce(
+        (sum: any, pkg: any) => Number(sum) + Number(pkg.agent_commission),
+        0
+      );
+      totalPackagePaidMalang += filterMalang?.reduce((sum: any, pkg: any) => Number(sum) + Number(pkg.cost), 0);
+      totalPackagePaidSurabaya += filterSurabaya?.reduce((sum: any, pkg: any) => Number(sum) + pkg.cost, 0);
+      totalPackageCodMalang += filterCodMalang?.reduce((sum: any, pkg: any) => Number(sum) + Number(pkg.cost), 0);
+      totalPackageCodSurabaya += filterCodSurabaya?.reduce((sum: any, pkg: any) => Number(sum) + Number(pkg.cost), 0);
+      totalReminderPaymentPackage += filterReminderPayment?.reduce(
+        (sum: any, pkg: any) => Number(sum) + Number(pkg.cost),
+        0
+      );
+      totalPaymentMonthly += filterPaymentMonthly?.reduce((sum: any, pkg: any) => Number(sum) + Number(pkg.cost), 0);
     });
 
     return {
@@ -309,11 +315,17 @@ export class Utils {
       const filterReminderPayment = data.packages?.filter(
         (data: any) => data.payment === 'Lunas (Transfer)' || (data.payment === 'Lunas (Kantor)' && data.check_payment)
       );
-      totalPassengerCost += data.passengers?.reduce((sum: any, pass: any) => sum + pass.tariff, 0);
-      totalCommissionPassenger += data.passengers?.reduce((sum: any, pass: any) => sum + pass.agent_commission, 0);
-      totalPassengerPaidMalang += filterMalang?.reduce((sum: any, pkg: any) => sum + pkg.tariff, 0);
-      totalPassengerPaidSurabaya += filterSurabaya?.reduce((sum: any, pkg: any) => sum + pkg.tariff, 0);
-      totalReminderPaymentPassenger += filterReminderPayment?.reduce((sum: any, pkg: any) => sum + pkg.tariff, 0);
+      totalPassengerCost += data.passengers?.reduce((sum: any, pass: any) => Number(sum) + Number(pass.tariff), 0);
+      totalCommissionPassenger += data.passengers?.reduce(
+        (sum: any, pass: any) => Number(sum) + Number(pass.agent_commission),
+        0
+      );
+      totalPassengerPaidMalang += filterMalang?.reduce((sum: any, pkg: any) => Number(sum) + Number(pkg.tariff), 0);
+      totalPassengerPaidSurabaya += filterSurabaya?.reduce((sum: any, pkg: any) => Number(sum) + Number(pkg.tariff), 0);
+      totalReminderPaymentPassenger += filterReminderPayment?.reduce(
+        (sum: any, pkg: any) => Number(sum) + Number(pkg.tariff),
+        0
+      );
     });
 
     return {
