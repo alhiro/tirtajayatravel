@@ -38,6 +38,7 @@ import { PrintdepositComponent } from '@app/pages/finance/deposit/printdeposit/p
 import { PrintcommissionComponent } from '@app/pages/finance/commission/printcommission/printcommission.component';
 import { PrintpiutangComponent } from '@app/pages/finance/piutang/printpiutang/printpiutang.component';
 import { PrintrecapitulationComponent } from '@app/pages/finance/recapitulation/printrecapitulation/printrecapitulation.component';
+import { PrintPassengerComponent } from '@app/pages/booking/passenger/printPassenger/printPassenger.component';
 
 const routes: Routes = [
   {
@@ -64,9 +65,21 @@ const routes: Routes = [
     loadChildren: () =>
       import('../../pages/booking/passenger/printList/printList.module').then((m) => m.PrintListModule),
   },
+  {
+    path: 'booking/passenger/transaction/printpassenger',
+    component: PrintPassengerComponent,
+    loadChildren: () =>
+      import('../../pages/booking/passenger/printPassenger/printPassenger.module').then((m) => m.PrintPassengerModule),
+  },
   // Print Delivery Daily
   {
     path: 'booking/departure/delivery/printsp',
+    component: PrintspComponent,
+    loadChildren: () => import('../../pages/booking/delivery/printsp/printsp.module').then((m) => m.PrintspModule),
+  },
+  // Print Delivery Ticket Passenger
+  {
+    path: 'booking/departure/delivery/print-ticket',
     component: PrintspComponent,
     loadChildren: () => import('../../pages/booking/delivery/printsp/printsp.module').then((m) => m.PrintspModule),
   },

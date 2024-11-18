@@ -1102,7 +1102,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
       city_id: city,
       charter: 'Reguler',
       status: 'Biasa',
-      payment: 'Lunas (Kantor)',
+      payment: 'Bayar Tujuan (CBA)',
       total_passenger: 1,
       status_passenger: 'Progress',
       position: this.selectPosition,
@@ -1375,8 +1375,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
   }
 
   openModalPrint(event: PassengerModel) {
-    // sessionStorage.setItem('printpassenger', JSON.stringify(event));
-    // window.open('#/booking/passenger/transaction/printpassenger', '_blank');
+    sessionStorage.setItem('printpassenger', JSON.stringify(event));
+    window.open('#/booking/passenger/transaction/printpassenger', '_blank');
   }
 
   async openModalCancel(event: PassengerModel) {
@@ -1504,6 +1504,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
     this.formAddress.patchValue({
       customer_id: event.customer_id,
+      name: event.name,
+      telp: event.telp,
     });
 
     return await this.modalComponentAddress.open();

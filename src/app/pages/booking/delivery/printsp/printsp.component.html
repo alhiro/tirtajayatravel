@@ -1,3 +1,4 @@
+@if (lastSegment !== 'print-ticket') {
 <div class="p-10">
   <span class="small"
     >{{ detail?.updated_by ? detail?.updated_by : detail?.created_by }},
@@ -249,3 +250,150 @@
   </div>
   }
 </div>
+} @if (lastSegment === 'print-ticket') {
+<div class="p-0">
+  @for (item of data; track item) {
+  <table
+    x:str
+    border="0"
+    cellpadding="0"
+    cellspacing="0"
+    width="1200"
+    style="border-collapse: collapse; table-layout: fixed; width: 600pt"
+  >
+    <col width="7" style="mso-width-source: userset; mso-width-alt: 256; width: 5pt" />
+    <col width="64" style="width: 48pt" />
+    <col width="38" style="mso-width-source: userset; mso-width-alt: 1389; width: 29pt" />
+    <col width="64" span="8" style="width: 48pt" />
+    <tr height="17" style="height: 12.75pt">
+      <td
+        colspan="3"
+        rowspan="2"
+        height="34"
+        class="xl35"
+        width="109"
+        style="border-bottom: 0.5pt solid black; height: 25.5pt; width: 82pt"
+      >
+        <img src="http://adm.t4478.xyz/assets/images/image002.jpg" border="0" width="110" height="34" />
+      </td>
+      <td
+        colspan="8"
+        class="xl39"
+        width="512"
+        style="border-right: 0.5pt solid black; width: 384pt"
+        x:str="'- Malang, Jl. Kalimantan 36, Telp (0341) 366148 - 325939, KELUHAN (0341) 361533"
+      >
+        -
+        <font class="font5">Malang</font>
+        <font class="font0">, Jl. Kalimantan 36, Telp (0341) 366148 - 325939, </font>
+        <font class="font5">KELUHAN</font>
+        <font class="font0"> (0341) 361533</font>
+      </td>
+    </tr>
+    <tr height="17" style="height: 12.75pt">
+      <td
+        colspan="8"
+        height="17"
+        class="xl41"
+        style="border-right: 0.5pt solid black; height: 12.75pt"
+        x:str="'- Surabaya, Jl. Embong Gayam 2A, Telp.(031) 5493888"
+      >
+        -
+        <font class="font5">Surabaya</font>
+        <font class="font0">, Jl. Embong Gayam 2A, Telp.(031) 5493888 </font>
+      </td>
+    </tr>
+    <tr height="17" style="height: 12.75pt">
+      <td colspan="3" height="17" class="xl43" style="height: 12.75pt">Nama</td>
+      <td colspan="2" class="xl44" style="border-right: 0.5pt solid black">
+        :<font class="font10">&nbsp;{{ item.waybills[0].name }}</font>
+      </td>
+      <td colspan="6" class="xl25" style="border-right: 0.5pt solid black; border-left: none">
+        JADWAL TIAP JAM mulai jam 03.00 - 18.00 WIB
+      </td>
+    </tr>
+    <tr height="17" style="height: 12.75pt">
+      <td colspan="3" height="17" class="xl45" style="height: 12.75pt" x:str="Berlaku untuk ">
+        Berlaku untuk<span style="mso-spacerun: yes"></span>
+      </td>
+      <td class="xl24">
+        : <font class="font10">{{ item.total_passenger | number }}</font>
+      </td>
+      <td class="xl24">ORANG</td>
+      <td colspan="6" class="xl25" style="border-right: 0.5pt solid black">
+        CONTACT PERSON PENJEMPUTAN JUANDA AIRPORT:
+      </td>
+    </tr>
+    <tr height="17" style="height: 12.75pt">
+      <td colspan="3" height="17" class="xl47" style="height: 12.75pt">Harga Tiket</td>
+      <td colspan="2" class="xl48" style="border-right: 0.5pt solid black">
+        : <font class="font10">{{ item.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}</font>
+      </td>
+      <td colspan="6" class="xl28" style="border-right: 0.5pt solid black; border-left: none">
+        081 233 25 414 / 081 233 12 637
+      </td>
+    </tr>
+    <tr height="17" style="height: 12.75pt">
+      <td
+        colspan="11"
+        height="5"
+        class="xl51"
+        style="
+          height: 18.75pt;
+          text-align: center;
+          border-right: 0.5pt solid black;
+          border-left: 0.5pt solid black;
+          line-height: 25px;
+        "
+      >
+        TGL BERANGKAT: {{ item.book_date | date : 'dd/MM/yyyy' : 'GMT' }}, JAM:
+        {{ item.book_date | date : 'H:mm:ss' : 'GMT' }}
+      </td>
+    </tr>
+    <tr height="17" style="height: 12.75pt">
+      <td colspan="5" height="17" class="xl51" style="height: 18.75pt">PERATURAN</td>
+      <td colspan="6" class="xl31" style="border-right: 0.5pt solid black">
+        www.tirtajayatravel.com<span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;</span>Email :gmail.com
+      </td>
+    </tr>
+    <tr height="17" style="height: 12.75pt">
+      <td colspan="11" height="17" class="xl45" style="border-right: 0.5pt solid black; height: 12.75pt">
+        1<font class="font6"
+          >. Penumpang harap<span style="mso-spacerun: yes">�� </span>siap 1 jam sebelum<span style="mso-spacerun: yes"
+            >� </span
+          >jam berangkat.
+        </font>
+        <font class="font9"><span style="mso-spacerun: yes">�</span></font>
+        <font class="font5">2</font>
+        <font class="font6"
+          >. Barang yang dibawa 1 buah/max 10 kg / orang.<span style="mso-spacerun: yes">�</span></font
+        >
+      </td>
+    </tr>
+    <tr height="17" style="height: 12.75pt">
+      <td colspan="11" height="17" class="xl54" style="border-right: 0.5pt solid black; height: 12.75pt">
+        Bila hilang/rusak/tertukar risiko sendiri. <font class="font9"><span style="mso-spacerun: yes">�</span></font>
+        <font class="font5">3</font>
+        <font class="font6">. Anak di atas 4 tahun bayar penuh. </font>
+        <font class="font5">4</font>
+        <font class="font10">.</font>
+        <font class="font6"> Bila terjadi kerusakan mobil atau hal-hal</font>
+      </td>
+    </tr>
+    <tr height="17" style="height: 12.75pt">
+      <td colspan="11" height="17" class="xl54" style="border-right: 0.5pt solid black; height: 12.75pt">
+        lain, hingga tak sampai tujuan, tiket berlaku jam berikutnya dan akibat lain menjadi risiko penumpang.
+      </td>
+    </tr>
+    <tr height="17" style="height: 12.75pt">
+      <td colspan="11" height="17" class="xl47" style="border-right: 0.5pt solid black; height: 12.75pt">
+        5<font class="font6">. Pembatalan penumpang mnimal 4 jam sebelum jam berangkat.</font>
+      </td>
+    </tr>
+    <tr height="3" style="mso-height-source: userset; height: 2.25pt">
+      <td colspan="11" height="3" class="xl33" style="height: 2.25pt">&nbsp;</td>
+    </tr>
+  </table>
+  }
+</div>
+}

@@ -179,8 +179,8 @@
 
   "Reset": "Reset",
   "Print": "Cetak",
-  "Print Payment": "Cetak Lunas",
-  "Print All": "Cetak Semua",
+  "Print Payment": "Lunas",
+  "Print All": "Semua",
 
   "TABLE": {
     "RESI_NUMBER": "No Resi",

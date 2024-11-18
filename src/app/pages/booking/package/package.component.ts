@@ -315,6 +315,23 @@ export class PackageComponent implements OnInit, OnDestroy {
     datepicker.close();
   }
 
+  printFilterSelected(datepicker: any) {
+    this.params = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      city: this.currentTab,
+      status: this.pagination.status,
+    };
+
+    this.dataList(this.params);
+    console.log(this.params);
+
+    datepicker.close();
+  }
+
   printFilterDate(datepicker: any) {
     let getCity = '';
     if (this.levelrule === 2) {

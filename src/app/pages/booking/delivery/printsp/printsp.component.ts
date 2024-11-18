@@ -25,9 +25,17 @@ export class PrintspComponent implements OnInit, OnDestroy {
   public totalTariff: any;
   public totalPassenger: any;
 
-  constructor(private router: Router) {}
+  lastSegment: string = '';
+
+  constructor(private router: Router) {
+    const url = this.router.url;
+    this.lastSegment = url.substring(url.lastIndexOf('/') + 1);
+    console.log(this.lastSegment);
+  }
 
   ngOnInit() {
+    document.documentElement.setAttribute('data-bs-theme', 'light');
+
     this.getPrintSP();
 
     this.nowDate = new Date();

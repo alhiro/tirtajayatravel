@@ -171,6 +171,7 @@ export class MonitoringPackageComponent implements OnInit, OnDestroy {
       { key: 'sender_id', title: 'Sender' },
       { key: 'recipient_id', title: 'Recipient' },
       { key: 'book_date', title: 'Book Date' },
+      { key: 'created_at', title: 'Created At' },
       { key: 'status_package', title: 'Status Package' },
     ];
   }

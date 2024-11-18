@@ -172,6 +172,14 @@
             >
               Print Payment
             </button>
+            <button
+              class="btn btn-info btn-sm m-2 p-1 px-4 float-end"
+              [disabled]="configuration.isLoading"
+              (click)="printFilterSelected(datepicker)"
+              translate
+            >
+              Filter
+            </button>
           </ng-template>
         </div>
       </div>

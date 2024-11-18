@@ -475,8 +475,8 @@ export class CustomerComponent implements OnInit {
     this.clearForm();
 
     this.form.patchValue({
-      company_id: '',
-      business_id: '',
+      company_id: null,
+      business_id: null,
     });
 
     return await this.modalComponent.open();

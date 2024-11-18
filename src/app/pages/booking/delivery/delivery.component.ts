@@ -265,6 +265,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       { key: 'destination_id', title: 'Destination' },
       { key: 'status', title: 'Status' },
       { key: 'position', title: 'Seat' },
+      { key: 'createdAt', title: 'Created At' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
 
@@ -276,6 +277,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       { key: 'sender_id', title: 'Sender' },
       { key: 'recipient_id', title: 'Recipient' },
       { key: 'origin_form', title: 'From' },
+      { key: 'createdAt', title: 'Created At' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
   }
@@ -472,6 +474,13 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     sessionStorage.setItem('detailsp', JSON.stringify(this.dataDetail));
     sessionStorage.setItem('type', JSON.stringify(item));
     window.open('#/booking/departure/delivery/printsp', '_blank');
+  }
+
+  async printTicket(val: any, item: any) {
+    sessionStorage.setItem('printsp', JSON.stringify(val));
+    sessionStorage.setItem('detailsp', JSON.stringify(this.dataDetail));
+    sessionStorage.setItem('type', JSON.stringify(item));
+    window.open('#/booking/departure/delivery/print-ticket', '_blank');
   }
 
   async openModalView(val: GoSendModel) {

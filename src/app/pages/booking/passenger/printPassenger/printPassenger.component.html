@@ -1,1 +1,694 @@
-<p>printPassenger works!</p>
+<table id="pdf-content" width="900" style="border-collapse: collapse; table-layout: fixed; width: 732pt">
+  <tr height="12" style="mso-height-source: userset; height: 9pt">
+    <td height="12" width="8" style="height: 9pt; width: 6pt"></td>
+    <td width="38" style="width: 29pt"></td>
+    <td width="11" style="width: 8pt"></td>
+
+    <td width="178" style="width: 134pt" align="center" valign="top">
+      <table cellpadding="0" cellspacing="0">
+        <tr>
+          <td height="12" width="178" style="height: 9pt; width: 134pt"></td>
+        </tr>
+      </table>
+    </td>
+    <td width="7" style="width: 5pt"></td>
+    <td width="48" style="width: 36pt"></td>
+    <td width="10" style="width: 8pt"></td>
+    <td width="175" style="width: 131pt"></td>
+    <td width="9" style="width: 7pt"></td>
+    <td width="66" style="width: 50pt"></td>
+    <td width="9" style="width: 7pt"></td>
+    <td width="158" style="width: 119pt"></td>
+  </tr>
+  <tr height="18" style="mso-height-source: userset; height: 14pt">
+    <td height="18" colspan="12" style="height: 14pt; mso-ignore: colspan"></td>
+  </tr>
+  <tr height="18" style="mso-height-source: userset; height: 14pt">
+    <td height="18" class="xl43" style="height: 14pt">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+  </tr>
+  <tr height="18" style="mso-height-source: userset; height: 16pt">
+    <td
+      colspan="8"
+      height="18"
+      class="xl66"
+      style="height: 16pt"
+      x:str="'- Malang, Jl. Kalimantan 36, Telp (0341) 366168 - 325939"
+    >
+      <img
+        width="240"
+        height="36"
+        src="http://adm.t4478.xyz/assets/images/image002.jpg"
+        v:shapes="Picture_x0020_3"
+      /><span></span>
+    </td>
+    <td colspan="2" class="xl57" x:str="No Urut    ">No Booking :</td>
+    <td>:</td>
+    <td class="xl36">{{ data.resi_number }}</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td colspan="8" height="18" class="xl62" style="border-right: 0.5pt solid black; height: 14pt"></td>
+    <td colspan="2" class="xl52" style="border-left: none"></td>
+    <td class="xl32"></td>
+    <td class="xl33"></td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td colspan="2" height="18" class="xl65" style="height: 14pt">Nama</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.waybill?.name }}</b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">
+      - Jadwal Pemberangkatan tiap jam mulai <br />
+      &nbsp;&nbsp;&nbsp;03.00 - 18.00 WIB
+    </td>
+    <td class="xl35"></td>
+    <td class="xl34">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Jemput Di</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.waybill?.address }} malang </b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">- Dengan Mobil - Mobil Terbaru</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Telp</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.waybill?.telp }}</b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">- Full Air Conditioner</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Antar Ke</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.waybill?.address }}</b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">- Jaminan Asuransi Jasa Raharja</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Tanggal</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.book_date | date : 'dd/MM/yyyy' : 'GMT' }}</b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">- Via Jalan Tol Gratis</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Jam</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.book_date | date : 'H:mm' : 'GMT' }}:00</b>
+    </td>
+    <td colspan="2" class="xl47" style="border-left: none">&nbsp;</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Berlaku</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.total_passenger | number }} Orang</b>
+    </td>
+    <td colspan="2" class="xl47" style="border-left: none">&nbsp;</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+
+  <tr height="22" style="mso-height-source: userset; height: 16.5pt">
+    <td colspan="8" height="22" class="xl78" style="border-right: 0.5pt solid black; height: 16.5pt">
+      Status Pembayaran : {{ data.payment }}
+    </td>
+
+    <td class="xl33" colspan="4" style="border-top: none"></td>
+  </tr>
+  <tr height="22" style="mso-height-source: userset; height: 16.5pt">
+    <td colspan="8" height="22" class="xl81" style="border-right: 0.5pt solid black; height: 16.5pt; font-size: 15px">
+      TARIF : {{ data.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+    </td>
+    <td class="xl33" colspan="4" style="border-top: none"></td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl74"
+      style="height: 10.5pt; font-size: 13px"
+      x:str='Kehilangan / Kerusakan / Kebakaran yang diakibatkan "Forse Majeure" bukan tanggung jawab TIRTA JAYA.'
+    >
+      1. Penumpang harap siap 1 jam sebelum jam berangkat.
+    </td>
+    <td rowspan="2" class="xl76" style="border-top: none" x:num>1</td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl69"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="Kehilangan barang titipan diganti 10 kali biaya titipan."
+    >
+      2. Barang yang dibawa 1 buah/max 10 kg / orang, Bila hilang/rusak/tertukar risiko sendiri.
+    </td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl69"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="Isi titipan ini tanggung jawab di penitip sepenuhnya dan sewaktu-waktu dapat diperiksa."
+    >
+      3. Anak di atas 4 tahun bayar penuh.
+    </td>
+    <td rowspan="2" class="xl77">PENUMPANG</td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl69"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="Titipan isi uang, perhiasan, cheque dan barang berharga tidak ditanggung tanpa sepengetahuan kami"
+    >
+      4. Bila terjadi kerusakan mobil atau hal-hal lain, hingga tak sampai tujuan, tiket berlaku jam berikutnya dan
+      akibat lain menjadi risiko penumpang.
+    </td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl69"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="Dalam waktu 7 hari, jika tidak ada komplain dianggap barang titipan sudah diterima dan Resi Tanda Terima yang tidak diambil dalam waktu tersebut"
+    >
+      5. Pembatalan penumpang mnimal 4 jam sebelum jam berangkat.
+    </td>
+    <td class="xl42"></td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="8"
+      height="16"
+      class="xl70"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="bukan menjadi tanggung jawab kami"
+    ></td>
+    <td colspan="4" class="xl71" style="border-right: 0.5pt solid black" x:str="">
+      {{ data.created_by }}, {{ data.createdAt | date : 'dd/MM/yyyy H:mm:ss' : 'GMT' }}
+    </td>
+  </tr>
+  <tr height="4" style="mso-height-source: userset; height: 3pt">
+    <td colspan="12" height="6" class="xl89" style="height: 3pt"><br /><br /></td>
+  </tr>
+</table>
+
+<table width="900" style="border-collapse: collapse; table-layout: fixed; width: 732pt">
+  <tr height="12" style="mso-height-source: userset; height: 9pt">
+    <td height="12" width="8" style="height: 9pt; width: 6pt"></td>
+    <td width="38" style="width: 29pt"></td>
+    <td width="11" style="width: 8pt"></td>
+
+    <td width="178" style="width: 134pt" align="center" valign="top">
+      <table cellpadding="0" cellspacing="0">
+        <tr>
+          <td height="12" width="178" style="height: 9pt; width: 134pt"></td>
+        </tr>
+      </table>
+    </td>
+    <td width="7" style="width: 5pt"></td>
+    <td width="48" style="width: 36pt"></td>
+    <td width="10" style="width: 8pt"></td>
+    <td width="175" style="width: 131pt"></td>
+    <td width="9" style="width: 7pt"></td>
+    <td width="66" style="width: 50pt"></td>
+    <td width="9" style="width: 7pt"></td>
+    <td width="158" style="width: 119pt"></td>
+  </tr>
+  <tr height="18" style="mso-height-source: userset; height: 14pt">
+    <td height="18" colspan="12" style="height: 14pt; mso-ignore: colspan"></td>
+  </tr>
+  <tr height="18" style="mso-height-source: userset; height: 14pt">
+    <td height="18" class="xl43" style="height: 14pt">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+  </tr>
+  <tr height="18" style="mso-height-source: userset; height: 16pt">
+    <td
+      colspan="8"
+      height="18"
+      class="xl66"
+      style="height: 16pt"
+      x:str="'- Malang, Jl. Kalimantan 36, Telp (0341) 366168 - 325939"
+    >
+      <img
+        width="240"
+        height="36"
+        src="http://adm.t4478.xyz/assets/images/image002.jpg"
+        v:shapes="Picture_x0020_3"
+      /><span></span>
+    </td>
+    <td colspan="2" class="xl57" x:str="No Urut    ">No Booking :</td>
+    <td>:</td>
+    <td class="xl36">{{ data.resi_number }}</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td colspan="8" height="18" class="xl62" style="border-right: 0.5pt solid black; height: 14pt"></td>
+    <td colspan="2" class="xl52" style="border-left: none"></td>
+    <td class="xl32"></td>
+    <td class="xl33"></td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td colspan="2" height="18" class="xl65" style="height: 14pt">Nama</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.waybill?.name }}</b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">
+      - Jadwal Pemberangkatan tiap jam mulai <br />
+      &nbsp;&nbsp;&nbsp;03.00 - 18.00 WIB
+    </td>
+    <td class="xl35"></td>
+    <td class="xl34">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Jemput Di</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.waybill?.address }} malang </b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">- Dengan Mobil - Mobil Terbaru</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Telp</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.waybill?.telp }}</b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">- Full Air Conditioner</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Antar Ke</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.waybill?.address }}</b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">- Jaminan Asuransi Jasa Raharja</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Tanggal</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.book_date | date : 'dd/MM/yyyy' : 'GMT' }}</b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">- Via Jalan Tol Gratis</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Jam</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.book_date | date : 'H:mm' : 'GMT' }}:00</b>
+    </td>
+    <td colspan="2" class="xl47" style="border-left: none">&nbsp;</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Berlaku</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.total_passenger | number }} Orang</b>
+    </td>
+    <td colspan="2" class="xl47" style="border-left: none">&nbsp;</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+
+  <tr height="22" style="mso-height-source: userset; height: 16.5pt">
+    <td colspan="8" height="22" class="xl78" style="border-right: 0.5pt solid black; height: 16.5pt">
+      Status Pembayaran : {{ data.payment }}
+    </td>
+
+    <td class="xl33" colspan="4" style="border-top: none"></td>
+  </tr>
+  <tr height="22" style="mso-height-source: userset; height: 16.5pt">
+    <td colspan="8" height="22" class="xl81" style="border-right: 0.5pt solid black; height: 16.5pt; font-size: 15px">
+      TARIF : {{ data.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+    </td>
+    <td class="xl33" colspan="4" style="border-top: none"></td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl74"
+      style="height: 10.5pt; font-size: 13px"
+      x:str='Kehilangan / Kerusakan / Kebakaran yang diakibatkan "Forse Majeure" bukan tanggung jawab TIRTA JAYA.'
+    >
+      1. Penumpang harap siap 1 jam sebelum jam berangkat.
+    </td>
+    <td rowspan="2" class="xl76" style="border-top: none" x:num>2</td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl69"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="Kehilangan barang titipan diganti 10 kali biaya titipan."
+    >
+      2. Barang yang dibawa 1 buah/max 10 kg / orang, Bila hilang/rusak/tertukar risiko sendiri.
+    </td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl69"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="Isi titipan ini tanggung jawab di penitip sepenuhnya dan sewaktu-waktu dapat diperiksa."
+    >
+      3. Anak di atas 4 tahun bayar penuh.
+    </td>
+    <td rowspan="2" class="xl77">PETUGAS</td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl69"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="Titipan isi uang, perhiasan, cheque dan barang berharga tidak ditanggung tanpa sepengetahuan kami"
+    >
+      4. Bila terjadi kerusakan mobil atau hal-hal lain, hingga tak sampai tujuan, tiket berlaku jam berikutnya dan
+      akibat lain menjadi risiko penumpang.
+    </td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl69"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="Dalam waktu 7 hari, jika tidak ada komplain dianggap barang titipan sudah diterima dan Resi Tanda Terima yang tidak diambil dalam waktu tersebut"
+    >
+      5. Pembatalan penumpang mnimal 4 jam sebelum jam berangkat.
+    </td>
+    <td class="xl42"></td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="8"
+      height="16"
+      class="xl70"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="bukan menjadi tanggung jawab kami"
+    ></td>
+    <td colspan="4" class="xl71" style="border-right: 0.5pt solid black" x:str="">
+      {{ data.created_by }}, {{ data.createdAt | date : 'dd/MM/yyyy H:mm:ss' : 'GMT' }}
+    </td>
+  </tr>
+  <tr height="4" style="mso-height-source: userset; height: 3pt">
+    <td colspan="12" height="6" class="xl89" style="height: 3pt"><br /><br /></td>
+  </tr>
+</table>
+
+<table width="900" style="border-collapse: collapse; table-layout: fixed; width: 732pt">
+  <tr height="12" style="mso-height-source: userset; height: 9pt">
+    <td height="12" width="8" style="height: 9pt; width: 6pt"></td>
+    <td width="38" style="width: 29pt"></td>
+    <td width="11" style="width: 8pt"></td>
+
+    <td width="178" style="width: 134pt" align="center" valign="top">
+      <table cellpadding="0" cellspacing="0">
+        <tr>
+          <td height="12" width="178" style="height: 9pt; width: 134pt"></td>
+        </tr>
+      </table>
+    </td>
+    <td width="7" style="width: 5pt"></td>
+    <td width="48" style="width: 36pt"></td>
+    <td width="10" style="width: 8pt"></td>
+    <td width="175" style="width: 131pt"></td>
+    <td width="9" style="width: 7pt"></td>
+    <td width="66" style="width: 50pt"></td>
+    <td width="9" style="width: 7pt"></td>
+    <td width="158" style="width: 119pt"></td>
+  </tr>
+  <tr height="18" style="mso-height-source: userset; height: 14pt">
+    <td height="18" colspan="12" style="height: 14pt; mso-ignore: colspan"></td>
+  </tr>
+  <tr height="18" style="mso-height-source: userset; height: 14pt">
+    <td height="18" class="xl43" style="height: 14pt">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+    <td class="xl43">&nbsp;</td>
+  </tr>
+  <tr height="18" style="mso-height-source: userset; height: 16pt">
+    <td
+      colspan="8"
+      height="18"
+      class="xl66"
+      style="height: 16pt"
+      x:str="'- Malang, Jl. Kalimantan 36, Telp (0341) 366168 - 325939"
+    >
+      <img
+        width="240"
+        height="36"
+        src="http://adm.t4478.xyz/assets/images/image002.jpg"
+        v:shapes="Picture_x0020_3"
+      /><span></span>
+    </td>
+    <td colspan="2" class="xl57" x:str="No Urut    ">No Booking :</td>
+    <td>:</td>
+    <td class="xl36">{{ data.resi_number }}</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td colspan="8" height="18" class="xl62" style="border-right: 0.5pt solid black; height: 14pt"></td>
+    <td colspan="2" class="xl52" style="border-left: none"></td>
+    <td class="xl32"></td>
+    <td class="xl33"></td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td colspan="2" height="18" class="xl65" style="height: 14pt">Nama</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.waybill?.name }}</b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">
+      - Jadwal Pemberangkatan tiap jam mulai <br />
+      &nbsp;&nbsp;&nbsp;03.00 - 18.00 WIB
+    </td>
+    <td class="xl35"></td>
+    <td class="xl34">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Jemput Di</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.waybill?.address }} malang </b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">- Dengan Mobil - Mobil Terbaru</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Telp</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.waybill?.telp }}</b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">- Full Air Conditioner</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Antar Ke</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.waybill?.address }}</b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">- Jaminan Asuransi Jasa Raharja</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Tanggal</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.book_date | date : 'dd/MM/yyyy' : 'GMT' }}</b>
+    </td>
+    <td colspan="2" class="xl54" style="border-left: none">- Via Jalan Tol Gratis</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Jam</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.book_date | date : 'H:mm' : 'GMT' }}:00</b>
+    </td>
+    <td colspan="2" class="xl47" style="border-left: none">&nbsp;</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+  <tr height="18" style="height: 14pt">
+    <td height="18" class="xl28" colspan="2" style="height: 14pt; mso-ignore: colspan">Berlaku</td>
+    <td class="xl29">:</td>
+    <td colspan="5" class="xl45" style="border-right: 0.5pt solid black">
+      <b>{{ data.total_passenger | number }} Orang</b>
+    </td>
+    <td colspan="2" class="xl47" style="border-left: none">&nbsp;</td>
+    <td></td>
+    <td class="xl25">&nbsp;</td>
+  </tr>
+
+  <tr height="22" style="mso-height-source: userset; height: 16.5pt">
+    <td colspan="8" height="22" class="xl78" style="border-right: 0.5pt solid black; height: 16.5pt">
+      Status Pembayaran : {{ data.payment }}
+    </td>
+
+    <td class="xl33" colspan="4" style="border-top: none"></td>
+  </tr>
+  <tr height="22" style="mso-height-source: userset; height: 16.5pt">
+    <td colspan="8" height="22" class="xl81" style="border-right: 0.5pt solid black; height: 16.5pt; font-size: 15px">
+      TARIF : {{ data.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+    </td>
+    <td class="xl33" colspan="4" style="border-top: none"></td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl74"
+      style="height: 10.5pt; font-size: 13px"
+      x:str='Kehilangan / Kerusakan / Kebakaran yang diakibatkan "Forse Majeure" bukan tanggung jawab TIRTA JAYA.'
+    >
+      1. Penumpang harap siap 1 jam sebelum jam berangkat.
+    </td>
+    <td rowspan="2" class="xl76" style="border-top: none" x:num>3</td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl69"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="Kehilangan barang titipan diganti 10 kali biaya titipan."
+    >
+      2. Barang yang dibawa 1 buah/max 10 kg / orang, Bila hilang/rusak/tertukar risiko sendiri.
+    </td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl69"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="Isi titipan ini tanggung jawab di penitip sepenuhnya dan sewaktu-waktu dapat diperiksa."
+    >
+      3. Anak di atas 4 tahun bayar penuh.
+    </td>
+    <td rowspan="2" class="xl77">ARSIP</td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl69"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="Titipan isi uang, perhiasan, cheque dan barang berharga tidak ditanggung tanpa sepengetahuan kami"
+    >
+      4. Bila terjadi kerusakan mobil atau hal-hal lain, hingga tak sampai tujuan, tiket berlaku jam berikutnya dan
+      akibat lain menjadi risiko penumpang.
+    </td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="11"
+      height="16"
+      class="xl69"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="Dalam waktu 7 hari, jika tidak ada komplain dianggap barang titipan sudah diterima dan Resi Tanda Terima yang tidak diambil dalam waktu tersebut"
+    >
+      5. Pembatalan penumpang mnimal 4 jam sebelum jam berangkat.
+    </td>
+    <td class="xl42"></td>
+  </tr>
+  <tr height="16" style="mso-height-source: userset; height: 10.5pt">
+    <td
+      colspan="8"
+      height="16"
+      class="xl70"
+      style="height: 10.5pt; font-size: 13px"
+      x:str="bukan menjadi tanggung jawab kami"
+    ></td>
+    <td colspan="4" class="xl71" style="border-right: 0.5pt solid black" x:str="">
+      {{ data.created_by }}, {{ data.createdAt | date : 'dd/MM/yyyy H:mm:ss' : 'GMT' }}
+    </td>
+  </tr>
+  <tr height="4" style="mso-height-source: userset; height: 3pt">
+    <td colspan="12" height="6" class="xl89" style="height: 3pt"><br /><br /></td>
+  </tr>
+</table>
+
+<div class="float-object">
+  <a
+    class="btn btn-icon btn-primary btn-hover-light btn-sm cursor-pointer"
+    data-bs-toggle="tooltip"
+    data-bs-trigger="hover"
+    data-bs-dismiss-="click"
+    data-bs-placement="left"
+    [ngbTooltip]="'TOOLTIP.DOWNLOAD_TICKET' | translate"
+    (click)="downloadImageShare(data)"
+  >
+    <app-keenicon name="send" class="fs-md-3 text-light"></app-keenicon>
+  </a>
+</div>

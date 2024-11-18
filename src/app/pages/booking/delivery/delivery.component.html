@@ -680,15 +680,26 @@
           <div class="menu-item px-3">
             <div class="menu-content px-2 py-1">
               <a
+                class="btn btn-danger btn-hover-primary btn-sm cursor-pointer p-1 px-3 fs-7"
+                data-bs-toggle="tooltip"
+                data-bs-trigger="hover"
+                data-bs-dismiss-="click"
+                data-bs-placement="top"
+                title="Cetak Tiket"
+                (click)="printTicket(dataDetailPassenger, 'Passenger')"
+              >
+                Cetak Ticket
+              </a>
+              <a
                 class="btn btn-primary btn-hover-primary btn-sm cursor-pointer p-1 px-3 fs-7"
                 data-bs-toggle="tooltip"
                 data-bs-trigger="hover"
                 data-bs-dismiss-="click"
                 data-bs-placement="top"
-                title="Print SP"
+                title="Cetak SP"
                 (click)="printSP(dataDetailPassenger, 'Passenger')"
               >
-                Print Passenger
+                Cetak SP
               </a>
             </div>
           </div>
@@ -757,6 +768,11 @@
             {{ row.position }}
           </span>
         </td>
+        <td>
+          <span class="text-gray-900 d-block">
+            {{ row.createdAt | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}
+          </span>
+        </td>
         <td class="text-end">
           <a
             class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
@@ -803,10 +819,10 @@
                   data-bs-trigger="hover"
                   data-bs-dismiss-="click"
                   data-bs-placement="top"
-                  title="Print SP"
+                  title="Cetak Paket"
                   (click)="printSP(dataDetailPackages, 'Package')"
                 >
-                  Print Package
+                  Cetak Paket
                 </a>
               </div>
             </div>
@@ -865,6 +881,11 @@
         <td>
           <span class="text-gray-900 d-block">
             {{ row.origin_from }}
+          </span>
+        </td>
+        <td>
+          <span class="text-gray-900 d-block">
+            {{ row.createdAt | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}
           </span>
         </td>
         <td class="text-end">

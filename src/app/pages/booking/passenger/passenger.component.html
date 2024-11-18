@@ -139,7 +139,7 @@
               Print
             </button>
             <button
-              class="btn btn-warning btn-sm m-2 p-1 px-4 float-end"
+              class="btn btn-info btn-sm m-2 p-1 px-4 float-end"
               [disabled]="configuration.isLoading"
               (click)="printFilterSelected(datepicker)"
               translate
@@ -257,6 +257,17 @@
                 >
                   <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
                 </a> -->
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  [ngbTooltip]="'TOOLTIP.PRINT_PACKAGE' | translate"
+                  (click)="openModalPrint(row)"
+                >
+                  <app-keenicon name="printer" class="fs-md-3 text-success"></app-keenicon>
+                </a>
                 <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
@@ -407,6 +418,17 @@
                 >
                   <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
                 </a> -->
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  [ngbTooltip]="'TOOLTIP.PRINT_PACKAGE' | translate"
+                  (click)="openModalPrint(row)"
+                >
+                  <app-keenicon name="printer" class="fs-md-3 text-success"></app-keenicon>
+                </a>
                 <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
@@ -1213,6 +1235,10 @@
                     <span class="form-check-label text-gray-900">Biasa</span>
                   </label>
                   <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                    <input class="form-check-input" type="radio" value="Paket" name="status" formControlName="status" />
+                    <span class="form-check-label text-gray-900">Paket</span>
+                  </label>
+                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
                     <input
                       class="form-check-input"
                       type="radio"
@@ -1221,10 +1247,6 @@
                       formControlName="status"
                     />
                     <span class="form-check-label text-gray-900">Executif</span>
-                  </label>
-                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                    <input class="form-check-input" type="radio" value="Paket" name="status" formControlName="status" />
-                    <span class="form-check-label text-gray-900">Paket</span>
                   </label>
                 </div>
               </div>
@@ -1249,11 +1271,11 @@
                     <input
                       class="form-check-input"
                       type="radio"
-                      value="Lunas (Kantor)"
+                      value="Bayar Tujuan (CBA)"
                       name="payment"
                       formControlName="payment"
                     />
-                    <span class="form-check-label text-gray-900">Lunas (Kantor)</span>
+                    <span class="form-check-label text-gray-900">Bayar Tujuan (CBA)</span>
                   </label>
                   <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
                     <input
@@ -1269,11 +1291,11 @@
                     <input
                       class="form-check-input"
                       type="radio"
-                      value="Bayar Tujuan (CBA)"
+                      value="Lunas (Kantor)"
                       name="payment"
                       formControlName="payment"
                     />
-                    <span class="form-check-label text-gray-900">Bayar Tujuan (CBA)</span>
+                    <span class="form-check-label text-gray-900">Lunas (Kantor)</span>
                   </label>
                   <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
                     <input

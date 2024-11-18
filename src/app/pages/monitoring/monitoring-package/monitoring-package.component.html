@@ -122,6 +122,11 @@
                   </span>
                 </td>
                 <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.created_at | date : 'dd/MM/yyyy H:mm' : 'GMT' }}
+                  </span>
+                </td>
+                <td>
                   <span class="badge badge-light-primary">
                     {{ row.status_package }}
                   </span>
@@ -195,6 +200,11 @@
                       {{ row.employee.name ? row.employee.name : '-' }} |
                       {{ row.car.car_number ? row.car.car_number : '-' }}
                     </span>
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.created_at | date : 'dd/MM/yyyy H:mm' : 'GMT' }}
                   </span>
                 </td>
                 <td>
