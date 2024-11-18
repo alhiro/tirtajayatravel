@@ -670,8 +670,8 @@
                               [checked]="row.check_payment"
                               (change)="checkPaymentPassenger(row, $event)"
                             />
-                            } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)') { ^ }
-                            @else { * }
+                            } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)' ||
+                            row.payment === 'Customer (Bulanan)') { ^ } @else { * }
                           </label>
                         </span>
                       </td>
@@ -751,8 +751,8 @@
                               [checked]="row.check_payment"
                               (change)="checkPaymentPassenger(row, $event)"
                             />
-                            } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)') { ^ }
-                            @else { * }
+                            } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)' ||
+                            row.payment === 'Customer (Bulanan)') { ^ } @else { * }
                           </label>
                         </span>
                       </td>
@@ -1328,8 +1328,8 @@
                           [checked]="row.check_payment"
                           (change)="checkPaymentPassenger(row, $event)"
                         />
-                        } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)') { ^ } @else
-                        { * }
+                        } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)' ||
+                        row.payment === 'Customer (Bulanan)') { ^ } @else { * }
                       </label>
                     </span>
                   </td>
@@ -1420,8 +1420,8 @@
                           [checked]="row.check_payment"
                           (change)="checkPaymentPassenger(row, $event)"
                         />
-                        } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)') { ^ } @else
-                        { * }
+                        } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)' ||
+                        row.payment === 'Customer (Bulanan)') { ^ } @else { * }
                       </label>
                     </span>
                   </td>

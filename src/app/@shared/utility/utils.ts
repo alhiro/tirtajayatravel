@@ -255,10 +255,16 @@ export class Utils {
 
     array.forEach((data: any) => {
       const filterMalang = data.packages?.filter(
-        (data: any) => (data.city_id === 1 && data.status === 'Lunas (Transfer)') || data.status === 'Lunas (Kantor)'
+        (data: any) =>
+          (data.city_id === 1 && data.status === 'Lunas (Transfer)') ||
+          (data.city_id === 1 && data.status === 'Lunas (Kantor)') ||
+          (data.city_id === 1 && data.status === 'Customer (Bulanan)')
       );
       const filterSurabaya = data.packages?.filter(
-        (data: any) => (data.city_id === 2 && data.status === 'Lunas (Transfer)') || data.status === 'Lunas (Kantor)'
+        (data: any) =>
+          (data.city_id === 2 && data.status === 'Lunas (Transfer)') ||
+          (data.city_id === 2 && data.status === 'Lunas (Kantor)') ||
+          (data.city_id === 2 && data.status === 'Customer (Bulanan)')
       );
       const filterCodMalang = data.packages?.filter(
         (data: any) => data.city_id === 1 && data.status === 'Bayar Tujuan (COD)'
@@ -307,10 +313,16 @@ export class Utils {
 
     array.forEach((data: any) => {
       const filterMalang = data.passengers?.filter(
-        (data: any) => (data.city_id === 1 && data.payment === 'Lunas (Transfer)') || data.payment === 'Lunas (Kantor)'
+        (data: any) =>
+          (data.city_id === 1 && data.payment === 'Lunas (Transfer)') ||
+          (data.city_id === 1 && data.status === 'Lunas (Kantor)') ||
+          (data.city_id === 1 && data.status === 'Customer (Bulanan)')
       );
       const filterSurabaya = data.passengers?.filter(
-        (data: any) => (data.city_id === 2 && data.payment === 'Lunas (Transfer)') || data.payment === 'Lunas (Kantor)'
+        (data: any) =>
+          (data.city_id === 2 && data.payment === 'Lunas (Transfer)') ||
+          (data.city_id === 2 && data.status === 'Lunas (Kantor)') ||
+          (data.city_id === 2 && data.status === 'Customer (Bulanan)')
       );
       const filterReminderPayment = data.packages?.filter(
         (data: any) => data.payment === 'Lunas (Transfer)' || (data.payment === 'Lunas (Kantor)' && data.check_payment)
