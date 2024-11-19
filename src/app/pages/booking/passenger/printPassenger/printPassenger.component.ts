@@ -51,6 +51,7 @@ export class PrintPassengerComponent implements OnInit, OnDestroy {
   }
 
   downloadImageShare(value: any) {
+    console.log(value);
     const data = document.getElementById('pdf-content');
     if (data) {
       html2canvas(data, {
@@ -61,7 +62,7 @@ export class PrintPassengerComponent implements OnInit, OnDestroy {
 
         const link = document.createElement('a');
         link.href = imageDataURL;
-        link.download = `paket_${value.sender.name}, ${value.book_date}.jpg`;
+        link.download = `paket_${value.waybill?.name}, ${value.book_date}.jpg`;
         link.click();
       });
     }
