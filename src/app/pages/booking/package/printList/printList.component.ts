@@ -4,6 +4,7 @@ import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { finalize, takeUntil, Subject } from 'rxjs';
 import { PackageService } from '../package.service';
 import { PackageModel } from '../models/package.model';
+import { Router } from '@angular/router';
 
 interface GroupedDataCost {
   id: number;
@@ -43,9 +44,15 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
     endDate: '',
   };
 
+  public lastSegment = '';
+
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private packageService: PackageService, private readonly cdr: ChangeDetectorRef) {}
+  constructor(private packageService: PackageService, private router: Router, private readonly cdr: ChangeDetectorRef) {
+    const url = this.router.url;
+    this.lastSegment = url.substring(url.lastIndexOf('/') + 1);
+    console.log(this.lastSegment);
+  }
 
   ngOnInit() {
     this.configuration.resizeColumn = false;
@@ -67,7 +74,6 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
       { key: 'created_by', title: 'Admin' },
       { key: 'sender_id', title: 'Sender' },
       { key: 'recipient_id', title: 'Recipient' },
-      { key: 'createdAt', title: 'Book Date' },
     ];
 
     this.nowDate = new Date();
@@ -108,19 +114,29 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
       .subscribe((response: any) => {
         if (response.data.length > 0) {
           let filterData;
-          if (this.status === 'Lunas (Kantor)') {
+
+          if (this.lastSegment === 'printbayartujuan') {
+            // filter base bayar tujuan url
             filterData = response.data?.filter(
-              (data: PackageModel) => data.status === 'Lunas (Kantor)' && data.status_package !== 'Cancel'
+              (data: PackageModel) => data.status === 'Bayar Tujuan (COD)' && data.status_package !== 'Cancel'
             );
             this.data = filterData;
           } else {
-            filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
-            this.data = response.data;
+            // filter base package url
+            if (this.status === 'Lunas (Kantor)') {
+              filterData = response.data?.filter(
+                (data: PackageModel) => data.status === 'Lunas (Kantor)' && data.status_package !== 'Cancel'
+              );
+              this.data = filterData;
+            } else {
+              filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
+              this.data = response.data;
+            }
           }
 
           // Count calculation total package except cancel
           this.totalCost = filterData?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
-          this.totalKoli = filterData?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
+          // this.totalKoli = filterData?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
 
           const groupedDataCost: GroupedDataCost[] = Object.values(
             filterData.reduce((acc: any, item: any) => {
@@ -135,11 +151,8 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
           console.log(groupedDataCost);
 
           this.configuration.isLoading = false;
-          this.configuration.horizontalScroll = true;
           this.cdr.detectChanges();
         } else {
-          this.configuration.horizontalScroll = false;
-
           this.data = [];
         }
       });

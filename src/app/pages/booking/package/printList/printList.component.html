@@ -8,9 +8,11 @@
             <div class="menu-content px-0 text-center">
               <h3 class="card-title align-items-start flex-column mb-2">
                 <span class="card-label fw-bolder fs-2">
-                  @if (city === 'Malang') { @if (status === 'Lunas (Kantor)') { LIST LUNAS PAKET MALANG } @else { LIST
-                  SEMUA PAKET MALANG } } @else { @if (status === 'Lunas (Kantor)') { LIST LUNAS PAKET SURABAYA } @else {
-                  LIST SEMUA PAKET SURABAYA } }
+                  @if (lastSegment === 'printbayartujuan') { @if (city === 'Malang') { LIST PAKET BAYAR TUJUAN (BA)
+                  MALANG } @else if (city === 'Surabaya') { LIST PAKET BAYAR TUJUAN (BA) SURABAYA } @else { LIST PAKET
+                  BAYAR TUJUAN (BA) MALANG & SURABAYA } } @else { @if (city === 'Malang') { @if (status === 'Lunas
+                  (Kantor)') { LIST LUNAS PAKET MALANG } @else { LIST SEMUA PAKET MALANG } } @else { @if (status ===
+                  'Lunas (Kantor)') { LIST LUNAS PAKET SURABAYA } @else { LIST SEMUA PAKET SURABAYA } } }
                 </span>
               </h3>
               @if (startDate && endDate) {
@@ -47,6 +49,13 @@
             >
               <span class="text-gray-900 fw-bolder fs-7">
                 {{ row.resi_number }}
+              </span>
+              <span class="text-gray-900 fs-9">
+                {{
+                  row.updatedAt
+                    ? (row.updatedAt | date : 'dd/MM/yyyy H:mm:ss' : 'GMT')
+                    : (row.createdAt | date : 'dd/MM/yyyy H:mm:ss' : 'GMT')
+                }}
               </span>
             </td>
             <td
@@ -155,7 +164,7 @@
                 {{ row.recipient?.telp }}
               </span>
             </td>
-            <td
+            <!-- <td
               [ngClass]="{
                 'soft-orange-bg': row.status_package === 'Cancel',
                 'transparent-bg': row.status_package !== 'Cancel'
@@ -168,7 +177,7 @@
                     : (row.createdAt | date : 'dd/MM/yyyy H:mm:ss' : 'GMT')
                 }}
               </span>
-            </td>
+            </td> -->
           </ng-template>
         </ngx-table>
         <!-- end::Table -->
@@ -177,7 +186,7 @@
 
       <div class="mt-7">
         <span
-          ><b>TOTAL PACKAGE: {{ totalKoli | number }}</b></span
+          ><b>TOTAL PACKAGE: {{ data?.length | number }}</b></span
         ><br />
         <span
           ><b>TOTAL COST: {{ totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span

@@ -78,11 +78,20 @@
             </button>
 
             <button
-              class="btn btn-primary btn-sm m-2 p-1 px-4 float-end"
+              class="btn btn-success btn-sm m-2 p-1 px-4 float-end"
               [disabled]="configuration.isLoading"
               (click)="printFilterDate(datepicker)"
+              translate
             >
-              Print
+              Commission
+            </button>
+            <button
+              class="btn btn-primary btn-sm m-2 p-1 px-4 float-end"
+              [disabled]="configuration.isLoading"
+              (click)="printFilterBa(datepicker)"
+              translate=""
+            >
+              Bayar Tujuan
             </button>
             <button
               class="btn btn-warning btn-sm m-2 p-1 px-4 float-end"
@@ -163,18 +172,22 @@
                 <span class="text-gray-900 d-block">{{ row.recipient?.courier }}</span>
               </td>
               <td>
-                <span>{{ row.recipient?.date_payment | date : 'dd/MM/yyyy' : 'GMT' }} </span>
+                @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') { @if (row.check_sp) {
+                <span>{{ row.updatedAt | date : 'dd/MM/yyyy' : 'GMT' }} </span>
+                } } @else { * }
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.status }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.recipient?.sign }}</span>
+                @if (row.check_payment) {
+                <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
+                }
               </td>
               <td class="text-end">
                 @if (row.recipient?.received_by) { @if (username === 'admin_11' && levelrule === 8 || username ===
-                'fomlg' && levelrule === 2 || username === 'fosby' && levelrule === 2) { @if
-                (!row.recipient?.date_payment) {
+                'fomlg' && levelrule === 2 || username === 'fosby' && levelrule === 2) { @if (!row.check_sp) { @if
+                (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') { @if (!row.check_sp) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -187,7 +200,7 @@
                 >
                   <app-keenicon name="save-deposit" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                } @if (!row.recipient?.sign) {
+                } } } @if (!row.check_payment) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -287,18 +300,22 @@
                 <span class="text-gray-900 d-block">{{ row.recipient?.courier }}</span>
               </td>
               <td>
-                <span>{{ row.recipient?.date_payment | date : 'dd/MM/yyyy' : 'GMT' }} </span>
+                @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') { @if (row.check_sp) {
+                <span>{{ row.updatedAt | date : 'dd/MM/yyyy' : 'GMT' }} </span>
+                } } @else { * }
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.status }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.recipient?.sign }}</span>
+                @if (row.check_payment) {
+                <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
+                }
               </td>
               <td class="text-end">
                 @if (row.recipient?.received_by) { @if (username === 'admin_11' && levelrule === 8 || username ===
-                'fomlg' && levelrule === 2 || username === 'fosby' && levelrule === 2) { @if
-                (!row.recipient?.date_payment) {
+                'fomlg' && levelrule === 2 || username === 'fosby' && levelrule === 2) { @if (!row.check_sp) { @if
+                (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') { @if (!row.check_sp) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -311,7 +328,7 @@
                 >
                   <app-keenicon name="save-deposit" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                } @if (!row.recipient?.sign) {
+                } } } @if (!row.check_payment) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"

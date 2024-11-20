@@ -137,14 +137,14 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
 
           const groupedDataCommission: GroupedDataCost[] = Object.values(
             this.data.reduce((acc: any, item: any) => {
-              if (!acc[item.recipient.sign]) {
-                acc[item.recipient.sign] = {
+              if (!acc[item.updated_by]) {
+                acc[item.updated_by] = {
                   id: Object.keys(acc).length + 1,
-                  admin: item.recipient.sign,
+                  admin: item.updated_by,
                   totalCost: 0,
                 };
               }
-              acc[item.recipient.sign].totalCost += Number(item.agent_commission);
+              acc[item.updated_by].totalCost += Number(item.agent_commission);
               return acc;
             }, {} as { [key: string]: GroupedDataCost })
           );
@@ -162,14 +162,14 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
 
           const groupedDataPiutang: GroupedDataCost[] = Object.values(
             this.dataPiutang.reduce((acc: any, item: any) => {
-              if (!acc[item.recipient.sign]) {
-                acc[item.recipient.sign] = {
+              if (!acc[item.updated_by]) {
+                acc[item.updated_by] = {
                   id: Object.keys(acc).length + 1,
-                  admin: item.recipient.sign,
+                  admin: item.updated_by,
                   totalCost: 0,
                 };
               }
-              acc[item.recipient.sign].totalCost += Number(item.cost);
+              acc[item.updated_by].totalCost += Number(item.cost);
               return acc;
             }, {} as { [key: string]: GroupedDataCost })
           );

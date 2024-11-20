@@ -58,6 +58,11 @@ const routes: Routes = [
     component: PrintListPackageComponent,
     loadChildren: () => import('../../pages/booking/package/printList/printList.module').then((m) => m.PrintListModule),
   },
+  {
+    path: 'finance/commission/package/printbayartujuan',
+    component: PrintListPackageComponent,
+    loadChildren: () => import('../../pages/booking/package/printList/printList.module').then((m) => m.PrintListModule),
+  },
   // Print Passenger
   {
     path: 'booking/passenger/transaction/printlist',

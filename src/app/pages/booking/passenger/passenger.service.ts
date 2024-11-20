@@ -14,6 +14,17 @@ import { GoSendModel } from '../package/models/gosend';
 export class PassengerService {
   constructor(private httpService: HttpService) {}
 
+  search(context: ExtendedPaginationContext): Observable<GoSendModel> {
+    return this.httpService.searchPassenger(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   list(context: ExtendedPaginationContext): Observable<PassengerModel> {
     return this.httpService.passengerList(context).pipe(
       map((result) => {

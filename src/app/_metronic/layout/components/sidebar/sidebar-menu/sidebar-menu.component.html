@@ -229,6 +229,55 @@
       </div> -->
     </div>
 
+    <!-- Separator -->
+    <div class="menu-item">
+      <div class="menu-content pt-8 pb-2">
+        <span class="menu-section text-muted text-uppercase fs-8 ls-1" translate>Monitoring</span>
+      </div>
+    </div>
+
+    <!-- Monitoring History Package -->
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+      <a class="menu-link without-sub" routerLinkActive="active" routerLink="monitoring/package">
+        <span class="menu-icon">
+          <app-keenicon name="monitor-mobile" class="fs-2"></app-keenicon>
+        </span>
+        <span class="menu-title" data-link="/monitoring/package" translate> History Package </span>
+        <!-- <span class="menu-arrow"></span> -->
+      </a>
+      <!-- <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/bsd/tirta-jaya">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>BSD Tirta Jaya </span>
+          </a>
+        </div>
+      </div> -->
+    </div>
+
+    <!-- Monitoring History Penumpang -->
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+      <a class="menu-link without-sub" routerLinkActive="active" routerLink="monitoring/passenger">
+        <span class="menu-icon">
+          <app-keenicon name="monitor-mobile" class="fs-2"></app-keenicon>
+        </span>
+        <span class="menu-title" data-link="/monitoring/passenger" translate> History Passenger </span>
+        <!-- <span class="menu-arrow"></span> -->
+      </a>
+      <!-- <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/bsd/tirta-jaya">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>BSD Tirta Jaya </span>
+          </a>
+        </div>
+      </div> -->
+    </div>
+
     @if (levelrule === 8 && username === 'admin_11' || levelrule === 2 && username === 'fomlg') {
     <!-- Separator -->
     <div class="menu-item">
@@ -253,64 +302,6 @@
               <span class="bullet bullet-dot"></span>
             </span>
             <span class="menu-title" translate>BSD Tirta Jaya </span>
-          </a>
-        </div>
-      </div> -->
-    </div>
-
-    <!-- Daily Deposit -->
-    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
-      <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/deposit/daily">
-        <span class="menu-icon">
-          <app-keenicon name="save-deposit" class="fs-2"></app-keenicon>
-        </span>
-        <span class="menu-title" data-link="/finance/deposit" translate> Deposit </span>
-        <!-- <span class="menu-arrow"></span> -->
-      </a>
-      <!-- <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/deposit/daily">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title" translate>Daily </span>
-          </a>
-        </div>
-      </div> -->
-    </div>
-
-    <!-- Cash Out -->
-    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
-      <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/cash-out/list">
-        <span class="menu-icon">
-          <app-keenicon name="finance-calculator" class="fs-2"></app-keenicon>
-        </span>
-        <span class="menu-title" data-link="/finance/cash-out" translate> Cash Out </span>
-        <!-- <span class="menu-arrow"></span> -->
-      </a>
-      <!-- <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/cash-out/list">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title" translate>List </span>
-          </a>
-        </div>
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/cash-out/recapitulation">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title" translate>Recapitulation </span>
-          </a>
-        </div>
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/cash-out/spareparts">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title" translate>Spareparts </span>
           </a>
         </div>
       </div> -->
@@ -376,6 +367,64 @@
           </div>
         </div> -->
       </div>
+    </div>
+
+    <!-- Daily Deposit -->
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+      <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/deposit/daily">
+        <span class="menu-icon">
+          <app-keenicon name="save-deposit" class="fs-2"></app-keenicon>
+        </span>
+        <span class="menu-title" data-link="/finance/deposit" translate> Deposit </span>
+        <!-- <span class="menu-arrow"></span> -->
+      </a>
+      <!-- <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/deposit/daily">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>Daily </span>
+          </a>
+        </div>
+      </div> -->
+    </div>
+
+    <!-- Cash Out -->
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+      <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/cash-out/list">
+        <span class="menu-icon">
+          <app-keenicon name="finance-calculator" class="fs-2"></app-keenicon>
+        </span>
+        <span class="menu-title" data-link="/finance/cash-out" translate> Cash Out </span>
+        <!-- <span class="menu-arrow"></span> -->
+      </a>
+      <!-- <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/cash-out/list">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>List </span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/cash-out/recapitulation">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>Recapitulation </span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/cash-out/spareparts">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>Spareparts </span>
+          </a>
+        </div>
+      </div> -->
     </div>
 
     <!-- Recapitulation -->
@@ -483,7 +532,28 @@
         <span class="menu-icon">
           <app-keenicon name="monitor-mobile" class="fs-2"></app-keenicon>
         </span>
-        <span class="menu-title" data-link="/monitoring/package" translate> Package </span>
+        <span class="menu-title" data-link="/monitoring/history/package" translate> History Package </span>
+        <!-- <span class="menu-arrow"></span> -->
+      </a>
+      <!-- <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/bsd/tirta-jaya">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>BSD Tirta Jaya </span>
+          </a>
+        </div>
+      </div> -->
+    </div>
+
+    <!-- Monitoring History Penumpang -->
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+      <a class="menu-link without-sub" routerLinkActive="active" routerLink="monitoring/passenger">
+        <span class="menu-icon">
+          <app-keenicon name="monitor-mobile" class="fs-2"></app-keenicon>
+        </span>
+        <span class="menu-title" data-link="/monitoring/history/passenger" translate> History Passenger </span>
         <!-- <span class="menu-arrow"></span> -->
       </a>
       <!-- <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
@@ -525,7 +595,7 @@
         <span class="menu-icon">
           <app-keenicon name="monitor-mobile" class="fs-2"></app-keenicon>
         </span>
-        <span class="menu-title" data-link="/monitoring/commission" translate> Commission </span>
+        <span class="menu-title" data-link="/monitoring/commission" translate> Commission & Piutang </span>
         <!-- <span class="menu-arrow"></span> -->
       </a>
       <!-- <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">

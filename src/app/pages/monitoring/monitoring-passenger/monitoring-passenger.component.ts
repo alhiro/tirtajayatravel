@@ -31,6 +31,7 @@ import { Utils } from '@app/@shared';
 import Swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
 import { PackageService } from '@app/pages/booking/package/package.service';
+import { PassengerService } from '@app/pages/booking/passenger/passenger.service';
 
 interface EventObject {
   event: string;
@@ -40,19 +41,17 @@ interface EventObject {
   };
 }
 @Component({
-  selector: 'app-monitoring-package',
-  templateUrl: './monitoring-package.component.html',
-  styleUrls: ['./monitoring-package.component.scss'],
+  selector: 'app-monitoring-passenger',
+  templateUrl: './monitoring-passenger.component.html',
+  styleUrls: ['./monitoring-passenger.component.scss'],
 })
-export class MonitoringPackageComponent implements OnInit, OnDestroy {
+export class MonitoringPassengerComponent implements OnInit {
   public levelrule!: number;
   public username!: string;
   public city_id!: number;
 
   @ViewChild('table') table!: APIDefinition;
   public columns!: Columns[];
-  public columnsPackage!: Columns[];
-  public columnsPassenger!: Columns[];
   public category: any;
 
   public city: any;
@@ -124,7 +123,7 @@ export class MonitoringPackageComponent implements OnInit, OnDestroy {
     private readonly cdr: ChangeDetectorRef,
     private handlerResponseService: HandlerResponseService,
     private utils: Utils,
-    private packageService: PackageService
+    private passengerService: PassengerService
   ) {
     this.levelrule = this.utils.getLevel();
     this.city_id = this.utils.getCity();
@@ -157,22 +156,22 @@ export class MonitoringPackageComponent implements OnInit, OnDestroy {
       status: this.pagination.status,
     };
 
-    this.dataListGosend(this.params);
+    this.dataList(this.params);
 
     this.configuration.resizeColumn = false;
     this.configuration.fixedColumnWidth = true;
     this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = true;
 
-    this.columnsPackage = [
+    this.columns = [
       // { key: 'category_sub_id', title: 'No' },
       { key: 'resi_number', title: 'Resi Number' },
       { key: 'level', title: 'Level' },
-      { key: 'sender_id', title: 'Sender' },
-      { key: 'recipient_id', title: 'Recipient' },
+      { key: 'waybill_id', title: 'Waybill' },
+      { key: 'destination_id', title: 'Destination' },
       { key: 'book_date', title: 'Book Date' },
       { key: 'created_at', title: 'Created At' },
-      { key: 'received_by', title: 'Received' },
+      { key: 'status_passenger', title: 'Status Passenger' },
     ];
   }
 
@@ -194,7 +193,7 @@ export class MonitoringPackageComponent implements OnInit, OnDestroy {
         city: this.currentTab,
         status: '',
       };
-      this.dataListGosend(this.params);
+      this.dataList(this.params);
     } else if (this.currentTab === 'Surabaya') {
       this.params = {
         limit: this.pagination.limit,
@@ -205,7 +204,7 @@ export class MonitoringPackageComponent implements OnInit, OnDestroy {
         city: this.currentTab,
         status: '',
       };
-      this.dataListGosend(this.params);
+      this.dataList(this.params);
     }
   }
 
@@ -233,12 +232,12 @@ export class MonitoringPackageComponent implements OnInit, OnDestroy {
       city: this.currentTab,
       status: this.pagination.status,
     }; // see https://github.com/typicode/json-server
-    this.dataListGosend(this.params);
+    this.dataList(this.params);
   }
 
-  private dataListGosend(params: ExtendedPaginationContext): void {
+  private dataList(params: ExtendedPaginationContext): void {
     this.configuration.isLoading = true;
-    this.packageService
+    this.passengerService
       .search(params)
       .pipe(
         takeUntil(this.ngUnsubscribe),
@@ -250,6 +249,7 @@ export class MonitoringPackageComponent implements OnInit, OnDestroy {
       )
       .subscribe((response: any) => {
         this.data = response.data;
+        console.log(this.data);
         this.dataLength = response.length;
 
         // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
@@ -308,13 +308,13 @@ export class MonitoringPackageComponent implements OnInit, OnDestroy {
     console.log(this.booktime);
   }
 
-  searchDataPackage: any = (text$: Observable<string>) =>
+  searchDataPassenger: any = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(1000),
       distinctUntilChanged(),
       tap(() => (this.configuration.isLoading = true)),
       switchMap((term) =>
-        this.packageService
+        this.passengerService
           .search({
             limit: this.params.limit,
             page: this.params.page,

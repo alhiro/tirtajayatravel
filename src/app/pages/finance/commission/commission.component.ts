@@ -187,6 +187,21 @@ export class CommissionComponent implements OnInit, OnDestroy {
     window.open('#/finance/commission/package/printcommission', '_blank');
   }
 
+  printFilterBa(datepicker: any) {
+    const paramRange = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: this.city_id ? this.city_id : '',
+      status: 'Bayar Tujuan (COD)',
+    };
+    console.log(paramRange);
+    sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
+    window.open('#/finance/commission/package/printbayartujuan', '_blank');
+  }
+
   onDateChange(date: NgbDateStruct): void {
     this.receivedDate = date;
   }
@@ -573,7 +588,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
 
   async openModalEditPayment(event: PackageModel) {
     console.log(event);
-    this.formRecipient.patchValue(event?.recipient);
+    this.form.patchValue(event);
 
     this.translate
       .get(['SWAL.ARE_YOU_SURE', 'SWAL.REVERT_WARNING', 'SWAL.CONFIRM_SUBMIT', 'SWAL.BACK_BUTTON'])
@@ -596,6 +611,43 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   dataEditPayment() {
+    this.form.patchValue({
+      check_payment: true,
+    });
+    console.log(this.form.value);
+
+    this.isLoading = true;
+    this.packageService
+      .patch(this.form.value)
+      .pipe(
+        finalize(() => {
+          this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 5000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponent.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  dataEditPaymentRecipient() {
     // send data to update bayar tujuan
     this.formRecipient.patchValue({
       sign: this.username,
@@ -635,7 +687,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
 
   async openModalEditCommission(event: PackageModel) {
     console.log(event);
-    this.formRecipient.patchValue(event?.recipient);
+    this.form.patchValue(event);
 
     this.translate
       .get(['SWAL.ARE_YOU_SURE', 'SWAL.REVERT_WARNING', 'SWAL.CONFIRM_SUBMIT', 'SWAL.BACK_BUTTON'])
@@ -658,6 +710,44 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   dataEditCommission() {
+    this.form.patchValue({
+      check_date_sp: new Date(),
+      check_sp: true,
+    });
+    console.log(this.form.value);
+
+    this.isLoading = true;
+    this.packageService
+      .patch(this.form.value)
+      .pipe(
+        finalize(() => {
+          this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 5000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponent.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  dataEditCommissionRecipient() {
     // send data to update commission
     this.formRecipient.patchValue({
       date_payment: new Date(),

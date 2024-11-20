@@ -60,6 +60,11 @@ const Routing: Routes = [
     loadChildren: () =>
       import('./monitoring/monitoring-package/monitoring-package.module').then((m) => m.MonitoringPackageModule),
   },
+  {
+    path: 'monitoring/passenger',
+    loadChildren: () =>
+      import('./monitoring/monitoring-passenger/monitoring-passenger.module').then((m) => m.MonitoringPassengerModule),
+  },
 
   // Garage
   {

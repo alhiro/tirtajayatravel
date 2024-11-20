@@ -851,6 +851,20 @@ export class PassengerComponent implements OnInit, OnDestroy {
   formatterCustomer = (result: { name: string }) => result.name;
 
   onCustomerSelect(event: any, inputElement: HTMLInputElement) {
+    event.preventDefault();
+    console.log(event);
+    const selectedItem = event.item;
+    if (selectedItem) {
+      console.log(this.modelCustomer);
+
+      if (this.modelCustomer.customer_id === selectedItem.customer_id) {
+        this.selectedAddress.push(selectedItem);
+      } else {
+        this.selectedAddress = [];
+      }
+      console.log(this.selectedAddress);
+    }
+
     inputElement.blur();
   }
 

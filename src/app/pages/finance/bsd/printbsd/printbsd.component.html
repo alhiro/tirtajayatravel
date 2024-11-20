@@ -135,7 +135,7 @@
         <!-- end::Table -->
       </div>
       <!-- end::Table container -->
-      } @if (dataSurabayaPassenger.length > 0) {
+      } @if (dataSurabayaPassenger?.length > 0) {
       <!-- begin::Table container -->
       <div class="table-responsive table-custom mb-7">
         <!-- begin::Table -->
@@ -240,7 +240,8 @@
             <div class="mt-7">
               <b><u>KREDIT</u></b
               ><br />
-              <b>Total Commission Driver</b>: {{ totalCommissionPassenger | currency : 'Rp ' : true : '1.0-2' }} <br />
+              <b>Total Commission Driver</b>: {{ totalCommissionPassengerKredit | currency : 'Rp ' : true : '1.0-2' }}
+              <br />
               <b>BBM</b>: {{ bbm | number }} L, ({{ bbmTotal | currency : 'Rp ' : true : '1.0-2' }})<br />
               <b>Parking</b>: {{ totalParkingPassenger | currency : 'Rp ' : true : '1.0-2' }}<br />
               <b>In Toll</b>: {{ inToll | currency : 'Rp ' : true : '1.0-2' }}<br />
@@ -359,7 +360,7 @@
       </div>
       <!--end::Row-->
 
-      @if (dataMalangPackage.length > 0) {
+      @if (dataMalangPackage?.length > 0) {
       <!-- begin::Table container -->
       <div class="table-responsive table-custom mb-7">
         <!-- begin::Table -->

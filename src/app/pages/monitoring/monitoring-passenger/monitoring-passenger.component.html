@@ -8,7 +8,7 @@
           type="text"
           class="form-control"
           [(ngModel)]="searchGlobal"
-          [ngbTypeahead]="searchDataPackage"
+          [ngbTypeahead]="searchDataPassenger"
           [placeholder]="'Search name, address, no resi' | translate"
         />
         <span hidden translate>Search name, address, no resi</span>
@@ -35,8 +35,8 @@
     <div class="card-header border-0 pt-5 p-0">
       <h3 class="card-title align-items-start flex-column">
         <span class="card-label fw-bolder fs-3 mb-1">
-          @if (currentTab === 'Malang') { Monitoring Paket Malang } @else if (currentTab === 'Surabaya') { Monitoring
-          Paket Surabaya }
+          @if (currentTab === 'Malang') { Monitoring Passenger Malang } @else if (currentTab === 'Surabaya') {
+          Monitoring Passenger Surabaya }
         </span>
         <span class="text-muted mt-1 fw-bold fs-7"> Have {{ dataLength | number }} items </span>
       </h3>
@@ -67,7 +67,7 @@
               #table
               [configuration]="configuration"
               [data]="data"
-              [columns]="columnsPackage"
+              [columns]="columns"
               [pagination]="pagination"
               (event)="eventEmitted($event)"
               tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
@@ -87,25 +87,42 @@
                 </td>
                 <td>
                   <span class="text-gray-900 d-block">
-                    @if (row.level === 'Normal') {
-                    <span class="badge badge-light-primary">Normal</span>
-                    } @else if (row.level === 'Urgent') {
-                    <span class="badge badge-light-danger">Urgent</span>
+                    @if (row.status === 'Biasa') {
+                    <span class="badge">Biasa</span>
+                    } @else if (row.status === 'Paket') {
+                    <span class="badge badge-light-primary">Paket</span>
+                    } @else {
+                    <span class="badge badge-light-danger">Executif</span>
                     }
                     <br />
-                    <span class="text-gray-900 d-block">{{ row.status }}</span>
-                    <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : true : '1.0-2' }}</span>
+                    <span class="text-gray-900 d-block">{{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}</span>
                   </span>
                 </td>
                 <td>
-                  <span class="text-gray-900 d-block">{{ row.recipient?.name }}</span>
-                </td>
-                <td>
+                  @for (value of row.waybills; track value) {
                   <span class="text-gray-900 d-block">
-                    {{ row.recipient?.address }} <br />
-                    {{ row.recipient?.telp }} <br />
-                    {{ row.description }}
+                    <ul>
+                      <li>
+                        {{ value?.name }} <br />
+                        {{ value?.address }} <br />
+                        {{ value?.telp }}
+                      </li>
+                    </ul>
                   </span>
+                  }
+                </td>
+                <td>
+                  @for (value of row.destinations; track value) {
+                  <span class="text-gray-900 d-block">
+                    <ul>
+                      <li>
+                        {{ value?.name }} <br />
+                        {{ value?.address }} <br />
+                        {{ value?.telp }}
+                      </li>
+                    </ul>
+                  </span>
+                  }
                 </td>
                 <td>
                   <span class="text-gray-900 d-block">
@@ -117,10 +134,10 @@
                       </span>
                     </div>
                     <span class="badge badge-light-primary">
-                      {{ row.go_send.send_date ? (row.go_send.send_date | date : 'H:mm' : 'GMT') : '-' }} |
-                      {{ row.go_send.send_date ? (row.go_send.send_date | date : 'dd' : 'GMT') : '-' }} |
-                      {{ row.employee.name ? row.employee.name : '-' }} |
-                      {{ row.car.car_number ? row.car.car_number : '-' }}
+                      {{ row.go_send?.send_date ? (row.go_send?.send_date | date : 'H:mm' : 'GMT') : '-' }} |
+                      {{ row.go_send?.send_date ? (row.go_send?.send_date | date : 'dd' : 'GMT') : '-' }} |
+                      {{ row.go_send?.employee?.name ? row.go_send?.employee?.name : '-' }} |
+                      {{ row.go_send?.car?.car_number ? row.go_send?.car?.car_number : '-' }}
                     </span>
                   </span>
                 </td>
@@ -131,7 +148,23 @@
                 </td>
                 <td>
                   <span class="text-gray-900 d-block">
-                    {{ row.received_by }}
+                    @if (row.status_passenger === 'Progress') {
+                    <span class="badge badge-light-primary">
+                      {{ row.status_passenger }}
+                    </span>
+                    } @else if (row.status_passenger === 'Delivery') {
+                    <span class="badge badge-light-info">
+                      {{ row.status_passenger }}
+                    </span>
+                    } @else if (row.status_passenger === 'Cancel') {
+                    <span class="badge badge-light-warning">
+                      {{ row.status_passenger }}
+                    </span>
+                    }@else {
+                    <span class="badge badge-light-success">
+                      {{ row.status_passenger }}
+                    </span>
+                    }
                   </span>
                 </td>
               </ng-template>
@@ -151,7 +184,7 @@
               #table
               [configuration]="configuration"
               [data]="data"
-              [columns]="columnsPackage"
+              [columns]="columns"
               [pagination]="pagination"
               (event)="eventEmitted($event)"
               tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
@@ -171,22 +204,42 @@
                 </td>
                 <td>
                   <span class="text-gray-900 d-block">
-                    @if (row.level === 'Normal') {
-                    <span class="badge badge-light-primary">Normal</span>
-                    } @else if (row.level === 'Urgent') {
-                    <span class="badge badge-light-danger">Urgent</span>
+                    @if (row.status === 'Biasa') {
+                    <span class="badge">Biasa</span>
+                    } @else if (row.status === 'Paket') {
+                    <span class="badge badge-light-primary">Paket</span>
+                    } @else {
+                    <span class="badge badge-light-danger">Executif</span>
                     }
+                    <br />
+                    <span class="text-gray-900 d-block">{{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}</span>
                   </span>
                 </td>
                 <td>
-                  <span class="text-gray-900 d-block">{{ row.recipient?.name }}</span>
-                </td>
-                <td>
+                  @for (value of row.waybills; track value) {
                   <span class="text-gray-900 d-block">
-                    {{ row.recipient?.address }} <br />
-                    {{ row.recipient?.telp }} <br />
-                    {{ row.description }}
+                    <ul>
+                      <li>
+                        {{ value?.name }} <br />
+                        {{ value?.address }} <br />
+                        {{ value?.telp }}
+                      </li>
+                    </ul>
                   </span>
+                  }
+                </td>
+                <td>
+                  @for (value of row.destinations; track value) {
+                  <span class="text-gray-900 d-block">
+                    <ul>
+                      <li>
+                        {{ value?.name }} <br />
+                        {{ value?.address }} <br />
+                        {{ value?.telp }}
+                      </li>
+                    </ul>
+                  </span>
+                  }
                 </td>
                 <td>
                   <span class="text-gray-900 d-block">
@@ -198,10 +251,10 @@
                       </span>
                     </div>
                     <span class="badge badge-light-primary">
-                      {{ row.go_send.send_date ? (row.go_send.send_date | date : 'H:mm' : 'GMT') : '-' }} |
-                      {{ row.go_send.send_date ? (row.go_send.send_date | date : 'dd' : 'GMT') : '-' }} |
-                      {{ row.employee.name ? row.employee.name : '-' }} |
-                      {{ row.car.car_number ? row.car.car_number : '-' }}
+                      {{ row.go_send?.send_date ? (row.go_send?.send_date | date : 'H:mm' : 'GMT') : '-' }} |
+                      {{ row.go_send?.send_date ? (row.go_send?.send_date | date : 'dd' : 'GMT') : '-' }} |
+                      {{ row.go_send?.employee?.name ? row.go_send?.employee?.name : '-' }} |
+                      {{ row.go_send?.car?.car_number ? row.go_send?.car?.car_number : '-' }}
                     </span>
                   </span>
                 </td>
@@ -211,8 +264,24 @@
                   </span>
                 </td>
                 <td>
-                  <span class="badge badge-light-primary">
-                    {{ row.status_package }}
+                  <span class="text-gray-900 d-block">
+                    @if (row.status_passenger === 'Progress') {
+                    <span class="badge badge-light-primary">
+                      {{ row.status_passenger }}
+                    </span>
+                    } @else if (row.status_passenger === 'Delivery') {
+                    <span class="badge badge-light-info">
+                      {{ row.status_passenger }}
+                    </span>
+                    } @else if (row.status_passenger === 'Cancel') {
+                    <span class="badge badge-light-warning">
+                      {{ row.status_passenger }}
+                    </span>
+                    }@else {
+                    <span class="badge badge-light-success">
+                      {{ row.status_passenger }}
+                    </span>
+                    }
                   </span>
                 </td>
               </ng-template>
