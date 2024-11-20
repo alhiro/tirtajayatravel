@@ -274,7 +274,7 @@
                 </a>
                 }
 
-                <!-- <a
+                <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
@@ -284,8 +284,8 @@
                   (click)="openModalCancel(row)"
                 >
                   <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
-                </a> -->
-                <a
+                </a>
+                <!-- <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
@@ -295,7 +295,7 @@
                   (click)="openModalDelete(row)"
                 >
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
-                </a>
+                </a> -->
               </td>
               } @else {
               <td class="text-end">
@@ -413,7 +413,7 @@
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
                 }
-                <!-- <a
+                <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
@@ -423,8 +423,8 @@
                   (click)="openModalCancel(row)"
                 >
                   <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
-                </a> -->
-                <a
+                </a>
+                <!-- <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
@@ -434,7 +434,7 @@
                   (click)="openModalDelete(row)"
                 >
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
-                </a>
+                </a> -->
               </td>
               } @else {
               <td class="text-end">
@@ -527,6 +527,7 @@
                 <span class="badge badge-light-warning">{{ row.status_package }}</span>
               </td>
               <td class="text-end">
+                @if (username === 'admin_11' && levelrule === 8) {
                 <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm fs-9"
                   data-bs-toggle="tooltip"
@@ -538,6 +539,7 @@
                 >
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
                 </a>
+                }
               </td>
             </ng-template>
           </ngx-table>
@@ -601,7 +603,7 @@
                 <span class="badge badge-light-success">{{ row.status_package }}</span>
               </td>
               <td class="text-end">
-                <a
+                <!-- <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm fs-9"
                   data-bs-toggle="tooltip"
                   data-bs-trigger="hover"
@@ -610,7 +612,7 @@
                   [ngbTooltip]="'TOOLTIP.DETAIL_PACKAGE' | translate"
                 >
                   <app-keenicon name="eye" class="fs-md-3 text-primary"></app-keenicon>
-                </a>
+                </a> -->
               </td>
             </ng-template>
           </ngx-table>

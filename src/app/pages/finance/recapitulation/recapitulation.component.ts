@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { Utils } from '@app/@shared';
 import { Dates } from '@app/@shared/interfaces/pagination';
 import { NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap';
@@ -11,7 +11,7 @@ import { CashoutService } from '../cashout/cashout.service';
   templateUrl: './recapitulation.component.html',
   styleUrls: ['./recapitulation.component.scss'],
 })
-export class RecapitulationComponent implements OnInit {
+export class RecapitulationComponent implements OnInit, OnDestroy {
   public data: any[] = [];
   public totalSetoran: any = 0;
   public totalCommission: any = 0;
@@ -52,7 +52,16 @@ export class RecapitulationComponent implements OnInit {
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private cashoutService: CashoutService, private utils: Utils, private readonly cdr: ChangeDetectorRef) {}
+  constructor(private cashoutService: CashoutService, private utils: Utils, private readonly cdr: ChangeDetectorRef) {
+    // set min selected date
+    const minDate = this.utils.indonesiaDateFormat(new Date());
+    var getDate = new Date(minDate);
+
+    const valueBookFromDate = new Date(getDate.getFullYear(), getDate.getMonth(), getDate.getDate());
+    const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookFromDate);
+    this.startDate = startDate;
+    this.endDate = endDate;
+  }
 
   ngOnInit() {
     this.columns = [
@@ -266,9 +275,46 @@ export class RecapitulationComponent implements OnInit {
 
   revenueData() {}
 
-  bsdPnpData() {}
+  bsdPnpData() {
+    const paramRange = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: '',
+      status: this.pagination.status,
+    };
+    console.log(paramRange);
+    sessionStorage.setItem('printrecapitulation', JSON.stringify(paramRange));
+    window.open('#/finance/recapitulation/deposit/printbsdpnp', '_blank');
+  }
 
-  bsdPktData() {}
+  bsdPktData() {
+    const paramRange = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: '',
+      status: this.pagination.status,
+    };
+    console.log(paramRange);
+    sessionStorage.setItem('printrecapitulation', JSON.stringify(paramRange));
+    window.open('#/finance/recapitulation/deposit/printbsdpkt', '_blank');
+  }
 
   bbmData() {}
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+
+    sessionStorage.removeItem('printrecapitulation');
+    sessionStorage.removeItem('printlistdate');
+    sessionStorage.removeItem('printpiutang');
+    sessionStorage.removeItem('printbsdpnp');
+    sessionStorage.removeItem('printbsdpkt');
+  }
 }

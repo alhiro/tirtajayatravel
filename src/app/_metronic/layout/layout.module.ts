@@ -135,6 +135,24 @@ const routes: Routes = [
         (m) => m.PrintrecapitulationModule
       ),
   },
+  // print recapitulation bsd pnp
+  {
+    path: 'finance/recapitulation/deposit/printbsdpnp',
+    component: PrintrecapitulationComponent,
+    loadChildren: () =>
+      import('../../pages/finance/recapitulation/printrecapitulation/printrecapitulation.module').then(
+        (m) => m.PrintrecapitulationModule
+      ),
+  },
+  // print recapitulation bsd pkt
+  {
+    path: 'finance/recapitulation/deposit/printbsdpkt',
+    component: PrintrecapitulationComponent,
+    loadChildren: () =>
+      import('../../pages/finance/recapitulation/printrecapitulation/printrecapitulation.module').then(
+        (m) => m.PrintrecapitulationModule
+      ),
+  },
 ];
 
 @NgModule({

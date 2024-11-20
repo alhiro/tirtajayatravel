@@ -8,6 +8,7 @@ import { finalize, Subject, takeUntil } from 'rxjs';
 import localeId from '@angular/common/locales/id';
 import { Router } from '@angular/router';
 import { CashoutService } from '../../cashout/cashout.service';
+import { PassengerModel } from '@app/pages/booking/passenger/models/passenger.model';
 
 interface GroupedDataCost {
   id: number;
@@ -38,6 +39,7 @@ export class PrintrecapitulationComponent implements OnInit {
   public configuration: Config = { ...DefaultConfig };
   public columns!: Columns[];
   public columnsPiutang!: Columns[];
+  public columnsBsd!: Columns[];
 
   public pagination = {
     limit: 10,
@@ -115,6 +117,23 @@ export class PrintrecapitulationComponent implements OnInit {
       { key: '', title: 'Total Piutang' },
     ];
 
+    // data table bsd pnp & bsd pnk
+    this.columnsBsd = [
+      { key: '', title: 'No' },
+      { key: 'bsd_date', title: 'Date' },
+      { key: 'bsd_passenger', title: 'No Bsd Pnp' },
+      { key: 'employee.name', title: 'Driver' },
+      { key: 'car_number', title: 'No Mobil' },
+      { key: 'total_passenger', title: '#PNP' },
+      { key: 'mandatory_deposit', title: 'T.Wajib' },
+      { key: 'driver_deposit', title: 'T.Driver' },
+      { key: 'voluntary_deposit', title: 'T.SKRL' },
+      { key: 'agent_commission', title: 'Komisi' },
+      { key: 'overnight', title: 'Bermalam' },
+      { key: 'extra', title: 'Extra' },
+      { key: 'others', title: 'Lainnya' },
+    ];
+
     this.configuration.resizeColumn = false;
     this.configuration.fixedColumnWidth = true;
     this.configuration.horizontalScroll = false;
@@ -162,6 +181,18 @@ export class PrintrecapitulationComponent implements OnInit {
       console.log('run printrevenue');
     } else if (this.lastSegment === 'printbsdpnp') {
       console.log('run printbsdpnp');
+
+      const params = {
+        limit: 100,
+        page: 1,
+        search: '',
+        startDate: this.startDate,
+        endDate: this.endDate,
+        city: '',
+        status: 'bsdDone',
+      };
+
+      this.dataListBsdPnp(params);
     } else if (this.lastSegment === 'printbsdpkt') {
       console.log('run printbsdpkt');
     } else if (this.lastSegment === 'printbbm') {
@@ -299,12 +330,59 @@ export class PrintrecapitulationComponent implements OnInit {
       });
   }
 
+  private dataListBsdPnp(params: ExtendedPaginationContext): void {
+    this.configuration.isLoading = true;
+    this.packageService
+      .listSP(params)
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        finalize(() => {
+          this.configuration.isLoading = false;
+        })
+      )
+      .subscribe((response: any) => {
+        console.log(response.data);
+
+        const filterCommissionPassenger = response.data?.map((data: any) =>
+          data.passengers?.find((row: PassengerModel) => row.check_sp === true)
+        );
+        console.log(filterCommissionPassenger);
+        const commissionToll = response.data?.map(
+          (data: any) => (Number(data?.cost?.toll_out) * 0.15) / filterCommissionPassenger?.length
+        );
+
+        const remapDataAll = response.data?.map((item: any) => ({
+          ...item,
+          agent_commission: filterCommissionPassenger
+            ?.map((passenger: PassengerModel) => passenger.agent_commission - commissionToll)
+            .reduce((acc: any, value: any) => acc + value, 0),
+          passengers: filterCommissionPassenger?.map((passenger: PassengerModel) => ({
+            ...passenger,
+            agent_commission: passenger.agent_commission - commissionToll,
+          })),
+        }));
+
+        this.data = remapDataAll;
+        console.log(this.data);
+
+        this.configuration.isLoading = false;
+        response?.length > 0
+          ? (this.configuration.horizontalScroll = true)
+          : (this.configuration.horizontalScroll = false);
+
+        this.cdr.detectChanges();
+      });
+  }
+
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
 
-    sessionStorage.removeItem('city');
     sessionStorage.removeItem('printlistdate');
+    sessionStorage.removeItem('printbsd');
+    sessionStorage.removeItem('printrecapitulation');
+    sessionStorage.removeItem('printbsdpnp');
+    sessionStorage.removeItem('printbsdpkt');
   }
 }
 

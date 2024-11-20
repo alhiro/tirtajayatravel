@@ -130,7 +130,7 @@
       <div class="mt-7">
         <span><b>Total Tariff</b>: {{ totalTariff | currency : 'Rp ' : true : '1.0-2' }}</span
         ><br />
-        <span><b>Total Passenger</b>: {{ totalPassenger | number }}</span>
+        <span><b>Total Passenger</b>: {{ data?.length | number }}</span>
       </div>
     </div>
   </div>
@@ -244,7 +244,7 @@
       <div class="mt-7">
         <span><b>Total Cost</b>: {{ totalCost | currency : 'Rp ' : true : '1.0-2' }}</span
         ><br />
-        <span><b>Total Koli</b>: {{ totalKoli | number }}</span>
+        <span><b>Total Koli</b>: {{ data?.length | number }}</span>
       </div>
     </div>
   </div>
