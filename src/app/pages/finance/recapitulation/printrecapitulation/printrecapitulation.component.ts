@@ -23,6 +23,8 @@ interface GroupedDataCost {
 })
 export class PrintrecapitulationComponent implements OnInit {
   public data: any;
+  public totalData: any;
+
   public city: any;
   public status: any;
   public groupAdmin: any;
@@ -294,12 +296,10 @@ export class PrintrecapitulationComponent implements OnInit {
           this.data = result;
 
           this.configuration.isLoading = false;
-          this.configuration.horizontalScroll = true;
           this.cdr.detectChanges();
         } else {
           this.data = [];
           this.configuration.isLoading = false;
-          this.configuration.horizontalScroll = false;
           this.cdr.detectChanges();
         }
       });
@@ -347,12 +347,14 @@ export class PrintrecapitulationComponent implements OnInit {
           data.passengers?.find((row: PassengerModel) => row.check_sp === true)
         );
         console.log(filterCommissionPassenger);
+        console.log(filterCommissionPassenger.length);
         const commissionToll = response.data?.map(
           (data: any) => (Number(data?.cost?.toll_out) * 0.15) / filterCommissionPassenger?.length
         );
 
         const remapDataAll = response.data?.map((item: any) => ({
           ...item,
+          total_passengers: filterCommissionPassenger.length,
           agent_commission: filterCommissionPassenger
             ?.map((passenger: PassengerModel) => passenger.agent_commission - commissionToll)
             .reduce((acc: any, value: any) => acc + value, 0),
@@ -362,14 +364,88 @@ export class PrintrecapitulationComponent implements OnInit {
           })),
         }));
 
-        this.data = remapDataAll;
+        // count total
+        const totals = {
+          pnp: 0,
+          twajib: 0,
+          tdriver: 0,
+          tskrl: 0,
+          komisi: 0,
+          bermalam: 0,
+          extra: 0,
+          lainnya: 0,
+        };
+        // Calculate totals
+        remapDataAll.forEach((item: any) => {
+          totals.pnp += parseFloat(item?.total_passengers);
+          totals.twajib += parseFloat(item?.cost?.mandatory_deposit);
+          totals.tdriver += parseFloat(item?.cost?.driver_deposit);
+          totals.tskrl += parseFloat(item?.cost?.voluntary_deposit);
+          totals.komisi += parseFloat(item?.agent_commission);
+          totals.bermalam += parseFloat(item?.cost?.overnight);
+          totals.extra += parseFloat(item?.cost?.extra);
+          totals.lainnya += parseFloat(item?.cost?.others);
+        });
+        console.log(remapDataAll);
+
+        const result = [
+          ...remapDataAll,
+          {
+            bsd_date: 'Total',
+            agent_commission: totals.komisi,
+            total_passengers: totals.pnp,
+            passengers: filterCommissionPassenger,
+            cost: {
+              mandatory_deposit: totals.twajib,
+              driver_deposit: totals.tdriver,
+              voluntary_deposit: totals.tskrl,
+              overnight: totals.bermalam,
+              extra: totals.extra,
+              others: totals.lainnya,
+            },
+          },
+        ];
+        this.data = result;
         console.log(this.data);
 
-        this.configuration.isLoading = false;
-        response?.length > 0
-          ? (this.configuration.horizontalScroll = true)
-          : (this.configuration.horizontalScroll = false);
+        // // count total
+        // const totals = {
+        //   twajib: 0,
+        //   tdriver: 0,
+        //   tskrl: 0,
+        //   komisi: 0,
+        //   bermalam: 0,
+        //   extra: 0,
+        //   lainnya: 0,
+        // };
 
+        // // Calculate totals
+        // remapDataAll.forEach((item: any) => {
+        //   totals.twajib += parseFloat(item?.cost?.mandatory_deposit);
+        //   totals.tdriver += parseFloat(item?.cost?.driver_deposit);
+        //   totals.tskrl += parseFloat(item?.cost?.voluntary_deposit);
+        //   totals.komisi += parseFloat(item?.agent_commission);
+        //   totals.bermalam += parseFloat(item?.cost?.overnight);
+        //   totals.extra += parseFloat(item?.cost?.extra);
+        //   totals.lainnya += parseFloat(item?.cost?.others);
+        // });
+
+        // const result = [
+        //   ...remapDataAll,
+        //   {
+        //     date: 'Total',
+        //     twajib: totals.twajib,
+        //     tdriver: totals.tdriver,
+        //     tskrl: totals.tskrl,
+        //     komisi: totals.komisi,
+        //     bermalam: totals.bermalam,
+        //     extra: totals.extra,
+        //     lainnya: totals.lainnya,
+        //   },
+        // ];
+        // this.totalData = result;
+
+        this.configuration.isLoading = false;
         this.cdr.detectChanges();
       });
   }

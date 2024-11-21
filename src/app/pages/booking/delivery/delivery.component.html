@@ -35,40 +35,41 @@
         </li>
       </ul>
     </div>
-    }
+    } @if (levelrule === 2 && city_id === 1) {
     <div class="card-toolbar">
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="openModalNewSP()" [style.cursor]="'pointer'">
           <a class="nav-link py-2 px-4 active">New Schedule</a>
         </li>
         <!-- <li class="nav-item" [style.cursor]="'pointer'">
-          <a
-            class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
-            data-bs-toggle="tooltip"
-            data-bs-trigger="hover"
-            data-bs-dismiss-="click"
-            data-bs-placement="top"
-            title="Generate SP Package"
-            (click)="openModalGeneratePackageSP()"
-          >
-            <app-keenicon name="package" class="fs-md-3 text-light"></app-keenicon>
-          </a>
-        </li>
-        <li class="nav-item" [style.cursor]="'pointer'">
-          <a
-            class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
-            data-bs-toggle="tooltip"
-            data-bs-trigger="hover"
-            data-bs-dismiss-="click"
-            data-bs-placement="top"
-            title="Generate SP Passenger"
-            (click)="openModalGeneratePackageSP()"
-          >
-            <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
-          </a>
-        </li> -->
+            <a
+              class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
+              data-bs-toggle="tooltip"
+              data-bs-trigger="hover"
+              data-bs-dismiss-="click"
+              data-bs-placement="top"
+              title="Generate SP Package"
+              (click)="openModalGeneratePackageSP()"
+            >
+              <app-keenicon name="package" class="fs-md-3 text-light"></app-keenicon>
+            </a>
+          </li>
+          <li class="nav-item" [style.cursor]="'pointer'">
+            <a
+              class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
+              data-bs-toggle="tooltip"
+              data-bs-trigger="hover"
+              data-bs-dismiss-="click"
+              data-bs-placement="top"
+              title="Generate SP Passenger"
+              (click)="openModalGeneratePackageSP()"
+            >
+              <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
+            </a>
+          </li> -->
       </ul>
     </div>
+    }
   </div>
   <!-- end::Header -->
 
@@ -156,6 +157,7 @@
                 <span class="text-gray-900 d-block">{{ row.status }}</span>
               </td>
               <td class="text-end">
+                @if (levelrule === 2 && city_id === 1) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -189,6 +191,7 @@
                 >
                   <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
                 </a>
+                }
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -211,7 +214,9 @@
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
                 </a> -->
-                @if (row?.packages?.length === 0 && row?.passengers?.length === 0) {
+
+                @if (levelrule === 2 && city_id === 1) { @if (row?.packages?.length === 0 && row?.passengers?.length ===
+                0) {
                 <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
@@ -223,7 +228,7 @@
                 >
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
                 </a>
-                }
+                } }
               </td>
             </ng-template>
           </ngx-table>
@@ -774,6 +779,7 @@
           </span>
         </td>
         <td class="text-end">
+          @if (levelrule === 2 && city_id === 1) {
           <a
             class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
             data-bs-toggle="tooltip"
@@ -785,6 +791,7 @@
           >
             <app-keenicon name="minus" class="fs-md-3 text-danger"></app-keenicon>
           </a>
+          }
         </td>
       </ng-template>
     </ngx-table>
@@ -889,6 +896,7 @@
           </span>
         </td>
         <td class="text-end">
+          @if (levelrule === 2 && city_id === 1) {
           <a
             class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
             data-bs-toggle="tooltip"
@@ -900,6 +908,7 @@
           >
             <app-keenicon name="minus" class="fs-md-3 text-danger"></app-keenicon>
           </a>
+          }
         </td>
       </ng-template>
     </ngx-table>

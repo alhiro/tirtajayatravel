@@ -9,7 +9,8 @@
               <h3 class="card-title align-items-start flex-column mb-2">
                 <span class="card-label fw-bolder fs-2">
                   @if (lastSegment === 'printrecapitulation') { REKAPITULASI SETORAN OPERASIONAL } @else if (lastSegment
-                  === 'printpiutang') { REKAPITULASI PIUTANG }
+                  === 'printpiutang') { REKAPITULASI PIUTANG } @else if (lastSegment === 'printbsdpnp') {REKAPITULASI
+                  PENUMPANG}
                 </span>
               </h3>
               @if (startDate && endDate) {
@@ -172,9 +173,11 @@
           [columns]="columnsBsd"
           tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
         >
-          <ng-template let-row let-index="index" ngx-table-row>
+          <ng-template let-row let-index="index" ngx-table-row let-first="$first" let-last="$last">
             <td>
+              @if (row.bsd_date !== 'Total') {
               <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+              }
             </td>
             <td>
               <span class="text-gray-900 d-block">
@@ -192,13 +195,17 @@
               </span>
             </td>
             <td>
+              @if (row.bsd_date === 'Total') {
+              <span class="text-gray-900 d-block"> Total </span>
+              } @else {
               <span class="text-gray-900 d-block">
                 {{ row.car?.car_number }}
               </span>
+              }
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.passengers?.length | number }}
+                {{ row.total_passengers | number }}
               </span>
             </td>
             <td>
@@ -240,6 +247,54 @@
           </ng-template>
         </ngx-table>
         <!-- end::Table -->
+        <!-- <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+          @for(row of totalData; track row.bsd_passenger; let firstRow = $first; let lastRow = $last) {
+            @if(lastRow) {
+              <tr>
+                <td colspan="6">
+                  <span class="text-gray-900 d-block fw-bolder text-center">
+                    TOTAL
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.twajib | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.tdriver | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.tskrl | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.komisi | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.bermalam | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.extra | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-gray-900 d-block">
+                    {{ row.lainnya | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  </span>
+                </td>
+              </tr>
+            } 
+          }
+        </table> -->
       </div>
       <!-- end::Table container -->
     </div>

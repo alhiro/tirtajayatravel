@@ -2,6 +2,15 @@
   ngx-table {
     table {
       display: table;
+      font-size: 12px;
+
+      tbody {
+        tr {
+          &:last-child {
+            font-weight: bold;
+          }
+        }
+      }
     }
   }
 }
