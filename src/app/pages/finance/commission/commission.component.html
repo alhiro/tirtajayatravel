@@ -185,9 +185,9 @@
                 }
               </td>
               <td class="text-end">
-                @if (row.recipient?.received_by) { @if (username === 'admin_11' && levelrule === 8 || username ===
-                'fomlg' && levelrule === 2 || username === 'fosby' && levelrule === 2) { @if (!row.check_sp) { @if
-                (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') { @if (!row.check_sp) {
+                @if (row.recipient?.received_by) { @if (levelrule === 8 || levelrule === 2) { @if (!row.check_sp) { @if
+                (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang' || row.status === 'Lunas (Kantor)') {
+                @if (!row.check_sp) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -200,7 +200,7 @@
                 >
                   <app-keenicon name="save-deposit" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                } } } @if (!row.check_payment) {
+                } } } @if (!row.check_payment && city_id === 1 || !row.check_payment && levelrule === 8) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -313,9 +313,9 @@
                 }
               </td>
               <td class="text-end">
-                @if (row.recipient?.received_by) { @if (username === 'admin_11' && levelrule === 8 || username ===
-                'fomlg' && levelrule === 2 || username === 'fosby' && levelrule === 2) { @if (!row.check_sp) { @if
-                (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') { @if (!row.check_sp) {
+                @if (row.recipient?.received_by) { @if (levelrule === 8 || levelrule === 1) { @if (!row.check_sp) { @if
+                (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang' || row.status === 'Lunas (Kantor)') {
+                @if (!row.check_sp) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -328,7 +328,7 @@
                 >
                   <app-keenicon name="save-deposit" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                } } } @if (!row.check_payment) {
+                } } } @if (!row.check_payment && city_id === 1 || !row.check_payment && levelrule === 8) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"

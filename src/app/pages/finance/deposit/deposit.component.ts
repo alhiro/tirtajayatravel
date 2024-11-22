@@ -16,6 +16,10 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./deposit.component.scss'],
 })
 export class DepositComponent implements OnInit {
+  public levelrule!: number;
+  public city_id!: number;
+  public username!: string;
+
   public columnsPackage!: Columns[];
   public columnsPassenger!: Columns[];
 
@@ -94,18 +98,22 @@ export class DepositComponent implements OnInit {
 
   public pagination = {
     limit: 100,
-    offset: 0,
+    offset: 1,
     count: -1,
     search: '',
     startDate: '',
     endDate: '',
+    city: '',
+    status: '',
   };
-  public params: any = {
-    limit: '',
-    page: '',
+  public params = {
+    limit: 100,
+    page: 1,
     search: '',
     startDate: '',
     endDate: '',
+    city: '',
+    status: '',
   };
 
   date!: NgbDateStruct;
@@ -118,7 +126,11 @@ export class DepositComponent implements OnInit {
     private cashoutService: CashoutService,
     private handlerResponseService: HandlerResponseService,
     private utils: Utils
-  ) {}
+  ) {
+    this.levelrule = this.utils.getLevel();
+    this.city_id = this.utils.getCity();
+    this.username = this.utils.getUsername();
+  }
 
   ngOnInit() {
     this.configuration.resizeColumn = false;
@@ -150,16 +162,19 @@ export class DepositComponent implements OnInit {
     const inputDate = new Date();
     const { startDate, endDate } = this.utils.singleDate(inputDate);
 
-    const params = {
-      limit: 100,
-      page: 1,
-      search: '',
+    this.params = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
       startDate: startDate,
       endDate: endDate,
+      city: this.pagination.city,
+      status: this.pagination.status,
     };
-    console.log(params);
-    this.dataListCashout(params);
-    this.dataListBSD(params);
+
+    console.log(this.params);
+    this.dataListCashout(this.params);
+    this.dataListBSD(this.params);
   }
 
   datepicker() {
@@ -178,6 +193,8 @@ export class DepositComponent implements OnInit {
       search: '',
       startDate: startDate,
       endDate: endDate,
+      city: this.pagination.city,
+      status: this.pagination.status,
     };
     console.log(params);
     this.dataListCashout(params);
@@ -238,13 +255,11 @@ export class DepositComponent implements OnInit {
         this.configuration.horizontalScroll = true;
 
         if (response) {
-          const dataPackage = response.data?.filter((data: GoSendModel) => data.status === 'Box' && data.bsd !== null);
+          const dataPackage = response.data;
           this.dataPackage = dataPackage;
           console.log(this.dataPackage);
 
-          const dataPassenger = response.data?.filter(
-            (data: GoSendModel) => data.status === 'Reguler' && data.bsd_passenger !== null
-          );
+          const dataPassenger = response.data;
           this.dataPassenger = dataPassenger;
           console.log(this.dataPassenger);
 

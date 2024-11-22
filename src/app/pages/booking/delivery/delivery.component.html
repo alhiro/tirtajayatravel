@@ -36,7 +36,7 @@
     </div>
 
     <div class="card-toolbar" style="width: 13.2%">
-      @if (currentTab === 'Malang' && levelrule === 2 && city_id === 1) {
+      @if (currentTab === 'Malang' && levelrule === 2 && city_id === 1 || levelrule === 8) {
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="openModalNewSP()" [style.cursor]="'pointer'">
           <a class="nav-link py-2 px-4 active">New Schedule</a>
@@ -68,7 +68,7 @@
               </a>
             </li> -->
       </ul>
-      } @if (currentTab === 'Surabaya' && levelrule === 2 && city_id === 2) {
+      } @if (currentTab === 'Surabaya' && levelrule === 2 && city_id === 2 || levelrule === 8) {
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="openModalNewSP()" [style.cursor]="'pointer'">
           <a class="nav-link py-2 px-4 active">New Schedule</a>

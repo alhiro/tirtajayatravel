@@ -387,6 +387,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log(this.setCity);
+    console.log(this.delivery);
 
     if (this.setCity === 'Malang') {
       this.currentTab = 'Malang';
@@ -396,8 +397,17 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
     this.dataCategory();
 
-    const valueBookFromDate = moment().utc().startOf('day').format('YYYY-MM-DD HH:mm:ss');
-    const valueBookToDate = moment().utc().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+    let valueBookFromDate;
+    let valueBookToDate;
+
+    if (this.delivery) {
+      valueBookFromDate = moment(this.delivery?.send_date).utc().startOf('day').format('YYYY-MM-DD HH:mm:ss');
+      valueBookToDate = moment(this.delivery?.send_date).utc().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+    } else {
+      valueBookFromDate = moment().utc().startOf('day').format('YYYY-MM-DD HH:mm:ss');
+      valueBookToDate = moment().utc().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+    }
+
     this.startDate = valueBookFromDate;
     this.endDate = valueBookToDate;
 
