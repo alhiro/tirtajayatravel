@@ -1,4 +1,4 @@
-<div class="p-10">
+<div class="p-5">
   <div class="m-0">
     <div class="card-header border-0 pt-5">
       <div class="card-toolbar">
@@ -10,7 +10,7 @@
                 <span class="card-label fw-bolder fs-2">
                   @if (lastSegment === 'printrecapitulation') { REKAPITULASI SETORAN OPERASIONAL } @else if (lastSegment
                   === 'printpiutang') { REKAPITULASI PIUTANG } @else if (lastSegment === 'printbsdpnp') {REKAPITULASI
-                  PENUMPANG}
+                  PENUMPANG} @else if (lastSegment === 'printbsdpkt') {REKAPITULASI PAKET}
                 </span>
               </h3>
               @if (startDate && endDate) {
@@ -30,7 +30,7 @@
     <!-- begin::Body -->
     <div class="card-body py-3">
       <!-- begin::Table container -->
-      <div class="table-responsive">
+      <div class="table-responsive table-custom">
         <!-- begin::Table -->
         <ngx-table
           #table
@@ -121,7 +121,7 @@
     <!-- begin::Body -->
     <div class="card-body py-3">
       <!-- begin::Table container -->
-      <div class="table-responsive">
+      <div class="table-responsive table-custom">
         <!-- begin::Table -->
         <ngx-table
           #table
@@ -164,7 +164,7 @@
     <!-- begin::Body -->
     <div class="card-body py-3">
       <!-- begin::Table container -->
-      <div class="table-responsive">
+      <div class="table-responsive table-custom">
         <!-- begin::Table -->
         <ngx-table
           #table
@@ -180,9 +180,11 @@
               }
             </td>
             <td>
+              @if (row.bsd_date !== 'Total') {
               <span class="text-gray-900 d-block">
                 {{ row.bsd_date | date : 'dd/MM/yyyy' : 'GMT' }}
               </span>
+              }
             </td>
             <td>
               <span class="text-gray-900 d-block">
@@ -246,55 +248,71 @@
             </td>
           </ng-template>
         </ngx-table>
-        <!-- end::Table -->
-        <!-- <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
-          @for(row of totalData; track row.bsd_passenger; let firstRow = $first; let lastRow = $last) {
-            @if(lastRow) {
-              <tr>
-                <td colspan="6">
-                  <span class="text-gray-900 d-block fw-bolder text-center">
-                    TOTAL
-                  </span>
-                </td>
-                <td>
-                  <span class="text-gray-900 d-block">
-                    {{ row.twajib | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                  </span>
-                </td>
-                <td>
-                  <span class="text-gray-900 d-block">
-                    {{ row.tdriver | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                  </span>
-                </td>
-                <td>
-                  <span class="text-gray-900 d-block">
-                    {{ row.tskrl | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                  </span>
-                </td>
-                <td>
-                  <span class="text-gray-900 d-block">
-                    {{ row.komisi | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                  </span>
-                </td>
-                <td>
-                  <span class="text-gray-900 d-block">
-                    {{ row.bermalam | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                  </span>
-                </td>
-                <td>
-                  <span class="text-gray-900 d-block">
-                    {{ row.extra | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                  </span>
-                </td>
-                <td>
-                  <span class="text-gray-900 d-block">
-                    {{ row.lainnya | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                  </span>
-                </td>
-              </tr>
-            } 
-          }
-        </table> -->
+      </div>
+      <!-- end::Table container -->
+    </div>
+    } @if (lastSegment === 'printbsdpkt') {
+    <!-- begin::Body -->
+    <div class="card-body py-3">
+      <!-- begin::Table container -->
+      <div class="table-responsive table-custom">
+        <!-- begin::Table -->
+        <ngx-table
+          #table
+          [configuration]="configuration"
+          [data]="data"
+          [columns]="columnsBsdPkt"
+          tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+        >
+          <ng-template let-row let-index="index" ngx-table-row let-first="$first" let-last="$last">
+            <td>
+              @if (row.bsd_date !== 'Total') {
+              <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+              }
+            </td>
+            <td>
+              @if (row.bsd_date !== 'Total') {
+              <span class="text-gray-900 d-block">
+                {{ row.bsd_date | date : 'dd/MM/yyyy' : 'GMT' }}
+              </span>
+              }
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.bsd }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.employee?.name }}
+              </span>
+            </td>
+            <td>
+              @if (row.bsd_date === 'Total') {
+              <span class="text-gray-900 d-block"> Total </span>
+              } @else {
+              <span class="text-gray-900 d-block">
+                {{ row.car?.car_number }}
+              </span>
+              }
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.total_packages | number }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.total_cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+              </span>
+            </td>
+          </ng-template>
+        </ngx-table>
       </div>
       <!-- end::Table container -->
     </div>

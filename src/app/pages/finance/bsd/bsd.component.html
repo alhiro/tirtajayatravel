@@ -7,14 +7,16 @@
       </span>
       <span class="text-muted mt-1 fw-bold fs-7"> Have {{ dataLength | number }} items </span>
     </h3>
-    <div class="card-toolbar" style="width: 33%">
+    <div class="card-toolbar">
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="setCurrentTab('Done')" [style.cursor]="'pointer'">
           <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Done'" data-toggle="tab">BSD (Done)</a>
         </li>
+        @if (levelrule === 8 || levelrule === 2 && city_id === 1) {
         <li class="nav-item" (click)="setCurrentTab('List')" [style.cursor]="'pointer'">
           <a class="nav-link py-2 px-4" [class.active]="currentTab === 'List'" data-toggle="tab">BSD (List)</a>
         </li>
+        }
       </ul>
     </div>
     <!-- <div class="card-toolbar">

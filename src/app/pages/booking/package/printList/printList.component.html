@@ -51,11 +51,7 @@
                 {{ row.resi_number }}
               </span>
               <span class="text-gray-900 fs-9">
-                {{
-                  row.updatedAt
-                    ? (row.updatedAt | date : 'dd/MM/yyyy H:mm:ss' : 'GMT')
-                    : (row.createdAt | date : 'dd/MM/yyyy H:mm:ss' : 'GMT')
-                }}
+                {{ row.createdAt | date : 'dd/MM/yyyy H:mm:ss' : 'GMT' }}
               </span>
             </td>
             <td
@@ -198,6 +194,52 @@
         ><br />
         }
       </div>
+
+      <hr />
+
+      <h3 class="card-title align-items-start flex-column mb-2 mt-10">
+        <span class="card-label fw-bolder fs-2"> PER DRIVER </span>
+      </h3>
+
+      <!-- begin::Table container -->
+      <div class="table-responsive table-custom mb-3">
+        <!-- begin::Table -->
+        <ngx-table
+          #table
+          [configuration]="configuration"
+          [data]="dataDriver"
+          [columns]="columnsDriver"
+          tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+        >
+          <ng-template let-row let-index="index" ngx-table-row>
+            <td>
+              <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+            </td>
+            <td>
+              <span class="text-gray-900 fw-bolder fs-7">
+                {{ row.go_send?.employee?.name }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.go_send?.send_date | date : 'dd/MM/yyyy H:mm:ss a' : 'GMT' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.go_send?.total_packages | number }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.go_send?.total_cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+              </span>
+            </td>
+          </ng-template>
+        </ngx-table>
+        <!-- end::Table -->
+      </div>
+      <!-- end::Table container -->
     </div>
   </div>
 </div>

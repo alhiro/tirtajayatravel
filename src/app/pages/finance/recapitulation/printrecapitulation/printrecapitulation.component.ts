@@ -42,6 +42,7 @@ export class PrintrecapitulationComponent implements OnInit {
   public columns!: Columns[];
   public columnsPiutang!: Columns[];
   public columnsBsd!: Columns[];
+  public columnsBsdPkt!: Columns[];
 
   public pagination = {
     limit: 10,
@@ -119,7 +120,7 @@ export class PrintrecapitulationComponent implements OnInit {
       { key: '', title: 'Total Piutang' },
     ];
 
-    // data table bsd pnp & bsd pnk
+    // data table bsd pnp
     this.columnsBsd = [
       { key: '', title: 'No' },
       { key: 'bsd_date', title: 'Date' },
@@ -134,6 +135,18 @@ export class PrintrecapitulationComponent implements OnInit {
       { key: 'overnight', title: 'Bermalam' },
       { key: 'extra', title: 'Extra' },
       { key: 'others', title: 'Lainnya' },
+    ];
+
+    // data table bsd pkt
+    this.columnsBsdPkt = [
+      { key: '', title: 'No' },
+      { key: 'bsd_date', title: 'Date' },
+      { key: 'bsd', title: 'No Bsd Pkt' },
+      { key: 'employee.name', title: 'Driver' },
+      { key: 'car_number', title: 'No Mobil' },
+      { key: 'total_package', title: '#PKT' },
+      { key: 'cost', title: 'Setor' },
+      { key: 'agent_commission', title: 'Komisi' },
     ];
 
     this.configuration.resizeColumn = false;
@@ -197,6 +210,17 @@ export class PrintrecapitulationComponent implements OnInit {
       this.dataListBsdPnp(params);
     } else if (this.lastSegment === 'printbsdpkt') {
       console.log('run printbsdpkt');
+      const params = {
+        limit: 100,
+        page: 1,
+        search: '',
+        startDate: this.startDate,
+        endDate: this.endDate,
+        city: '',
+        status: 'bsdDone',
+      };
+
+      this.dataListBsdPkt(params);
     } else if (this.lastSegment === 'printbbm') {
       console.log('run printbbm');
     }
@@ -343,24 +367,33 @@ export class PrintrecapitulationComponent implements OnInit {
       .subscribe((response: any) => {
         console.log(response.data);
 
-        const filterCommissionPassenger = response.data?.map((data: any) =>
-          data.passengers?.find((row: PassengerModel) => row.check_sp === true)
-        );
+        const filterCommissionPassenger = response.data?.map((data: any) => ({
+          ...data,
+          passengers: data.passengers?.filter((row: PassengerModel) => row.check_sp === true),
+        }));
         console.log(filterCommissionPassenger);
         console.log(filterCommissionPassenger.length);
-        const commissionToll = response.data?.map(
-          (data: any) => (Number(data?.cost?.toll_out) * 0.15) / filterCommissionPassenger?.length
-        );
 
-        const remapDataAll = response.data?.map((item: any) => ({
+        // const commissionToll = filterCommissionPassenger?.map(
+        //   (data: any) => (Number(data?.cost?.toll_out) * 0.15) / filterCommissionPassenger?.length
+        // );
+
+        const remapDataAll = filterCommissionPassenger?.map((item: any) => ({
           ...item,
-          total_passengers: filterCommissionPassenger.length,
-          agent_commission: filterCommissionPassenger
-            ?.map((passenger: PassengerModel) => passenger.agent_commission - commissionToll)
-            .reduce((acc: any, value: any) => acc + value, 0),
+          total_passengers: item.passengers?.length,
+          total_cost: item.passengers
+            ?.map((passengers: PassengerModel) => passengers.tariff)
+            .reduce((acc: any, value: any) => Number(acc) + Number(value), 0),
+          agent_commission: item.passengers
+            ?.map((passengers: PassengerModel) => passengers.agent_commission)
+            .reduce(
+              (acc: any, value: any) =>
+                Number(acc) + Number(value) - Number(item.cost?.toll_out * 0.15) / item.passengers?.length,
+              0
+            ),
           passengers: filterCommissionPassenger?.map((passenger: PassengerModel) => ({
             ...passenger,
-            agent_commission: passenger.agent_commission - commissionToll,
+            agent_commission: item.cost?.toll_out,
           })),
         }));
 
@@ -444,6 +477,67 @@ export class PrintrecapitulationComponent implements OnInit {
         //   },
         // ];
         // this.totalData = result;
+
+        this.configuration.isLoading = false;
+        this.cdr.detectChanges();
+      });
+  }
+
+  private dataListBsdPkt(params: ExtendedPaginationContext): void {
+    this.configuration.isLoading = true;
+    this.packageService
+      .listSP(params)
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        finalize(() => {
+          this.configuration.isLoading = false;
+        })
+      )
+      .subscribe((response: any) => {
+        console.log(response.data);
+
+        const filterCommissionPackage = response.data?.map((data: any) => ({
+          ...data,
+          packages: data.packages,
+        }));
+        console.log(filterCommissionPackage);
+        console.log(filterCommissionPackage.length);
+
+        const remapDataAll = filterCommissionPackage?.map((item: any) => ({
+          ...item,
+          total_packages: item.packages?.length,
+          total_cost: item.packages
+            ?.map((packages: PackageModel) => packages.cost)
+            .reduce((acc: any, value: any) => Number(acc) + Number(value), 0),
+          agent_commission: item.packages
+            ?.map((packages: PackageModel) => packages.agent_commission)
+            .reduce((acc: any, value: any) => Number(acc) + Number(value), 0),
+        }));
+
+        // count total
+        const totals = {
+          pkt: 0,
+          cost: 0,
+          komisi: 0,
+        };
+        // Calculate totals
+        remapDataAll.forEach((item: any) => {
+          totals.pkt += parseFloat(item?.total_packages);
+          totals.cost += parseFloat(item?.total_cost);
+          totals.komisi += parseFloat(item?.agent_commission);
+        });
+
+        const result = [
+          ...remapDataAll,
+          {
+            bsd_date: 'Total',
+            total_packages: totals.pkt,
+            total_cost: totals.cost,
+            agent_commission: totals.komisi,
+          },
+        ];
+        this.data = result;
+        console.log(this.data);
 
         this.configuration.isLoading = false;
         this.cdr.detectChanges();

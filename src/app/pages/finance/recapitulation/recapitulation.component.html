@@ -14,9 +14,9 @@
           <div class="btn btn-info btn-sm cursor-pointer" (click)="datepicker.toggle()">Filter Date</div>
         </div>
 
-        <div class="menu-content p-0 px-3">
+        <!-- <div class="menu-content p-0 px-3">
           <div class="btn btn-primary btn-sm cursor-pointer" (click)="printRecapitulation()">Print</div>
-        </div>
+        </div> -->
 
         <div ngbDropdown placement="bottom-end" class="d-inline-block">
           <button type="button" class="btn btn-sm btn-light" id="otherspackage" ngbDropdownToggle translate>
@@ -24,6 +24,9 @@
           </button>
           <div ngbDropdownMenu aria-labelledby="otherspackage">
             <ul class="px-2 mb-0">
+              <li class="nav-item dropdown-item" (click)="printRecapitulation()" [style.cursor]="'pointer'">
+                <a class="nav-link" data-toggle="tab" translate>Setoran</a>
+              </li>
               <li class="nav-item dropdown-item" (click)="piutangData()" [style.cursor]="'pointer'">
                 <a class="nav-link" data-toggle="tab" translate>Piutang</a>
               </li>

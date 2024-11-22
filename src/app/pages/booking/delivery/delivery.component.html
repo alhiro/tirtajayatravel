@@ -17,15 +17,14 @@
   </div>
 
   <div class="card-header border-0 pt-5">
-    <h3 class="card-title align-items-start flex-column">
+    <h3 class="card-title align-items-start flex-column" style="width: 30%">
       <span class="card-label fw-bolder fs-3 mb-1">
         @if (currentTab === 'Malang') { Schedule Delivery Malang } @else if (currentTab === 'Surabaya') { Schedule
         Delivery Surabaya }
       </span>
       <span class="text-muted mt-1 fw-bold fs-7"> Have {{ dataLength | number }} items </span>
     </h3>
-    @if (username === 'admin_11' && levelrule === 8) {
-    <div class="card-toolbar">
+    <div class="card-toolbar" style="width: 30%">
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
           <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Malang'" data-toggle="tab">Malang</a>
@@ -35,41 +34,74 @@
         </li>
       </ul>
     </div>
-    } @if (levelrule === 2 && city_id === 1) {
-    <div class="card-toolbar">
+
+    <div class="card-toolbar" style="width: 13.2%">
+      @if (currentTab === 'Malang' && levelrule === 2 && city_id === 1) {
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="openModalNewSP()" [style.cursor]="'pointer'">
           <a class="nav-link py-2 px-4 active">New Schedule</a>
         </li>
         <!-- <li class="nav-item" [style.cursor]="'pointer'">
-            <a
-              class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
-              data-bs-toggle="tooltip"
-              data-bs-trigger="hover"
-              data-bs-dismiss-="click"
-              data-bs-placement="top"
-              title="Generate SP Package"
-              (click)="openModalGeneratePackageSP()"
-            >
-              <app-keenicon name="package" class="fs-md-3 text-light"></app-keenicon>
-            </a>
-          </li>
-          <li class="nav-item" [style.cursor]="'pointer'">
-            <a
-              class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
-              data-bs-toggle="tooltip"
-              data-bs-trigger="hover"
-              data-bs-dismiss-="click"
-              data-bs-placement="top"
-              title="Generate SP Passenger"
-              (click)="openModalGeneratePackageSP()"
-            >
-              <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
-            </a>
-          </li> -->
+              <a
+                class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
+                data-bs-toggle="tooltip"
+                data-bs-trigger="hover"
+                data-bs-dismiss-="click"
+                data-bs-placement="top"
+                title="Generate SP Package"
+                (click)="openModalGeneratePackageSP()"
+              >
+                <app-keenicon name="package" class="fs-md-3 text-light"></app-keenicon>
+              </a>
+            </li>
+            <li class="nav-item" [style.cursor]="'pointer'">
+              <a
+                class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
+                data-bs-toggle="tooltip"
+                data-bs-trigger="hover"
+                data-bs-dismiss-="click"
+                data-bs-placement="top"
+                title="Generate SP Passenger"
+                (click)="openModalGeneratePackageSP()"
+              >
+                <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
+              </a>
+            </li> -->
       </ul>
+      } @if (currentTab === 'Surabaya' && levelrule === 2 && city_id === 2) {
+      <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+        <li class="nav-item" (click)="openModalNewSP()" [style.cursor]="'pointer'">
+          <a class="nav-link py-2 px-4 active">New Schedule</a>
+        </li>
+        <!-- <li class="nav-item" [style.cursor]="'pointer'">
+              <a
+                class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
+                data-bs-toggle="tooltip"
+                data-bs-trigger="hover"
+                data-bs-dismiss-="click"
+                data-bs-placement="top"
+                title="Generate SP Package"
+                (click)="openModalGeneratePackageSP()"
+              >
+                <app-keenicon name="package" class="fs-md-3 text-light"></app-keenicon>
+              </a>
+            </li>
+            <li class="nav-item" [style.cursor]="'pointer'">
+              <a
+                class="btn btn-icon btn-primary btn-hover-primary btn-sm cursor-pointer"
+                data-bs-toggle="tooltip"
+                data-bs-trigger="hover"
+                data-bs-dismiss-="click"
+                data-bs-placement="top"
+                title="Generate SP Passenger"
+                (click)="openModalGeneratePackageSP()"
+              >
+                <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
+              </a>
+            </li> -->
+      </ul>
+      }
     </div>
-    }
   </div>
   <!-- end::Header -->
 
@@ -258,11 +290,16 @@
               </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.send_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}
+                  {{ row.send_date | date : 'yyyy/MM/dd' : 'GMT' }} <br />
+                  {{ row.send_date | date : 'H:mm:ss a' : 'GMT' }}
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalView(row)">
+                <span
+                  class="text-gray-900 fw-bolder text-hover-primary fs-6 cursor-pointer"
+                  ngbTooltip="Detail SP"
+                  (click)="openModalView(row)"
+                >
                   {{ row.employee?.name }}
                 </span>
               </td>
@@ -276,7 +313,11 @@
                 </span>
               </td> -->
               <td>
-                <span class="text-gray-900 d-block">{{ row.description }}</span>
+                <span class="text-gray-900 d-block">
+                  {{ row.packages?.length > 0 ? row.packages?.length : 0 }} Paket,
+                  {{ row.passengers?.length ? row.passengers?.length : 0 }} Orang <br />
+                  {{ row.description }}
+                </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
@@ -310,6 +351,7 @@
                 <span class="text-gray-900 d-block">{{ row.status }}</span>
               </td>
               <td class="text-end">
+                @if (levelrule === 2 && city_id === 2) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -343,6 +385,7 @@
                 >
                   <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
                 </a>
+                }
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -365,7 +408,9 @@
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
                 </a> -->
-                @if (row?.packages?.length === 0 && row?.passengers?.length === 0) {
+
+                @if (levelrule === 2 && city_id === 2) { @if (row?.packages?.length === 0 && row?.passengers?.length ===
+                0) {
                 <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
@@ -377,7 +422,7 @@
                 >
                   <app-keenicon name="trash" class="fs-md-3 text-danger"></app-keenicon>
                 </a>
-                }
+                } }
               </td>
             </ng-template>
           </ngx-table>
@@ -779,7 +824,19 @@
           </span>
         </td>
         <td class="text-end">
-          @if (levelrule === 2 && city_id === 1) {
+          @if (currentTab === 'Malang' && levelrule === 2 && city_id === 1) {
+          <a
+            class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+            data-bs-toggle="tooltip"
+            data-bs-trigger="hover"
+            data-bs-dismiss-="click"
+            data-bs-placement="top"
+            ngbTooltip="Remove Passenger"
+            (click)="removeDriverSPPassenger(row)"
+          >
+            <app-keenicon name="minus" class="fs-md-3 text-danger"></app-keenicon>
+          </a>
+          } @if (currentTab === 'Surabaya' && levelrule === 2 && city_id === 2) {
           <a
             class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
             data-bs-toggle="tooltip"
@@ -896,7 +953,19 @@
           </span>
         </td>
         <td class="text-end">
-          @if (levelrule === 2 && city_id === 1) {
+          @if (currentTab === 'Malang' && levelrule === 2 && city_id === 1) {
+          <a
+            class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+            data-bs-toggle="tooltip"
+            data-bs-trigger="hover"
+            data-bs-dismiss-="click"
+            data-bs-placement="top"
+            ngbTooltip="Remove Package"
+            (click)="removeDriverSPPackage(row)"
+          >
+            <app-keenicon name="minus" class="fs-md-3 text-danger"></app-keenicon>
+          </a>
+          } @if (currentTab === 'Surabaya' && levelrule === 2 && city_id === 2) {
           <a
             class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
             data-bs-toggle="tooltip"

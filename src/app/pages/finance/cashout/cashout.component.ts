@@ -39,6 +39,7 @@ interface EventObject {
 export class CashoutComponent implements OnInit {
   public levelrule!: number;
   public username!: string;
+  public city_id!: number;
 
   @ViewChild('table') table!: APIDefinition;
   public columns!: Columns[];
@@ -106,13 +107,12 @@ export class CashoutComponent implements OnInit {
     private localService: LocalService
   ) {
     this.levelrule = this.utils.getLevel();
+    this.city_id = this.utils.getCity();
     this.username = this.utils.getUsername();
-    if (this.username === 'fomlg' && this.levelrule === 2) {
+    if (this.levelrule === 2 && this.city_id == 1) {
       this.currentTab = 'Malang';
-    } else if (this.username === 'fosby' && this.levelrule === 2) {
+    } else if (this.levelrule === 2 && this.city_id == 2) {
       this.currentTab = 'Surabaya';
-    } else if (this.username === 'admin_11' && this.levelrule === 8) {
-      this.currentTab = 'Malang';
     }
 
     this.initForm();

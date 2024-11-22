@@ -203,9 +203,9 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.levelrule = this.utils.getLevel();
     this.city_id = this.utils.getCity();
     this.username = this.utils.getUsername();
-    if (this.levelrule === 2 && this.city_id === 2) {
+    if (this.levelrule === 2 && this.city_id === 1) {
       this.currentTab = 'Malang';
-    } else if (this.levelrule === 2 && this.city_id === 1) {
+    } else if (this.levelrule === 2 && this.city_id === 2) {
       this.currentTab = 'Surabaya';
     }
 

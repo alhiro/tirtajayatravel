@@ -51,6 +51,10 @@ interface EventObject {
   providers: [DatePipe],
 })
 export class BsdComponent implements OnInit, OnDestroy {
+  public levelrule!: number;
+  public username!: string;
+  public city_id!: number;
+
   public dataMalangPackage: any;
   public dataSurabayaPackage: any;
   public dataMalangPassenger: any;
@@ -173,6 +177,15 @@ export class BsdComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe
   ) {
     this.initForm();
+
+    this.levelrule = this.utils.getLevel();
+    this.city_id = this.utils.getCity();
+    this.username = this.utils.getUsername();
+    if (this.levelrule === 2 && this.city_id === 2) {
+      this.currentTab = 'Done';
+    } else if (this.levelrule === 2 && this.city_id === 1) {
+      this.currentTab = 'List';
+    }
   }
 
   ngOnInit() {

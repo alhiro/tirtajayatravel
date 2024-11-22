@@ -135,6 +135,15 @@ const routes: Routes = [
         (m) => m.PrintrecapitulationModule
       ),
   },
+  // print recapitulation revenue
+  {
+    path: 'finance/recapitulation/deposit/printrevenue',
+    component: PrintrecapitulationComponent,
+    loadChildren: () =>
+      import('../../pages/finance/recapitulation/printrecapitulation/printrecapitulation.module').then(
+        (m) => m.PrintrecapitulationModule
+      ),
+  },
   // print recapitulation bsd pnp
   {
     path: 'finance/recapitulation/deposit/printbsdpnp',
@@ -147,6 +156,15 @@ const routes: Routes = [
   // print recapitulation bsd pkt
   {
     path: 'finance/recapitulation/deposit/printbsdpkt',
+    component: PrintrecapitulationComponent,
+    loadChildren: () =>
+      import('../../pages/finance/recapitulation/printrecapitulation/printrecapitulation.module').then(
+        (m) => m.PrintrecapitulationModule
+      ),
+  },
+  // print recapitulation bbm
+  {
+    path: 'finance/recapitulation/deposit/printbbm',
     component: PrintrecapitulationComponent,
     loadChildren: () =>
       import('../../pages/finance/recapitulation/printrecapitulation/printrecapitulation.module').then(

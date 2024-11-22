@@ -273,7 +273,20 @@ export class RecapitulationComponent implements OnInit, OnDestroy {
     window.open('#/finance/recapitulation/deposit/printpiutang', '_blank');
   }
 
-  revenueData() {}
+  revenueData() {
+    const paramRange = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: '',
+      status: this.pagination.status,
+    };
+    console.log(paramRange);
+    sessionStorage.setItem('printrecapitulation', JSON.stringify(paramRange));
+    window.open('#/finance/recapitulation/deposit/printrevenue', '_blank');
+  }
 
   bsdPnpData() {
     const paramRange = {
@@ -305,7 +318,20 @@ export class RecapitulationComponent implements OnInit, OnDestroy {
     window.open('#/finance/recapitulation/deposit/printbsdpkt', '_blank');
   }
 
-  bbmData() {}
+  bbmData() {
+    const paramRange = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: '',
+      status: this.pagination.status,
+    };
+    console.log(paramRange);
+    sessionStorage.setItem('printrecapitulation', JSON.stringify(paramRange));
+    window.open('#/finance/recapitulation/deposit/printbbm', '_blank');
+  }
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();

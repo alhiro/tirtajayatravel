@@ -19,6 +19,8 @@ interface GroupedDataCost {
 })
 export class PrintListPackageComponent implements OnInit, OnDestroy {
   public data: any;
+  public dataDriver: any;
+
   public city: any;
   public status: any;
   public groupAdmin: any;
@@ -34,6 +36,7 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
 
   public configuration: Config = { ...DefaultConfig };
   public columns!: Columns[];
+  public columnsDriver!: Columns[];
 
   public pagination = {
     limit: 5,
@@ -76,6 +79,14 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
       { key: 'recipient_id', title: 'Recipient' },
     ];
 
+    this.columnsDriver = [
+      { key: '', title: 'No', width: '5%' },
+      { key: 'name', title: 'Nama Driver' },
+      { key: 'send_date', title: 'Tanggal Kirim' },
+      { key: 'total_packages', title: 'Jumlah Paket' },
+      { key: 'total_cost', title: 'Nominal' },
+    ];
+
     this.nowDate = new Date();
     // this.getPrint();
 
@@ -92,7 +103,7 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
     const params = {
       limit: '',
       page: '',
-      search: '',
+      search: this.status,
       startDate: this.startDate,
       endDate: this.endDate,
       city: this.city,
@@ -133,6 +144,9 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
               this.data = response.data;
             }
           }
+
+          this.dataDriver = this.data?.filter((data: any) => data.go_send_id !== null);
+          console.log(this.dataDriver);
 
           // Count calculation total package except cancel
           this.totalCost = filterData?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
