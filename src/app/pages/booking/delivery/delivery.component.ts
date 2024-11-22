@@ -395,7 +395,17 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       )
       .subscribe((response: any) => {
         this.dataLength = response.length;
-        this.data = response.data;
+
+        const remapData = response.data?.map((item: any) => ({
+          ...item,
+          total_koli: item.packages
+            ?.map((packages: PackageModel) => packages.koli)
+            .reduce((acc: any, value: any) => Number(acc) + Number(value), 0),
+          total_passenger: item.passengers
+            ?.map((passengers: PassengerModel) => passengers.total_passenger)
+            .reduce((acc: any, value: any) => Number(acc) + Number(value), 0),
+        }));
+        this.data = remapData;
 
         // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
         this.pagination.count =
@@ -404,9 +414,9 @@ export class DeliveryComponent implements OnInit, OnDestroy {
 
         this.configuration.isLoading = false;
 
-        response?.length > 0
-          ? (this.configuration.horizontalScroll = true)
-          : (this.configuration.horizontalScroll = false);
+        // response?.length > 0
+        //   ? (this.configuration.horizontalScroll = true)
+        //   : (this.configuration.horizontalScroll = false);
         this.cdr.detectChanges();
       });
   }

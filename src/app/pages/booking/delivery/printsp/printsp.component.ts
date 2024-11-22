@@ -41,12 +41,14 @@ export class PrintspComponent implements OnInit, OnDestroy {
     this.nowDate = new Date();
 
     this.configuration.resizeColumn = false;
-    this.configuration.fixedColumnWidth = false;
+    this.configuration.fixedColumnWidth = true;
+    this.configuration.horizontalScroll = false;
+
     this.configuration.paginationEnabled = false;
     this.configuration.orderEnabled = false;
 
     this.columnsPassenger = [
-      // { key: 'category_sub_id', title: 'No' },
+      { key: '', title: 'No', width: '3%' },
       { key: 'resi_number', title: 'Resi Number' },
       { key: 'waybill_id', title: 'Waybill' },
       { key: 'destination_id', title: 'Destination' },
@@ -58,7 +60,7 @@ export class PrintspComponent implements OnInit, OnDestroy {
     ];
 
     this.columnsPackage = [
-      // { key: 'category_sub_id', title: 'No' },
+      { key: '', title: 'No', width: '3%' },
       { key: 'resi_number', title: 'Resi Number' },
       { key: 'recipient_id', title: 'Recipient' },
       { key: 'address', title: 'Address' },

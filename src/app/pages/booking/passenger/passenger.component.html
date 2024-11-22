@@ -182,22 +182,30 @@
                 >
                   {{ row.resi_number }}
                 </span>
+                <span class="text-gray-900 d-block">
+                  {{ row.payment }} <br />
+                  ({{ row.total_passenger | number }} Orang)
+                </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
+                <span class="text-gray-900 d-block">{{ row.book_date | date : 'dd/MM/yyyy H:mm:ss a' : 'GMT' }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}</span>
+                <span class="text-gray-900 d-block">
+                  {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}
+                </span>
               </td>
-              <td>
+              <!-- <td>
                 <span class="text-gray-900 d-block">{{ row.payment }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.total_passenger | number }}</span>
-              </td>
+              </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.waybill?.name }}
+                  {{ row.waybill?.name }} <br />
+                  {{ row.waybill?.telp }} <br />
+                  ({{ row.position }})
                 </span>
               </td>
               <td>
@@ -224,14 +232,11 @@
                 </span>
                 }
               </td>
-              <!-- <td>
-                <span class="text-gray-900 d-block">{{ row.description }}</span>
-              </td> -->
               <td>
-                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
+                <span class="badge badge-light-primary">{{ row.description }}</span>
               </td>
               <td>
-                <span class="badge badge-light-primary">{{ row.status_passenger }}</span>
+                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
               </td>
               @if (!delivery) {
               <td class="text-end">
@@ -343,22 +348,30 @@
                 >
                   {{ row.resi_number }}
                 </span>
+                <span class="text-gray-900 d-block">
+                  {{ row.payment }} <br />
+                  ({{ row.total_passenger | number }} Orang)
+                </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
+                <span class="text-gray-900 d-block">{{ row.book_date | date : 'dd/MM/yyyy H:mm:ss a' : 'GMT' }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}</span>
+                <span class="text-gray-900 d-block">
+                  {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}
+                </span>
               </td>
-              <td>
+              <!-- <td>
                 <span class="text-gray-900 d-block">{{ row.payment }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.total_passenger | number }}</span>
-              </td>
+              </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.waybill?.name }}
+                  {{ row.waybill?.name }} <br />
+                  {{ row.waybill?.telp }} <br />
+                  ({{ row.position }})
                 </span>
               </td>
               <td>
@@ -385,14 +398,11 @@
                 </span>
                 }
               </td>
-              <!-- <td>
-                <span class="text-gray-900 d-block">{{ row.description }}</span>
-              </td> -->
               <td>
-                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
+                <span class="badge badge-light-primary">{{ row.description }}</span>
               </td>
               <td>
-                <span class="badge badge-light-primary">{{ row.status_passenger }}</span>
+                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
               </td>
               @if (!delivery) {
               <td class="text-end">
@@ -504,22 +514,30 @@
                 >
                   {{ row.resi_number }}
                 </span>
+                <span class="text-gray-900 d-block">
+                  {{ row.payment }} <br />
+                  ({{ row.total_passenger | number }} Orang)
+                </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
+                <span class="text-gray-900 d-block">{{ row.book_date | date : 'dd/MM/yyyy H:mm:ss a' : 'GMT' }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}</span>
+                <span class="text-gray-900 d-block">
+                  {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}
+                </span>
               </td>
-              <td>
+              <!-- <td>
                 <span class="text-gray-900 d-block">{{ row.payment }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.total_passenger | number }}</span>
-              </td>
+              </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.waybill?.name }}
+                  {{ row.waybill?.name }} <br />
+                  {{ row.waybill?.telp }} <br />
+                  ({{ row.position }})
                 </span>
               </td>
               <td>
@@ -550,10 +568,10 @@
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
               </td> -->
               <td>
-                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
+                <span class="badge badge-light-primary">{{ row.description }}</span>
               </td>
               <td>
-                <span class="badge badge-light-warning">{{ row.status_passenger }}</span>
+                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
               </td>
               <td class="text-end">
                 @if (username === 'admin_11' && levelrule === 8) {
@@ -604,22 +622,30 @@
                 >
                   {{ row.resi_number }}
                 </span>
+                <span class="text-gray-900 d-block">
+                  {{ row.payment }} <br />
+                  ({{ row.total_passenger | number }} Orang)
+                </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.book_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}</span>
+                <span class="text-gray-900 d-block">{{ row.book_date | date : 'dd/MM/yyyy H:mm:ss a' : 'GMT' }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}</span>
+                <span class="text-gray-900 d-block">
+                  {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}
+                </span>
               </td>
-              <td>
+              <!-- <td>
                 <span class="text-gray-900 d-block">{{ row.payment }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.total_passenger | number }}</span>
-              </td>
+              </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.waybill?.name }}
+                  {{ row.waybill?.name }} <br />
+                  {{ row.waybill?.telp }} <br />
+                  ({{ row.position }})
                 </span>
               </td>
               <td>
@@ -650,10 +676,10 @@
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
               </td> -->
               <td>
-                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
+                <span class="badge badge-light-primary">{{ row.description }}</span>
               </td>
               <td>
-                <span class="badge badge-light-success">{{ row.status_passenger }}</span>
+                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
               </td>
               <td class="text-end">
                 <!-- <a

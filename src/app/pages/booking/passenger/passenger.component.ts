@@ -457,14 +457,14 @@ export class PassengerComponent implements OnInit, OnDestroy {
           { key: 'resi_number', title: translations['TABLE.RESI_NUMBER'] },
           { key: 'book_date', title: translations['TABLE.BOOK_DATE'] },
           { key: 'tariff', title: translations['TABLE.COST'] },
-          { key: 'status', title: translations['TABLE.STATUS'] },
-          { key: 'total_passenger', title: translations['TABLE.TOTAL_PASSENGER'] },
+          // { key: 'status', title: translations['TABLE.STATUS'] },
+          // { key: 'total_passenger', title: translations['TABLE.TOTAL_PASSENGER'] },
           { key: 'waybill.name', title: translations['TABLE.NAME'] },
           { key: 'waybill_id', title: translations['TABLE.PICKUP_ADDRESS'] },
           { key: 'destination_id', title: translations['TABLE.DESTINATION_ADDRESS'] },
-          // { key: 'description', title: translations['TABLE.DESCRIPTION'] },
+          { key: 'description', title: translations['TABLE.DESCRIPTION'] },
           { key: 'created_by', title: translations['TABLE.CREATED_BY'] },
-          { key: 'status_passenger', title: translations['TABLE.STATUS_PASSENGER'] },
+          // { key: 'status_passenger', title: translations['TABLE.STATUS_PASSENGER'] },
           { key: '', title: translations['TABLE.ACTION'], cssClass: { includeHeader: true, name: 'text-end' } },
         ];
       });
