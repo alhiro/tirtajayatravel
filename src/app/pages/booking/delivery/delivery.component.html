@@ -36,7 +36,7 @@
     </div>
 
     <div class="card-toolbar" style="width: 13.2%">
-      @if (currentTab === 'Malang' && levelrule === 2 && city_id === 1 || levelrule === 8) {
+      @if (currentTab === 'Malang' && levelrule === 2 && city_id === 1) {
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="openModalNewSP()" [style.cursor]="'pointer'">
           <a class="nav-link py-2 px-4 active">New Schedule</a>
@@ -68,7 +68,7 @@
               </a>
             </li> -->
       </ul>
-      } @if (currentTab === 'Surabaya' && levelrule === 2 && city_id === 2 || levelrule === 8) {
+      } @if (currentTab === 'Surabaya' && levelrule === 2 && city_id === 2) {
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="openModalNewSP()" [style.cursor]="'pointer'">
           <a class="nav-link py-2 px-4 active">New Schedule</a>
@@ -99,6 +99,12 @@
                 <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
               </a>
             </li> -->
+      </ul>
+      } @if (levelrule === 8) {
+      <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+        <li class="nav-item" (click)="openModalNewSP()" [style.cursor]="'pointer'">
+          <a class="nav-link py-2 px-4 active">New Schedule</a>
+        </li>
       </ul>
       }
     </div>
@@ -152,8 +158,9 @@
               </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.packages?.length > 0 ? row.packages?.length : 0 }} Paket,
-                  {{ row.passengers?.length > 0 ? row.row.passengers?.length : 0 }} Orang <br />
+                  @if (row.packages) {
+                  {{ row.packages?.length }} Paket, } @else { 0 Paket, } @if (row.packages) {
+                  {{ row.passengers?.length }} Orang } @else { 0 Orang } <br />
                   {{ row.description }}
                 </span>
               </td>
@@ -314,8 +321,9 @@
               </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.packages?.length > 0 ? row.packages?.length : 0 }} Paket,
-                  {{ row.passengers?.length > 0 ? row.row.passengers?.length : 0 }} Orang <br />
+                  @if (row.packages) {
+                  {{ row.packages?.length }} Paket, } @else { 0 Paket, } @if (row.packages) {
+                  {{ row.passengers?.length }} Orang } @else { 0 Orang } <br />
                   {{ row.description }}
                 </span>
               </td>

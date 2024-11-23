@@ -453,7 +453,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
       ])
       .subscribe((translations: any) => {
         this.columns = [
-          // { key: 'passenger_id', title: 'No' },
+          { key: '', title: '', width: '3%' },
           { key: 'resi_number', title: translations['TABLE.RESI_NUMBER'] },
           { key: 'book_date', title: translations['TABLE.BOOK_DATE'] },
           { key: 'tariff', title: translations['TABLE.COST'] },
@@ -726,6 +726,10 @@ export class PassengerComponent implements OnInit, OnDestroy {
     this.dataList(this.params);
   }
 
+  getIndex(i: number): number {
+    return (this.pagination.offset - 1) * this.pagination.limit + (i + 1);
+  }
+
   private dataList(params: PaginationContext): void {
     this.configuration.isLoading = true;
     this.passengerService
@@ -736,8 +740,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
         this.data = response.data;
         // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
 
-        this.pagination.count =
-          this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
+        this.pagination.count = this.dataLength;
         this.pagination = { ...this.pagination };
 
         this.configuration.isLoading = false;

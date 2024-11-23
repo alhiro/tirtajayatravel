@@ -442,7 +442,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       ])
       .subscribe((translations: any) => {
         this.columns = [
-          // { key: 'package_id', title: 'No' },
+          { key: '', title: '', width: '3%' },
           { key: 'resi_number', title: translations['TABLE.RESI_NUMBER'] },
           { key: 'level', title: translations['TABLE.LEVEL'] },
           { key: 'book_date', title: translations['TABLE.SEND_DATE'] },
@@ -450,7 +450,7 @@ export class PackageComponent implements OnInit, OnDestroy {
           { key: 'recipient_id', title: translations['TABLE.RECIPIENT'] },
           { key: 'cost', title: translations['TABLE.COST'] },
           { key: 'admin', title: translations['TABLE.ADMIN'] },
-          { key: 'status', title: translations['TABLE.STATUS'] },
+          // { key: 'status', title: translations['TABLE.STATUS'] },
           { key: '', title: translations['TABLE.ACTION'], cssClass: { includeHeader: true, name: 'text-end' } },
         ];
       });
@@ -728,6 +728,10 @@ export class PackageComponent implements OnInit, OnDestroy {
     this.dataList(this.params);
   }
 
+  getIndex(i: number): number {
+    return (this.pagination.offset - 1) * this.pagination.limit + (i + 1);
+  }
+
   private dataList(params: ExtendedPaginationContext): void {
     this.configuration.isLoading = true;
     this.packageService
@@ -738,8 +742,7 @@ export class PackageComponent implements OnInit, OnDestroy {
         this.data = response.data;
         // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
 
-        this.pagination.count =
-          this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
+        this.pagination.count = this.dataLength;
         this.pagination = { ...this.pagination };
 
         this.configuration.isLoading = false;

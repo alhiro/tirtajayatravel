@@ -205,12 +205,12 @@
             tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
           >
             <ng-template let-row let-index="index">
-              <!-- <td>
-                    <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
-                  </td> -->
+              <td>
+                <span class="text-gray-900 d-block">{{ getIndex(index) }}</span>
+              </td>
               <td>
                 <span
-                  class="text-gray-900 fw-bolder text-hover-primary fs-6 cursor-pointer"
+                  class="text-gray-900 fw-bolder text-hover-primary fs-7 cursor-pointer"
                   [ngbTooltip]="'TOOLTIP.EDIT_PACKAGE' | translate"
                   (click)="openModalEdit(row)"
                 >
@@ -244,9 +244,9 @@
               <td>
                 <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
               </td>
-              <td>
+              <!-- <td>
                 <span class="badge badge-light-primary">{{ row.status_package }}</span>
-              </td>
+              </td> -->
               @if (!delivery) {
               <td class="text-end">
                 <a
@@ -349,11 +349,11 @@
             tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
           >
             <ng-template let-row let-index="index">
-              <!-- <td>
-                    <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
-                  </td> -->
               <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
+                <span class="text-gray-900 d-block">{{ getIndex(index) }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 fw-bolder text-hover-primary fs-7" (click)="openModalEdit(row)">
                   {{ row.resi_number }}
                 </span>
               </td>
@@ -384,9 +384,9 @@
               <td>
                 <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
               </td>
-              <td>
+              <!-- <td>
                 <span class="badge badge-light-primary">{{ row.status_package }}</span>
-              </td>
+              </td> -->
               @if (!delivery) {
               <td class="text-end">
                 <a
@@ -488,11 +488,11 @@
             tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
           >
             <ng-template let-row let-index="index">
-              <!-- <td>
-                    <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
-                  </td> -->
               <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
+                <span class="text-gray-900 d-block">{{ getIndex(index) }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 fw-bolder text-hover-primary fs-7" (click)="openModalEdit(row)">
                   {{ row.resi_number }}
                 </span>
               </td>
@@ -523,9 +523,9 @@
               <td>
                 <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
               </td>
-              <td>
+              <!-- <td>
                 <span class="badge badge-light-warning">{{ row.status_package }}</span>
-              </td>
+              </td> -->
               <td class="text-end">
                 @if (username === 'admin_11' && levelrule === 8) {
                 <a
@@ -564,11 +564,11 @@
             tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
           >
             <ng-template let-row let-index="index">
-              <!-- <td>
-                    <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
-                  </td> -->
               <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
+                <span class="text-gray-900 d-block">{{ getIndex(index) }}</span>
+              </td>
+              <td>
+                <span class="text-gray-900 fw-bolder text-hover-primary fs-7" (click)="openModalEdit(row)">
                   {{ row.resi_number }}
                 </span>
               </td>
@@ -599,9 +599,9 @@
               <td>
                 <span class="text-gray-900 d-block">{{ row.updated_by ? row.updated_by : row.created_by }}</span>
               </td>
-              <td>
+              <!-- <td>
                 <span class="badge badge-light-success">{{ row.status_package }}</span>
-              </td>
+              </td> -->
               <td class="text-end">
                 <!-- <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm fs-9"

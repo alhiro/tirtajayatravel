@@ -408,8 +408,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
         this.data = remapData;
 
         // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-        this.pagination.count =
-          this.pagination.count === -1 ? (this.data ? this.data.length : 0) : this.pagination.count;
+        this.pagination.count = this.dataLength;
         this.pagination = { ...this.pagination };
 
         this.configuration.isLoading = false;
@@ -1026,8 +1025,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
                   this.data = response.data;
 
                   // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-                  this.pagination.count =
-                    this.pagination.count === -1 ? (this.data ? this.data.length : 0) : this.pagination.count;
+                  this.pagination.count = this.dataLength;
                   this.pagination = { ...this.pagination };
 
                   this.configuration.isLoading = false;
