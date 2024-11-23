@@ -376,6 +376,29 @@ export class PackageComponent implements OnInit, OnDestroy {
     window.open('#/booking/package/transaction/printlist', '_blank');
   }
 
+  printFilterDatePaymentUser(datepicker: any) {
+    let getCity = '';
+    if (this.levelrule === 2) {
+      if (this.city_id === 1) {
+        getCity = 'Malang';
+      } else {
+        getCity = 'Surabaya';
+      }
+    } else if (this.levelrule === 8) {
+      getCity = this.city;
+    }
+
+    const dateRange = {
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: getCity,
+      status: 'Lunas (Kantor)',
+      username: this.username,
+    };
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    window.open('#/booking/package/transaction/printlistuser', '_blank');
+  }
+
   isHovered(date: NgbDate) {
     return (
       this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate)
@@ -423,8 +446,8 @@ export class PackageComponent implements OnInit, OnDestroy {
     this.status = this.localService.getStatus();
     this.statusPackage = this.localService.getStatusPackage();
 
-    this.configuration.resizeColumn = false;
-    this.configuration.fixedColumnWidth = true;
+    this.configuration.resizeColumn = true;
+    this.configuration.fixedColumnWidth = false;
     this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = false;
 

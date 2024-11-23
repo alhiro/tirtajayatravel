@@ -149,20 +149,29 @@
 
           <ng-template #footerTemplate>
             <hr class="my-0" />
-            <button
+            <!-- <button
               class="btn btn-primary btn-sm m-2 p-1 px-4 float-start"
               (click)="resetFilterDate(datepicker)"
               translate
             >
               Reset
+            </button> -->
+            <button
+              class="btn btn-info btn-sm m-2 p-1 px-4 float-start"
+              [disabled]="configuration.isLoading"
+              (click)="printFilterSelected(datepicker)"
+              translate
+            >
+              Filter
             </button>
+
             <button
               class="btn btn-warning btn-sm m-2 p-1 px-4 float-end"
               [disabled]="configuration.isLoading"
               (click)="printFilterDate(datepicker)"
               translate
             >
-              Print All
+              Semua
             </button>
             <button
               class="btn btn-success btn-sm m-2 p-1 px-4 float-end"
@@ -170,15 +179,15 @@
               (click)="printFilterDatePayment(datepicker)"
               translate
             >
-              Print Payment
+              Lunas (All)
             </button>
             <button
-              class="btn btn-info btn-sm m-2 p-1 px-4 float-end"
+              class="btn btn-success btn-sm m-2 p-1 px-4 float-end"
               [disabled]="configuration.isLoading"
-              (click)="printFilterSelected(datepicker)"
+              (click)="printFilterDatePaymentUser(datepicker)"
               translate
             >
-              Filter
+              Lunas (User)
             </button>
           </ng-template>
         </div>

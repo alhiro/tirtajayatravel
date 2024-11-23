@@ -21,6 +21,7 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
   public data: any;
   public dataDriver: any;
 
+  public username!: string;
   public city: any;
   public status: any;
   public groupAdmin: any;
@@ -93,6 +94,7 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
     const getDataDate: any = sessionStorage.getItem('printlistdate');
     const objDataDate = JSON.parse(getDataDate);
 
+    this.username = objDataDate.username;
     this.city = objDataDate.city;
     this.status = objDataDate.status;
     this.startDate = objDataDate.fromDate;
@@ -100,16 +102,31 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
     this.endDate = objDataDate.toDate;
     this.endDateDisplay = this.endDate?.split(' ')[0];
 
-    const params = {
-      limit: '',
-      page: '',
-      search: this.status,
-      startDate: this.startDate,
-      endDate: this.endDate,
-      city: this.city,
-      status: '',
-    };
-    this.dataListFilter(params);
+    if (this.lastSegment === 'printlistuser') {
+      const params = {
+        limit: '',
+        page: '',
+        search: this.status,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        city: this.city,
+        status: '',
+        username: this.username ? this.username : '',
+      };
+      this.dataListFilter(params);
+    } else {
+      const params = {
+        limit: '',
+        page: '',
+        search: this.status,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        city: this.city,
+        status: '',
+        username: '',
+      };
+      this.dataListFilter(params);
+    }
   }
 
   private dataListFilter(params: PaginationContext): void {
@@ -145,7 +162,19 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
             }
           }
 
-          this.dataDriver = this.data?.filter((data: any) => data.go_send_id !== null);
+          const uniqueDrivers = Object.values(
+            this.data
+              .filter((item: any) => item?.go_send) // Keep only items with a driver
+              .reduce((acc: any, item: any) => {
+                const { go_send_id, send_date, total_cost, total_packages, employee } = item?.go_send;
+                if (!acc[go_send_id]) {
+                  acc[go_send_id] = { go_send_id, send_date, total_cost, total_packages, employee }; // Add driver to accumulator if not already present
+                }
+                return acc;
+              }, {})
+          );
+
+          this.dataDriver = uniqueDrivers;
           console.log(this.dataDriver);
 
           // Count calculation total package except cancel

@@ -466,8 +466,7 @@ export class BsdComponent implements OnInit, OnDestroy {
         this.data = response.data;
 
         // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-        this.pagination.count =
-          this.pagination.count === -1 ? (this.data ? this.data.length : 0) : this.pagination.count;
+        this.pagination.count = response.length;
         this.pagination = { ...this.pagination };
 
         this.configuration.isLoading = false;
@@ -958,7 +957,7 @@ export class BsdComponent implements OnInit, OnDestroy {
 
   async openModalAddSPGroup() {
     this.formSP.patchValue({
-      car: this.groupCheckedBsdList[0].car.name,
+      car: this.groupCheckedBsdList[0].employee.name,
       car_no: this.groupCheckedBsdList[0].car.car_number,
       send_date_city1: this.datePipe.transform(this.groupCheckedBsdList[0]?.send_date, 'dd-MM-yyyy, HH:mm'),
       send_date_city2: this.datePipe.transform(this.groupCheckedBsdList[1]?.send_date, 'dd-MM-yyyy, HH:mm'),

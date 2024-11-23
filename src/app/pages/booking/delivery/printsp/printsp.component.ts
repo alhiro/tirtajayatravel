@@ -40,12 +40,13 @@ export class PrintspComponent implements OnInit, OnDestroy {
 
     this.nowDate = new Date();
 
-    this.configuration.resizeColumn = false;
-    this.configuration.fixedColumnWidth = true;
+    this.configuration.resizeColumn = true;
+    this.configuration.fixedColumnWidth = false;
     this.configuration.horizontalScroll = false;
 
     this.configuration.paginationEnabled = false;
     this.configuration.orderEnabled = false;
+    this.configuration.rows = 100;
 
     this.columnsPassenger = [
       { key: '', title: 'No', width: '3%' },
@@ -54,8 +55,6 @@ export class PrintspComponent implements OnInit, OnDestroy {
       { key: 'destination_id', title: 'Destination' },
       { key: 'tariff', title: 'Tariff' },
       { key: 'status', title: 'Status' },
-      { key: 'total_passenger', title: 'Total Passenger' },
-      { key: 'position', title: 'Seat' },
       { key: 'description', title: 'Description' },
     ];
 

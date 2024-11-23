@@ -37,7 +37,7 @@
       </a>
     </div>
 
-    @if (levelrule === 8 || levelrule === 2) {
+    @if (levelrule === 8 || levelrule === 2 || levelrule === 3) {
     <!-- Separator -->
     <div class="menu-item">
       <div class="menu-content pt-8 pb-2">
@@ -413,7 +413,8 @@
             </div>
           </div> -->
     <!-- </div> -->
-    } @if (levelrule === 8 && username === 'admin_11' || levelrule === 2 && city_id === 2) {
+    } @if ( (levelrule === 8 && username === 'admin_11') || (levelrule === 2 && city_id === 2) || (username === 'lina'
+    && city_id === 1) || (username === 'zen' && city_id === 1) ) {
     <!-- Separator -->
     <div class="menu-item">
       <div class="menu-content pt-8 pb-2">
@@ -562,7 +563,7 @@
       </div> -->
     </div>
 
-    @if (levelrule === 8 && username === 'admin_11' || levelrule === 2 && city_id === 1) {
+    @if (levelrule === 8 || levelrule === 3) {
     <!-- Recapitulation -->
     <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
       <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/recapitulation-finance/deposit">

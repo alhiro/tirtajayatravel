@@ -19,6 +19,7 @@ export const defaultPage: PaginationContext = {
 export interface ExtendedPaginationContext extends PaginationContext {
   city?: string;
   status?: string;
+  username?: string;
 }
 export const defaultPageExtended: ExtendedPaginationContext = {
   limit: 10,

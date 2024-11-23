@@ -217,22 +217,22 @@
             </td>
             <td>
               <span class="text-gray-900 fw-bolder fs-7">
-                {{ row.go_send?.employee?.name }}
+                {{ row.employee?.name }}
               </span>
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.go_send?.send_date | date : 'dd/MM/yyyy H:mm:ss a' : 'GMT' }}
+                {{ row.send_date | date : 'dd/MM/yyyy H:mm:ss a' : 'GMT' }}
               </span>
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.go_send?.total_packages | number }}
+                {{ row.total_packages | number }}
               </span>
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.go_send?.total_cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                {{ row.total_cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
           </ng-template>

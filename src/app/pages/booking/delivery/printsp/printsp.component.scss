@@ -433,6 +433,16 @@ td {
   line-height: normal;
 }
 
-table {
-  display: block;
+:host ::ng-deep {
+  ngx-table {
+    table {
+      font-size: 13px;
+
+      td {
+        span {
+          font-size: 14px !important;
+        }
+      }
+    }
+  }
 }

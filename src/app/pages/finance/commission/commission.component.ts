@@ -29,6 +29,7 @@ import { PackageService } from '@app/pages/booking/package/package.service';
 import { PackageModel } from '@app/pages/booking/package/models/package.model';
 import Swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
+import { DeliveryService } from '@app/pages/booking/delivery/delivery.service';
 
 interface EventObject {
   event: string;
@@ -55,6 +56,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
   public dataRow: any;
   public data: any;
   public dataCustomer: any;
+  public modelDriver: any;
 
   public dataLength!: number;
 
@@ -74,7 +76,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     startDate: '',
     endDate: '',
     city: 'Malang',
-    status: 'Completed',
+    status: 'Delivery',
   };
   public params = {
     limit: 10,
@@ -83,7 +85,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     startDate: '',
     endDate: '',
     city: 'Malang',
-    status: 'Completed',
+    status: 'Delivery',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -127,6 +129,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     private packageService: PackageService,
     private categoryService: CategoryService,
     private employeeService: EmployeeService,
+    private deliveryService: DeliveryService,
     private formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
@@ -138,9 +141,9 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.levelrule = this.utils.getLevel();
     this.city_id = this.utils.getCity();
     this.username = this.utils.getUsername();
-    if (this.levelrule === 2 && this.city_id == 2) {
+    if ((this.levelrule === 2 && this.city_id == 2) || this.levelrule === 8) {
       this.currentTab = 'Malang';
-    } else if (this.levelrule === 2 && this.city_id == 1) {
+    } else if ((this.levelrule === 2 && this.city_id == 1) || (this.levelrule === 3 && this.city_id == 1)) {
       this.currentTab = 'Surabaya';
     }
 
@@ -188,13 +191,24 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   printFilterBa(datepicker: any) {
+    let getCity = '';
+    if (this.levelrule === 2) {
+      if (this.city_id === 1) {
+        getCity = 'Malang';
+      } else {
+        getCity = 'Surabaya';
+      }
+    } else {
+      getCity = '';
+    }
+
     const paramRange = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search: this.pagination.search,
       fromDate: this.startDate,
       toDate: this.endDate,
-      city: this.city_id ? this.city_id : '',
+      city: getCity,
       status: 'Bayar Tujuan (COD)',
     };
     console.log(paramRange);
@@ -455,14 +469,11 @@ export class CommissionComponent implements OnInit, OnDestroy {
         // count malang or surabaya
         if (response.data.length > 0) {
           this.data = response.data;
-          this.dataLength = response.data?.length;
+          this.dataLength = response.length;
 
           // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-          this.pagination.count =
-            this.pagination.count === -1 ? (response.data ? response.length : 0) : this.pagination.count;
+          this.pagination.count = response.length;
           this.pagination = { ...this.pagination };
-          this.configuration.isLoading = false;
-          this.configuration.horizontalScroll = true;
           this.cdr.detectChanges();
         } else {
           this.configuration.horizontalScroll = false;
@@ -471,6 +482,43 @@ export class CommissionComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+  searchDataDriver: any = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+      switchMap((term) =>
+        this.deliveryService
+          .driver({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+            startDate: this.params.startDate,
+            endDate: this.params.endDate,
+          })
+          .pipe(
+            map((response: any) => {
+              if (response) {
+                this.params = {
+                  limit: this.params.limit,
+                  page: this.params.page,
+                  search: term,
+                  startDate: this.params.startDate,
+                  endDate: this.params.endDate,
+                  status: this.params.status,
+                  city: this.currentTab,
+                };
+                this.dataList(this.params);
+              }
+            }),
+            catchError((err) => {
+              console.log(err);
+              this.handlerResponseService.failedResponse(err);
+              return of([]);
+            })
+          )
+      )
+    );
 
   searchDataEmployee = (text$: Observable<string>) =>
     text$.pipe(

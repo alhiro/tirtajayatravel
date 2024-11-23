@@ -186,7 +186,6 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
       this.voluntaryDeposit
     );
     this.totalKreditPassenger = this.utils.sumNumbers(
-      this.totalCommissionPassenger,
       this.bbmTotal,
       this.totalParkingPassenger,
       this.inToll,

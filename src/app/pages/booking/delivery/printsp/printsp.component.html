@@ -79,7 +79,7 @@
                   <li>
                     {{ value?.name }} <br />
                     {{ value?.address }} <br />
-                    {{ value?.telp }}
+                    <b>{{ value?.telp }}</b>
                   </li>
                 </ul>
               </span>
@@ -92,7 +92,7 @@
                   <li>
                     {{ value?.name }} <br />
                     {{ value?.address }} <br />
-                    {{ value?.telp }}
+                    <b>{{ value?.telp }}</b>
                   </li>
                 </ul>
               </span>
@@ -100,26 +100,20 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}
+                {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }} <br />
+                {{ row.payment }}
               </span>
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.status }}
-              </span>
-            </td>
-            <td>
-              <span class="text-gray-900 d-block">
-                {{ row.total_passenger | number }}
-              </span>
-            </td>
-            <td>
-              <span class="text-gray-900 d-block">
+                {{ row.status }} <br />
+                ({{ row.total_passenger | number }} Orang) <br />
                 {{ row.position }}
               </span>
             </td>
             <td>
               <span class="text-gray-900 d-block">
+                {{ row.category?.name }} <br />
                 {{ row.description }}
               </span>
             </td>

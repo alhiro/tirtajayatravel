@@ -19,7 +19,7 @@
         {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLength | number } }}
       </span>
     </h3>
-    @if (username === 'admin_11' && levelrule === 8 || username === 'fomlg' && levelrule === 2) {
+    @if (levelrule === 8) {
     <div class="card-toolbar">
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
@@ -33,6 +33,18 @@
     }
     <div class="card-toolbar">
       <!-- begin::Menu -->
+      <div class="menu-item">
+        <div class="menu-content">
+          <input
+            id="select-customer"
+            type="text"
+            class="form-control p-2"
+            [(ngModel)]="modelDriver"
+            [ngbTypeahead]="searchDataDriver"
+            placeholder="Search Resi..."
+          />
+        </div>
+      </div>
       <div class="menu-item">
         <div class="menu-content px-0">
           <div class="btn btn-info btn-sm py-2 px-4 cursor-pointer" (click)="datepicker.toggle()">Filter Date</div>

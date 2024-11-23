@@ -59,6 +59,11 @@ const routes: Routes = [
     loadChildren: () => import('../../pages/booking/package/printList/printList.module').then((m) => m.PrintListModule),
   },
   {
+    path: 'booking/package/transaction/printlistuser',
+    component: PrintListPackageComponent,
+    loadChildren: () => import('../../pages/booking/package/printList/printList.module').then((m) => m.PrintListModule),
+  },
+  {
     path: 'finance/commission/package/printbayartujuan',
     component: PrintListPackageComponent,
     loadChildren: () => import('../../pages/booking/package/printList/printList.module').then((m) => m.PrintListModule),
