@@ -201,6 +201,17 @@ export class PackageService {
     );
   }
 
+  listDeposit(context: any): Observable<any> {
+    return this.httpService.listDeposit(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   deleteSP(context: GoSendModel): Observable<GoSendModel> {
     return this.httpService.SpDelete(context).pipe(
       map((result) => {

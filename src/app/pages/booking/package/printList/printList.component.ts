@@ -193,6 +193,8 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
           this.groupAdmin = groupedDataCost;
           console.log(groupedDataCost);
 
+          console.log(this.data);
+
           this.configuration.isLoading = false;
           this.cdr.detectChanges();
         } else {

@@ -63,11 +63,11 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ totalDepositDriverPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  {{ row.total_cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
+                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
               </td>
               <td>
                 <a
@@ -121,11 +121,11 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ totalDepositDriverPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  {{ row.total_tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
+                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
               </td>
               <td>
                 <a

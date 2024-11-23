@@ -33,7 +33,7 @@ export class I18nService {
   init(defaultLanguage: string, supportedLanguages: string[]) {
     this.defaultLanguage = defaultLanguage;
     this.supportedLanguages = supportedLanguages;
-    this.language = '';
+    this.language = 'id-ID';
 
     // Warning: this subscription will always be alive for the app's lifetime
     this.langChangeSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {

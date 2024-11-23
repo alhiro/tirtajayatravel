@@ -237,7 +237,7 @@ export class DepositComponent implements OnInit {
   private dataListBSD(params: PaginationContext): void {
     this.configuration.isLoading = true;
     this.packageService
-      .listSP(params)
+      .listDeposit(params)
       .pipe(
         takeUntil(this.ngUnsubscribe),
         finalize(() => {
@@ -286,10 +286,11 @@ export class DepositComponent implements OnInit {
 
           // Package
           this.totalCost = Number(totalPackagesCost);
-          this.totalCommissionPackage = Number(totalCommissionPackage);
           this.totalDebetPackage = Number(this.totalCost);
+          this.totalDepositDriverPackage = Number(this.totalDebetPackage);
+
+          this.totalCommissionPackage = Number(totalCommissionPackage);
           this.totalKreditPackage = Number(this.totalCommissionPackage) + Number(this.totalParkingPackage);
-          this.totalDepositDriverPackage = Number(this.totalDebetPackage) - Number(this.totalKreditPackage);
 
           this.totalPackagePaidMalang = Number(totalPackagePaidMalang);
           this.totalPackagePaidSurabaya = Number(totalPackagePaidSurabaya);

@@ -356,14 +356,14 @@ export class PackageComponent implements OnInit, OnDestroy {
 
   printFilterDatePayment(datepicker: any) {
     let getCity = '';
-    if (this.levelrule === 2) {
+    if (this.levelrule === 2 || this.levelrule === 3) {
       if (this.city_id === 1) {
         getCity = 'Malang';
       } else {
         getCity = 'Surabaya';
       }
     } else if (this.levelrule === 8) {
-      getCity = this.city;
+      getCity = this.currentTab;
     }
 
     const dateRange = {
@@ -378,14 +378,14 @@ export class PackageComponent implements OnInit, OnDestroy {
 
   printFilterDatePaymentUser(datepicker: any) {
     let getCity = '';
-    if (this.levelrule === 2) {
+    if (this.levelrule === 2 || this.levelrule === 3) {
       if (this.city_id === 1) {
         getCity = 'Malang';
       } else {
         getCity = 'Surabaya';
       }
     } else if (this.levelrule === 8) {
-      getCity = this.city;
+      getCity = this.currentTab;
     }
 
     const dateRange = {
