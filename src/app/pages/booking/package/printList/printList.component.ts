@@ -66,7 +66,7 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
     this.configuration.orderEnabled = false;
 
     this.columns = [
-      // { key: 'category_sub_id', title: 'No' },
+      { key: '', title: 'No', width: '3%' },
       { key: 'resi_number', title: 'Resi Number' },
       { key: 'cost', title: 'Cost' },
       { key: 'origin_from', title: 'Status Package' },
@@ -129,6 +129,10 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
     }
   }
 
+  getIndex(i: number): number {
+    return (this.pagination.offset - 1) * this.pagination.limit + (i + 1);
+  }
+
   private dataListFilter(params: PaginationContext): void {
     this.configuration.isLoading = true;
     this.packageService
@@ -151,20 +155,14 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
             this.data = filterData;
           } else {
             // filter base package url
-            if (this.status === 'Lunas (Kantor)') {
-              filterData = response.data?.filter(
-                (data: PackageModel) => data.status === 'Lunas (Kantor)' && data.status_package !== 'Cancel'
-              );
-              this.data = filterData;
-            } else {
-              filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
-              this.data = response.data;
-            }
+            filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
           }
+          this.data = filterData;
+          console.log(this.data);
 
-          const uniqueDrivers = Object.values(
+          const uniqueDrivers = Object?.values(
             this.data
-              .filter((item: any) => item?.go_send) // Keep only items with a driver
+              ?.filter((item: any) => item?.go_send) // Keep only items with a driver
               .reduce((acc: any, item: any) => {
                 const { go_send_id, send_date, total_cost, total_packages, employee } = item?.go_send;
                 if (!acc[go_send_id]) {

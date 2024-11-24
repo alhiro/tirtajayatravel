@@ -1187,7 +1187,7 @@
               </label> -->
               <label class="d-block mb-4">
                 <input
-                  type="number"
+                  type="text"
                   class="form-control"
                   formControlName="tariff"
                   autocomplete="tariff"
@@ -1202,16 +1202,30 @@
                 >
                   Tariff is required
                 </small>
+                <small
+                  *ngIf="form.get('tariff')?.hasError('pattern') && form.get('tariff')?.touched"
+                  class="text-danger"
+                  translate
+                >
+                  Cost is not a valid digits
+                </small>
               </label>
               <label class="d-block mb-4">
                 <input
-                  type="number"
+                  type="text"
                   class="form-control"
                   formControlName="discount"
                   autocomplete="discount"
                   [placeholder]="'Discount' | translate"
                 />
                 <span hidden translate>Discount</span>
+                <small
+                  *ngIf="form.get('discount')?.hasError('pattern') && form.get('discount')?.touched"
+                  class="text-danger"
+                  translate
+                >
+                  Discount is not a valid digits
+                </small>
               </label>
               <label class="d-block mb-4">
                 <input

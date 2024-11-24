@@ -577,7 +577,7 @@
                 <span class="text-gray-900 d-block">{{ getIndex(index) }}</span>
               </td>
               <td>
-                <span class="text-gray-900 fw-bolder text-hover-primary fs-7" (click)="openModalEdit(row)">
+                <span class="text-gray-900 fw-bolder fs-7">
                   {{ row.resi_number }}
                 </span>
               </td>
@@ -1060,7 +1060,7 @@
               </label> -->
               <label class="d-block mb-4">
                 <input
-                  type="number"
+                  type="text"
                   class="form-control"
                   formControlName="cost"
                   autocomplete="cost"
@@ -1075,16 +1075,30 @@
                 >
                   Cost is required
                 </small>
+                <small
+                  *ngIf="form.get('cost')?.hasError('pattern') && form.get('cost')?.touched"
+                  class="text-danger"
+                  translate
+                >
+                  Cost is not a valid digits
+                </small>
               </label>
               <label class="d-block mb-4">
                 <input
-                  type="number"
+                  type="text"
                   class="form-control"
                   formControlName="discount"
                   autocomplete="discount"
                   [placeholder]="'Discount' | translate"
                 />
                 <span hidden translate>Discount</span>
+                <small
+                  *ngIf="form.get('discount')?.hasError('pattern') && form.get('discount')?.touched"
+                  class="text-danger"
+                  translate
+                >
+                  Discount is not a valid digits
+                </small>
               </label>
               <label class="d-block mb-4">
                 <input
