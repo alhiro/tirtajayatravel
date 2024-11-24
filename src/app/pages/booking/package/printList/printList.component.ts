@@ -147,15 +147,17 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
         if (response.data.length > 0) {
           let filterData;
 
-          if (this.lastSegment === 'printbayartujuan') {
-            // filter base bayar tujuan url
-            filterData = response.data?.filter(
-              (data: PackageModel) => data.status === 'Bayar Tujuan (COD)' && data.status_package !== 'Cancel'
-            );
-          } else {
-            // filter base package url
-            filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
-          }
+          // if (this.lastSegment === 'printbayartujuan') {
+          //   // filter base bayar tujuan url
+          //   filterData = response.data?.filter(
+          //     (data: PackageModel) => data.status === 'Bayar Tujuan (COD)' && data.status_package !== 'Cancel'
+          //   );
+          // } else {
+          //   // filter base package url
+          //   filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
+          // }
+
+          filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
           this.data = filterData;
           console.log(this.data);
 

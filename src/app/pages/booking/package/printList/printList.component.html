@@ -134,7 +134,11 @@
               }"
             >
               <span class="text-gray-900 d-block">
+                @if (row.status === 'Bayar Tujuan (COD)' && row.check_payment === true) {
+                {{ row.updated_by }}
+                } @if (row.status !== 'Bayar Tujuan (COD)') {
                 {{ row.created_by }}
+                }
               </span>
             </td>
             <td

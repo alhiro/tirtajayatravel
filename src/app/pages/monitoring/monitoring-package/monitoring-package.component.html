@@ -131,7 +131,7 @@
                 </td>
                 <td>
                   <span class="text-gray-900 d-block">
-                    {{ row.received_by }}
+                    {{ row.recipient?.received_by }}
                   </span>
                 </td>
               </ng-template>
@@ -211,8 +211,8 @@
                   </span>
                 </td>
                 <td>
-                  <span class="badge badge-light-primary">
-                    {{ row.status_package }}
+                  <span class="text-gray-900 d-block">
+                    {{ row.recipient?.received_by }}
                   </span>
                 </td>
               </ng-template>

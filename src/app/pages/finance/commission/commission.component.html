@@ -95,16 +95,16 @@
               (click)="printFilterDate(datepicker)"
               translate
             >
-              Commission
+              Commission & Piutang
             </button>
-            <button
+            <!-- <button
               class="btn btn-primary btn-sm m-2 p-1 px-4 float-end"
               [disabled]="configuration.isLoading"
               (click)="printFilterBa(datepicker)"
               translate=""
             >
               Bayar Tujuan
-            </button>
+            </button> -->
             <button
               class="btn btn-warning btn-sm m-2 p-1 px-4 float-end"
               [disabled]="configuration.isLoading"
@@ -171,7 +171,7 @@
                   {{ row.recipient?.received_date | date : 'dd/MM/yyyy' : 'GMT' }}
                   } @else {
                   <div
-                    class="btn btn-primary btn-sm px-3 p-1 cursor-pointer"
+                    class="btn btn-primary btn-sm px-2 p-1 cursor-pointer d-flex"
                     (click)="openModalEdit(row)"
                     ngbTooltip="Receive By"
                   >
@@ -184,9 +184,9 @@
                 <span class="text-gray-900 d-block">{{ row.recipient?.courier }}</span>
               </td>
               <td>
-                @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') { @if (row.check_sp) {
-                <span>{{ row.updatedAt | date : 'dd/MM/yyyy' : 'GMT' }} </span>
-                } } @else { * }
+                @if (row.check_sp) {
+                <span>{{ row.check_date_sp | date : 'dd/MM/yyyy' : 'GMT' }} </span>
+                } @else { * }
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.status }}</span>
@@ -197,9 +197,8 @@
                 }
               </td>
               <td class="text-end">
-                @if (row.recipient?.received_by) { @if (levelrule === 8 || levelrule === 2) { @if (!row.check_sp) { @if
-                (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang' || row.status === 'Lunas (Kantor)' ||
-                row.status === 'Lunas (Transfer)') { @if (!row.check_sp) {
+                @if (row.recipient?.received_by) { @if (levelrule === 8 || city_id === 2) { @if (!row.check_sp) { @if
+                (row.status !== 'Bayar Tujuan (COD)') {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -212,7 +211,8 @@
                 >
                   <app-keenicon name="save-deposit" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                } } } @if (!row.check_payment && city_id === 1 || !row.check_payment && levelrule === 8) {
+                } } } @if (!row.check_payment && city_id === 2 || !row.check_payment && levelrule === 8) { @if
+                (row.status === 'Bayar Tujuan (COD)') {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -221,7 +221,7 @@
                   data-bs-placement="top"
                   title="Edit"
                   (click)="openModalEditPayment(row)"
-                  ngbTooltip="Check Payment"
+                  ngbTooltip="Check BA"
                 >
                   <app-keenicon name="bill" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
@@ -299,7 +299,7 @@
                   {{ row.recipient?.received_date | date : 'dd/MM/yyyy' : 'GMT' }}
                   } @else {
                   <div
-                    class="btn btn-primary btn-sm px-3 p-1 cursor-pointer"
+                    class="btn btn-primary btn-sm px-2 p-1 cursor-pointer d-flex"
                     (click)="openModalEdit(row)"
                     ngbTooltip="Receive By"
                   >
@@ -312,9 +312,9 @@
                 <span class="text-gray-900 d-block">{{ row.recipient?.courier }}</span>
               </td>
               <td>
-                @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') { @if (row.check_sp) {
-                <span>{{ row.updatedAt | date : 'dd/MM/yyyy' : 'GMT' }} </span>
-                } } @else { * }
+                @if (row.check_sp) {
+                <span>{{ row.check_date_sp | date : 'dd/MM/yyyy' : 'GMT' }} </span>
+                } @else { * }
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.status }}</span>
@@ -325,9 +325,8 @@
                 }
               </td>
               <td class="text-end">
-                @if (row.recipient?.received_by) { @if (levelrule === 8 || levelrule === 1) { @if (!row.check_sp) { @if
-                (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang' || row.status === 'Lunas (Kantor)' ||
-                row.status === 'Lunas (Transfer)') { @if (!row.check_sp) {
+                @if (row.recipient?.received_by) { @if (levelrule === 8 || city_id === 1) { @if (!row.check_sp) { @if
+                (row.status !== 'Bayar Tujuan (COD)') {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -340,7 +339,8 @@
                 >
                   <app-keenicon name="save-deposit" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                } } } @if (!row.check_payment && city_id === 1 || !row.check_payment && levelrule === 8) {
+                } } } @if (!row.check_payment && city_id === 1 || !row.check_payment && levelrule === 8) { @if
+                (row.status === 'Bayar Tujuan (COD)') {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -349,7 +349,7 @@
                   data-bs-placement="top"
                   title="Edit"
                   (click)="openModalEditPayment(row)"
-                  ngbTooltip="Check Payment"
+                  ngbTooltip="Check BA"
                 >
                   <app-keenicon name="bill" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
@@ -400,7 +400,7 @@
           <input
             class="form-control p-1 px-4"
             placeholder="Select date"
-            name="datePicker"
+            name="dp"
             [ngModelOptions]="{ standalone: true }"
             [(ngModel)]="receivedDate"
             ngbDatepicker

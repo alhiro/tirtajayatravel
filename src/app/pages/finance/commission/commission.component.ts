@@ -176,14 +176,25 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   printFilterDate(datepicker: any) {
+    let getCity = '';
+    if (this.levelrule === 2) {
+      if (this.city_id === 1) {
+        getCity = 'Malang';
+      } else {
+        getCity = 'Surabaya';
+      }
+    } else {
+      getCity = '';
+    }
+
     const paramRange = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search: this.pagination.search,
       fromDate: this.startDate,
       toDate: this.endDate,
-      city: this.currentTab === 'Malang' ? JSON.stringify(1) : JSON.stringify(2),
-      status: this.pagination.status,
+      city: getCity,
+      status: 'Completed',
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
@@ -210,6 +221,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
       toDate: this.endDate,
       city: getCity,
       status: 'Bayar Tujuan (COD)',
+      username: '',
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
@@ -458,28 +470,17 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.configuration.isLoading = true;
     this.packageService
       .list(params)
-      .pipe(
-        takeUntil(this.ngUnsubscribe),
-        finalize(() => {
-          this.configuration.isLoading = false;
-        })
-      )
+      .pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
-        console.log(response);
-        // count malang or surabaya
-        if (response.data.length > 0) {
-          this.data = response.data;
-          this.dataLength = response.length;
+        this.data = response.data;
+        this.dataLength = response.length;
 
-          // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-          this.pagination.count = response.length;
-          this.pagination = { ...this.pagination };
-          this.cdr.detectChanges();
-        } else {
-          this.configuration.horizontalScroll = false;
-          this.data = [];
-          this.dataLength = 0;
-        }
+        // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
+        this.pagination.count = response.length;
+        this.pagination = { ...this.pagination };
+
+        this.configuration.isLoading = false;
+        this.cdr.detectChanges();
       });
   }
 
@@ -572,7 +573,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
 
     const nameCourier = { name: event.recipient?.courier };
     this.modelEmployee = nameCourier;
-    this.formatDateValue(event.recipient?.received_date);
+    this.formatDateValue(new Date());
 
     this.formRecipient.patchValue({
       recipient_id: event.recipient_id,
@@ -661,6 +662,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
   dataEditPayment() {
     this.form.patchValue({
       check_payment: true,
+      status_package: 'Completed',
     });
     console.log(this.form.value);
 
@@ -761,6 +763,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.form.patchValue({
       check_date_sp: new Date(),
       check_sp: true,
+      status_package: 'Completed',
     });
     console.log(this.form.value);
 

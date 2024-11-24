@@ -615,8 +615,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
     if (this.currentTab === 'Malang') {
       this.city = 'Malang';
       this.params = {
-        limit: this.pagination.limit,
-        page: this.pagination.offset,
+        limit: 10,
+        page: 1,
         search: this.pagination.search,
         startDate: this.startDate,
         endDate: this.endDate,
@@ -627,8 +627,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
     } else if (this.currentTab === 'Surabaya') {
       this.city = 'Surabaya';
       this.params = {
-        limit: this.pagination.limit,
-        page: this.pagination.offset,
+        limit: 10,
+        page: 1,
         search: this.pagination.search,
         startDate: this.startDate,
         endDate: this.endDate,
@@ -649,8 +649,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
       }
 
       this.params = {
-        limit: this.pagination.limit,
-        page: this.pagination.offset,
+        limit: 10,
+        page: 1,
         search: this.pagination.search,
         startDate: this.startDate,
         endDate: this.endDate,
@@ -671,8 +671,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
       }
 
       this.params = {
-        limit: this.pagination.limit,
-        page: this.pagination.offset,
+        limit: 10,
+        page: 1,
         search: this.pagination.search,
         startDate: this.startDate,
         endDate: this.endDate,

@@ -100,7 +100,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
     this.endDate = objDataDate.toDate;
     this.endDateDisplay = this.endDate?.split(' ')[0];
 
-    this.params = {
+    const params = {
       limit: '',
       page: '',
       search: objDataDate.search,
@@ -108,8 +108,9 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
       endDate: this.endDate,
       city: this.city === 1 ? 'Malang' : 'Surabaya',
       status: this.status,
+      username: '',
     };
-    this.dataListFilter(this.params);
+    this.dataListFilter(params);
   }
 
   private dataListFilter(params: ExtendedPaginationContext): void {
@@ -128,8 +129,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
           // Data commission status lunas & bayar tujuan
           this.data = response.data?.filter(
             (data: PackageModel) =>
-              data.city_id === this.city &&
-              (data.status === 'Piutang' || data.status === 'Lunas (Kantor)' || data.status === 'Bayar Tujuan (COD)')
+              data.status === 'Piutang' || data.status === 'Lunas (Kantor)' || data.status === 'Bayar Tujuan (COD)'
           );
 
           this.totalCommission = this.data?.reduce((acc: any, item: any) => acc + Number(item?.agent_commission), 0);
@@ -158,7 +158,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
           );
 
           this.totalPiutang = this.dataPiutang?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
-          this.totalKoliPiutang = this.dataPiutang?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
+          this.totalKoliPiutang = this.dataPiutang?.length;
 
           const groupedDataPiutang: GroupedDataCost[] = Object.values(
             this.dataPiutang.reduce((acc: any, item: any) => {
@@ -177,11 +177,8 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
           console.log(groupedDataPiutang);
 
           this.configuration.isLoading = false;
-          this.configuration.horizontalScroll = true;
           this.cdr.detectChanges();
         } else {
-          this.configuration.horizontalScroll = false;
-
           this.data = [];
         }
       });
