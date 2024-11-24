@@ -152,7 +152,6 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
             filterData = response.data?.filter(
               (data: PackageModel) => data.status === 'Bayar Tujuan (COD)' && data.status_package !== 'Cancel'
             );
-            this.data = filterData;
           } else {
             // filter base package url
             filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');

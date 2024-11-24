@@ -198,8 +198,8 @@
               </td>
               <td class="text-end">
                 @if (row.recipient?.received_by) { @if (levelrule === 8 || levelrule === 2) { @if (!row.check_sp) { @if
-                (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang' || row.status === 'Lunas (Kantor)') {
-                @if (!row.check_sp) {
+                (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang' || row.status === 'Lunas (Kantor)' ||
+                row.status === 'Lunas (Transfer)') { @if (!row.check_sp) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -326,8 +326,8 @@
               </td>
               <td class="text-end">
                 @if (row.recipient?.received_by) { @if (levelrule === 8 || levelrule === 1) { @if (!row.check_sp) { @if
-                (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang' || row.status === 'Lunas (Kantor)') {
-                @if (!row.check_sp) {
+                (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang' || row.status === 'Lunas (Kantor)' ||
+                row.status === 'Lunas (Transfer)') { @if (!row.check_sp) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
