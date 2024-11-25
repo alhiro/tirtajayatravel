@@ -34,6 +34,7 @@
           [configuration]="configuration"
           [data]="data"
           [columns]="columns"
+          [pagination]="pagination"
           tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
         >
           <ng-template let-row let-index="index" ngx-table-row>
@@ -43,7 +44,7 @@
                 'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
               }"
             >
-              <span class="text-gray-900 d-block">{{ getIndex(index) }}</span>
+              <span class="text-gray-900 d-block">{{ index + 1 }}</span>
             </td>
             <td
               [ngClass]="{
@@ -150,9 +151,7 @@
       </div>
       <div class="mt-7">
         <span
-          ><b
-            >TOTAL SETORAN PELUNASAN PIUTANG PAKET: {{ totalPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
-          ></span
+          ><b>TOTAL SETORAN PELUNASAN BA PAKET: {{ totalPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
         ><br />
       </div>
       <div class="mt-1">

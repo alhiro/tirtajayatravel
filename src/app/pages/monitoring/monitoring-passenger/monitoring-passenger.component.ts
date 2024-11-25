@@ -171,7 +171,7 @@ export class MonitoringPassengerComponent implements OnInit {
       { key: 'destination_id', title: 'Destination' },
       { key: 'book_date', title: 'Book Date' },
       { key: 'created_at', title: 'Created At' },
-      { key: 'status_passenger', title: 'Status Passenger' },
+      // { key: 'status_passenger', title: 'Status Passenger' },
     ];
   }
 

@@ -129,71 +129,63 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((response: any) => {
-        // count malang or surabaya
-        if (response.data.length > 0) {
-          // Data commission status lunas & bayar tujuan
-          // this.data = response.data?.filter(
-          //   (data: PackageModel) =>
-          //     data.status === 'Piutang' || data.status === 'Lunas (Kantor)' || data.status === 'Bayar Tujuan (COD)'
-          // );
+        // Data commission status lunas & bayar tujuan
+        // this.data = response.data?.filter(
+        //   (data: PackageModel) =>
+        //     data.status === 'Piutang' || data.status === 'Lunas (Kantor)' || data.status === 'Bayar Tujuan (COD)'
+        // );
 
-          this.data = response.data;
-          this.totalKoli = this.data?.length;
+        this.data = response.data;
+        this.totalKoli = this.data?.length;
 
-          const dataCommission = response.data?.filter((data: any) => data.check_sp === true);
-          this.totalCommission = dataCommission?.reduce(
-            (acc: any, item: any) => acc + Number(item?.agent_commission),
-            0
-          );
+        const dataCommission = response.data?.filter((data: any) => data.check_sp === true);
+        this.totalCommission = dataCommission?.reduce((acc: any, item: any) => acc + Number(item?.agent_commission), 0);
 
-          const groupedDataCommission: GroupedDataCost[] = Object.values(
-            dataCommission.reduce((acc: any, item: any) => {
-              if (!acc[item.updated_by]) {
-                acc[item.updated_by] = {
-                  id: Object.keys(acc).length + 1,
-                  admin: item.updated_by,
-                  totalCost: 0,
-                  check_sp: item.check_sp,
-                };
-              }
-              acc[item.updated_by].totalCost += Number(item.agent_commission);
-              return acc;
-            }, {} as { [key: string]: GroupedDataCost })
-          );
-          this.groupAdminCommission = groupedDataCommission;
-          console.log(groupedDataCommission);
+        const groupedDataCommission: GroupedDataCost[] = Object.values(
+          dataCommission.reduce((acc: any, item: any) => {
+            if (!acc[item.updated_by]) {
+              acc[item.updated_by] = {
+                id: Object.keys(acc).length + 1,
+                admin: item.updated_by,
+                totalCost: 0,
+                check_sp: item.check_sp,
+              };
+            }
+            acc[item.updated_by].totalCost += Number(item.agent_commission);
+            return acc;
+          }, {} as { [key: string]: GroupedDataCost })
+        );
+        this.groupAdminCommission = groupedDataCommission;
+        console.log(groupedDataCommission);
 
-          // Data piutang status bayar tujuan
-          this.dataPiutang = response.data?.filter(
-            (data: PackageModel) => data.status === 'Piutang' || data.status === 'Bayar Tujuan (COD)'
-          );
+        // Data piutang status bayar tujuan
+        this.dataPiutang = response.data?.filter(
+          (data: PackageModel) => data.status === 'Piutang' || data.status === 'Bayar Tujuan (COD)'
+        );
 
-          const dataPiutang = this.dataPiutang?.filter((data: any) => data.check_payment === true);
-          this.totalPiutang = dataPiutang?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
-          this.totalKoliPiutang = this.dataPiutang?.length;
+        const dataPiutang = this.dataPiutang?.filter((data: any) => data.check_payment === true);
+        this.totalPiutang = dataPiutang?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
+        this.totalKoliPiutang = this.dataPiutang?.length;
 
-          const groupedDataPiutang: GroupedDataCost[] = Object.values(
-            dataPiutang.reduce((acc: any, item: any) => {
-              if (!acc[item.updated_by]) {
-                acc[item.updated_by] = {
-                  id: Object.keys(acc).length + 1,
-                  admin: item.updated_by,
-                  totalCost: 0,
-                  check_payment: item.check_payment,
-                };
-              }
-              acc[item.updated_by].totalCost += Number(item.cost);
-              return acc;
-            }, {} as { [key: string]: GroupedDataCost })
-          );
-          this.groupAdminPiutang = groupedDataPiutang;
-          console.log(groupedDataPiutang);
+        const groupedDataPiutang: GroupedDataCost[] = Object.values(
+          dataPiutang.reduce((acc: any, item: any) => {
+            if (!acc[item.updated_by]) {
+              acc[item.updated_by] = {
+                id: Object.keys(acc).length + 1,
+                admin: item.updated_by,
+                totalCost: 0,
+                check_payment: item.check_payment,
+              };
+            }
+            acc[item.updated_by].totalCost += Number(item.cost);
+            return acc;
+          }, {} as { [key: string]: GroupedDataCost })
+        );
+        this.groupAdminPiutang = groupedDataPiutang;
+        console.log(groupedDataPiutang);
 
-          this.configuration.isLoading = false;
-          this.cdr.detectChanges();
-        } else {
-          this.data = [];
-        }
+        this.configuration.isLoading = false;
+        this.cdr.detectChanges();
       });
   }
 
