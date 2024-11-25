@@ -92,8 +92,9 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
 
     const getDataDate: any = sessionStorage.getItem('printlistdate');
     const objDataDate = JSON.parse(getDataDate);
+    console.log(objDataDate);
 
-    this.city = Number(objDataDate.city);
+    this.city = objDataDate.city;
     this.status = objDataDate.status;
     this.startDate = objDataDate.fromDate;
     this.startDateDisplay = this.startDate?.split(' ')[0];
@@ -106,7 +107,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
       search: objDataDate.search,
       startDate: this.startDate,
       endDate: this.endDate,
-      city: this.city === 1 ? 'Malang' : 'Surabaya',
+      city: this.city,
       status: this.status,
       username: '',
     };

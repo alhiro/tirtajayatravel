@@ -76,7 +76,12 @@
                 <!-- <td>
                     <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
                   </td> -->
-                <td>
+                <td
+                  [ngClass]="{
+                    'soft-orange-bg': row.status_passenger === 'Cancel',
+                    'transparent-bg': row.status_passenger !== 'Cancel'
+                  }"
+                >
                   <span class="text-gray-900 d-block">
                     {{ row.resi_number }} <br />
                     <div class="d-flex mt-1">
@@ -85,7 +90,12 @@
                     </div>
                   </span>
                 </td>
-                <td>
+                <td
+                  [ngClass]="{
+                    'soft-orange-bg': row.status_passenger === 'Cancel',
+                    'transparent-bg': row.status_passenger !== 'Cancel'
+                  }"
+                >
                   <span class="text-gray-900 d-block">
                     @if (row.status === 'Biasa') {
                     <span class="badge">Biasa</span>
@@ -98,7 +108,12 @@
                     <span class="text-gray-900 d-block">{{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}</span>
                   </span>
                 </td>
-                <td>
+                <td
+                  [ngClass]="{
+                    'soft-orange-bg': row.status_passenger === 'Cancel',
+                    'transparent-bg': row.status_passenger !== 'Cancel'
+                  }"
+                >
                   @for (value of row.waybills; track value) {
                   <span class="text-gray-900 d-block">
                     <ul>
@@ -111,7 +126,12 @@
                   </span>
                   }
                 </td>
-                <td>
+                <td
+                  [ngClass]="{
+                    'soft-orange-bg': row.status_passenger === 'Cancel',
+                    'transparent-bg': row.status_passenger !== 'Cancel'
+                  }"
+                >
                   @for (value of row.destinations; track value) {
                   <span class="text-gray-900 d-block">
                     <ul>
@@ -124,7 +144,12 @@
                   </span>
                   }
                 </td>
-                <td>
+                <td
+                  [ngClass]="{
+                    'soft-orange-bg': row.status_passenger === 'Cancel',
+                    'transparent-bg': row.status_passenger !== 'Cancel'
+                  }"
+                >
                   <span class="text-gray-900 d-block">
                     <div class="d-flex mb-1">
                       <span class="badge badge-light-success">{{ row.created_at | date : 'H:mm' : 'GMT' }}</span>
@@ -141,12 +166,22 @@
                     </span>
                   </span>
                 </td>
-                <td>
+                <td
+                  [ngClass]="{
+                    'soft-orange-bg': row.status_passenger === 'Cancel',
+                    'transparent-bg': row.status_passenger !== 'Cancel'
+                  }"
+                >
                   <span class="text-gray-900 d-block">
                     {{ row.created_at | date : 'dd/MM/yyyy H:mm' : 'GMT' }}
                   </span>
                 </td>
-                <td>
+                <td
+                  [ngClass]="{
+                    'soft-orange-bg': row.status_passenger === 'Cancel',
+                    'transparent-bg': row.status_passenger !== 'Cancel'
+                  }"
+                >
                   <span class="text-gray-900 d-block">
                     @if (row.status_passenger === 'Progress') {
                     <span class="badge badge-light-primary">
@@ -193,7 +228,12 @@
                 <!-- <td>
                     <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
                   </td> -->
-                <td>
+                <td
+                  [ngClass]="{
+                    'soft-orange-bg': row.status_passenger === 'Cancel',
+                    'transparent-bg': row.status_passenger !== 'Cancel'
+                  }"
+                >
                   <span class="text-gray-900 d-block">
                     {{ row.resi_number }} <br />
                     <div class="d-flex mt-1">
@@ -202,7 +242,12 @@
                     </div>
                   </span>
                 </td>
-                <td>
+                <td
+                  [ngClass]="{
+                    'soft-orange-bg': row.status_passenger === 'Cancel',
+                    'transparent-bg': row.status_passenger !== 'Cancel'
+                  }"
+                >
                   <span class="text-gray-900 d-block">
                     @if (row.status === 'Biasa') {
                     <span class="badge">Biasa</span>
@@ -215,7 +260,12 @@
                     <span class="text-gray-900 d-block">{{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}</span>
                   </span>
                 </td>
-                <td>
+                <td
+                  [ngClass]="{
+                    'soft-orange-bg': row.status_passenger === 'Cancel',
+                    'transparent-bg': row.status_passenger !== 'Cancel'
+                  }"
+                >
                   @for (value of row.waybills; track value) {
                   <span class="text-gray-900 d-block">
                     <ul>
@@ -228,7 +278,12 @@
                   </span>
                   }
                 </td>
-                <td>
+                <td
+                  [ngClass]="{
+                    'soft-orange-bg': row.status_passenger === 'Cancel',
+                    'transparent-bg': row.status_passenger !== 'Cancel'
+                  }"
+                >
                   @for (value of row.destinations; track value) {
                   <span class="text-gray-900 d-block">
                     <ul>
@@ -241,7 +296,12 @@
                   </span>
                   }
                 </td>
-                <td>
+                <td
+                  [ngClass]="{
+                    'soft-orange-bg': row.status_passenger === 'Cancel',
+                    'transparent-bg': row.status_passenger !== 'Cancel'
+                  }"
+                >
                   <span class="text-gray-900 d-block">
                     <div class="d-flex mb-1">
                       <span class="badge badge-light-success">{{ row.created_at | date : 'H:mm' : 'GMT' }}</span>
@@ -258,12 +318,22 @@
                     </span>
                   </span>
                 </td>
-                <td>
+                <td
+                  [ngClass]="{
+                    'soft-orange-bg': row.status_passenger === 'Cancel',
+                    'transparent-bg': row.status_passenger !== 'Cancel'
+                  }"
+                >
                   <span class="text-gray-900 d-block">
                     {{ row.created_at | date : 'dd/MM/yyyy H:mm' : 'GMT' }}
                   </span>
                 </td>
-                <td>
+                <td
+                  [ngClass]="{
+                    'soft-orange-bg': row.status_passenger === 'Cancel',
+                    'transparent-bg': row.status_passenger !== 'Cancel'
+                  }"
+                >
                   <span class="text-gray-900 d-block">
                     @if (row.status_passenger === 'Progress') {
                     <span class="badge badge-light-primary">

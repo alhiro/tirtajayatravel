@@ -159,13 +159,24 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   printFilterSelected(datepicker: any) {
+    let getCity = '';
+    if (this.levelrule === 2) {
+      if (this.city_id === 1) {
+        getCity = 'Surabaya';
+      } else {
+        getCity = 'Malang';
+      }
+    } else {
+      getCity = '';
+    }
+
     this.params = {
-      limit: this.pagination.limit,
-      page: this.pagination.offset,
+      limit: 10,
+      page: 1,
       search: this.pagination.search,
       startDate: this.startDate,
       endDate: this.endDate,
-      city: this.currentTab,
+      city: getCity,
       status: this.pagination.status,
     };
 
@@ -179,17 +190,17 @@ export class CommissionComponent implements OnInit, OnDestroy {
     let getCity = '';
     if (this.levelrule === 2) {
       if (this.city_id === 1) {
-        getCity = 'Malang';
-      } else {
         getCity = 'Surabaya';
+      } else {
+        getCity = 'Malang';
       }
     } else {
       getCity = '';
     }
 
     const paramRange = {
-      limit: this.pagination.limit,
-      page: this.pagination.offset,
+      limit: 10,
+      page: 1,
       search: this.pagination.search,
       fromDate: this.startDate,
       toDate: this.endDate,
@@ -205,17 +216,17 @@ export class CommissionComponent implements OnInit, OnDestroy {
     let getCity = '';
     if (this.levelrule === 2) {
       if (this.city_id === 1) {
-        getCity = 'Malang';
-      } else {
         getCity = 'Surabaya';
+      } else {
+        getCity = 'Malang';
       }
     } else {
       getCity = '';
     }
 
     const paramRange = {
-      limit: this.pagination.limit,
-      page: this.pagination.offset,
+      limit: 10,
+      page: 1,
       search: this.pagination.search,
       fromDate: this.startDate,
       toDate: this.endDate,
@@ -323,7 +334,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
       search: this.pagination.search,
       startDate: this.startDate,
       endDate: this.endDate,
-      city: this.currentTab,
+      city: this.city_id === 1 ? 'Surabaya' : 'Malang',
       status: this.pagination.status,
     };
     this.dataList(this.params);

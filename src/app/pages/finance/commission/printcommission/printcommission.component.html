@@ -8,7 +8,7 @@
             <div class="menu-content px-0 text-center">
               <h3 class="card-title align-items-start flex-column mb-2">
                 <span class="card-label fw-bolder fs-2">
-                  @if (city === 1) { PENCAIRAN KOMISI & PIUTANG PAKET MALANG } @else { PENCAIRAN KOMISI & PIUTANG PAKET
+                  @if (city === 'Surabaya') { PENCAIRAN KOMISI & BA PAKET MALANG } @else { PENCAIRAN KOMISI & BA PAKET
                   SURABAYA }
                 </span>
               </h3>
@@ -37,51 +37,96 @@
           tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
         >
           <ng-template let-row let-index="index" ngx-table-row>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
               <span class="text-gray-900 d-block">{{ getIndex(index) }}</span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
               <span class="text-gray-900 fw-bolder fs-7">
                 {{ row.resi_number }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.book_date | date : 'yyyy/MM/dd H:mm:ss' : 'GMT' }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
               @if (row.check_sp) {
               <span class="text-gray-900 d-block">
                 {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
               }
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.sender?.name }} <br />
                 {{ row.sender?.address }} <br />
                 {{ row.sender?.telp }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.recipient?.name }}<br />
                 {{ row.recipient?.address }}<br />
                 {{ row.recipient?.telp }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
               <span class="text-gray-900 d-block">
                 {{ row.status }}
               </span>
             </td>
-            <td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
               @if (row.check_payment) {
               <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
               }

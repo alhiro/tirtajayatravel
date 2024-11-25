@@ -4,10 +4,10 @@
     <h3 class="card-title align-items-start flex-column">
       <span class="card-label fw-bolder fs-3 mb-1">
         <ng-container [ngSwitch]="currentTab">
-          <ng-container *ngSwitchCase="'Malang'">
+          <ng-container *ngSwitchCase="'Surabaya'">
             {{ 'Commission Table Malang' | translate : { title: 'Malang' } }}
           </ng-container>
-          <ng-container *ngSwitchCase="'Surabaya'">
+          <ng-container *ngSwitchCase="'Malang'">
             {{ 'Commission Table Surabaya' | translate : { title: 'Surabaya' } }}
           </ng-container>
           <ng-container *ngSwitchDefault>
@@ -95,7 +95,7 @@
               (click)="printFilterDate(datepicker)"
               translate
             >
-              Commission & Piutang
+              Commission & BA
             </button>
             <!-- <button
               class="btn btn-primary btn-sm m-2 p-1 px-4 float-end"

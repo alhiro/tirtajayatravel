@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Utils } from '@app/@shared';
 import { PaginationContext } from '@app/@shared/interfaces/pagination';
 import { GoSendModel } from '@app/pages/booking/package/models/gosend';
 import { PackageService } from '@app/pages/booking/package/package.service';
 import { HandlerResponseService } from '@app/services/handler-response/handler-response.service';
 import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
-import { Subject, catchError, finalize, of, takeUntil } from 'rxjs';
+import { Subject, catchError, debounceTime, finalize, of, takeUntil } from 'rxjs';
 import { CashoutService } from '../cashout/cashout.service';
 import { CashoutModel } from '../cashout/models/cashout.model';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -122,6 +122,7 @@ export class DepositComponent implements OnInit {
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
+    private readonly cdr: ChangeDetectorRef,
     private packageService: PackageService,
     private cashoutService: CashoutService,
     private handlerResponseService: HandlerResponseService,
@@ -175,6 +176,7 @@ export class DepositComponent implements OnInit {
     console.log(this.params);
     this.dataListCashout(this.params);
     this.dataListBSD(this.params);
+    this.dataListDeposit(this.params);
   }
 
   datepicker() {
@@ -380,6 +382,20 @@ export class DepositComponent implements OnInit {
             totalDepositDaily: this.totalDepositDaily,
           };
         }
+      });
+  }
+
+  private dataListDeposit(params: PaginationContext): void {
+    this.configuration.isLoading = true;
+    this.cashoutService
+      .list(params)
+      .pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
+      .subscribe((response: any) => {
+        const data = response.data;
+        console.log(data);
+
+        this.configuration.isLoading = false;
+        this.cdr.detectChanges();
       });
   }
 }
