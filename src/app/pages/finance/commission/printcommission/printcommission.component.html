@@ -37,9 +37,9 @@
           tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
         >
           <ng-template let-row let-index="index" ngx-table-row>
-            <!-- <td>
-                <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
-              </td> -->
+            <td>
+              <span class="text-gray-900 d-block">{{ getIndex(index) }}</span>
+            </td>
             <td>
               <span class="text-gray-900 fw-bolder fs-7">
                 {{ row.resi_number }}
@@ -99,8 +99,8 @@
       </div>
       <div class="mt-1">
         @for (admin of groupAdminCommission; track admin) {
-        <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span
-        ><br />
+        <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+        <br />
         }
       </div>
       <div class="mt-7">
@@ -112,8 +112,8 @@
       </div>
       <div class="mt-1">
         @for (admin of groupAdminPiutang; track admin) {
-        <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span
-        ><br />
+        <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+        <br />
         }
       </div>
     </div>

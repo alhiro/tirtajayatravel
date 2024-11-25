@@ -194,7 +194,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
       fromDate: this.startDate,
       toDate: this.endDate,
       city: getCity,
-      status: 'Completed',
+      status: 'Delivery',
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
@@ -662,7 +662,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
   dataEditPayment() {
     this.form.patchValue({
       check_payment: true,
-      status_package: 'Completed',
+      // status_package: 'Completed',
     });
     console.log(this.form.value);
 
@@ -763,7 +763,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.form.patchValue({
       check_date_sp: new Date(),
       check_sp: true,
-      status_package: 'Completed',
+      // status_package: 'Completed',
     });
     console.log(this.form.value);
 
