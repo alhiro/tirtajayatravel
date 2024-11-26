@@ -128,6 +128,10 @@ export class PackageComponent implements OnInit, OnDestroy {
   public searchFailedRecipient = false;
   public searchFailedEmployee = false;
   public searchFailedCar = false;
+  public searchPrintFailed = false;
+  public searchingPrint = false;
+
+  public isLoadingPrint = false;
 
   public configuration: Config = { ...DefaultConfig };
 
@@ -161,6 +165,8 @@ export class PackageComponent implements OnInit, OnDestroy {
   isLoading = false;
   isLoadingAddress = false;
   isLoadingCustomer = false;
+
+  resiNumber: any;
 
   get f() {
     return this.form.controls;
@@ -202,10 +208,16 @@ export class PackageComponent implements OnInit, OnDestroy {
     dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
+  modalConfigPrintResi: ModalConfig = {
+    modalTitle: 'Print Resi',
+    dismissButtonLabel: 'Submit',
+    closeButtonLabel: 'Cancel',
+  };
   @ViewChild('modal') private modalComponent!: ModalXlComponent;
   @ViewChild('modalAddress') private modalComponentAddress!: ModalComponent;
   @ViewChild('modalSP') private modalComponentSP!: ModalComponent;
   @ViewChild('assignSP') private modalComponentAssignSP!: ModalComponent;
+  @ViewChild('modalPrintResi') private modalComponentPrintResi!: ModalComponent;
 
   @ViewChild('datepicker') datePicker!: any;
 
@@ -235,6 +247,8 @@ export class PackageComponent implements OnInit, OnDestroy {
   clickSender$ = new Subject<string>();
   focusRecipient$ = new Subject<string>();
   clickRecipient$ = new Subject<string>();
+  focusPrint$ = new Subject<string>();
+  clickPrint$ = new Subject<string>();
   @ViewChild('instance', { static: true }) instance!: NgbTypeahead;
 
   // private fields
@@ -844,7 +858,7 @@ export class PackageComponent implements OnInit, OnDestroy {
     );
 
   searchDataCustomer = (text$: Observable<string>) => {
-    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const debouncedText$ = text$.pipe(debounceTime(500), distinctUntilChanged());
     const clicksWithClosedPopup$ = this.clickCustomer$.pipe(filter(() => this.instance?.isPopupOpen()));
     const inputFocus$ = this.focusCustomer$;
 
@@ -942,7 +956,7 @@ export class PackageComponent implements OnInit, OnDestroy {
   }
 
   searchAddressSender = (text$: Observable<string>) => {
-    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const debouncedText$ = text$.pipe(debounceTime(500), distinctUntilChanged());
     const clicksWithClosedPopup$ = this.clickSender$.pipe(filter(() => this.instance?.isPopupOpen()));
     const inputFocus$ = this.focusSender$;
 
@@ -991,7 +1005,7 @@ export class PackageComponent implements OnInit, OnDestroy {
   }
 
   searchAddressRecipient = (text$: Observable<string>) => {
-    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const debouncedText$ = text$.pipe(debounceTime(500), distinctUntilChanged());
     const clicksWithClosedPopup$ = this.clickRecipient$.pipe(filter(() => this.instance?.isPopupOpen()));
     const inputFocus$ = this.focusRecipient$;
 
@@ -1049,6 +1063,72 @@ export class PackageComponent implements OnInit, OnDestroy {
       this.selectedAddressRecipient = getdAddress;
       console.log(this.selectedAddressRecipient);
     }
+  }
+
+  async printResi() {
+    this.isLoadingPrint = true;
+    this.resiNumber = '';
+
+    return await this.modalComponentPrintResi.open();
+  }
+
+  dataPrintResi() {
+    console.log(this.resiNumber);
+    sessionStorage.setItem('printpackage', JSON.stringify(this.resiNumber));
+    window.open('#/booking/package/transaction/printpackage', '_blank');
+  }
+
+  searchDataPackage = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.clickPrint$.pipe(filter(() => this.instance?.isPopupOpen()));
+    const inputFocus$ = this.focusPrint$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => ((this.searchingPrint = true), (this.isLoadingPrint = true))),
+      switchMap((term) =>
+        this.packageService
+          .list({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+            startDate: '',
+            endDate: '',
+            city: '',
+            status: '',
+          })
+          .pipe(
+            tap(() => (this.searchPrintFailed = false)),
+            map((response: any) => {
+              if (response.length > 0) {
+                tap(() => (this.searchingPrint = false));
+                return response.data.filter(
+                  (val: PackageModel) => val.resi_number.toLowerCase().indexOf(term.toLowerCase()) > -1
+                );
+              } else {
+                this.searchPrintFailed = true;
+                this.isLoadingPrint = true;
+              }
+            }),
+            catchError(() => {
+              this.searchPrintFailed = true;
+              this.isLoadingPrint = true;
+              return of([]);
+            })
+          )
+      ),
+      tap(() => (this.searchingPrint = false))
+    );
+  };
+  formatterPrint = (result: { resi_number: string }) => result.resi_number;
+
+  onPrintSelect(event: any, inputElement: HTMLInputElement) {
+    this.isLoadingPrint = false;
+    this.resiNumber = event.item;
+    console.log('Selected Package:', this.resiNumber);
+
+    inputElement.blur();
   }
 
   onDateChange(date: NgbDateStruct): void {

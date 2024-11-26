@@ -212,6 +212,17 @@ export class PackageService {
     );
   }
 
+  depositDaily(context: any): Observable<any> {
+    return this.httpService.depositDailyFullQuery(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   deleteSP(context: GoSendModel): Observable<GoSendModel> {
     return this.httpService.SpDelete(context).pipe(
       map((result) => {

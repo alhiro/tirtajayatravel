@@ -64,15 +64,4 @@ export class CashoutService {
       })
     );
   }
-
-  depositDaily(context: any): Observable<any> {
-    return this.httpService.depositDaily(context).pipe(
-      map((result) => {
-        if (!result) {
-          return result;
-        }
-        return result;
-      })
-    );
-  }
 }

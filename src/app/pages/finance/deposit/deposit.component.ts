@@ -25,9 +25,9 @@ export class DepositComponent implements OnInit {
 
   public configuration: Config = { ...DefaultConfig };
 
-  public depositData: any;
-  public dataPackage: any;
-  public dataPassenger: any;
+  public dataDeposit: any;
+  public dataPackage: any[] = [];
+  public dataPassenger: any[] = [];
 
   // table package
   public totalCost = 0;
@@ -78,6 +78,7 @@ export class DepositComponent implements OnInit {
   // cashout
   public dataCashoutMalang: any;
   public dataCashoutSurabaya: any;
+
   public totalCostMalang: any = 0;
   public totalCostSurabaya: any = 0;
   public cashoutOnderdilService = 0;
@@ -163,20 +164,20 @@ export class DepositComponent implements OnInit {
     const inputDate = new Date();
     const { startDate, endDate } = this.utils.singleDate(inputDate);
 
-    this.params = {
+    const params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search: this.pagination.search,
       startDate: startDate,
       endDate: endDate,
-      city: this.pagination.city,
+      city: this.city_id,
       status: this.pagination.status,
     };
 
-    console.log(this.params);
-    this.dataListCashout(this.params);
-    this.dataListBSD(this.params);
-    this.dataListDeposit(this.params);
+    console.log(params);
+    // this.dataListCashout(params);
+    // this.dataListBSD(params);
+    this.dataListDeposit(params);
   }
 
   datepicker() {
@@ -190,21 +191,22 @@ export class DepositComponent implements OnInit {
     const { startDate, endDate } = this.utils.singleDate(inputDate);
 
     const params = {
-      limit: 100,
-      page: 1,
+      limit: 1,
+      page: '',
       search: '',
       startDate: startDate,
       endDate: endDate,
-      city: this.pagination.city,
+      city: this.city_id,
       status: this.pagination.status,
     };
     console.log(params);
+    // this.dataListBSD(params);
     this.dataListCashout(params);
-    this.dataListBSD(params);
+    this.dataListDeposit(params);
   }
 
   printDeposit() {
-    sessionStorage.setItem('data-deposit', JSON.stringify(this.depositData));
+    sessionStorage.setItem('data-deposit', JSON.stringify(this.dataDeposit));
     window.open('#/finance/deposit/daily/printdaily', '_blank');
   }
 
@@ -236,163 +238,220 @@ export class DepositComponent implements OnInit {
       });
   }
 
-  private dataListBSD(params: PaginationContext): void {
-    this.configuration.isLoading = true;
-    this.packageService
-      .listDeposit(params)
-      .pipe(
-        takeUntil(this.ngUnsubscribe),
-        finalize(() => {
-          this.configuration.isLoading = false;
-        }),
-        catchError((err) => {
-          this.configuration.isLoading = false;
-          this.configuration.horizontalScroll = false;
-          this.handlerResponseService.failedResponse(err);
-          return of([]);
-        })
-      )
-      .subscribe((response: any) => {
-        this.configuration.isLoading = false;
-        this.configuration.horizontalScroll = true;
+  // private dataListBSD(params: PaginationContext): void {
+  //   this.configuration.isLoading = true;
+  //   this.packageService
+  //     .listDeposit(params)
+  //     .pipe(
+  //       takeUntil(this.ngUnsubscribe),
+  //       finalize(() => {
+  //         this.configuration.isLoading = false;
+  //       }),
+  //       catchError((err) => {
+  //         this.configuration.isLoading = false;
+  //         this.configuration.horizontalScroll = false;
+  //         this.handlerResponseService.failedResponse(err);
+  //         return of([]);
+  //       })
+  //     )
+  //     .subscribe((response: any) => {
+  //       this.configuration.isLoading = false;
+  //       this.configuration.horizontalScroll = true;
 
-        if (response) {
-          const dataPackage = response.data;
-          this.dataPackage = dataPackage;
-          console.log(this.dataPackage);
+  //       if (response) {
+  //         const dataPackage = response.data;
+  //         this.dataPackage = dataPackage;
+  //         console.log(this.dataPackage);
 
-          const dataPassenger = response.data;
-          this.dataPassenger = dataPassenger;
-          console.log(this.dataPassenger);
+  //         const dataPassenger = response.data;
+  //         this.dataPassenger = dataPassenger;
+  //         console.log(this.dataPassenger);
 
-          const dataBSD = response.data?.filter(
-            (data: GoSendModel) => data.bsd !== null || data.bsd_passenger !== null
-          );
-          const {
-            totalPackagesCost,
-            totalCommissionPackage,
-            totalPackagePaidMalang,
-            totalPackagePaidSurabaya,
-            totalPackageCodMalang,
-            totalPackageCodSurabaya,
-            totalReminderPaymentPackage,
-            totalPaymentMonthly,
-          } = this.utils.sumCostPackages(dataBSD);
-          const {
-            totalPassengerCost,
-            totalCommissionPassenger,
-            totalPassengerPaidMalang,
-            totalPassengerPaidSurabaya,
-            totalReminderPaymentPassenger,
-          } = this.utils.sumCostPassengers(dataBSD);
+  //         const dataBSD = response.data?.filter(
+  //           (data: GoSendModel) => data.bsd !== null || data.bsd_passenger !== null
+  //         );
+  //         const {
+  //           totalPackagesCost,
+  //           totalCommissionPackage,
+  //           totalPackagePaidMalang,
+  //           totalPackagePaidSurabaya,
+  //           totalPackageCodMalang,
+  //           totalPackageCodSurabaya,
+  //           totalReminderPaymentPackage,
+  //           totalPaymentMonthly,
+  //         } = this.utils.sumCostPackages(dataBSD);
+  //         const {
+  //           totalPassengerCost,
+  //           totalCommissionPassenger,
+  //           totalPassengerPaidMalang,
+  //           totalPassengerPaidSurabaya,
+  //           totalReminderPaymentPassenger,
+  //         } = this.utils.sumCostPassengers(dataBSD);
 
-          // Package
-          this.totalCost = Number(totalPackagesCost);
-          this.totalDebetPackage = Number(this.totalCost);
-          this.totalDepositDriverPackage = Number(this.totalDebetPackage);
+  //         // Package
+  //         this.totalCost = Number(totalPackagesCost);
+  //         this.totalDebetPackage = Number(this.totalCost);
+  //         this.totalDepositDriverPackage = Number(this.totalDebetPackage);
 
-          this.totalCommissionPackage = Number(totalCommissionPackage);
-          this.totalKreditPackage = Number(this.totalCommissionPackage) + Number(this.totalParkingPackage);
+  //         this.totalCommissionPackage = Number(totalCommissionPackage);
+  //         this.totalKreditPackage = Number(this.totalCommissionPackage) + Number(this.totalParkingPackage);
 
-          this.totalPackagePaidMalang = Number(totalPackagePaidMalang);
-          this.totalPackagePaidSurabaya = Number(totalPackagePaidSurabaya);
-          this.totalPackageCodMalang = Number(totalPackageCodMalang);
-          this.totalPackageCodSurabaya = Number(totalPackageCodSurabaya);
+  //         this.totalPackagePaidMalang = Number(totalPackagePaidMalang);
+  //         this.totalPackagePaidSurabaya = Number(totalPackagePaidSurabaya);
+  //         this.totalPackageCodMalang = Number(totalPackageCodMalang);
+  //         this.totalPackageCodSurabaya = Number(totalPackageCodSurabaya);
 
-          this.totalPaymentMonthly = Number(totalPaymentMonthly);
+  //         this.totalPaymentMonthly = Number(totalPaymentMonthly);
 
-          // Passenger
-          this.totalTariff = Number(totalPassengerCost);
-          this.totalCommissionPassenger = Number(totalCommissionPassenger);
-          this.totalDebetPassenger =
-            Number(this.totalTariff) +
-            Number(this.mandatoryDeposit) +
-            Number(this.depositDriver) +
-            Number(this.voluntaryDeposit);
-          this.totalKreditPassenger =
-            Number(this.totalCommissionPassenger) +
-            Number(this.bbm) +
-            Number(this.totalParkingPassenger) +
-            Number(this.inToll) +
-            Number(this.outToll) +
-            Number(this.overnight) +
-            Number(this.extra) +
-            Number(this.others);
-          this.totalDepositDriverPassenger = Number(this.totalDebetPassenger) - Number(this.totalKreditPassenger);
+  //         // Passenger
+  //         this.totalTariff = Number(totalPassengerCost);
+  //         this.totalCommissionPassenger = Number(totalCommissionPassenger);
+  //         this.totalDebetPassenger =
+  //           Number(this.totalTariff) +
+  //           Number(this.mandatoryDeposit) +
+  //           Number(this.depositDriver) +
+  //           Number(this.voluntaryDeposit);
+  //         this.totalKreditPassenger =
+  //           Number(this.totalCommissionPassenger) +
+  //           Number(this.bbm) +
+  //           Number(this.totalParkingPassenger) +
+  //           Number(this.inToll) +
+  //           Number(this.outToll) +
+  //           Number(this.overnight) +
+  //           Number(this.extra) +
+  //           Number(this.others);
+  //         this.totalDepositDriverPassenger = Number(this.totalDebetPassenger) - Number(this.totalKreditPassenger);
 
-          this.totalPassengerPaidMalang = Number(totalPassengerPaidMalang);
-          this.totalPassengerPaidSurabaya = Number(totalPassengerPaidSurabaya);
+  //         this.totalPassengerPaidMalang = Number(totalPassengerPaidMalang);
+  //         this.totalPassengerPaidSurabaya = Number(totalPassengerPaidSurabaya);
 
-          // reminder payment transfer
-          this.totalReminderPaymentPackage = Number(totalReminderPaymentPackage);
-          this.totalReminderPaymentPassenger = Number(totalReminderPaymentPassenger);
-          this.totalReminderPaymentTransfer =
-            Number(this.totalReminderPaymentPackage) + Number(this.totalReminderPaymentPassenger);
+  //         // reminder payment transfer
+  //         this.totalReminderPaymentPackage = Number(totalReminderPaymentPackage);
+  //         this.totalReminderPaymentPassenger = Number(totalReminderPaymentPassenger);
+  //         this.totalReminderPaymentTransfer =
+  //           Number(this.totalReminderPaymentPackage) + Number(this.totalReminderPaymentPassenger);
 
-          // daily malang
-          this.totalCashInMalangDaily =
-            Number(this.totalDepositDriverPackage) +
-            Number(this.totalDepositDriverPassenger) +
-            Number(this.totalPackagePaidMalang) +
-            Number(this.totalPackageCodMalang);
-          this.totalCashOutMalangDaily = Number(this.totalCostMalang) + Number(this.cashoutCourierMalang);
-          this.totalDepositMalangDaily = Number(this.totalCashInMalangDaily) - Number(this.totalCashOutMalangDaily);
+  //         // daily malang
+  //         this.totalCashInMalangDaily =
+  //           Number(this.totalDepositDriverPackage) +
+  //           Number(this.totalDepositDriverPassenger) +
+  //           Number(this.totalPackagePaidMalang) +
+  //           Number(this.totalPackageCodMalang);
+  //         this.totalCashOutMalangDaily = Number(this.totalCostMalang) + Number(this.cashoutCourierMalang);
+  //         this.totalDepositMalangDaily = Number(this.totalCashInMalangDaily) - Number(this.totalCashOutMalangDaily);
 
-          // daily surabaya
-          this.totalCashInSurabayaDaily =
-            Number(this.totalPackagePaidSurabaya) +
-            Number(this.totalPackageCodSurabaya) +
-            Number(this.totalPassengerPaidSurabaya);
-          this.totalCashOutSurabayaDaily = Number(this.totalCostSurabaya) + Number(this.cashoutCourierSurabaya);
-          this.totalDepositSurabayaDaily =
-            Number(this.totalCashInSurabayaDaily) - Number(this.totalCashOutSurabayaDaily);
+  //         // daily surabaya
+  //         this.totalCashInSurabayaDaily =
+  //           Number(this.totalPackagePaidSurabaya) +
+  //           Number(this.totalPackageCodSurabaya) +
+  //           Number(this.totalPassengerPaidSurabaya);
+  //         this.totalCashOutSurabayaDaily = Number(this.totalCostSurabaya) + Number(this.cashoutCourierSurabaya);
+  //         this.totalDepositSurabayaDaily =
+  //           Number(this.totalCashInSurabayaDaily) - Number(this.totalCashOutSurabayaDaily);
 
-          this.totalDepositDaily = Number(this.totalDepositMalangDaily) + Number(this.totalDepositSurabayaDaily);
+  //         this.totalDepositDaily = Number(this.totalDepositMalangDaily) + Number(this.totalDepositSurabayaDaily);
 
-          this.depositData = {
-            dataPackage: dataPackage,
-            dataPassenger: dataPassenger,
-            // cashin
-            totalDepositDriverPackage: this.totalDepositDriverPackage,
-            totalDepositDriverPassenger: this.totalDepositDriverPassenger,
-            totalPackagePaidMalang: Number(totalPackagePaidMalang),
-            totalPackagePaidSurabaya: Number(totalPackagePaidSurabaya),
-            totalPackageCodMalang: Number(totalPackageCodMalang),
-            totalPackageCodSurabaya: Number(totalPackageCodSurabaya),
-            totalPassengerPaidMalang: Number(totalPassengerPaidMalang),
-            totalPassengerPaidSurabaya: Number(totalPassengerPaidSurabaya),
-            piutangTransition: this.piutangTransition,
-            // cashout
-            totalCostMalang: this.totalCostMalang,
-            totalCostSurabaya: this.totalCostSurabaya,
-            cashoutOnderdilService: this.cashoutOnderdilService,
-            cashoutCourierMalang: this.cashoutCourierMalang,
-            cashoutCourierSurabaya: this.cashoutCourierSurabaya,
-            totalReminderPaymentTransfer: this.totalReminderPaymentTransfer,
-            totalPaymentMonthly: this.totalPaymentMonthly,
-            // deposit cash malang
-            totalCashInMalangDaily: this.totalCashInMalangDaily,
-            totalCashOutMalangDaily: this.totalCashOutMalangDaily,
-            totalDepositMalangDaily: this.totalDepositMalangDaily,
-            // information cash in surabaya:
-            totalCashInSurabayaDaily: this.totalCashInSurabayaDaily,
-            totalCashOutSurabayaDaily: this.totalCashOutSurabayaDaily,
-            totalDepositSurabayaDaily: this.totalDepositSurabayaDaily,
-            // deposit cash daily
-            totalDepositDaily: this.totalDepositDaily,
-          };
-        }
-      });
-  }
+  //         this.dataDeposit = {
+  //           dataPackage: dataPackage,
+  //           dataPassenger: dataPassenger,
+  //           // cashin
+  //           totalDepositDriverPackage: this.totalDepositDriverPackage,
+  //           totalDepositDriverPassenger: this.totalDepositDriverPassenger,
+  //           totalPackagePaidMalang: Number(totalPackagePaidMalang),
+  //           totalPackagePaidSurabaya: Number(totalPackagePaidSurabaya),
+  //           totalPackageCodMalang: Number(totalPackageCodMalang),
+  //           totalPackageCodSurabaya: Number(totalPackageCodSurabaya),
+  //           totalPassengerPaidMalang: Number(totalPassengerPaidMalang),
+  //           totalPassengerPaidSurabaya: Number(totalPassengerPaidSurabaya),
+  //           piutangTransition: this.piutangTransition,
+  //           // cashout
+  //           totalCostMalang: this.totalCostMalang,
+  //           totalCostSurabaya: this.totalCostSurabaya,
+  //           cashoutOnderdilService: this.cashoutOnderdilService,
+  //           cashoutCourierMalang: this.cashoutCourierMalang,
+  //           cashoutCourierSurabaya: this.cashoutCourierSurabaya,
+  //           totalReminderPaymentTransfer: this.totalReminderPaymentTransfer,
+  //           totalPaymentMonthly: this.totalPaymentMonthly,
+  //           // deposit cash malang
+  //           totalCashInMalangDaily: this.totalCashInMalangDaily,
+  //           totalCashOutMalangDaily: this.totalCashOutMalangDaily,
+  //           totalDepositMalangDaily: this.totalDepositMalangDaily,
+  //           // information cash in surabaya:
+  //           totalCashInSurabayaDaily: this.totalCashInSurabayaDaily,
+  //           totalCashOutSurabayaDaily: this.totalCashOutSurabayaDaily,
+  //           totalDepositSurabayaDaily: this.totalDepositSurabayaDaily,
+  //           // deposit cash daily
+  //           totalDepositDaily: this.totalDepositDaily,
+  //         };
+  //       }
+  //     });
+  // }
 
   private dataListDeposit(params: PaginationContext): void {
     this.configuration.isLoading = true;
-    this.cashoutService
-      .list(params)
+    this.packageService
+      .depositDaily(params)
       .pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
         const data = response.data;
-        console.log(data);
+        this.dataDeposit = data;
+
+        this.totalDepositDriverPackage = data.reduce((acc: any, item: any) => acc + item.package.total_cost, 0);
+        this.totalDepositDriverPassenger = data.reduce((acc: any, item: any) => acc + item.passenger.total_tariff, 0);
+
+        this.totalPackagePaidMalang = data.reduce((acc: any, item: any) => acc + item.package_paid.total_lunas_mlg, 0);
+        this.totalPackagePaidSurabaya = data.reduce(
+          (acc: any, item: any) => acc + item.package_paid.total_lunas_sby,
+          0
+        );
+
+        this.totalPackageCodMalang = data.reduce((acc: any, item: any) => acc + item.package_ba.total_ba_mlg, 0);
+        this.totalPackageCodSurabaya = data.reduce((acc: any, item: any) => acc + item.package_ba.total_ba_sby, 0);
+
+        this.totalPassengerPaidMalang = data.reduce(
+          (acc: any, item: any) => acc + item.passenger_paid.total_lunas_mlg,
+          0
+        );
+        this.totalPassengerPaidSurabaya = data.reduce(
+          (acc: any, item: any) => acc + item.passenger_paid.total_lunas_sby,
+          0
+        );
+
+        this.piutangTransition = data.reduce((acc: any, item: any) => acc + item.package_piutang.total_piutang_mlg, 0);
+
+        this.cashoutCourierMalang = data.reduce(
+          (acc: any, item: any) => acc + item.package_commission.total_commission_mlg,
+          0
+        );
+        this.cashoutCourierSurabaya = data.reduce(
+          (acc: any, item: any) => acc + item.package_commission.total_commission_sby,
+          0
+        );
+
+        this.totalReminderPaymentTransfer = data.reduce(
+          (acc: any, item: any) => acc + item.package_transfer.total_transfer,
+          0
+        );
+        this.totalPaymentMonthly = data.reduce((acc: any, item: any) => acc + item.package_transfer.total_bulanan, 0);
+
+        this.totalCashInMalangDaily =
+          Number(this.totalDepositDriverPackage) +
+          Number(this.totalDepositDriverPassenger) +
+          Number(this.totalPackagePaidMalang) +
+          Number(this.totalPackageCodMalang);
+
+        this.totalCashOutMalangDaily = Number(this.totalCostMalang) + Number(this.cashoutCourierMalang);
+        this.totalDepositMalangDaily = Number(this.totalCashInMalangDaily) - Number(this.totalCashOutMalangDaily);
+
+        this.totalCashInSurabayaDaily =
+          Number(this.totalPackagePaidSurabaya) +
+          Number(this.totalPackageCodSurabaya) +
+          Number(this.totalPassengerPaidSurabaya);
+
+        this.totalCashOutSurabayaDaily = Number(this.totalCostSurabaya) + Number(this.cashoutCourierSurabaya);
+        this.totalDepositSurabayaDaily = Number(this.totalCashInSurabayaDaily) - Number(this.totalCashOutSurabayaDaily);
+
+        this.totalDepositDaily = Number(this.totalDepositMalangDaily) + Number(this.totalDepositSurabayaDaily);
 
         this.configuration.isLoading = false;
         this.cdr.detectChanges();

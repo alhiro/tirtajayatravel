@@ -391,9 +391,22 @@ export class HttpService {
     ) as Observable<any>;
   }
 
+  depositDailyFullQuery(param: ExtendedPaginationContext): Observable<any> {
+    return this.commonApi.get(
+      '/cashout/deposit/daily?startDate=' +
+        param.startDate +
+        '&endDate=' +
+        param.endDate +
+        '&city=' +
+        param.city +
+        '&status=' +
+        param.status
+    ) as Observable<any>;
+  }
+
   depositDaily(param: ExtendedPaginationContext): Observable<any> {
     return this.commonApi.get(
-      '/deposit/daily?limit=' +
+      '/go-send/deposit-daily?limit=' +
         param.limit +
         '&page=' +
         param.page +

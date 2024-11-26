@@ -42,7 +42,7 @@
           <ngx-table
             #table
             [configuration]="configuration"
-            [data]="dataPackage"
+            [data]="dataDeposit"
             [columns]="columnsPackage"
             (event)="eventEmitted($event)"
             tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
@@ -53,23 +53,23 @@
               </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.bsd }}
+                  {{ row.package.bsd }}
                 </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.employee?.name }}
+                  {{ row.package.driver }}
                 </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.total_cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  {{ row.package.total_cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
+                <span class="text-gray-900 d-block">{{ row.package.admin }}</span>
               </td>
-              <td>
+              <td class="text-end">
                 <a
                   (click)="printBSD(row, 'Package')"
                   class="cursor-pointer text-primary"
@@ -89,10 +89,8 @@
         <!-- end::Table container -->
 
         <div class="mt-4 mb-9">
-          <b>Total BSD Package</b>: {{ totalDepositDriverPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+          <b>Total BSD Paket</b>: {{ totalDepositDriverPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}
         </div>
-
-        <hr class="my-5" />
 
         <!-- begin::Table container -->
         <div class="table-responsive">
@@ -100,34 +98,34 @@
           <ngx-table
             #table
             [configuration]="configuration"
-            [data]="dataPassenger"
+            [data]="dataDeposit"
             [columns]="columnsPassenger"
             (event)="eventEmitted($event)"
             tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
           >
             <ng-template let-row let-index="index">
               <!-- <td>
-                <span class="text-gray-900 d-block">{{ index }}</span>
-              </td> -->
+                  <span class="text-gray-900 d-block">{{ index }}</span>
+                </td> -->
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.bsd_passenger }}
+                  {{ row.passenger.bsd }}
                 </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.employee?.name }}
+                  {{ row.passenger.driver }}
                 </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.total_tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  {{ row.passenger.total_tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.created_by }}</span>
+                <span class="text-gray-900 d-block">{{ row.passenger.admin }}</span>
               </td>
-              <td>
+              <td class="text-end">
                 <a
                   (click)="printBSD(row, 'Passenger')"
                   class="cursor-pointer text-primary"
@@ -147,16 +145,16 @@
         <!-- end::Table container -->
 
         <div class="mt-5 mb-10">
-          <b>Total BSD Passenger</b>: {{ totalDepositDriverPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+          <b>Total BSD Penumpang</b>: {{ totalDepositDriverPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}
         </div>
 
         <hr class="my-5" />
 
-        <b>LIST PAID PACKAGE MALANG</b>
+        <b>LIST PAKET LUNAS MALANG</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
             <tr>
-              <td>Total Paid Package</td>
+              <td>Total Paket Lunas</td>
               <td style="text-align: center">Action</td>
             </tr>
             <tr>
@@ -168,11 +166,11 @@
           </tbody>
         </table>
         <hr />
-        <b>LIST PAID PACKAGE SURABAYA</b>
+        <b>LIST PAKET LUNAS SURABAYA</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
             <tr>
-              <td>Total Paid Package</td>
+              <td>Total Paket Lunas</td>
               <td style="text-align: center">Action</td>
             </tr>
             <tr>
@@ -184,11 +182,11 @@
           </tbody>
         </table>
         <hr />
-        <b>LIST BA FOR MALANG</b>
+        <b>LIST PAKET BAYAR TUJUAN MALANG</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
             <tr>
-              <td>Total Pay For Malang</td>
+              <td>Total Bayar Tujuan Malang</td>
               <td style="text-align: center">Action</td>
             </tr>
             <tr>
@@ -199,11 +197,11 @@
             </tr>
           </tbody>
         </table>
-        <b>LIST BA FOR SURABAYA</b>
+        <b>LIST PAKET BAYAR TUJUAN SURABAYA</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
             <tr>
-              <td>Total Pay For Surabaya</td>
+              <td>Total Bayar Tujuan Surabaya</td>
               <td style="text-align: center">Action</td>
             </tr>
             <tr>
@@ -214,11 +212,11 @@
             </tr>
           </tbody>
         </table>
-        <b>PAID PASSENGER MALANG</b>
+        <b>PENUMPANG LUNAS MALANG</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
             <tr>
-              <td>Total Paid Passenger Malang</td>
+              <td>Total Penumpang Lunas Malang</td>
               <td style="text-align: center" style="text-align: center">Action</td>
             </tr>
             <tr>
@@ -229,11 +227,11 @@
             </tr>
           </tbody>
         </table>
-        <b>PAID PASSENGER SURABAYA</b>
+        <b>PENUMPANG LUNAS SURABAYA</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
             <tr>
-              <td>Total Paid Passenger Surabaya</td>
+              <td>Total Penumpang Lunas Surabaya</td>
               <td style="text-align: center">Action</td>
             </tr>
             <tr>
@@ -285,7 +283,7 @@
 
       <!--begin::Card body-->
       <div class="card-body pt-0">
-        <b>LIST CASH OUT OPERATIONAL MALANG</b>
+        <b>LIST PENGELUARAN OPERASIONAL MALANG</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
             <tr>
@@ -301,7 +299,7 @@
           </tbody>
         </table>
         <hr />
-        <b>LIST CASH OUT OPERATIONAL SURABAYA</b>
+        <b>LIST PENGELUARAN OPERASIONAL SURABAYA</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
             <tr>
@@ -334,7 +332,7 @@
           </tbody>
         </table>
         <hr />
-        <b>LIST COMMISSION COURIER MALANG</b>
+        <b>LIST KOMISI KURIR MALANG</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
             <tr>
@@ -349,7 +347,7 @@
             </tr>
           </tbody>
         </table>
-        <b>LIST COMMISSION COURIER SURABAYA</b>
+        <b>LIST KOMISI KURIR SURABAYA</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
             <tr>
@@ -364,7 +362,7 @@
             </tr>
           </tbody>
         </table>
-        <b>PAYMENTS TO BE RECEIVED</b>
+        <b>PEMBAYARAN YANG AKAN MASUK</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
             <tr style="background-color: #ffb8b8">
@@ -392,25 +390,27 @@
 
         <div class="activity-stream">
           <div class="stream">
-            <h2>Deposit Cash In Daily Malang:</h2>
+            <h2>Setoran Pendapatan Harian Malang:</h2>
             <table class="table table-striped table-bordered table-hover">
               <tbody>
                 <tr align="center">
-                  <td>Description</td>
-                  <td>Total</td>
+                  <td>Keterangan</td>
+                  <td class="text-end">Total</td>
                 </tr>
                 <tr align="center">
-                  <td>Total Cash In</td>
+                  <td>Total Pendapatan</td>
                   <td align="right">{{ totalCashInMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
                 <tr align="center">
-                  <td>Total Cash Out</td>
+                  <td>Total Pengeluaran</td>
                   <td align="right">{{ totalCashOutMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
 
                 <tr align="center">
-                  <td>Total Deposit</td>
-                  <td align="right">{{ totalDepositMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                  <td>Total Setoran</td>
+                  <td align="right">
+                    <b>{{ totalDepositMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -419,19 +419,19 @@
 
         <div class="activity-stream">
           <div class="stream">
-            <h2>Information Cash In:</h2>
+            <h2>Informasi Pendapatan:</h2>
             <table class="table table-striped table-bordered table-hover">
               <tbody>
                 <tr align="center">
-                  <td>Description</td>
-                  <td>Total</td>
+                  <td>Keterangan</td>
+                  <td class="text-end">Total</td>
                 </tr>
                 <tr align="center">
-                  <td>Payment Monthly</td>
+                  <td>Pembayaran Bulanan</td>
                   <td align="right">{{ totalPaymentMonthly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
                 <tr align="center">
-                  <td>Payment Via Transfer</td>
+                  <td>Pembayaran Via Transfer</td>
                   <td align="right">{{ totalReminderPaymentTransfer | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
               </tbody>
@@ -441,24 +441,26 @@
 
         <div class="activity-stream">
           <div class="stream">
-            <h2>Information Cash In Daily Surabaya:</h2>
+            <h2>Setoran Pendapatan Harian Surabaya:</h2>
             <table class="table table-striped table-bordered table-hover">
               <tbody>
                 <tr align="center">
-                  <td>Description</td>
-                  <td>Total</td>
+                  <td>Keterangan</td>
+                  <td class="text-end">Total</td>
                 </tr>
                 <tr align="center">
-                  <td>Total Cash In</td>
+                  <td>Total Pendapatan</td>
                   <td align="right">{{ totalCashInSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
                 <tr align="center">
-                  <td>Total Cash Out</td>
+                  <td>Total Pengeluaran</td>
                   <td align="right">{{ totalCashOutSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
                 <tr align="center">
-                  <td>Total Deposit</td>
-                  <td align="right">{{ totalDepositSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                  <td>Total Setoran</td>
+                  <td align="right">
+                    <b>{{ totalDepositSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -467,16 +469,18 @@
 
         <div class="activity-stream">
           <div class="stream">
-            <h2>Deposit Cash In Daily :</h2>
+            <h2>Setoran Pendapatan Harian :</h2>
             <table class="table table-striped table-bordered table-hover">
               <tbody>
                 <tr align="center">
-                  <td>Description</td>
-                  <td>Total</td>
+                  <td>Keterangan</td>
+                  <td class="text-end">Total</td>
                 </tr>
                 <tr align="center">
-                  <td>Total Deposit</td>
-                  <td align="right">{{ totalDepositDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                  <td>Total Setoran</td>
+                  <td align="right">
+                    <b>{{ totalDepositDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+                  </td>
                 </tr>
               </tbody>
             </table>
