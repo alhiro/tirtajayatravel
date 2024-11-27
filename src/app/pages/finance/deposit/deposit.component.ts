@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Utils } from '@app/@shared';
 import { PaginationContext } from '@app/@shared/interfaces/pagination';
 import { GoSendModel } from '@app/pages/booking/package/models/gosend';
@@ -15,7 +15,7 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './deposit.component.html',
   styleUrls: ['./deposit.component.scss'],
 })
-export class DepositComponent implements OnInit {
+export class DepositComponent implements OnInit, OnDestroy {
   public levelrule!: number;
   public city_id!: number;
   public username!: string;
@@ -207,6 +207,11 @@ export class DepositComponent implements OnInit {
 
   printDeposit() {
     sessionStorage.setItem('data-deposit', JSON.stringify(this.dataDeposit));
+    window.open('#/finance/deposit/daily/printdaily', '_blank');
+  }
+
+  printDepositSurabaya() {
+    sessionStorage.setItem('data-deposit-sby', JSON.stringify(this.dataDeposit));
     window.open('#/finance/deposit/daily/printdaily', '_blank');
   }
 
@@ -456,5 +461,13 @@ export class DepositComponent implements OnInit {
         this.configuration.isLoading = false;
         this.cdr.detectChanges();
       });
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+
+    sessionStorage.removeItem('data-deposit');
+    sessionStorage.removeItem('data-deposit-sby');
   }
 }

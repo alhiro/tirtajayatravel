@@ -36,6 +36,7 @@
 
       <!--begin::Card body-->
       <div class="card-body pt-0">
+        @if (city_id === 1) {
         <!-- begin::Table container -->
         <div class="table-responsive">
           <!-- begin::Table -->
@@ -49,8 +50,8 @@
           >
             <ng-template let-row let-index="index">
               <!-- <td>
-                <span class="text-gray-900 d-block">{{ index }}</span>
-              </td> -->
+                  <span class="text-gray-900 d-block">{{ index }}</span>
+                </td> -->
               <td>
                 <span class="text-gray-900 d-block">
                   {{ row.package.bsd }}
@@ -105,8 +106,8 @@
           >
             <ng-template let-row let-index="index">
               <!-- <td>
-                  <span class="text-gray-900 d-block">{{ index }}</span>
-                </td> -->
+                    <span class="text-gray-900 d-block">{{ index }}</span>
+                  </td> -->
               <td>
                 <span class="text-gray-900 d-block">
                   {{ row.passenger.bsd }}
@@ -166,6 +167,8 @@
           </tbody>
         </table>
         <hr />
+        }
+
         <b>LIST PAKET LUNAS SURABAYA</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -182,26 +185,13 @@
           </tbody>
         </table>
         <hr />
+
+        @if (city_id === 1) {
         <b>LIST PAKET BAYAR TUJUAN MALANG</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
             <tr>
               <td>Total Bayar Tujuan Malang</td>
-              <td style="text-align: center">Action</td>
-            </tr>
-            <tr>
-              <td>{{ totalPackageCodMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a><b>Detail</b></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <b>LIST PAKET BAYAR TUJUAN SURABAYA</b>
-        <table class="table table-striped table-bordered table-hover">
-          <tbody>
-            <tr>
-              <td>Total Bayar Tujuan Surabaya</td>
               <td style="text-align: center">Action</td>
             </tr>
             <tr>
@@ -212,6 +202,25 @@
             </tr>
           </tbody>
         </table>
+        }
+
+        <b>LIST PAKET BAYAR TUJUAN SURABAYA</b>
+        <table class="table table-striped table-bordered table-hover">
+          <tbody>
+            <tr>
+              <td>Total Bayar Tujuan Surabaya</td>
+              <td style="text-align: center">Action</td>
+            </tr>
+            <tr>
+              <td>{{ totalPackageCodMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+              <td style="text-align: center">
+                <a><b>Detail</b></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        @if (city_id === 1) {
         <b>PENUMPANG LUNAS MALANG</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -227,6 +236,8 @@
             </tr>
           </tbody>
         </table>
+        }
+
         <b>PENUMPANG LUNAS SURABAYA</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -243,6 +254,7 @@
           </tbody>
         </table>
 
+        @if (city_id === 1) {
         <b>RECEIVED PIUTANG TRANSITION</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -258,6 +270,7 @@
             </tr>
           </tbody>
         </table>
+        }
       </div>
       <!--end::Card body-->
     </div>
@@ -283,6 +296,7 @@
 
       <!--begin::Card body-->
       <div class="card-body pt-0">
+        @if (city_id === 1) {
         <b>LIST PENGELUARAN OPERASIONAL MALANG</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -299,6 +313,8 @@
           </tbody>
         </table>
         <hr />
+        }
+
         <b>LIST PENGELUARAN OPERASIONAL SURABAYA</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -316,6 +332,8 @@
           </tbody>
         </table>
         <hr />
+
+        @if (city_id === 1) {
         <b>LIST CASH OUT ONDERDIL &amp; SERVICE</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -347,6 +365,8 @@
             </tr>
           </tbody>
         </table>
+        }
+
         <b>LIST KOMISI KURIR SURABAYA</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -362,6 +382,7 @@
             </tr>
           </tbody>
         </table>
+
         <b>PEMBAYARAN YANG AKAN MASUK</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -388,25 +409,26 @@
 
         <hr />
 
+        @if (city_id === 1) {
         <div class="activity-stream">
           <div class="stream">
             <h2>Setoran Pendapatan Harian Malang:</h2>
             <table class="table table-striped table-bordered table-hover">
               <tbody>
-                <tr align="center">
+                <tr align="left">
                   <td>Keterangan</td>
                   <td class="text-end">Total</td>
                 </tr>
-                <tr align="center">
+                <tr align="left">
                   <td>Total Pendapatan</td>
                   <td align="right">{{ totalCashInMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
-                <tr align="center">
+                <tr align="left">
                   <td>Total Pengeluaran</td>
                   <td align="right">{{ totalCashOutMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
 
-                <tr align="center">
+                <tr align="left">
                   <td>Total Setoran</td>
                   <td align="right">
                     <b>{{ totalDepositMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
@@ -416,21 +438,22 @@
             </table>
           </div>
         </div>
+        }
 
         <div class="activity-stream">
           <div class="stream">
             <h2>Informasi Pendapatan:</h2>
             <table class="table table-striped table-bordered table-hover">
               <tbody>
-                <tr align="center">
+                <tr align="left">
                   <td>Keterangan</td>
                   <td class="text-end">Total</td>
                 </tr>
-                <tr align="center">
+                <tr align="left">
                   <td>Pembayaran Bulanan</td>
                   <td align="right">{{ totalPaymentMonthly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
-                <tr align="center">
+                <tr align="left">
                   <td>Pembayaran Via Transfer</td>
                   <td align="right">{{ totalReminderPaymentTransfer | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
@@ -444,19 +467,19 @@
             <h2>Setoran Pendapatan Harian Surabaya:</h2>
             <table class="table table-striped table-bordered table-hover">
               <tbody>
-                <tr align="center">
+                <tr align="left">
                   <td>Keterangan</td>
                   <td class="text-end">Total</td>
                 </tr>
-                <tr align="center">
+                <tr align="left">
                   <td>Total Pendapatan</td>
                   <td align="right">{{ totalCashInSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
-                <tr align="center">
+                <tr align="left">
                   <td>Total Pengeluaran</td>
                   <td align="right">{{ totalCashOutSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
                 </tr>
-                <tr align="center">
+                <tr align="left">
                   <td>Total Setoran</td>
                   <td align="right">
                     <b>{{ totalDepositSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
@@ -464,19 +487,23 @@
                 </tr>
               </tbody>
             </table>
+            <a (click)="printDepositSurabaya()">
+              <button type="button" class="btn btn-flat btn-primary p-2 px-4"><i class="fa fa-save"></i> Print</button>
+            </a>
           </div>
         </div>
 
+        @if (city_id === 1) {
         <div class="activity-stream">
           <div class="stream">
             <h2>Setoran Pendapatan Harian :</h2>
             <table class="table table-striped table-bordered table-hover">
               <tbody>
-                <tr align="center">
+                <tr align="left">
                   <td>Keterangan</td>
                   <td class="text-end">Total</td>
                 </tr>
-                <tr align="center">
+                <tr align="left">
                   <td>Total Setoran</td>
                   <td align="right">
                     <b>{{ totalDepositDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
@@ -489,6 +516,7 @@
             </a>
           </div>
         </div>
+        }
       </div>
       <!--end::Card body-->
     </div>

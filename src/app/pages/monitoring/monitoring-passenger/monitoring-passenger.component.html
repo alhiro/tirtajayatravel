@@ -40,7 +40,6 @@
         </span>
         <span class="text-muted mt-1 fw-bold fs-7"> Have {{ dataLength | number }} items </span>
       </h3>
-      @if (levelrule === 8 || levelrule === 3) {
       <div class="card-toolbar">
         <ul class="nav nav-pills nav-pills-sm nav-dark-75">
           <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
@@ -51,7 +50,6 @@
           </li>
         </ul>
       </div>
-      }
     </div>
     <!-- end::Header -->
 
