@@ -8,8 +8,10 @@
             <div class="menu-content px-0 text-center">
               <h3 class="card-title align-items-start flex-column mb-2">
                 <span class="card-label fw-bolder fs-2">
-                  @if (city === 'Surabaya') { PENCAIRAN KOMISI & BA PAKET MALANG } @else { PENCAIRAN KOMISI & BA PAKET
-                  SURABAYA }
+                  @if (lastSegment === 'printmonthly') { @if (city === 'Surabaya') { PENCAIRAN KOMISI & PAKET BULANAN
+                  MALANG } @else { PENCAIRAN KOMISI & PAKET BULANAN SURABAYA } } @else if (lastSegment ===
+                  'printcommission') { @if (city === 'Surabaya') { PENCAIRAN KOMISI & PAKET BA MALANG } @else {
+                  PENCAIRAN KOMISI & PAKET BA SURABAYA } }
                 </span>
               </h3>
               @if (startDate && endDate) {
@@ -149,9 +151,11 @@
         <br />
         }
       </div>
+
+      @if (lastSegment === 'printcommission') {
       <div class="mt-7">
         <span
-          ><b>TOTAL SETORAN PELUNASAN BA PAKET: {{ totalPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
+          ><b>TOTAL SETORAN PELUNASAN PAKET BA: {{ totalPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
         ><br />
       </div>
       <div class="mt-1">
@@ -160,6 +164,21 @@
         <br />
         }
       </div>
+      } @if (lastSegment === 'printmonthly') {
+      <div class="mt-7">
+        <span
+          ><b
+            >TOTAL SETORAN PELUNASAN PAKET BULANAN: {{ totalMonthly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+          ></span
+        ><br />
+      </div>
+      <div class="mt-1">
+        @for (admin of groupAdminMonthly; track admin) {
+        <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+        <br />
+        }
+      </div>
+      }
     </div>
   </div>
 </div>

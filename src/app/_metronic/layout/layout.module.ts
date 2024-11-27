@@ -121,6 +121,14 @@ const routes: Routes = [
         (m) => m.PrintCommissionModule
       ),
   },
+  {
+    path: 'finance/commission/package/printmonthly',
+    component: PrintcommissionComponent,
+    loadChildren: () =>
+      import('../../pages/finance/commission/printcommission/printcommission.module').then(
+        (m) => m.PrintCommissionModule
+      ),
+  },
   // print piutang
   {
     path: 'finance/piutang/bill/printpiutang',

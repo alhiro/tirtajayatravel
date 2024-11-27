@@ -92,6 +92,15 @@
             <button
               class="btn btn-success btn-sm m-2 p-1 px-4 float-end"
               [disabled]="configuration.isLoading"
+              (click)="printFilterMonthly(datepicker)"
+              translate
+            >
+              Bulanan
+            </button>
+
+            <button
+              class="btn btn-success btn-sm m-2 p-1 px-4 float-end"
+              [disabled]="configuration.isLoading"
               (click)="printFilterDate(datepicker)"
               translate
             >

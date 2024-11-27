@@ -227,16 +227,43 @@ export class CommissionComponent implements OnInit, OnDestroy {
     const paramRange = {
       limit: 10,
       page: 1,
-      search: this.pagination.search,
+      search: 'Bayar Tujuan (COD)',
       fromDate: this.startDate,
       toDate: this.endDate,
       city: getCity,
-      status: 'Bayar Tujuan (COD)',
+      status: 'Delivery',
       username: '',
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
     window.open('#/finance/commission/package/printbayartujuan', '_blank');
+  }
+
+  printFilterMonthly(datepicker: any) {
+    let getCity = '';
+    if (this.levelrule === 2) {
+      if (this.city_id === 1) {
+        getCity = 'Surabaya';
+      } else {
+        getCity = 'Malang';
+      }
+    } else {
+      getCity = '';
+    }
+
+    const paramRange = {
+      limit: 10,
+      page: 1,
+      search: 'Customer (Bulanan)',
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: getCity,
+      status: 'Delivery',
+      username: '',
+    };
+    console.log(paramRange);
+    sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
+    window.open('#/finance/commission/package/printmonthly', '_blank');
   }
 
   onDateChange(date: NgbDateStruct): void {

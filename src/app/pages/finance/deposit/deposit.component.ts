@@ -207,11 +207,13 @@ export class DepositComponent implements OnInit, OnDestroy {
 
   printDeposit() {
     sessionStorage.setItem('data-deposit', JSON.stringify(this.dataDeposit));
+    sessionStorage.setItem('data-cashout-mlg', JSON.stringify(this.totalCostMalang));
     window.open('#/finance/deposit/daily/printdaily', '_blank');
   }
 
   printDepositSurabaya() {
     sessionStorage.setItem('data-deposit-sby', JSON.stringify(this.dataDeposit));
+    sessionStorage.setItem('data-cashout-sby', JSON.stringify(this.totalCostSurabaya));
     window.open('#/finance/deposit/daily/printdailysby', '_blank');
   }
 
@@ -469,5 +471,7 @@ export class DepositComponent implements OnInit, OnDestroy {
 
     sessionStorage.removeItem('data-deposit');
     sessionStorage.removeItem('data-deposit-sby');
+    sessionStorage.removeItem('data-cashout-mlg');
+    sessionStorage.removeItem('data-cashout-sby');
   }
 }

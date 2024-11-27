@@ -6,6 +6,7 @@ import { PackageService } from '@app/pages/booking/package/package.service';
 import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import localeId from '@angular/common/locales/id';
+import { Router } from '@angular/router';
 
 interface GroupedDataCost {
   id: number;
@@ -22,12 +23,14 @@ interface GroupedDataCost {
 export class PrintcommissionComponent implements OnInit, OnDestroy {
   public data: any;
   public dataPiutang: any;
+  public dataMonthly: any;
 
   public city: any;
   public status: any;
 
   public groupAdminCommission: any;
   public groupAdminPiutang: any;
+  public groupAdminMonthly: any;
 
   public startDate: any;
   public endDate: any;
@@ -37,11 +40,16 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
 
   public totalPiutang: any = 0;
   public totalCommission: any = 0;
+  public totalMonthly: any = 0;
+
   public totalKoli: any = 0;
   public totalKoliPiutang: any = 0;
+  public totalKoliMonthly: any = 0;
 
   public configuration: Config = { ...DefaultConfig };
   public columns!: Columns[];
+
+  lastSegment: string = '';
 
   public pagination = {
     limit: 10,
@@ -64,8 +72,12 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private packageService: PackageService, private readonly cdr: ChangeDetectorRef) {
+  constructor(private packageService: PackageService, private router: Router, private readonly cdr: ChangeDetectorRef) {
     registerLocaleData(localeId, 'id');
+
+    const url = this.router.url;
+    this.lastSegment = url.substring(url.lastIndexOf('/') + 1);
+    console.log(this.lastSegment);
   }
 
   ngOnInit() {
@@ -158,7 +170,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         this.groupAdminCommission = groupedDataCommission;
         console.log(groupedDataCommission);
 
-        // Data piutang status bayar tujuan
+        // Data piutang status bulanan
         this.dataPiutang = response.data?.filter(
           (data: PackageModel) => data.status === 'Piutang' || data.status === 'Bayar Tujuan (COD)'
         );
@@ -183,6 +195,30 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         );
         this.groupAdminPiutang = groupedDataPiutang;
         console.log(groupedDataPiutang);
+
+        // Data piutang status bayar tujuan
+        this.dataMonthly = response.data?.filter((data: PackageModel) => data.status === 'Customer (Bulanan)');
+
+        const dataMonthly = this.dataMonthly;
+        this.totalMonthly = dataMonthly?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
+        this.totalKoliMonthly = this.dataMonthly?.length;
+
+        const groupedDataMonthly: GroupedDataCost[] = Object.values(
+          dataPiutang.reduce((acc: any, item: any) => {
+            if (!acc[item.updated_by]) {
+              acc[item.updated_by] = {
+                id: Object.keys(acc).length + 1,
+                admin: item.updated_by,
+                totalCost: 0,
+                check_sp: item.check_sp,
+              };
+            }
+            acc[item.updated_by].totalCost += Number(item.cost);
+            return acc;
+          }, {} as { [key: string]: GroupedDataCost })
+        );
+        this.groupAdminMonthly = groupedDataMonthly;
+        console.log(groupedDataMonthly);
 
         this.configuration.isLoading = false;
         this.cdr.detectChanges();

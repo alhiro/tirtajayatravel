@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Utils } from '@app/@shared';
 import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
+import { CashoutModel } from '../../cashout/models/cashout.model';
 
 @Component({
   selector: 'app-printdeposit',
@@ -72,7 +73,11 @@ export class PrintdepositComponent implements OnInit {
       { key: 'tariff', title: 'Total' },
     ];
 
-    this.getData();
+    if (this.lastSegment === 'printdailysby') {
+      this.getDataSby();
+    } else {
+      this.getData();
+    }
   }
 
   getData() {
@@ -92,9 +97,13 @@ export class PrintdepositComponent implements OnInit {
   }
 
   getDataSby() {
+    const getCashout: any = sessionStorage.getItem('data-cashout-sby');
+    const dataCashout = JSON.parse(getCashout);
     const getData: any = sessionStorage.getItem('data-deposit-sby');
     const data = JSON.parse(getData);
-    console.log(data);
+
+    // cashout operational
+    this.totalCostSurabaya = dataCashout;
 
     this.totalPackageCodMalang = data.reduce((acc: any, item: any) => acc + item.package_ba.total_ba_mlg, 0);
 
@@ -102,6 +111,8 @@ export class PrintdepositComponent implements OnInit {
       (acc: any, item: any) => acc + item.passenger_paid.total_lunas_sby,
       0
     );
+
+    this.totalPackagePaidSurabaya = data.reduce((acc: any, item: any) => acc + item.package_paid.total_lunas_sby, 0);
 
     this.cashoutCourierMalang = data.reduce(
       (acc: any, item: any) => acc + item.package_commission.total_commission_mlg,
