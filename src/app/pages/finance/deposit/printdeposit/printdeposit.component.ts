@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Utils } from '@app/@shared';
 import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
 
 @Component({
@@ -7,6 +9,10 @@ import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
   styleUrls: ['./printdeposit.component.scss'],
 })
 export class PrintdepositComponent implements OnInit {
+  public levelrule!: number;
+  public city_id!: number;
+  public username!: string;
+
   public data: any;
   public totalOperationalDeposit: any;
 
@@ -15,7 +21,35 @@ export class PrintdepositComponent implements OnInit {
 
   public configuration: Config = { ...DefaultConfig };
 
-  constructor() {}
+  lastSegment: string = '';
+
+  // end table package
+  public totalPackagePaidSurabaya = 0;
+
+  // end table passenger
+  public totalPassengerPaidSurabaya = 0;
+
+  // cashout
+  public dataCashoutSurabaya: any;
+  public totalCostSurabaya: any = 0;
+  public cashoutCourierMalang = 0;
+
+  // daily surabaya
+  public totalCashInSurabayaDaily = 0;
+  public totalCashOutSurabayaDaily = 0;
+  public totalDepositSurabayaDaily = 0;
+
+  public totalPackageCodMalang = 0;
+
+  constructor(private utils: Utils, private router: Router) {
+    const url = this.router.url;
+    this.lastSegment = url.substring(url.lastIndexOf('/') + 1);
+    console.log(this.lastSegment);
+
+    this.levelrule = this.utils.getLevel();
+    this.city_id = this.utils.getCity();
+    this.username = this.utils.getUsername();
+  }
 
   ngOnInit() {
     this.configuration.resizeColumn = true;
@@ -55,5 +89,31 @@ export class PrintdepositComponent implements OnInit {
       this.data?.totalPackagePaidSurabaya +
       this.data?.totalReminderPaymentTransfer +
       this.data?.totalPaymentMonthly;
+  }
+
+  getDataSby() {
+    const getData: any = sessionStorage.getItem('data-deposit-sby');
+    const data = JSON.parse(getData);
+    console.log(data);
+
+    this.totalPackageCodMalang = data.reduce((acc: any, item: any) => acc + item.package_ba.total_ba_mlg, 0);
+
+    this.totalPassengerPaidSurabaya = data.reduce(
+      (acc: any, item: any) => acc + item.passenger_paid.total_lunas_sby,
+      0
+    );
+
+    this.cashoutCourierMalang = data.reduce(
+      (acc: any, item: any) => acc + item.package_commission.total_commission_mlg,
+      0
+    );
+
+    this.totalCashInSurabayaDaily =
+      Number(this.totalPackagePaidSurabaya) +
+      Number(this.totalPackageCodMalang) +
+      Number(this.totalPassengerPaidSurabaya);
+
+    this.totalCashOutSurabayaDaily = Number(this.totalCostSurabaya) + Number(this.cashoutCourierMalang);
+    this.totalDepositSurabayaDaily = Number(this.totalCashInSurabayaDaily) - Number(this.totalCashOutSurabayaDaily);
   }
 }

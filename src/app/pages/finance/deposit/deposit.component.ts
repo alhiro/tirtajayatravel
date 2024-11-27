@@ -175,7 +175,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     };
 
     console.log(params);
-    // this.dataListCashout(params);
+    this.dataListCashout(params);
     // this.dataListBSD(params);
     this.dataListDeposit(params);
   }
@@ -212,7 +212,7 @@ export class DepositComponent implements OnInit, OnDestroy {
 
   printDepositSurabaya() {
     sessionStorage.setItem('data-deposit-sby', JSON.stringify(this.dataDeposit));
-    window.open('#/finance/deposit/daily/printdaily', '_blank');
+    window.open('#/finance/deposit/daily/printdailysby', '_blank');
   }
 
   eventEmitted($event: { event: string; value: any }): void {
@@ -443,17 +443,17 @@ export class DepositComponent implements OnInit, OnDestroy {
           Number(this.totalDepositDriverPackage) +
           Number(this.totalDepositDriverPassenger) +
           Number(this.totalPackagePaidMalang) +
-          Number(this.totalPackageCodMalang);
+          Number(this.totalPackageCodSurabaya);
 
-        this.totalCashOutMalangDaily = Number(this.totalCostMalang) + Number(this.cashoutCourierMalang);
+        this.totalCashOutMalangDaily = Number(this.totalCostMalang) + Number(this.cashoutCourierSurabaya);
         this.totalDepositMalangDaily = Number(this.totalCashInMalangDaily) - Number(this.totalCashOutMalangDaily);
 
         this.totalCashInSurabayaDaily =
           Number(this.totalPackagePaidSurabaya) +
-          Number(this.totalPackageCodSurabaya) +
+          Number(this.totalPackageCodMalang) +
           Number(this.totalPassengerPaidSurabaya);
 
-        this.totalCashOutSurabayaDaily = Number(this.totalCostSurabaya) + Number(this.cashoutCourierSurabaya);
+        this.totalCashOutSurabayaDaily = Number(this.totalCostSurabaya) + Number(this.cashoutCourierMalang);
         this.totalDepositSurabayaDaily = Number(this.totalCashInSurabayaDaily) - Number(this.totalCashOutSurabayaDaily);
 
         this.totalDepositDaily = Number(this.totalDepositMalangDaily) + Number(this.totalDepositSurabayaDaily);

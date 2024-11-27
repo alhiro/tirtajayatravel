@@ -106,6 +106,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('../../pages/finance/deposit/printdeposit/printdeposit.module').then((m) => m.PrintDepositModule),
   },
+  {
+    path: 'finance/deposit/daily/printdailysby',
+    component: PrintdepositComponent,
+    loadChildren: () =>
+      import('../../pages/finance/deposit/printdeposit/printdeposit.module').then((m) => m.PrintDepositModule),
+  },
   // print commission
   {
     path: 'finance/commission/package/printcommission',
