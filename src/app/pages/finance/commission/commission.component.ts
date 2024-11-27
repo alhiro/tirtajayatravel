@@ -243,9 +243,9 @@ export class CommissionComponent implements OnInit, OnDestroy {
     let getCity = '';
     if (this.levelrule === 2) {
       if (this.city_id === 1) {
-        getCity = 'Surabaya';
-      } else {
         getCity = 'Malang';
+      } else {
+        getCity = 'Surabaya';
       }
     } else {
       getCity = '';

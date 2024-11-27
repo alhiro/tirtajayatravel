@@ -925,7 +925,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
               duration: 5000,
             });
 
-            this.dataDetailPackages = resp.data.packages;
+            this.dataDetailPackages = resp.data?.packages;
           } else {
             this.isLoading = false;
           }
@@ -963,14 +963,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
               duration: 5000,
             });
 
-            let city: any;
-            if (this.currentTab === 'Malang') {
-              city = 1;
-            } else if (this.currentTab === 'Surabaya') {
-              city = 2;
-            }
-
-            this.dataDetailPassenger = resp.data.passengers;
+            this.dataDetailPassenger = resp.data?.passengers;
           } else {
             this.isLoading = false;
           }
