@@ -146,6 +146,27 @@ export class HttpService {
     ) as Observable<any>;
   }
 
+  packageListCom(param: ExtendedPaginationContext): Observable<any> {
+    return this.commonApi.get(
+      '/package/list-commission-ba?limit=' +
+        param.limit +
+        '&page=' +
+        param.page +
+        '&search=' +
+        param.search +
+        '&startDate=' +
+        param.startDate +
+        '&endDate=' +
+        param.endDate +
+        '&city=' +
+        param.city +
+        '&status=' +
+        param.status +
+        '&username=' +
+        param.username
+    ) as Observable<any>;
+  }
+
   packageEdit(param: PackageModel): Observable<any> {
     const body = {
       package_id: param.package_id,
@@ -1106,6 +1127,13 @@ export class HttpService {
       used: param.used,
     };
     return this.commonApi.put('/address/update', body) as Observable<any>;
+  }
+
+  customerDelete(param: CustomerModel): Observable<any> {
+    const body = {
+      customer_id: param.customer_id,
+    };
+    return this.commonApi.delete('/customer/delete', body) as Observable<any>;
   }
 
   customerEditAddresDefault(param: any): Observable<any> {

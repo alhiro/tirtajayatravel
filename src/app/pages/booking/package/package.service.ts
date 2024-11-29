@@ -47,6 +47,17 @@ export class PackageService {
     );
   }
 
+  listCom(context: PaginationContext): Observable<PackageModel> {
+    return this.httpService.packageListCom(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   edit(context: PackageModel): Observable<PackageModel> {
     return this.httpService.packageEdit(context).pipe(
       map((result) => {

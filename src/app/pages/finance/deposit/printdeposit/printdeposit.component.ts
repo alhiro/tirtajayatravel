@@ -99,23 +99,21 @@ export class PrintdepositComponent implements OnInit {
   getDataSby() {
     const getCashout: any = sessionStorage.getItem('data-cashout-sby');
     const dataCashout = JSON.parse(getCashout);
-    const getData: any = sessionStorage.getItem('data-deposit-sby');
-    const data = JSON.parse(getData);
+    const getDataDeposit: any = sessionStorage.getItem('data-deposit-sby');
+    const dataDeposit = JSON.parse(getDataDeposit);
+    const getDataComba: any = sessionStorage.getItem('data-comba');
+    const dataComba = JSON.parse(getDataComba);
 
     // cashout operational
     this.totalCostSurabaya = dataCashout;
 
-    this.totalPackageCodMalang = data.reduce((acc: any, item: any) => acc + item.package_ba.total_ba_mlg, 0);
+    this.totalPackageCodMalang = dataComba?.bayarTujuanMalang;
+    this.cashoutCourierMalang = dataComba?.pengeluaranKomisiMalang;
 
-    this.totalPassengerPaidSurabaya = data.reduce(
-      (acc: any, item: any) => acc + item.passenger_paid.total_lunas_sby,
-      0
-    );
+    this.totalPassengerPaidSurabaya = 0;
 
-    this.totalPackagePaidSurabaya = data.reduce((acc: any, item: any) => acc + item.package_paid.total_lunas_sby, 0);
-
-    this.cashoutCourierMalang = data.reduce(
-      (acc: any, item: any) => acc + item.package_commission.total_commission_mlg,
+    this.totalPackagePaidSurabaya = dataDeposit.reduce(
+      (acc: any, item: any) => acc + item.package_paid.total_lunas_sby,
       0
     );
 

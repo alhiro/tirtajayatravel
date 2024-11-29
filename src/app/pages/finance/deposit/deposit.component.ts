@@ -5,10 +5,11 @@ import { GoSendModel } from '@app/pages/booking/package/models/gosend';
 import { PackageService } from '@app/pages/booking/package/package.service';
 import { HandlerResponseService } from '@app/services/handler-response/handler-response.service';
 import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
-import { Subject, catchError, debounceTime, finalize, of, takeUntil } from 'rxjs';
+import { Observable, Subject, catchError, debounceTime, finalize, forkJoin, map, of, takeUntil } from 'rxjs';
 import { CashoutService } from '../cashout/cashout.service';
 import { CashoutModel } from '../cashout/models/cashout.model';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { PackageModel } from '@app/pages/booking/package/models/package.model';
 
 @Component({
   selector: 'app-deposit',
@@ -40,6 +41,7 @@ export class DepositComponent implements OnInit, OnDestroy {
   public totalPackagePaidMalang = 0;
   public totalPackagePaidSurabaya = 0;
   public totalPackageCodMalang = 0;
+  public totalPackageCod = 0;
   public totalReminderPaymentPackage = 0;
 
   // table passenger
@@ -82,6 +84,7 @@ export class DepositComponent implements OnInit, OnDestroy {
   public totalCostMalang: any = 0;
   public totalCostSurabaya: any = 0;
   public cashoutOnderdilService = 0;
+  public cashoutCourier = 0;
   public cashoutCourierMalang = 0;
   public cashoutCourierSurabaya = 0;
 
@@ -96,6 +99,9 @@ export class DepositComponent implements OnInit, OnDestroy {
   public totalDepositSurabayaDaily = 0;
 
   public totalDepositDaily = 0;
+
+  public startDate: any;
+  public endDate: any;
 
   public pagination = {
     limit: 100,
@@ -132,6 +138,11 @@ export class DepositComponent implements OnInit, OnDestroy {
     this.levelrule = this.utils.getLevel();
     this.city_id = this.utils.getCity();
     this.username = this.utils.getUsername();
+
+    // set min selected date
+    const minDate = this.utils.indonesiaDateFormat(new Date());
+    var getDate = new Date(minDate);
+    this.formatDateNow(getDate);
   }
 
   ngOnInit() {
@@ -164,20 +175,28 @@ export class DepositComponent implements OnInit, OnDestroy {
     const inputDate = new Date();
     const { startDate, endDate } = this.utils.singleDate(inputDate);
 
-    const params = {
-      limit: this.pagination.limit,
-      page: this.pagination.offset,
-      search: this.pagination.search,
-      startDate: startDate,
-      endDate: endDate,
-      city: this.city_id,
-      status: this.pagination.status,
-    };
+    this.startDate = startDate;
+    this.endDate = endDate;
 
-    console.log(params);
-    this.dataListCashout(params);
-    // this.dataListBSD(params);
-    this.dataListDeposit(params);
+    forkJoin([this.dataListPackageBa(), this.dataListPackageCom(), this.dataListCashout()]).subscribe({
+      next: () => {
+        console.log('All functions completed');
+        this.dataListDeposit();
+      },
+      error: (err: any) => {
+        console.error('Error in one or more functions:', err);
+      },
+    });
+  }
+
+  formatDateNow(event: any) {
+    const valDate = {
+      year: event.getFullYear(),
+      month: event.getMonth() + 1,
+      day: event.getDate(),
+    };
+    this.date = { year: valDate.year, month: valDate.month, day: valDate.day };
+    console.log(this.date);
   }
 
   datepicker() {
@@ -189,31 +208,43 @@ export class DepositComponent implements OnInit, OnDestroy {
 
     const inputDate = new Date(date.year, date.month - 1, date.day);
     const { startDate, endDate } = this.utils.singleDate(inputDate);
+    this.startDate = startDate;
+    this.endDate = endDate;
 
-    const params = {
-      limit: 1,
-      page: '',
-      search: '',
-      startDate: startDate,
-      endDate: endDate,
-      city: this.city_id,
-      status: this.pagination.status,
-    };
-    console.log(params);
-    // this.dataListBSD(params);
-    this.dataListCashout(params);
-    this.dataListDeposit(params);
+    forkJoin([this.dataListPackageBa(), this.dataListPackageCom(), this.dataListCashout()]).subscribe({
+      next: () => {
+        console.log('All functions completed');
+        this.dataListDeposit();
+      },
+      error: (err: any) => {
+        console.error('Error in one or more functions:', err);
+      },
+    });
   }
 
   printDeposit() {
     sessionStorage.setItem('data-deposit', JSON.stringify(this.dataDeposit));
     sessionStorage.setItem('data-cashout-mlg', JSON.stringify(this.totalCostMalang));
+    const commba = {
+      bayarTujuanMalang: this.totalPackageCodMalang,
+      bayarTujuanSurabaya: this.totalPackageCodSurabaya,
+      pengeluaranKomisiMalang: this.cashoutCourierMalang,
+      pengeluaranKomisiSurabaya: this.cashoutCourierSurabaya,
+    };
+    sessionStorage.setItem('data-comba', JSON.stringify(commba));
     window.open('#/finance/deposit/daily/printdaily', '_blank');
   }
 
   printDepositSurabaya() {
     sessionStorage.setItem('data-deposit-sby', JSON.stringify(this.dataDeposit));
     sessionStorage.setItem('data-cashout-sby', JSON.stringify(this.totalCostSurabaya));
+    const commba = {
+      bayarTujuanMalang: this.totalPackageCodMalang,
+      bayarTujuanSurabaya: this.totalPackageCodSurabaya,
+      pengeluaranKomisiMalang: this.cashoutCourierMalang,
+      pengeluaranKomisiSurabaya: this.cashoutCourierSurabaya,
+    };
+    sessionStorage.setItem('data-comba', JSON.stringify(commba));
     window.open('#/finance/deposit/daily/printdailysby', '_blank');
   }
 
@@ -227,12 +258,21 @@ export class DepositComponent implements OnInit, OnDestroy {
     window.open('#/finance/bsd/tirta-jaya/printbsd', '_blank');
   }
 
-  private dataListCashout(params: PaginationContext): void {
-    this.configuration.isLoading = true;
-    this.cashoutService
-      .list(params)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((response: any) => {
+  private dataListCashout(): Observable<void> {
+    const params = {
+      limit: '',
+      page: '',
+      search: '',
+      startDate: this.startDate,
+      endDate: this.endDate,
+      city: this.city_id,
+      status: '',
+    };
+    console.log(params);
+
+    return this.cashoutService.list(params).pipe(
+      takeUntil(this.ngUnsubscribe),
+      map((response: any) => {
         const malangData = response.data?.filter((data: CashoutModel) => data.city_id === 1);
         const surabayaData = response.data?.filter((data: CashoutModel) => data.city_id === 2);
         this.dataCashoutMalang = malangData;
@@ -242,7 +282,88 @@ export class DepositComponent implements OnInit, OnDestroy {
         this.totalCostSurabaya = this.utils.sumTotal(this.dataCashoutSurabaya?.map((data: CashoutModel) => data.fee));
 
         this.configuration.horizontalScroll = true;
-      });
+      }),
+      catchError((err) => {
+        console.error('Error in dataListCashout:', err);
+        return of(); // Emit an empty observable to prevent errors from propagating
+      })
+    );
+  }
+
+  private dataListPackageBa(): Observable<void> {
+    const params = {
+      limit: '',
+      page: '',
+      search: 'listba',
+      startDate: this.startDate,
+      endDate: this.endDate,
+      city: '',
+      status: 'Delivery',
+      username: '',
+    };
+
+    return this.packageService.listCom(params).pipe(
+      takeUntil(this.ngUnsubscribe),
+      map((response: any) => {
+        const dataBaMlg = response.data?.filter(
+          (data: PackageModel) =>
+            data.status === 'Bayar Tujuan (COD)' && data.check_payment === true && data.city_id === 1
+        );
+        this.totalPackageCodMalang = this.utils.sumTotal(dataBaMlg?.map((data: PackageModel) => data.cost));
+        console.log(this.totalPackageCodMalang);
+        const dataBaSby = response.data?.filter(
+          (data: PackageModel) =>
+            data.status === 'Bayar Tujuan (COD)' && data.check_payment === true && data.city_id === 2
+        );
+        this.totalPackageCodSurabaya = this.utils.sumTotal(dataBaSby?.map((data: PackageModel) => data.cost));
+        console.log(this.totalPackageCodSurabaya);
+
+        this.configuration.horizontalScroll = true;
+      }),
+      catchError((err) => {
+        console.error('Error in dataListPackageBa:', err);
+        return of(); // Emit an empty observable to prevent errors from propagating
+      })
+    );
+  }
+
+  private dataListPackageCom(): Observable<void> {
+    const params = {
+      limit: '',
+      page: '',
+      search: 'listcom',
+      startDate: this.startDate,
+      endDate: this.endDate,
+      city: '',
+      status: 'Delivery',
+      username: '',
+    };
+
+    return this.packageService.listCom(params).pipe(
+      takeUntil(this.ngUnsubscribe),
+      map((response: any) => {
+        const dataKomisiMlg = response.data?.filter(
+          (data: PackageModel) => data.check_sp === true && data.city_id === 1
+        );
+        this.cashoutCourierMalang = this.utils.sumTotal(
+          dataKomisiMlg?.map((data: PackageModel) => data.agent_commission)
+        );
+        console.log(this.cashoutCourierMalang);
+        const dataKomisiSby = response.data?.filter(
+          (data: PackageModel) => data.check_sp === true && data.city_id === 2
+        );
+        this.cashoutCourierSurabaya = this.utils.sumTotal(
+          dataKomisiSby?.map((data: PackageModel) => data.agent_commission)
+        );
+        console.log(this.cashoutCourierSurabaya);
+
+        this.configuration.horizontalScroll = true;
+      }),
+      catchError((err) => {
+        console.error('Error in dataListPackageCom:', err);
+        return of(); // Emit an empty observable to prevent errors from propagating
+      })
+    );
   }
 
   // private dataListBSD(params: PaginationContext): void {
@@ -394,7 +515,18 @@ export class DepositComponent implements OnInit, OnDestroy {
   //     });
   // }
 
-  private dataListDeposit(params: PaginationContext): void {
+  private dataListDeposit() {
+    const params = {
+      limit: '',
+      page: '',
+      search: '',
+      startDate: this.startDate,
+      endDate: this.endDate,
+      city: this.city_id,
+      status: 'Delivery',
+    };
+    console.log(params);
+
     this.configuration.isLoading = true;
     this.packageService
       .depositDaily(params)
@@ -412,28 +544,33 @@ export class DepositComponent implements OnInit, OnDestroy {
           0
         );
 
-        this.totalPackageCodMalang = data.reduce((acc: any, item: any) => acc + item.package_ba.total_ba_mlg, 0);
-        this.totalPackageCodSurabaya = data.reduce((acc: any, item: any) => acc + item.package_ba.total_ba_sby, 0);
+        // this.totalPackageCodMalang = data.reduce((acc: any, item: any) => acc + item.package_ba.total_ba_mlg, 0);
+        // this.totalPackageCodSurabaya = data.reduce((acc: any, item: any) => acc + item.package_ba.total_ba_sby, 0);
 
         this.totalPassengerPaidMalang = data.reduce(
           (acc: any, item: any) => acc + item.passenger_paid.total_lunas_mlg,
           0
         );
-        this.totalPassengerPaidSurabaya = data.reduce(
-          (acc: any, item: any) => acc + item.passenger_paid.total_lunas_sby,
-          0
-        );
+
+        if (this.city_id === 1) {
+          this.totalPassengerPaidSurabaya = data.reduce(
+            (acc: any, item: any) => acc + item.passenger_paid.total_lunas_sby,
+            0
+          );
+        } else {
+          this.totalPassengerPaidSurabaya = 0;
+        }
 
         this.piutangTransition = data.reduce((acc: any, item: any) => acc + item.package_piutang.total_piutang_mlg, 0);
 
-        this.cashoutCourierMalang = data.reduce(
-          (acc: any, item: any) => acc + item.package_commission.total_commission_mlg,
-          0
-        );
-        this.cashoutCourierSurabaya = data.reduce(
-          (acc: any, item: any) => acc + item.package_commission.total_commission_sby,
-          0
-        );
+        // this.cashoutCourierMalang = data.reduce(
+        //   (acc: any, item: any) => acc + item.package_commission.total_commission_mlg,
+        //   0
+        // );
+        // this.cashoutCourierSurabaya = data.reduce(
+        //   (acc: any, item: any) => acc + item.package_commission.total_commission_sby,
+        //   0
+        // );
 
         this.totalReminderPaymentTransfer = data.reduce(
           (acc: any, item: any) => acc + item.package_transfer.total_transfer,
@@ -455,6 +592,7 @@ export class DepositComponent implements OnInit, OnDestroy {
           Number(this.totalPackageCodMalang) +
           Number(this.totalPassengerPaidSurabaya);
 
+        console.log(this.cashoutCourierMalang);
         this.totalCashOutSurabayaDaily = Number(this.totalCostSurabaya) + Number(this.cashoutCourierMalang);
         this.totalDepositSurabayaDaily = Number(this.totalCashInSurabayaDaily) - Number(this.totalCashOutSurabayaDaily);
 
@@ -473,5 +611,6 @@ export class DepositComponent implements OnInit, OnDestroy {
     sessionStorage.removeItem('data-deposit-sby');
     sessionStorage.removeItem('data-cashout-mlg');
     sessionStorage.removeItem('data-cashout-sby');
+    sessionStorage.removeItem('data-comba');
   }
 }

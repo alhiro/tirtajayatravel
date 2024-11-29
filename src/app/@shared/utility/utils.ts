@@ -240,7 +240,7 @@ export class Utils {
     }
     // Use reduce to sum the data, treating null as 0
     const total = data?.reduce((acc: any, item: any) => acc + (Number(item) || 0), 0);
-    return total;
+    return Number(total);
   }
 
   sumCostPackages(array: any) {

@@ -254,6 +254,17 @@ export class CashoutComponent implements OnInit {
 
   ngOnInit() {
     this.type = this.localService.getType();
+
+    this.startDate = moment().utc().startOf('day').format('YYYY-MM-DD HH:mm:ss');
+    this.endDate = moment().utc().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+
+    this.params = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      startDate: this.startDate,
+      endDate: this.endDate,
+    };
     this.dataList(this.params);
 
     this.configuration.resizeColumn = false;
@@ -416,6 +427,7 @@ export class CashoutComponent implements OnInit {
 
     this.form.patchValue({
       cashout_id: event.cashout_id,
+      city_id: event.city_id,
       package_id: event.package_id,
       passenger_id: event.passenger_id,
       date: event.date,

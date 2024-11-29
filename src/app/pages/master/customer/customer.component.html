@@ -124,12 +124,15 @@
             >
               <app-keenicon name="pencil" class="fs-3 text-primary"></app-keenicon>
             </div>
+            @if (levelrule === 8 || levelrule === 2) {
             <div
               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+              (click)="openModalDelete(row)"
               [ngbTooltip]="'Delete Customer' | translate"
             >
               <app-keenicon name="trash" class="fs-3 text-danger"></app-keenicon>
             </div>
+            }
           </td>
         </ng-template>
       </ngx-table>
@@ -173,6 +176,7 @@
             type="text"
             class="form-control"
             formControlName="address"
+            name="address"
             autocomplete="address"
             [placeholder]="'Address' | translate"
           />
@@ -189,7 +193,7 @@
             data-allow-clear="true"
             formControlName="company_id"
           >
-            <option value="" disabled selected>Select company</option>
+            <option value="null" disabled selected>Select company</option>
             @for (value of company; track value) {
             <option [value]="value.company_id">{{ value.name }}</option>
             }
@@ -203,7 +207,7 @@
             data-allow-clear="true"
             formControlName="business_id"
           >
-            <option value="" disabled selected>Select business</option>
+            <option value="null" disabled selected>Select business</option>
             @for (value of business; track value) {
             <option [value]="value.business_id">{{ value.name }}</option>
             }
@@ -251,6 +255,7 @@
             type="text"
             class="form-control"
             formControlName="address"
+            name="address"
             autocomplete="address"
             [placeholder]="'Address' | translate"
           />
@@ -316,6 +321,7 @@
             type="text"
             class="form-control"
             formControlName="description"
+            name="description"
             autocomplete="description"
             [placeholder]="'Description' | translate"
           />

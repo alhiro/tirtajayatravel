@@ -62,6 +62,10 @@ export class CustomerComponent implements OnInit {
   @ViewChild('table') table!: APIDefinition;
   @ViewChild('tableAddress') tableAddress!: APIDefinition;
 
+  public levelrule!: number;
+  public city_id!: number;
+  public username!: string;
+
   public columns!: Columns[];
   public columnsAddress!: Columns[];
 
@@ -89,7 +93,7 @@ export class CustomerComponent implements OnInit {
   public params: Params = { ...defaultParams };
 
   public paramCustomer = {
-    limit: 100,
+    limit: 10,
     page: 1,
     search: '',
     customer_id: 0,
@@ -162,6 +166,10 @@ export class CustomerComponent implements OnInit {
     private utils: Utils
   ) {
     this.initForm();
+
+    this.levelrule = this.utils.getLevel();
+    this.city_id = this.utils.getCity();
+    this.username = this.utils.getUsername();
   }
 
   onDateSelection(date: NgbDate, datepicker: any) {
@@ -576,7 +584,7 @@ export class CustomerComponent implements OnInit {
     this.customer_id = event.customer_id;
 
     this.paramCustomer = {
-      limit: 100,
+      limit: 10,
       page: 1,
       search: '',
       customer_id: this.customer_id,
@@ -625,7 +633,7 @@ export class CustomerComponent implements OnInit {
             });
 
             this.paramCustomer = {
-              limit: 100,
+              limit: 10,
               page: 1,
               search: '',
               customer_id: this.customer_id,
@@ -686,7 +694,7 @@ export class CustomerComponent implements OnInit {
             });
 
             this.paramCustomer = {
-              limit: 100,
+              limit: 10,
               page: 1,
               search: '',
               customer_id: this.customer_id,
@@ -705,6 +713,60 @@ export class CustomerComponent implements OnInit {
         }
       );
     this.unsubscribe.push(catSubscr);
+  }
+
+  async openModalDelete(event: AddressModel) {
+    this.form.patchValue(event);
+
+    this.customer_id = event.customer_id;
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.dataCustomerDelete();
+      }
+    });
+  }
+
+  dataCustomerDelete() {
+    console.log(this.form.value);
+    this.isLoading = true;
+    const customerSubscr = this.customerService
+      .delete(this.form.value)
+      .pipe(
+        finalize(() => {
+          this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 5000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponentAddress.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+    this.unsubscribe.push(customerSubscr);
   }
 
   async openModalDeleteAddress(event: AddressModel) {
@@ -745,7 +807,7 @@ export class CustomerComponent implements OnInit {
             });
 
             this.paramCustomer = {
-              limit: 100,
+              limit: 10,
               page: 1,
               search: '',
               customer_id: this.customer_id,

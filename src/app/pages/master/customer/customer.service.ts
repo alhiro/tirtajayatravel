@@ -74,6 +74,17 @@ export class CustomerService {
     );
   }
 
+  delete(context: CustomerModel): Observable<AddressModel> {
+    return this.httpService.customerDelete(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   create(context: CustomerModel): Observable<CustomerModel> {
     return this.httpService.customerCreate(context).pipe(
       map((result) => {
