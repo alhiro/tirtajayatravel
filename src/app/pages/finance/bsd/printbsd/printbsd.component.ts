@@ -186,6 +186,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
       this.voluntaryDeposit
     );
     this.totalKreditPassenger = this.utils.sumNumbers(
+      this.totalCommissionPassengerKredit,
       this.bbmTotal,
       this.totalParkingPassenger,
       this.inToll,
@@ -198,10 +199,15 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
     this.totalDepositOffice = Number(this.totalTariff) - Number(this.totalKreditPassenger);
 
     // Package
-    const filterPaymentPackage = this.data?.packages.filter((row: any) => row.check_payment === true);
+    const filterPaymentPackage = this.data?.packages.filter(
+      (row: PackageModel) =>
+        row.check_payment === true && (row.status === 'Piutang' || row.status === 'Bayar Tujuan (COD)')
+    );
     this.totalCost = this.utils.sumTotal(filterPaymentPackage?.map((data: PackageModel) => data.cost));
 
-    const filterPaymentPackageSp = this.data?.packages.filter((row: any) => row.check_sp === true);
+    const filterPaymentPackageSp = this.data?.packages.filter(
+      (row: PackageModel) => row.check_sp === true && row.city_id === 2
+    );
     this.totalCommissionPackage = this.utils.sumTotal(
       filterPaymentPackageSp?.map((data: PackageModel) => data.agent_commission)
     );
