@@ -981,6 +981,13 @@ export class HttpService {
     return this.commonApi.post('/category/create', body) as Observable<any>;
   }
 
+  categoryDelete(param: CategoryModel): Observable<any> {
+    const body = {
+      category_id: param.category_id,
+    };
+    return this.commonApi.delete('/category/delete', body) as Observable<any>;
+  }
+
   // Sub Category
   subCategoryList(param: PaginationContext): Observable<any> {
     return this.commonApi.get('/category-sub/list?limit=' + param.limit + '&page=' + param.page) as Observable<any>;
@@ -1001,6 +1008,13 @@ export class HttpService {
       name: param.name,
     };
     return this.commonApi.post('/category-sub/create', body) as Observable<any>;
+  }
+
+  subCategoryDelete(param: SubCategoryModel): Observable<any> {
+    const body = {
+      category_sub_id: param.category_sub_id,
+    };
+    return this.commonApi.delete('/category-sub/delete', body) as Observable<any>;
   }
 
   // Employee
@@ -1045,6 +1059,13 @@ export class HttpService {
       log: param.log,
     };
     return this.commonApi.post('/employee/create', body) as Observable<any>;
+  }
+
+  employeeDelete(param: EmployeeyModel): Observable<any> {
+    const body = {
+      employee_id: param.employee_id,
+    };
+    return this.commonApi.delete('/employee/delete', body) as Observable<any>;
   }
 
   // Customer
@@ -1196,5 +1217,12 @@ export class HttpService {
       photo: param.photo,
     };
     return this.commonApi.post('/car/create', body) as Observable<any>;
+  }
+
+  carDelete(param: CarModel): Observable<any> {
+    const body = {
+      car_id: param.car_id,
+    };
+    return this.commonApi.delete('/car/delete', body) as Observable<any>;
   }
 }

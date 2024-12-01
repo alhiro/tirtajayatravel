@@ -43,4 +43,15 @@ export class SubCategoryService {
       })
     );
   }
+
+  delete(context: SubCategoryModel): Observable<SubCategoryModel> {
+    return this.httpService.subCategoryDelete(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
 }

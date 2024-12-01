@@ -53,4 +53,15 @@ export class CategoryService {
       })
     );
   }
+
+  delete(context: CategoryModel): Observable<CategoryModel> {
+    return this.httpService.categoryDelete(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
 }

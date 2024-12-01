@@ -423,7 +423,7 @@ export class CustomerComponent implements OnInit {
     this.pagination.limit = obj.value.limit ? obj.value.limit : this.pagination.limit;
     this.pagination.offset = obj.value.page ? obj.value.page : this.pagination.offset;
     this.pagination = { ...this.pagination };
-    const params = {
+    this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search:
@@ -431,7 +431,7 @@ export class CustomerComponent implements OnInit {
       startDate: this.pagination.startDate,
       endDate: this.pagination.endDate,
     }; // see https://github.com/typicode/json-server
-    this.dataList(params);
+    this.dataList(this.params);
   }
 
   private dataList(params: PaginationContext): void {

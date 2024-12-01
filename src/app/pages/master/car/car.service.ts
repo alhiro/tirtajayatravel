@@ -42,4 +42,15 @@ export class CarService {
       })
     );
   }
+
+  delete(context: CarModel): Observable<CarModel> {
+    return this.httpService.carDelete(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
 }

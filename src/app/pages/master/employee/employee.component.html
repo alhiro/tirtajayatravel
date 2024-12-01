@@ -62,6 +62,7 @@
             <div
               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
               [ngbTooltip]="'Delete Employee' | translate"
+              (click)="openModalDelete(row)"
             >
               <app-keenicon name="trash" class="fs-3 text-danger"></app-keenicon>
             </div>

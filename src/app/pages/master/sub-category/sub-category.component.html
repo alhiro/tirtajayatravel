@@ -57,6 +57,7 @@
             </div>
             <div
               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+              (click)="openModalDelete(row)"
               [ngbTooltip]="'Delete Sub Category' | translate"
             >
               <app-keenicon name="trash" class="fs-3 text-danger"></app-keenicon>
@@ -83,7 +84,7 @@
           data-allow-clear="true"
           formControlName="category_id"
         >
-          <option value="" disabled selected>Select category</option>
+          <option value="null" disabled selected>Select category</option>
           @for (value of category; track value) {
           <option [value]="value.category_id">{{ value.name }}</option>
           }

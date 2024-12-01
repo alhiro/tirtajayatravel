@@ -42,4 +42,15 @@ export class EmployeeService {
       })
     );
   }
+
+  delete(context: EmployeeyModel): Observable<EmployeeyModel> {
+    return this.httpService.employeeDelete(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
 }

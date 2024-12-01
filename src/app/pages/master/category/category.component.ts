@@ -17,6 +17,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { untilDestroyed } from '@ngneat/until-destroy';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HandlerResponseService } from '@app/services/handler-response/handler-response.service';
+import Swal from 'sweetalert2';
 
 interface EventObject {
   event: string;
@@ -38,6 +39,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
   public dataLength!: number;
   public toggledRows = new Set<number>();
   public isCreate = false;
+
+  public category_id: any;
 
   public configuration: Config = { ...DefaultConfig };
 
@@ -115,14 +118,14 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.pagination.limit = obj.value.limit ? obj.value.limit : this.pagination.limit;
     this.pagination.offset = obj.value.page ? obj.value.page : this.pagination.offset;
     this.pagination = { ...this.pagination };
-    const params = {
+    this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search: this.pagination.search,
       startDate: this.pagination.startDate,
       endDate: this.pagination.endDate,
     }; // see https://github.com/typicode/json-server
-    this.dataList(params);
+    this.dataList(this.params);
   }
 
   private dataList(params: PaginationContext): void {
@@ -229,5 +232,59 @@ export class CategoryComponent implements OnInit, OnDestroy {
         }
       );
     this.unsubscribe.push(catSubscr);
+  }
+
+  async openModalDelete(event: CategoryModel) {
+    this.form.patchValue(event);
+
+    this.category_id = event.category_id;
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.dataCustomerDelete();
+      }
+    });
+  }
+
+  dataCustomerDelete() {
+    console.log(this.form.value);
+    this.isLoading = true;
+    const categorySubscr = this.categoryService
+      .delete(this.form.value)
+      .pipe(
+        finalize(() => {
+          this.form.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 5000,
+            });
+
+            this.dataList(this.params);
+            await this.modalComponent.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+    this.unsubscribe.push(categorySubscr);
   }
 }
