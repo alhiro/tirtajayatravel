@@ -838,7 +838,7 @@
                       <td>
                         <span class="text-gray-900 d-block">
                           <label class="form-check form-check-sm form-check-solid m-0 p-0">
-                            @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') {
+                            @if (row.status === 'Piutang') {
                             <input
                               class="form-check-input f-none"
                               type="checkbox"
@@ -863,6 +863,7 @@
                               type="checkbox"
                               [checked]="row.check_sp"
                               (change)="checkSp(row, $event)"
+                              [disabled]="true"
                             />
                           </label>
                         </span>
@@ -1514,7 +1515,7 @@
                       </label> -->
 
                       <label class="form-check form-check-sm form-check-solid m-0 p-0">
-                        @if (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang') {
+                        @if (row.status === 'Piutang') {
                         <input
                           class="form-check-input f-none"
                           type="checkbox"
@@ -1539,6 +1540,7 @@
                           type="checkbox"
                           [checked]="row.check_sp"
                           (change)="checkSp(row, $event)"
+                          [disabled]="true"
                         />
                       </label>
                     </span>
