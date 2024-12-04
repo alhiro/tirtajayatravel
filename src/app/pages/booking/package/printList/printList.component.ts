@@ -5,6 +5,7 @@ import { finalize, takeUntil, Subject } from 'rxjs';
 import { PackageService } from '../package.service';
 import { PackageModel } from '../models/package.model';
 import { Router } from '@angular/router';
+import { Utils } from '@app/@shared';
 
 interface GroupedDataCost {
   id: number;
@@ -52,7 +53,12 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private packageService: PackageService, private router: Router, private readonly cdr: ChangeDetectorRef) {
+  constructor(
+    private packageService: PackageService,
+    private router: Router,
+    private utils: Utils,
+    private readonly cdr: ChangeDetectorRef
+  ) {
     const url = this.router.url;
     this.lastSegment = url.substring(url.lastIndexOf('/') + 1);
     console.log(this.lastSegment);
@@ -177,7 +183,8 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
           console.log(this.dataDriver);
 
           // Count calculation total package except cancel
-          this.totalCost = filterData?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
+          this.totalCost = this.utils.sumTotal(filterData?.map((data: any) => data.cost));
+          // this.totalCost = filterData?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
           // this.totalKoli = filterData?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
 
           const groupedDataCost: GroupedDataCost[] = Object.values(

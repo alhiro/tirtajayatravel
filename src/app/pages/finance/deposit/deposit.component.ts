@@ -67,6 +67,7 @@ export class DepositComponent implements OnInit, OnDestroy {
   public totalDebetPassenger = 0;
   public totalKreditPassenger = 0;
   public totalDepositDriverPassenger = 0;
+
   // end table passenger
   public totalPassengerPaidMalang = 0;
   public totalPassengerPaidSurabaya = 0;
@@ -224,12 +225,30 @@ export class DepositComponent implements OnInit, OnDestroy {
 
   printDeposit() {
     sessionStorage.setItem('data-deposit', JSON.stringify(this.dataDeposit));
-    sessionStorage.setItem('data-cashout-mlg', JSON.stringify(this.totalCostMalang));
     const commba = {
+      totalDepositDriverPackage: this.totalDepositDriverPackage,
+      totalDepositDriverPassenger: this.totalDepositDriverPassenger,
+      totalPackagePaidSurabaya: this.totalPackagePaidSurabaya,
+      totalPackagePaidMalang: this.totalPackagePaidMalang,
       bayarTujuanMalang: this.totalPackageCodMalang,
       bayarTujuanSurabaya: this.totalPackageCodSurabaya,
+      totalPassengerPaidMalang: this.totalPassengerPaidMalang,
+      totalPassengerPaidSurabaya: this.totalPassengerPaidSurabaya,
+      piutangTransition: this.piutangTransition,
+      totalCostMalang: this.totalCostMalang,
+      totalCostSurabaya: this.totalCostSurabaya,
+      cashoutOnderdilService: this.cashoutOnderdilService,
       pengeluaranKomisiMalang: this.cashoutCourierMalang,
       pengeluaranKomisiSurabaya: this.cashoutCourierSurabaya,
+      totalReminderPaymentTransfer: this.totalReminderPaymentTransfer,
+      totalPaymentMonthly: this.totalPaymentMonthly,
+      totalCashInMalangDaily: this.totalCashInMalangDaily,
+      totalCashOutMalangDaily: this.totalCashOutMalangDaily,
+      totalDepositMalangDaily: this.totalDepositMalangDaily,
+      totalCashInSurabayaDaily: this.totalCashInSurabayaDaily,
+      totalCashOutSurabayaDaily: this.totalCashOutSurabayaDaily,
+      totalDepositSurabayaDaily: this.totalDepositSurabayaDaily,
+      totalDepositDaily: this.totalDepositDaily,
     };
     sessionStorage.setItem('data-comba', JSON.stringify(commba));
     window.open('#/finance/deposit/daily/printdaily', '_blank');
@@ -572,11 +591,16 @@ export class DepositComponent implements OnInit, OnDestroy {
         //   0
         // );
 
-        this.totalReminderPaymentTransfer = data.reduce(
-          (acc: any, item: any) => acc + item.package_transfer.total_transfer,
-          0
+        this.totalReminderPaymentTransfer = this.utils.sumTotal(
+          data?.map((data: any) => data.package_transfer.total_transfer)
         );
-        this.totalPaymentMonthly = data.reduce((acc: any, item: any) => acc + item.package_transfer.total_bulanan, 0);
+        this.totalPaymentMonthly = this.utils.sumTotal(data?.map((data: any) => data.package_transfer.total_bulanan));
+
+        // this.totalReminderPaymentTransfer = data.reduce(
+        //   (acc: any, item: any) => acc + item.package_transfer.total_transfer,
+        //   0
+        // );
+        // this.totalPaymentMonthly = data.reduce((acc: any, item: any) => acc + item.package_transfer.total_bulanan, 0);
 
         this.totalCashInMalangDaily =
           Number(this.totalDepositDriverPackage) +
@@ -609,7 +633,6 @@ export class DepositComponent implements OnInit, OnDestroy {
 
     sessionStorage.removeItem('data-deposit');
     sessionStorage.removeItem('data-deposit-sby');
-    sessionStorage.removeItem('data-cashout-mlg');
     sessionStorage.removeItem('data-cashout-sby');
     sessionStorage.removeItem('data-comba');
   }

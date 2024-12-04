@@ -24,11 +24,22 @@ export class PrintdepositComponent implements OnInit {
 
   lastSegment: string = '';
 
-  // end table package
-  public totalPackagePaidSurabaya = 0;
+  public dataDeposit: any;
 
-  // end table passenger
-  public totalPassengerPaidSurabaya = 0;
+  // table package
+  public totalCost = 0;
+  public totalCommissionPackage = 0;
+  public totalParkingPackage = 0;
+  public totalDebetPackage = 0;
+  public totalKreditPackage = 0;
+  public totalDepositDriverPackage = 0;
+  public totalDepositDriverPassenger = 0;
+  // end table package
+  public totalPackagePaidMalang = 0;
+  public totalPackagePaidSurabaya = 0;
+  public totalPackageCodMalang = 0;
+  public totalPackageCod = 0;
+  public totalReminderPaymentPackage = 0;
 
   // cashout
   public dataCashoutSurabaya: any;
@@ -40,7 +51,29 @@ export class PrintdepositComponent implements OnInit {
   public totalCashOutSurabayaDaily = 0;
   public totalDepositSurabayaDaily = 0;
 
-  public totalPackageCodMalang = 0;
+  // end table passenger
+  public totalPassengerPaidMalang = 0;
+  public totalPassengerPaidSurabaya = 0;
+  public totalPackageCodSurabaya = 0;
+  public totalReminderPaymentPassenger = 0;
+
+  public piutangTransition = 0;
+  public totalReminderPaymentTransfer = 0;
+  public totalPaymentMonthly = 0;
+
+  // cashout
+  public dataCashoutMalang: any;
+  public totalCostMalang: any = 0;
+  public cashoutOnderdilService = 0;
+  public cashoutCourier = 0;
+  public cashoutCourierSurabaya = 0;
+
+  // daily malang
+  public totalCashInMalangDaily = 0;
+  public totalCashOutMalangDaily = 0;
+  public totalDepositMalangDaily = 0;
+
+  public totalDepositDaily = 0;
 
   constructor(private utils: Utils, private router: Router) {
     const url = this.router.url;
@@ -60,17 +93,17 @@ export class PrintdepositComponent implements OnInit {
     this.configuration.orderEnabled = false;
 
     this.columnsPackage = [
-      { key: '', title: 'No.' },
-      { key: 'bsd', title: 'BSD Package' },
-      { key: 'car_id', title: 'Driver' },
-      { key: 'cost', title: 'Total' },
+      { key: '', title: 'No.', width: '5%' },
+      { key: 'bsd', title: 'BSD Package', width: '35%' },
+      { key: 'car_id', title: 'Driver', width: '20%' },
+      { key: 'cost', title: 'Total', width: '40%' },
     ];
 
     this.columnsPassenger = [
-      { key: '', title: 'No.' },
-      { key: 'bsd_passenger', title: 'BSD Passenger' },
-      { key: 'employee_id', title: 'Driver' },
-      { key: 'tariff', title: 'Total' },
+      { key: '', title: 'No.', width: '5%' },
+      { key: 'bsd_passenger', title: 'BSD Passenger', width: '35%' },
+      { key: 'employee_id', title: 'Driver', width: '20%' },
+      { key: 'tariff', title: 'Total', width: '40%' },
     ];
 
     if (this.lastSegment === 'printdailysby') {
@@ -83,17 +116,46 @@ export class PrintdepositComponent implements OnInit {
   getData() {
     const getData: any = sessionStorage.getItem('data-deposit');
     const objData = JSON.parse(getData);
-    console.log(objData);
+    const getDataComba: any = sessionStorage.getItem('data-comba');
+    const dataComba = JSON.parse(getDataComba);
 
-    this.data = objData;
+    this.dataDeposit = objData;
+    this.totalCostMalang = dataComba?.totalCostMalang;
+    this.totalCostSurabaya = dataComba?.totalCostSurabaya;
+    this.totalPackagePaidMalang = dataComba?.totalPackagePaidMalang;
+    this.totalPackagePaidSurabaya = dataComba?.totalPackagePaidSurabaya;
+    this.totalPackageCodMalang = dataComba?.bayarTujuanMalang;
+    this.totalPackageCodSurabaya = dataComba?.bayarTujuanSurabaya;
+    this.totalPassengerPaidMalang = dataComba?.totalPassengerPaidMalang;
+    this.totalPassengerPaidSurabaya = dataComba?.totalPassengerPaidSurabaya;
+    this.piutangTransition = dataComba?.piutangTransition;
+    this.totalCostMalang = dataComba?.totalCostMalang;
+    this.totalCostSurabaya = dataComba?.totalCostSurabaya;
+    this.cashoutOnderdilService = dataComba?.cashoutOnderdilService;
+    this.cashoutCourierMalang = dataComba?.pengeluaranKomisiMalang;
+    this.cashoutCourierSurabaya = dataComba?.pengeluaranKomisiSurabaya;
+    this.totalReminderPaymentTransfer = dataComba?.totalReminderPaymentTransfer;
+    this.totalPaymentMonthly = dataComba?.totalPaymentMonthly;
+    this.totalCashInMalangDaily = dataComba?.totalCashInMalangDaily;
+    this.totalCashOutMalangDaily = dataComba?.totalCashOutMalangDaily;
+    this.totalDepositMalangDaily = dataComba?.totalDepositMalangDaily;
+    this.totalCashInSurabayaDaily = dataComba?.totalCashInSurabayaDaily;
+    this.totalCashOutSurabayaDaily = dataComba?.totalCashOutSurabayaDaily;
+    this.totalDepositSurabayaDaily = dataComba?.totalDepositSurabayaDaily;
+    this.totalDepositDaily = dataComba?.totalDepositDaily;
+
+    this.totalDepositDriverPackage = dataComba?.totalDepositDriverPackage;
+    this.totalDepositDriverPassenger = dataComba?.totalDepositDriverPassenger;
+
+    const safeNumber = (value: Number) => Number(value) || 0;
 
     this.totalOperationalDeposit =
-      this.data?.totalDepositDriverPackage +
-      this.data?.totalDepositDriverPassenger +
-      this.data?.totalPackagePaidMalang +
-      this.data?.totalPackagePaidSurabaya +
-      this.data?.totalReminderPaymentTransfer +
-      this.data?.totalPaymentMonthly;
+      safeNumber(this.totalDepositDriverPackage) +
+      safeNumber(this.totalDepositDriverPassenger) +
+      safeNumber(this.totalPackagePaidMalang) +
+      safeNumber(this.totalPackagePaidSurabaya) +
+      safeNumber(this.totalReminderPaymentTransfer) +
+      safeNumber(this.totalPaymentMonthly);
   }
 
   getDataSby() {
@@ -111,11 +173,7 @@ export class PrintdepositComponent implements OnInit {
     this.cashoutCourierMalang = dataComba?.pengeluaranKomisiMalang;
 
     this.totalPassengerPaidSurabaya = 0;
-
-    this.totalPackagePaidSurabaya = dataDeposit.reduce(
-      (acc: any, item: any) => acc + item.package_paid.total_lunas_sby,
-      0
-    );
+    this.totalPackagePaidSurabaya = dataComba?.totalPackagePaidSurabaya;
 
     this.totalCashInSurabayaDaily =
       Number(this.totalPackagePaidSurabaya) +
