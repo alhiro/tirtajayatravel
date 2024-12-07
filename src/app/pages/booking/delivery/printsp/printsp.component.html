@@ -228,6 +228,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
+                {{ row.category ? row.category?.name : '-' }} <br />
                 {{ row.description }}
               </span>
             </td>
@@ -240,7 +241,7 @@
       <div class="mt-7">
         <span class="fs-5"><b>Total Cost</b>: {{ totalCost | currency : 'Rp ' : true : '1.0-2' }}</span
         ><br />
-        <span class="fs-5"><b>Total Koli</b>: {{ data?.length | number }}</span>
+        <span class="fs-5"><b>Total Koli</b>: {{ totalKoli | number }}</span>
       </div>
     </div>
   </div>

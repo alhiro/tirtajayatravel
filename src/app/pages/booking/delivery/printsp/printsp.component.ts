@@ -95,7 +95,8 @@ export class PrintspComponent implements OnInit, OnDestroy {
 
     this.totalCost = this.utils.sumTotal(this.data?.map((data: PackageModel) => data.cost));
     this.totalTariff = this.utils.sumTotal(this.data?.map((data: PassengerModel) => data.tariff));
-    // this.totalKoli = this.data?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
+    this.totalKoli = this.utils.sumTotal(this.data?.map((data: PackageModel) => data.koli));
+    this.totalPassenger = this.utils.sumTotal(this.data?.map((data: PassengerModel) => data.total_passenger));
 
     // this.totalTariff = this.data?.reduce((acc: any, item: any) => acc + Number(item?.tariff), 0);
     // this.totalPassenger = this.data?.reduce((acc: any, item: any) => acc + Number(item?.total_passenger), 0);

@@ -8,10 +8,10 @@
             <div class="menu-content px-0 text-center">
               <h3 class="card-title align-items-start flex-column mb-2">
                 <span class="card-label fw-bolder fs-2">
-                  @if (lastSegment === 'printmonthly') { @if (city === 'Surabaya') { PENCAIRAN KOMISI & PAKET BULANAN
-                  MALANG } @else { PENCAIRAN KOMISI & PAKET BULANAN SURABAYA } } @else if (lastSegment ===
-                  'printcommission') { @if (city === 'Surabaya') { PENCAIRAN KOMISI & PAKET BA MALANG } @else {
-                  PENCAIRAN KOMISI & PAKET BA SURABAYA } }
+                  @if (lastSegment === 'printmonthly') { @if (city === 'Surabaya') { PENCAIRAN PAKET BULANAN MALANG }
+                  @else { PENCAIRAN PAKET BULANAN SURABAYA } } @else if (lastSegment === 'printcommission') { @if (city
+                  === 'Surabaya') { PENCAIRAN KOMISI & PAKET BA MALANG } @else { PENCAIRAN KOMISI & PAKET BA SURABAYA }
+                  }
                 </span>
               </h3>
               @if (startDate && endDate) {
@@ -28,6 +28,7 @@
     <!-- end::Header -->
     <!-- begin::Body -->
     <div class="card-body py-3">
+      @if (lastSegment === 'printcommission') {
       <!-- begin::Table container -->
       <div class="table-responsive table-custom">
         <!-- begin::Table -->
@@ -140,7 +141,7 @@
       </div>
       <!-- end::Table container -->
 
-      <div class="mt-7">
+      <div class="mt-5 mb-7">
         <span
           ><b>TOTAL SETORAN KOMISI PAKET: {{ totalCommission | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
         ><br />
@@ -152,8 +153,121 @@
         }
       </div>
 
-      @if (lastSegment === 'printcommission') {
-      <div class="mt-7">
+      <hr class="mb-7" />
+
+      <!-- begin::Table container -->
+      <div class="table-responsive table-custom">
+        <!-- begin::Table -->
+        <ngx-table
+          #table
+          [configuration]="configuration"
+          [data]="dataBa"
+          [columns]="columns"
+          [pagination]="pagination"
+          tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+        >
+          <ng-template let-row let-index="index" ngx-table-row>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
+              <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+            </td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
+              <span class="text-gray-900 fw-bolder fs-7">
+                {{ row.resi_number }}
+              </span>
+            </td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
+              <span class="text-gray-900 d-block">
+                {{ row.book_date | date : 'yyyy/MM/dd H:mm:ss' : 'GMT' }}
+              </span>
+            </td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
+              <span class="text-gray-900 d-block">
+                {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+              </span>
+            </td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
+              @if (row.check_sp) {
+              <span class="text-gray-900 d-block">
+                {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+              </span>
+              }
+            </td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
+              <span class="text-gray-900 d-block">
+                {{ row.sender?.name }} <br />
+                {{ row.sender?.address }} <br />
+                {{ row.sender?.telp }}
+              </span>
+            </td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
+              <span class="text-gray-900 d-block">
+                {{ row.recipient?.name }}<br />
+                {{ row.recipient?.address }}<br />
+                {{ row.recipient?.telp }}
+              </span>
+            </td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
+              <span class="text-gray-900 d-block">
+                {{ row.status }}
+              </span>
+            </td>
+            <td
+              [ngClass]="{
+                'soft-success-bg': row.status === 'Bayar Tujuan (COD)',
+                'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+              }"
+            >
+              @if (row.check_payment) {
+              <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
+              }
+            </td>
+          </ng-template>
+        </ngx-table>
+        <!-- end::Table -->
+      </div>
+      <!-- end::Table container -->
+
+      <div class="mt-5 mb-7">
         <span
           ><b>TOTAL SETORAN PELUNASAN PAKET BA: {{ totalPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
         ><br />
@@ -165,6 +279,65 @@
         }
       </div>
       } @if (lastSegment === 'printmonthly') {
+      <!-- begin::Table container -->
+      <span>Nama: {{ username }}</span>
+      <div class="table-responsive table-custom">
+        <!-- begin::Table -->
+        <ngx-table
+          #table
+          [configuration]="configuration"
+          [data]="data"
+          [columns]="columnsMonthly"
+          [pagination]="pagination"
+          tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+        >
+          <ng-template let-row let-index="index" ngx-table-row>
+            <td>
+              <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+            </td>
+            <td>
+              <span class="text-gray-900 fw-bolder fs-7">
+                {{ row.resi_number }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.book_date | date : 'yyyy/MM/dd H:mm:ss' : 'GMT' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.sender?.name }} <br />
+                {{ row.sender?.address }} <br />
+                {{ row.sender?.telp }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.recipient?.name }}<br />
+                {{ row.recipient?.address }}<br />
+                {{ row.recipient?.telp }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.status }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
+            </td>
+          </ng-template>
+        </ngx-table>
+        <!-- end::Table -->
+      </div>
+      <!-- end::Table container -->
+
       <div class="mt-7">
         <span
           ><b

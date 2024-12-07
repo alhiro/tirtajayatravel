@@ -159,21 +159,19 @@ export class PrintdepositComponent implements OnInit {
   }
 
   getDataSby() {
-    const getCashout: any = sessionStorage.getItem('data-cashout-sby');
-    const dataCashout = JSON.parse(getCashout);
-    const getDataDeposit: any = sessionStorage.getItem('data-deposit-sby');
-    const dataDeposit = JSON.parse(getDataDeposit);
+    const getCashoutSby: any = sessionStorage.getItem('data-cashout-sby');
+    const dataCashoutSby = JSON.parse(getCashoutSby);
     const getDataComba: any = sessionStorage.getItem('data-comba');
     const dataComba = JSON.parse(getDataComba);
 
     // cashout operational
-    this.totalCostSurabaya = dataCashout;
+    this.totalCostSurabaya = dataCashoutSby;
 
     this.totalPackageCodMalang = dataComba?.bayarTujuanMalang;
     this.cashoutCourierMalang = dataComba?.pengeluaranKomisiMalang;
 
     this.totalPassengerPaidSurabaya = 0;
-    this.totalPackagePaidSurabaya = dataComba?.totalPackagePaidSurabaya;
+    this.totalPackagePaidSurabaya = dataComba?.pengeluaranLunasSurabaya;
 
     this.totalCashInSurabayaDaily =
       Number(this.totalPackagePaidSurabaya) +

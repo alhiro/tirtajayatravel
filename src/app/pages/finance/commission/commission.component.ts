@@ -7,8 +7,10 @@ import {
   catchError,
   debounceTime,
   distinctUntilChanged,
+  filter,
   finalize,
   map,
+  merge,
   of,
   switchMap,
   takeUntil,
@@ -30,6 +32,7 @@ import { PackageModel } from '@app/pages/booking/package/models/package.model';
 import Swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
 import { DeliveryService } from '@app/pages/booking/delivery/delivery.service';
+import { CustomerService } from '@app/pages/master/customer/customer.service';
 
 interface EventObject {
   event: string;
@@ -65,6 +68,11 @@ export class CommissionComponent implements OnInit, OnDestroy {
   public modelEmployee: any;
   public searchingEmployee = false;
   public searchFailedEmployee = false;
+
+  public modelCustomer: any;
+  public isLoadingPrint = false;
+  public searchPrintFailed = false;
+  public searchingPrint = false;
 
   public configuration: Config = { ...DefaultConfig };
 
@@ -103,8 +111,14 @@ export class CommissionComponent implements OnInit, OnDestroy {
     // dismissButtonLabel: 'Submit',
     // closeButtonLabel: 'Cancel',
   };
+  modalConfigPrintUser: ModalConfig = {
+    modalTitle: 'Print Monthly',
+    dismissButtonLabel: 'Submit',
+    closeButtonLabel: 'Cancel',
+  };
   @ViewChild('modal') private modalComponent!: ModalComponent;
   @ViewChild('datepicker') datePicker!: any;
+  @ViewChild('modalPrintUser') private modalComponentPrintUser!: ModalComponent;
 
   @Input() cssClass!: '';
   currentTab = 'Malang';
@@ -130,6 +144,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     private categoryService: CategoryService,
     private employeeService: EmployeeService,
     private deliveryService: DeliveryService,
+    private customerService: CustomerService,
     private formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
@@ -239,7 +254,14 @@ export class CommissionComponent implements OnInit, OnDestroy {
     window.open('#/finance/commission/package/printbayartujuan', '_blank');
   }
 
-  printFilterMonthly(datepicker: any) {
+  async printUser() {
+    this.isLoadingPrint = true;
+    this.modelCustomer = '';
+
+    return await this.modalComponentPrintUser.open();
+  }
+
+  printFilterMonthly() {
     let getCity = '';
     if (this.levelrule === 2) {
       if (this.city_id === 1) {
@@ -259,7 +281,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
       toDate: this.endDate,
       city: getCity,
       status: 'Delivery',
-      username: '',
+      username: this.modelCustomer?.name,
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
@@ -604,6 +626,55 @@ export class CommissionComponent implements OnInit, OnDestroy {
 
   format(date: NgbDateStruct): string {
     return date ? `${date.day}/${date.month}/${date.year}` : '';
+  }
+
+  searchDataCustomer = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => ((this.searchingPrint = true), (this.isLoadingPrint = true))),
+      switchMap((term) =>
+        this.customerService
+          .list({
+            limit: this.params.limit,
+            page: this.params.page,
+            search: term,
+            startDate: this.params.startDate,
+            endDate: this.params.endDate,
+          })
+          .pipe(
+            tap(() => (this.searchPrintFailed = false)),
+            map((response: any) => {
+              if (response.length > 0) {
+                tap(() => (this.searchingPrint = false));
+
+                return response.data.filter(
+                  (val: any) =>
+                    val.name.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+                    val.telp.toLowerCase().indexOf(term.toLowerCase()) > -1
+                );
+              } else {
+                this.searchPrintFailed = true;
+                this.isLoadingPrint = true;
+              }
+            }),
+            catchError(() => {
+              this.searchPrintFailed = true;
+              this.isLoadingPrint = true;
+              return of([]);
+            })
+          )
+      ),
+      tap(() => (this.searchingPrint = false))
+    );
+  formatterCustomer = (result: { name: string }) => result.name;
+
+  onPrintSelect(event: any, inputElement: HTMLInputElement) {
+    this.isLoadingPrint = false;
+    this.modelCustomer = event.item;
+    console.log('Selected Customer:', this.modelCustomer);
+
+    inputElement.blur();
   }
 
   async openModalEdit(event: PackageModel) {

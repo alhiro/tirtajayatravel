@@ -22,11 +22,13 @@ interface GroupedDataCost {
 })
 export class PrintcommissionComponent implements OnInit, OnDestroy {
   public data: any;
+  public dataBa: any;
   public dataPiutang: any;
   public dataMonthly: any;
 
   public city: any;
   public status: any;
+  public username: any;
 
   public groupAdminCommission: any;
   public groupAdminPiutang: any;
@@ -43,11 +45,13 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
   public totalMonthly: any = 0;
 
   public totalKoli: any = 0;
+  public totalKoliBa: any = 0;
   public totalKoliPiutang: any = 0;
   public totalKoliMonthly: any = 0;
 
   public configuration: Config = { ...DefaultConfig };
   public columns!: Columns[];
+  public columnsMonthly!: Columns[];
 
   lastSegment: string = '';
 
@@ -99,6 +103,17 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
       { key: 'sign', title: 'Admin' },
     ];
 
+    this.columnsMonthly = [
+      { key: '', title: 'No', width: '3%' },
+      { key: 'resi_number', title: 'Resi Number' },
+      { key: 'book_date', title: 'Date' },
+      { key: 'cost', title: 'Cost' },
+      { key: 'sender_id', title: 'Sender' },
+      { key: 'recipient_id', title: 'Recipient' },
+      { key: 'status', title: 'Status Payment' },
+      { key: 'sign', title: 'Admin' },
+    ];
+
     this.nowDate = new Date();
     // this.getPrint();
 
@@ -112,6 +127,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
     this.startDateDisplay = this.startDate?.split(' ')[0];
     this.endDate = objDataDate.toDate;
     this.endDateDisplay = this.endDate?.split(' ')[0];
+    this.username = objDataDate.username;
 
     const params = {
       limit: '',
@@ -121,7 +137,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
       endDate: this.endDate,
       city: this.city,
       status: this.status,
-      username: '',
+      username: this.username,
     };
     this.dataListFilter(params);
   }
@@ -147,8 +163,11 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         //     data.status === 'Piutang' || data.status === 'Lunas (Kantor)' || data.status === 'Bayar Tujuan (COD)'
         // );
 
-        this.data = response.data;
+        this.data = response?.data?.filter((data: PackageModel) => data.status === 'Lunas (Kantor)');
         this.totalKoli = this.data?.length;
+
+        this.dataBa = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
+        this.totalKoliBa = this.dataBa?.length;
 
         const dataCommission = response.data?.filter((data: any) => data.check_sp === true);
         this.totalCommission = dataCommission?.reduce((acc: any, item: any) => acc + Number(item?.agent_commission), 0);

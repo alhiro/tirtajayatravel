@@ -244,6 +244,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     this.configurationDetail.fixedColumnWidth = true;
     this.configurationDetail.horizontalScroll = false;
     this.configurationDetail.orderEnabled = false;
+    this.configurationDetail.paginationEnabled = false;
+    this.configurationDetail.rows = 1000;
 
     this.columns = [
       // { key: 'category_sub_id', title: 'No' },
@@ -258,7 +260,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     ];
 
     this.columnsPassenger = [
-      // { key: 'category_sub_id', title: 'No' },
+      { key: '', title: 'No', width: '3%' },
       { key: 'resi_number', title: 'Resi Number' },
       { key: 'sp_package', title: 'SP' },
       { key: 'waybill_id', title: 'Waybill' },
@@ -270,7 +272,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     ];
 
     this.columnsPackage = [
-      // { key: 'category_sub_id', title: 'No' },
+      { key: '', title: 'No', width: '3%' },
       { key: 'resi_number', title: 'Resi Number' },
       { key: 'level', title: 'Level' },
       { key: 'book_date', title: 'SP' },

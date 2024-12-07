@@ -92,7 +92,7 @@
             <button
               class="btn btn-success btn-sm m-2 p-1 px-4 float-end"
               [disabled]="configuration.isLoading"
-              (click)="printFilterMonthly(datepicker)"
+              (click)="printUser()"
               translate
             >
               Bulanan
@@ -466,3 +466,52 @@
 </app-modal>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
 <!-- end:: Modal Commission -->
+
+<!-- begin:: Modal Print Monthly -->
+<app-modal #modalPrintUser [modalConfig]="modalConfigPrintUser">
+  <div class="m-3">
+    <label class="d-block mb-4">
+      <input
+        id="select-customer"
+        type="text"
+        class="form-control"
+        [class.is-invalid]="searchPrintFailed"
+        [(ngModel)]="modelCustomer"
+        [ngbTypeahead]="searchDataCustomer"
+        [resultTemplate]="rtp"
+        [inputFormatter]="formatterCustomer"
+        #printInput
+        (selectItem)="onPrintSelect($event, printInput)"
+        #instance="ngbTypeahead"
+        placeholder="Customer search"
+      />
+      <ng-template #rtp let-r="result" let-t="term"> {{ r.name }} - {{ r.address }} - {{ r.telp }} </ng-template>
+
+      @if (searchingPrint) {
+      <small class="form-text text-muted">Searching. Please wait...</small>
+      } @if (searchPrintFailed) {
+      <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+      }
+    </label>
+  </div>
+  <div class="mt-10">
+    <button
+      class="btn btn-primary w-100"
+      (click)="printFilterMonthly()"
+      [disabled]="isLoadingPrint || searchingPrint || searchPrintFailed"
+    >
+      <!--begin::Spinner-->
+      <span
+        class="translate-middle-y lh-0 me-1"
+        data-kt-search-element="spinner"
+        [ngClass]="searchingPrint ? '' : 'd-none'"
+      >
+        <span class="spinner-border h-15px w-15px align-middle text-gray-500"></span>
+      </span>
+      <!--end::Spinner-->
+      <span translate>Cetak Bulanan</span>
+    </button>
+  </div>
+</app-modal>
+<!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
+<!-- end:: Modal Print Resi -->

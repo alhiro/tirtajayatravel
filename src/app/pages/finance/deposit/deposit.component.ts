@@ -26,6 +26,7 @@ export class DepositComponent implements OnInit, OnDestroy {
 
   public configuration: Config = { ...DefaultConfig };
 
+  public dataBsd: any;
   public dataDeposit: any;
   public dataPackage: any[] = [];
   public dataPassenger: any[] = [];
@@ -179,7 +180,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     this.startDate = startDate;
     this.endDate = endDate;
 
-    forkJoin([this.dataListPackageBa(), this.dataListPackageCom(), this.dataListCashout()]).subscribe({
+    forkJoin([this.dataListCashout()]).subscribe({
       next: () => {
         console.log('All functions completed');
         this.dataListDeposit();
@@ -212,7 +213,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     this.startDate = startDate;
     this.endDate = endDate;
 
-    forkJoin([this.dataListPackageBa(), this.dataListPackageCom(), this.dataListCashout()]).subscribe({
+    forkJoin([this.dataListCashout()]).subscribe({
       next: () => {
         console.log('All functions completed');
         this.dataListDeposit();
@@ -255,9 +256,9 @@ export class DepositComponent implements OnInit, OnDestroy {
   }
 
   printDepositSurabaya() {
-    sessionStorage.setItem('data-deposit-sby', JSON.stringify(this.dataDeposit));
     sessionStorage.setItem('data-cashout-sby', JSON.stringify(this.totalCostSurabaya));
     const commba = {
+      pengeluaranLunasSurabaya: this.totalPackagePaidSurabaya,
       bayarTujuanMalang: this.totalPackageCodMalang,
       bayarTujuanSurabaya: this.totalPackageCodSurabaya,
       pengeluaranKomisiMalang: this.cashoutCourierMalang,
@@ -385,155 +386,6 @@ export class DepositComponent implements OnInit, OnDestroy {
     );
   }
 
-  // private dataListBSD(params: PaginationContext): void {
-  //   this.configuration.isLoading = true;
-  //   this.packageService
-  //     .listDeposit(params)
-  //     .pipe(
-  //       takeUntil(this.ngUnsubscribe),
-  //       finalize(() => {
-  //         this.configuration.isLoading = false;
-  //       }),
-  //       catchError((err) => {
-  //         this.configuration.isLoading = false;
-  //         this.configuration.horizontalScroll = false;
-  //         this.handlerResponseService.failedResponse(err);
-  //         return of([]);
-  //       })
-  //     )
-  //     .subscribe((response: any) => {
-  //       this.configuration.isLoading = false;
-  //       this.configuration.horizontalScroll = true;
-
-  //       if (response) {
-  //         const dataPackage = response.data;
-  //         this.dataPackage = dataPackage;
-  //         console.log(this.dataPackage);
-
-  //         const dataPassenger = response.data;
-  //         this.dataPassenger = dataPassenger;
-  //         console.log(this.dataPassenger);
-
-  //         const dataBSD = response.data?.filter(
-  //           (data: GoSendModel) => data.bsd !== null || data.bsd_passenger !== null
-  //         );
-  //         const {
-  //           totalPackagesCost,
-  //           totalCommissionPackage,
-  //           totalPackagePaidMalang,
-  //           totalPackagePaidSurabaya,
-  //           totalPackageCodMalang,
-  //           totalPackageCodSurabaya,
-  //           totalReminderPaymentPackage,
-  //           totalPaymentMonthly,
-  //         } = this.utils.sumCostPackages(dataBSD);
-  //         const {
-  //           totalPassengerCost,
-  //           totalCommissionPassenger,
-  //           totalPassengerPaidMalang,
-  //           totalPassengerPaidSurabaya,
-  //           totalReminderPaymentPassenger,
-  //         } = this.utils.sumCostPassengers(dataBSD);
-
-  //         // Package
-  //         this.totalCost = Number(totalPackagesCost);
-  //         this.totalDebetPackage = Number(this.totalCost);
-  //         this.totalDepositDriverPackage = Number(this.totalDebetPackage);
-
-  //         this.totalCommissionPackage = Number(totalCommissionPackage);
-  //         this.totalKreditPackage = Number(this.totalCommissionPackage) + Number(this.totalParkingPackage);
-
-  //         this.totalPackagePaidMalang = Number(totalPackagePaidMalang);
-  //         this.totalPackagePaidSurabaya = Number(totalPackagePaidSurabaya);
-  //         this.totalPackageCodMalang = Number(totalPackageCodMalang);
-  //         this.totalPackageCodSurabaya = Number(totalPackageCodSurabaya);
-
-  //         this.totalPaymentMonthly = Number(totalPaymentMonthly);
-
-  //         // Passenger
-  //         this.totalTariff = Number(totalPassengerCost);
-  //         this.totalCommissionPassenger = Number(totalCommissionPassenger);
-  //         this.totalDebetPassenger =
-  //           Number(this.totalTariff) +
-  //           Number(this.mandatoryDeposit) +
-  //           Number(this.depositDriver) +
-  //           Number(this.voluntaryDeposit);
-  //         this.totalKreditPassenger =
-  //           Number(this.totalCommissionPassenger) +
-  //           Number(this.bbm) +
-  //           Number(this.totalParkingPassenger) +
-  //           Number(this.inToll) +
-  //           Number(this.outToll) +
-  //           Number(this.overnight) +
-  //           Number(this.extra) +
-  //           Number(this.others);
-  //         this.totalDepositDriverPassenger = Number(this.totalDebetPassenger) - Number(this.totalKreditPassenger);
-
-  //         this.totalPassengerPaidMalang = Number(totalPassengerPaidMalang);
-  //         this.totalPassengerPaidSurabaya = Number(totalPassengerPaidSurabaya);
-
-  //         // reminder payment transfer
-  //         this.totalReminderPaymentPackage = Number(totalReminderPaymentPackage);
-  //         this.totalReminderPaymentPassenger = Number(totalReminderPaymentPassenger);
-  //         this.totalReminderPaymentTransfer =
-  //           Number(this.totalReminderPaymentPackage) + Number(this.totalReminderPaymentPassenger);
-
-  //         // daily malang
-  //         this.totalCashInMalangDaily =
-  //           Number(this.totalDepositDriverPackage) +
-  //           Number(this.totalDepositDriverPassenger) +
-  //           Number(this.totalPackagePaidMalang) +
-  //           Number(this.totalPackageCodMalang);
-  //         this.totalCashOutMalangDaily = Number(this.totalCostMalang) + Number(this.cashoutCourierMalang);
-  //         this.totalDepositMalangDaily = Number(this.totalCashInMalangDaily) - Number(this.totalCashOutMalangDaily);
-
-  //         // daily surabaya
-  //         this.totalCashInSurabayaDaily =
-  //           Number(this.totalPackagePaidSurabaya) +
-  //           Number(this.totalPackageCodSurabaya) +
-  //           Number(this.totalPassengerPaidSurabaya);
-  //         this.totalCashOutSurabayaDaily = Number(this.totalCostSurabaya) + Number(this.cashoutCourierSurabaya);
-  //         this.totalDepositSurabayaDaily =
-  //           Number(this.totalCashInSurabayaDaily) - Number(this.totalCashOutSurabayaDaily);
-
-  //         this.totalDepositDaily = Number(this.totalDepositMalangDaily) + Number(this.totalDepositSurabayaDaily);
-
-  //         this.dataDeposit = {
-  //           dataPackage: dataPackage,
-  //           dataPassenger: dataPassenger,
-  //           // cashin
-  //           totalDepositDriverPackage: this.totalDepositDriverPackage,
-  //           totalDepositDriverPassenger: this.totalDepositDriverPassenger,
-  //           totalPackagePaidMalang: Number(totalPackagePaidMalang),
-  //           totalPackagePaidSurabaya: Number(totalPackagePaidSurabaya),
-  //           totalPackageCodMalang: Number(totalPackageCodMalang),
-  //           totalPackageCodSurabaya: Number(totalPackageCodSurabaya),
-  //           totalPassengerPaidMalang: Number(totalPassengerPaidMalang),
-  //           totalPassengerPaidSurabaya: Number(totalPassengerPaidSurabaya),
-  //           piutangTransition: this.piutangTransition,
-  //           // cashout
-  //           totalCostMalang: this.totalCostMalang,
-  //           totalCostSurabaya: this.totalCostSurabaya,
-  //           cashoutOnderdilService: this.cashoutOnderdilService,
-  //           cashoutCourierMalang: this.cashoutCourierMalang,
-  //           cashoutCourierSurabaya: this.cashoutCourierSurabaya,
-  //           totalReminderPaymentTransfer: this.totalReminderPaymentTransfer,
-  //           totalPaymentMonthly: this.totalPaymentMonthly,
-  //           // deposit cash malang
-  //           totalCashInMalangDaily: this.totalCashInMalangDaily,
-  //           totalCashOutMalangDaily: this.totalCashOutMalangDaily,
-  //           totalDepositMalangDaily: this.totalDepositMalangDaily,
-  //           // information cash in surabaya:
-  //           totalCashInSurabayaDaily: this.totalCashInSurabayaDaily,
-  //           totalCashOutSurabayaDaily: this.totalCashOutSurabayaDaily,
-  //           totalDepositSurabayaDaily: this.totalDepositSurabayaDaily,
-  //           // deposit cash daily
-  //           totalDepositDaily: this.totalDepositDaily,
-  //         };
-  //       }
-  //     });
-  // }
-
   private dataListDeposit() {
     const params = {
       limit: '',
@@ -552,35 +404,100 @@ export class DepositComponent implements OnInit, OnDestroy {
       .pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
         const data = response.data;
+
+        // Check ba & commission
+        const dataPackage = Array.from(
+          data
+            .flatMap((item: any) => item?.standalone_packages)
+            .reduce((map: any, packageItem: PackageModel) => {
+              if (!map.has(packageItem?.package_id)) {
+                map.set(packageItem?.package_id, packageItem);
+              }
+              return map;
+            }, new Map())
+            .values()
+        );
+
+        console.log(dataPackage);
+        this.dataPackage = dataPackage;
+
+        // const uniqueDrivers = Object?.values(
+        //   filterData
+        //     ?.filter((item: any) => item?.go_send)
+        //     .reduce((acc: any, item: any) => {
+        //       const { go_send_id, send_date, total_cost, total_packages, employee } = item?.go_send;
+        //       if (!acc[go_send_id]) {
+        //         acc[go_send_id] = { go_send_id, send_date, total_cost, total_packages, employee };
+        //       }
+        //       return acc;
+        //     }, {})
+        // );
+        // this.dataBsd = uniqueDrivers;
+        // console.log(uniqueDrivers);
+
+        const dataPackageMlg = this.dataPackage?.filter(
+          (data: PackageModel) => data.status === 'Lunas (Kantor)' && data?.city_id === 1
+        );
+        this.totalPackagePaidMalang = this.utils.sumTotal(dataPackageMlg?.map((data: PackageModel) => data?.cost));
+        const dataPackageSby = this.dataPackage?.filter(
+          (data: PackageModel) => data.status === 'Lunas (Kantor)' && data?.city_id === 2
+        );
+        this.totalPackagePaidSurabaya = this.utils.sumTotal(dataPackageSby?.map((data: PackageModel) => data?.cost));
+
+        // Check commission mlg
+        const dataKomisiMlg = this.dataPackage?.filter(
+          (data: PackageModel) => data?.check_sp === true && data?.city_id === 1
+        );
+        this.cashoutCourierMalang = this.utils.sumTotal(
+          dataKomisiMlg?.map((data: PackageModel) => data?.agent_commission)
+        );
+        console.log(this.cashoutCourierMalang);
+        // Check commission sby
+        const dataKomisiSby = this.dataPackage?.filter(
+          (data: PackageModel) => data?.check_sp === true && data?.city_id === 2
+        );
+        this.cashoutCourierSurabaya = this.utils.sumTotal(
+          dataKomisiSby?.map((data: PackageModel) => data?.agent_commission)
+        );
+        console.log(this.cashoutCourierSurabaya);
+
+        // Check Ba
+        const dataBaMlg = this.dataPackage?.filter(
+          (data: PackageModel) =>
+            data?.status === 'Bayar Tujuan (COD)' && data?.check_payment === true && data?.city_id === 1
+        );
+        this.totalPackageCodMalang = this.utils.sumTotal(dataBaMlg?.map((data: PackageModel) => data?.cost));
+        console.log(this.totalPackageCodMalang);
+
+        const dataBaSby = this.dataPackage?.filter(
+          (data: PackageModel) =>
+            data?.status === 'Bayar Tujuan (COD)' && data?.check_payment === true && data?.city_id === 2
+        );
+        this.totalPackageCodSurabaya = this.utils.sumTotal(dataBaSby?.map((data: PackageModel) => data?.cost));
+        console.log(this.totalPackageCodSurabaya);
+
+        // Deposit
+        // deposit daily
         this.dataDeposit = data;
 
-        this.totalDepositDriverPackage = data.reduce((acc: any, item: any) => acc + item.package.total_cost, 0);
-        this.totalDepositDriverPassenger = data.reduce((acc: any, item: any) => acc + item.passenger.total_tariff, 0);
+        this.totalDepositDriverPackage = this.utils.sumTotal(data?.map((data: any) => data.package?.total_cost));
+        this.totalDepositDriverPassenger = this.utils.sumTotal(data?.map((data: any) => data.passenger?.total_tariff));
 
-        this.totalPackagePaidMalang = data.reduce((acc: any, item: any) => acc + item.package_paid.total_lunas_mlg, 0);
-        this.totalPackagePaidSurabaya = data.reduce(
-          (acc: any, item: any) => acc + item.package_paid.total_lunas_sby,
-          0
+        // this.totalPackagePaidMalang = data.reduce((acc: any, item: any) => acc + item.package_paid.total_lunas_mlg, 0);
+        // this.totalPackagePaidSurabaya = this.utils.sumTotal(data?.map((data: any) => data.package_paid?.total_lunas_sby));
+
+        this.totalPassengerPaidMalang = this.utils.sumTotal(
+          data?.map((data: any) => data.passenger_paid?.total_lunas_mlg)
         );
-
-        // this.totalPackageCodMalang = data.reduce((acc: any, item: any) => acc + item.package_ba.total_ba_mlg, 0);
-        // this.totalPackageCodSurabaya = data.reduce((acc: any, item: any) => acc + item.package_ba.total_ba_sby, 0);
-
-        this.totalPassengerPaidMalang = data.reduce(
-          (acc: any, item: any) => acc + item.passenger_paid.total_lunas_mlg,
-          0
-        );
-
         if (this.city_id === 1) {
-          this.totalPassengerPaidSurabaya = data.reduce(
-            (acc: any, item: any) => acc + item.passenger_paid.total_lunas_sby,
-            0
+          this.totalPassengerPaidSurabaya = this.utils.sumTotal(
+            data?.map((data: any) => data.passenger_paid?.total_lunas_sby)
           );
         } else {
           this.totalPassengerPaidSurabaya = 0;
         }
 
-        this.piutangTransition = data.reduce((acc: any, item: any) => acc + item.package_piutang.total_piutang_mlg, 0);
+        this.piutangTransition = this.utils.sumTotal(data?.map((data: any) => data.package_piutang?.total_piutang_mlg));
 
         // this.cashoutCourierMalang = data.reduce(
         //   (acc: any, item: any) => acc + item.package_commission.total_commission_mlg,
@@ -592,15 +509,9 @@ export class DepositComponent implements OnInit, OnDestroy {
         // );
 
         this.totalReminderPaymentTransfer = this.utils.sumTotal(
-          data?.map((data: any) => data.package_transfer.total_transfer)
+          data?.map((data: any) => data.package_transfer?.total_transfer)
         );
-        this.totalPaymentMonthly = this.utils.sumTotal(data?.map((data: any) => data.package_transfer.total_bulanan));
-
-        // this.totalReminderPaymentTransfer = data.reduce(
-        //   (acc: any, item: any) => acc + item.package_transfer.total_transfer,
-        //   0
-        // );
-        // this.totalPaymentMonthly = data.reduce((acc: any, item: any) => acc + item.package_transfer.total_bulanan, 0);
+        this.totalPaymentMonthly = this.utils.sumTotal(data?.map((data: any) => data.package_transfer?.total_bulanan));
 
         this.totalCashInMalangDaily =
           Number(this.totalDepositDriverPackage) +
@@ -625,6 +536,76 @@ export class DepositComponent implements OnInit, OnDestroy {
         this.configuration.isLoading = false;
         this.cdr.detectChanges();
       });
+  }
+
+  private dataListPackage(): Observable<void> {
+    const params = {
+      limit: '',
+      page: '',
+      search: '',
+      startDate: this.startDate,
+      endDate: this.endDate,
+      city: '',
+      status: '',
+      username: '',
+    };
+
+    return this.packageService.listCom(params).pipe(
+      takeUntil(this.ngUnsubscribe),
+      map((response: any) => {
+        let filterData;
+
+        filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
+        console.log(filterData);
+
+        // const uniqueDrivers = Object?.values(
+        //   filterData
+        //     ?.filter((item: any) => item?.go_send)
+        //     .reduce((acc: any, item: any) => {
+        //       const { go_send_id, send_date, total_cost, total_packages, employee } = item?.go_send;
+        //       if (!acc[go_send_id]) {
+        //         acc[go_send_id] = { go_send_id, send_date, total_cost, total_packages, employee };
+        //       }
+        //       return acc;
+        //     }, {})
+        // );
+        // this.dataBsd = uniqueDrivers;
+        // console.log(uniqueDrivers);
+
+        this.totalPackagePaidMalang = this.utils.sumTotal(filterData?.map((data: PackageModel) => data.cost));
+        // this.totalCost = this.utils.sumTotal(this.dataBsd?.map((data: any) => data.total_cost));
+
+        // Check commission
+        const dataKomisiMlg = filterData?.filter((data: PackageModel) => data.check_sp === true && data.city_id === 1);
+        this.cashoutCourierMalang = this.utils.sumTotal(
+          dataKomisiMlg?.map((data: PackageModel) => data.agent_commission)
+        );
+        console.log(this.cashoutCourierMalang);
+        const dataKomisiSby = filterData?.filter((data: PackageModel) => data.check_sp === true && data.city_id === 2);
+        this.cashoutCourierSurabaya = this.utils.sumTotal(
+          dataKomisiSby?.map((data: PackageModel) => data.agent_commission)
+        );
+        console.log(this.cashoutCourierSurabaya);
+
+        // Check Ba
+        const dataBaMlg = filterData?.filter(
+          (data: PackageModel) =>
+            data.status === 'Bayar Tujuan (COD)' && data.check_payment === true && data.city_id === 1
+        );
+        this.totalPackageCodMalang = this.utils.sumTotal(dataBaMlg?.map((data: PackageModel) => data.cost));
+        console.log(this.totalPackageCodMalang);
+        const dataBaSby = filterData?.filter(
+          (data: PackageModel) =>
+            data.status === 'Bayar Tujuan (COD)' && data.check_payment === true && data.city_id === 2
+        );
+        this.totalPackageCodSurabaya = this.utils.sumTotal(dataBaSby?.map((data: PackageModel) => data.cost));
+        console.log(this.totalPackageCodSurabaya);
+      }),
+      catchError((err) => {
+        console.error('Error in dataListPackage:', err);
+        return of(); // Emit an empty observable to prevent errors from propagating
+      })
+    );
   }
 
   ngOnDestroy(): void {
