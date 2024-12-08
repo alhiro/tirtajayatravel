@@ -1258,6 +1258,16 @@ export class PackageComponent implements OnInit, OnDestroy {
               duration: 5000,
             });
 
+            this.params = {
+              limit: this.pagination.limit,
+              page: this.pagination.offset,
+              search: this.pagination.search,
+              startDate: '',
+              endDate: '',
+              city: this.currentTab,
+              status: this.pagination.status,
+            };
+
             this.dataList(this.params);
             await this.modalComponent.dismiss();
           } else {

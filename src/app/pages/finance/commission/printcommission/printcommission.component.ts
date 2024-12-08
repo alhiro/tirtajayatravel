@@ -7,6 +7,7 @@ import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import localeId from '@angular/common/locales/id';
 import { Router } from '@angular/router';
+import { Utils } from '@app/@shared';
 
 interface GroupedDataCost {
   id: number;
@@ -21,6 +22,8 @@ interface GroupedDataCost {
   providers: [{ provide: LOCALE_ID, useValue: 'id' }],
 })
 export class PrintcommissionComponent implements OnInit, OnDestroy {
+  public city_id!: number;
+
   public data: any;
   public dataBa: any;
   public dataPiutang: any;
@@ -76,12 +79,19 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private packageService: PackageService, private router: Router, private readonly cdr: ChangeDetectorRef) {
+  constructor(
+    private packageService: PackageService,
+    private router: Router,
+    private utils: Utils,
+    private readonly cdr: ChangeDetectorRef
+  ) {
     registerLocaleData(localeId, 'id');
 
     const url = this.router.url;
     this.lastSegment = url.substring(url.lastIndexOf('/') + 1);
     console.log(this.lastSegment);
+
+    this.city_id = this.utils.getCity();
   }
 
   ngOnInit() {
@@ -164,13 +174,8 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         // );
 
         this.data = response?.data?.filter((data: PackageModel) => data.status === 'Lunas (Kantor)');
-        this.totalKoli = this.data?.length;
-
-        this.dataBa = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
-        this.totalKoliBa = this.dataBa?.length;
-
-        const dataCommission = response.data?.filter((data: any) => data.check_sp === true);
-        this.totalCommission = dataCommission?.reduce((acc: any, item: any) => acc + Number(item?.agent_commission), 0);
+        const dataCommission = this.data?.filter((data: any) => data.check_sp === true);
+        this.totalCommission = this.utils.sumTotal(dataCommission?.map((data: PackageModel) => data.agent_commission));
 
         const groupedDataCommission: GroupedDataCost[] = Object.values(
           dataCommission.reduce((acc: any, item: any) => {
@@ -180,6 +185,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
                 admin: item.updated_by,
                 totalCost: 0,
                 check_sp: item.check_sp,
+                city_id: item.city_id,
               };
             }
             acc[item.updated_by].totalCost += Number(item.agent_commission);
@@ -189,13 +195,17 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         this.groupAdminCommission = groupedDataCommission;
         console.log(groupedDataCommission);
 
-        // Data piutang status bulanan
-        this.dataPiutang = response.data?.filter(
-          (data: PackageModel) => data.status === 'Piutang' || data.status === 'Bayar Tujuan (COD)'
-        );
+        // Data piutang & ba
+        if (this.city_id === 1) {
+          this.dataPiutang = response.data?.filter(
+            (data: PackageModel) => data.status === 'Piutang' || data.status === 'Bayar Tujuan (COD)'
+          );
+        } else {
+          this.dataPiutang = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
+        }
 
         const dataPiutang = this.dataPiutang?.filter((data: any) => data.check_payment === true);
-        this.totalPiutang = dataPiutang?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
+        this.totalPiutang = this.utils.sumTotal(dataPiutang?.map((data: PackageModel) => data.cost));
         this.totalKoliPiutang = this.dataPiutang?.length;
 
         const groupedDataPiutang: GroupedDataCost[] = Object.values(
@@ -206,6 +216,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
                 admin: item.updated_by,
                 totalCost: 0,
                 check_payment: item.check_payment,
+                city_id: item.city_id,
               };
             }
             acc[item.updated_by].totalCost += Number(item.cost);
@@ -215,11 +226,11 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         this.groupAdminPiutang = groupedDataPiutang;
         console.log(groupedDataPiutang);
 
-        // Data piutang status bayar tujuan
+        // Data bulanan
         this.dataMonthly = response.data?.filter((data: PackageModel) => data.status === 'Customer (Bulanan)');
 
         const dataMonthly = this.dataMonthly;
-        this.totalMonthly = dataMonthly?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
+        this.totalMonthly = this.utils.sumTotal(dataMonthly?.map((data: PackageModel) => data.cost));
         this.totalKoliMonthly = this.dataMonthly?.length;
 
         const groupedDataMonthly: GroupedDataCost[] = Object.values(
@@ -230,6 +241,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
                 admin: item.updated_by,
                 totalCost: 0,
                 check_sp: item.check_sp,
+                city_id: item.city_id,
               };
             }
             acc[item.updated_by].totalCost += Number(item.cost);

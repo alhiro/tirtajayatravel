@@ -186,11 +186,11 @@ export class CommissionComponent implements OnInit, OnDestroy {
     }
 
     this.params = {
-      limit: 10,
-      page: 1,
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
       search: this.pagination.search,
-      startDate: this.startDate,
-      endDate: this.endDate,
+      startDate: this.pagination.startDate,
+      endDate: this.pagination.endDate,
       city: getCity,
       status: this.pagination.status,
     };
@@ -221,6 +221,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
       toDate: this.endDate,
       city: getCity,
       status: 'Delivery',
+      username: '',
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
@@ -326,6 +327,25 @@ export class CommissionComponent implements OnInit, OnDestroy {
   resetFilterDate(datepicker: any) {
     this.fromDate = this.calendar.getToday();
     this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
+
+    const inputDate = new Date();
+    const { startDate, endDate } = this.utils.singleDate(inputDate);
+
+    this.startDate = startDate;
+    this.endDate = endDate;
+
+    this.pagination.startDate = this.startDate;
+    this.pagination.endDate = this.endDate;
+
+    this.params = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      startDate: this.pagination.startDate,
+      endDate: this.pagination.endDate,
+      city: this.currentTab,
+      status: this.pagination.status,
+    };
     this.dataList(this.params);
     datepicker.close();
   }
@@ -377,13 +397,18 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.startDate = startDate;
     this.endDate = endDate;
 
+    this.pagination.search = this.city_id === 1 ? this.pagination.search : 'Bayar Tujuan (COD)';
+    this.pagination.startDate = this.startDate;
+    this.pagination.endDate = this.endDate;
+    this.pagination.city = this.city_id === 1 ? 'Surabaya' : 'Malang';
+
     this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search: this.pagination.search,
-      startDate: this.startDate,
-      endDate: this.endDate,
-      city: this.city_id === 1 ? 'Surabaya' : 'Malang',
+      startDate: this.pagination.startDate,
+      endDate: this.pagination.endDate,
+      city: this.pagination.city,
       status: this.pagination.status,
     };
     this.dataList(this.params);
@@ -474,8 +499,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
         limit: this.pagination.limit,
         page: this.pagination.offset,
         search: this.pagination.search,
-        startDate: this.startDate,
-        endDate: this.endDate,
+        startDate: this.pagination.startDate,
+        endDate: this.pagination.endDate,
         city: this.currentTab,
         status: this.pagination.status,
       };
@@ -485,8 +510,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
         limit: this.pagination.limit,
         page: this.pagination.offset,
         search: this.pagination.search,
-        startDate: this.startDate,
-        endDate: this.endDate,
+        startDate: this.pagination.startDate,
+        endDate: this.pagination.endDate,
         city: this.currentTab,
         status: this.pagination.status,
       };
@@ -511,9 +536,6 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   private parseEvent(obj: EventObject): void {
-    this.pagination.limit = obj.value.limit ? obj.value.limit : this.pagination.limit;
-    this.pagination.offset = obj.value.page ? obj.value.page : this.pagination.offset;
-    this.pagination = { ...this.pagination };
     this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
@@ -522,7 +544,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
       endDate: this.pagination.endDate,
       city: this.currentTab,
       status: this.pagination.status,
-    }; // see https://github.com/typicode/json-server
+    };
     this.dataList(this.params);
   }
 
@@ -561,13 +583,13 @@ export class CommissionComponent implements OnInit, OnDestroy {
             map((response: any) => {
               if (response) {
                 this.params = {
-                  limit: this.params.limit,
-                  page: this.params.page,
+                  limit: this.pagination.limit,
+                  page: this.pagination.offset,
                   search: term,
-                  startDate: this.params.startDate,
-                  endDate: this.params.endDate,
-                  status: this.params.status,
+                  startDate: this.pagination.startDate,
+                  endDate: this.pagination.endDate,
                   city: this.currentTab,
+                  status: this.pagination.status,
                 };
                 this.dataList(this.params);
               }

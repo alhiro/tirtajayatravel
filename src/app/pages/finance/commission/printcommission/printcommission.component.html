@@ -131,7 +131,7 @@
                 'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
               }"
             >
-              @if (row.check_payment) {
+              @if (row.check_sp) {
               <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
               }
             </td>
@@ -161,7 +161,7 @@
         <ngx-table
           #table
           [configuration]="configuration"
-          [data]="dataBa"
+          [data]="dataPiutang"
           [columns]="columns"
           [pagination]="pagination"
           tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
@@ -211,7 +211,7 @@
                 'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
               }"
             >
-              @if (row.check_sp) {
+              @if (row.check_payment) {
               <span class="text-gray-900 d-block">
                 {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
@@ -286,7 +286,7 @@
         <ngx-table
           #table
           [configuration]="configuration"
-          [data]="data"
+          [data]="dataMonthly"
           [columns]="columnsMonthly"
           [pagination]="pagination"
           tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
