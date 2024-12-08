@@ -26,6 +26,7 @@ export class DepositComponent implements OnInit, OnDestroy {
 
   public configuration: Config = { ...DefaultConfig };
 
+  public data: any;
   public dataBsd: any;
   public dataDeposit: any;
   public dataPackage: any[] = [];
@@ -258,7 +259,7 @@ export class DepositComponent implements OnInit, OnDestroy {
   printDepositSurabaya() {
     sessionStorage.setItem('data-cashout-sby', JSON.stringify(this.totalCostSurabaya));
     const commba = {
-      datapackage: this.dataPackage,
+      data: this.data,
       datacashout: this.dataCashoutSurabaya,
       pengeluaranLunasSurabaya: this.totalPackagePaidSurabaya,
       bayarTujuanMalang: this.totalPackageCodMalang,
@@ -406,6 +407,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       .pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
       .subscribe((response: any) => {
         const data = response.data;
+        this.data = data;
 
         // Check ba & commission
         const dataPackage = Array.from(

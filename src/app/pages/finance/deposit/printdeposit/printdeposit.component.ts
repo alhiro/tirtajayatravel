@@ -15,6 +15,9 @@ export class PrintdepositComponent implements OnInit {
   public username!: string;
 
   public data: any;
+  public dataPackage: any;
+  public dataCashout: any;
+
   public totalOperationalDeposit: any;
 
   public columnsPackage!: Columns[];
@@ -163,6 +166,9 @@ export class PrintdepositComponent implements OnInit {
     const dataCashoutSby = JSON.parse(getCashoutSby);
     const getDataComba: any = sessionStorage.getItem('data-comba');
     const dataComba = JSON.parse(getDataComba);
+
+    this.dataPackage = dataComba?.data;
+    this.dataCashout = dataComba?.datacashout;
 
     // cashout operational
     this.totalCostSurabaya = dataCashoutSby;

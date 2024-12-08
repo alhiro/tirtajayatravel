@@ -225,14 +225,20 @@
       <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-6 mb-xl-6 m-0">
         <!--begin::Card body-->
         <b>LIST PAKET LUNAS SURABAYA</b>
-        <table class="table table-striped table-bordered table-hover">
+        <table class="table table-striped table-bordered table-hover mt-2">
           <tbody>
             <tr>
-              <td>Total Paket Lunas</td>
+              <td class="p-0"><b>Total Paket Lunas</b></td>
+              <td class="p-0 text-end" style="width: 70%">
+                <b>{{ totalPackagePaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+              </td>
             </tr>
+            @for (data of dataPackage; track data) {
             <tr>
-              <td>{{ totalPackagePaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+              <td class="p-0" style="width: 70%">{{ data.package.driver }}</td>
+              <td class="p-0">{{ data.package.total_cost_paid_sby | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
             </tr>
+            }
           </tbody>
         </table>
         <!--end::Card body-->
@@ -243,16 +249,21 @@
       <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-6 mb-xl-6 m-0">
         <!--begin::Card body-->
         <div class="card-body pt-0">
-          <b>LIST PENGELUARAN OPERASIONAL SURABAYA</b>
-          <table class="table table-striped table-bordered table-hover">
+          <b>LIST PAKET BAYAR TUJUAN SURABAYA</b>
+          <table class="table table-striped table-bordered table-hover mt-2">
             <tbody>
               <tr>
-                <td>Total Pengeluaran</td>
+                <td class="p-0" style="width: 70%"><b>Total Bayar Tujuan Surabaya</b></td>
+                <td class="p-0 text-end">
+                  <b>{{ totalPackageCodMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+                </td>
               </tr>
-
+              @for (data of dataPackage; track data) {
               <tr>
-                <td class="negative">{{ totalCostSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                <td class="p-0" style="width: 70%">{{ data.package.driver }}</td>
+                <td class="p-0">{{ data.package.total_cost_ba_sby | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               </tr>
+              }
             </tbody>
           </table>
         </div>
@@ -264,15 +275,21 @@
       <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-6 mb-xl-6 m-0">
         <!--begin::Card body-->
         <div class="card-body pt-0">
-          <b>LIST PAKET BAYAR TUJUAN SURABAYA</b>
-          <table class="table table-striped table-bordered table-hover">
+          <b>LIST PENGELUARAN OPERASIONAL SURABAYA</b>
+          <table class="table table-striped table-bordered table-hover mt-2">
             <tbody>
               <tr>
-                <td>Total Bayar Tujuan Surabaya</td>
+                <td class="p-0" style="width: 70%"><b>Total Pengeluaran</b></td>
+                <td class="p-0 negative text-end">
+                  <b>{{ totalCostSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+                </td>
               </tr>
+              @for (data of dataCashout; track data) {
               <tr>
-                <td>{{ totalPackageCodMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                <td class="p-0" style="width: 70%">{{ data.description }}</td>
+                <td class="p-0">{{ data.fee | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               </tr>
+              }
             </tbody>
           </table>
         </div>
@@ -285,14 +302,22 @@
         <!--begin::Card body-->
         <div class="card-body pt-0">
           <b>LIST KOMISI KURIR SURABAYA</b>
-          <table class="table table-striped table-bordered table-hover">
+          <table class="table table-striped table-bordered table-hover mt-2">
             <tbody>
               <tr>
-                <td>Total Pengeluaran</td>
+                <td class="p-0" style="width: 70%"><b>Total Pengeluaran</b></td>
+                <td class="p-0 negative text-end">
+                  <b>{{ cashoutCourierMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+                </td>
               </tr>
+              @for (data of dataPackage; track data) {
               <tr>
-                <td class="negative">{{ cashoutCourierMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                <td class="p-0" style="width: 70%">{{ data.package.driver }}</td>
+                <td class="p-0">
+                  {{ data.package.total_cost_commission_sby | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                </td>
               </tr>
+              }
             </tbody>
           </table>
         </div>
@@ -304,13 +329,13 @@
       <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-6 mb-xl-6 m-0">
         <!--begin::Card body-->
         <b>PENUMPANG LUNAS SURABAYA</b>
-        <table class="table table-striped table-bordered table-hover">
+        <table class="table table-striped table-bordered table-hover mt-2">
           <tbody>
             <tr>
-              <td>Total Penumpang Lunas Surabaya</td>
-            </tr>
-            <tr>
-              <td>{{ totalPassengerPaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+              <td class="p-0"><b>Total Penumpang Lunas Surabaya</b></td>
+              <td class="p-0 text-end">
+                <b>{{ totalPassengerPaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+              </td>
             </tr>
           </tbody>
         </table>
