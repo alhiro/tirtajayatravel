@@ -211,6 +211,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
     this.totalCommissionPackage = this.utils.sumTotal(
       filterPaymentPackageSp?.map((data: PackageModel) => data.agent_commission)
     );
+    this.totalParkingPackage = this.data?.cost?.parking_package;
     this.totalDebetPackage = this.totalCost;
     this.totalKreditPackage = Number(this.totalCommissionPackage) + Number(this.totalParkingPackage);
     this.totalDepositDriverPackage = Number(this.totalDebetPackage) - Number(this.totalKreditPackage);

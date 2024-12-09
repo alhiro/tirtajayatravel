@@ -86,7 +86,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}
+                {{ row.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
             <td>
@@ -115,7 +115,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}
+                {{ row.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
             <td>
@@ -127,7 +127,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.agent_commission | currency : 'Rp ' : true : '1.0-2' }}
+                {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
           </ng-template>
@@ -157,7 +157,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}
+                {{ row.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
             <td>
@@ -186,7 +186,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.tariff | currency : 'Rp ' : true : '1.0-2' }}
+                {{ row.tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
             <td>
@@ -198,7 +198,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.agent_commission | currency : 'Rp ' : true : '1.0-2' }}
+                {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
           </ng-template>
@@ -216,17 +216,17 @@
           <div class="card-body pt-0">
             <div class="mt-7">
               <b>Total Passengers</b>: {{ totalPassenger | number }}<br />
-              <b>Total Remaining Payment</b>: {{ totalTariff | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>Total Commission Driver</b>: {{ totalCommissionPassenger | currency : 'Rp ' : true : '1.0-2' }}
+              <b>Total Remaining Payment</b>: {{ totalTariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}<br />
+              <b>Total Commission Driver</b>: {{ totalCommissionPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}
             </div>
 
             <div class="mt-7">
               <b><u>DEBET</u></b
               ><br />
-              <b>Total Remaining Payment</b>: {{ totalTariff | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>Total Mandatory Deposit</b>: {{ mandatoryDeposit | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>Total Driver Deposit</b>: {{ depositDriver | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>Total Voluntary Deposit</b>: {{ voluntaryDeposit | currency : 'Rp ' : true : '1.0-2' }}
+              <b>Total Remaining Payment</b>: {{ totalTariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}<br />
+              <b>Total Mandatory Deposit</b>: {{ mandatoryDeposit | currency : 'Rp ' : 'symbol' : '1.0-2' }}<br />
+              <b>Total Driver Deposit</b>: {{ depositDriver | currency : 'Rp ' : 'symbol' : '1.0-2' }}<br />
+              <b>Total Voluntary Deposit</b>: {{ voluntaryDeposit | currency : 'Rp ' : 'symbol' : '1.0-2' }}
             </div>
           </div>
           <!--end::Card body-->
@@ -240,14 +240,15 @@
             <div class="mt-7">
               <b><u>KREDIT</u></b
               ><br />
-              <b>Total Commission Driver</b>: {{ totalCommissionPassengerKredit | currency : 'Rp ' : true : '1.0-2' }}
+              <b>Total Commission Driver</b>:
+              {{ totalCommissionPassengerKredit | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               <br />
-              <b>BBM</b>: {{ bbm | number }} L, ({{ bbmTotal | currency : 'Rp ' : true : '1.0-2' }})<br />
-              <b>Parking</b>: {{ totalParkingPassenger | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>In Toll</b>: {{ inToll | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>Out Toll</b>: {{ outToll | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>Extra</b>: {{ extra | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>Others</b>: {{ others | currency : 'Rp ' : true : '1.0-2' }}
+              <b>BBM</b>: {{ bbm | number }} L, ({{ bbmTotal | currency : 'Rp ' : 'symbol' : '1.0-2' }})<br />
+              <b>Parking</b>: {{ totalParkingPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}<br />
+              <b>In Toll</b>: {{ inToll | currency : 'Rp ' : 'symbol' : '1.0-2' }}<br />
+              <b>Out Toll</b>: {{ outToll | currency : 'Rp ' : 'symbol' : '1.0-2' }}<br />
+              <b>Extra</b>: {{ extra | currency : 'Rp ' : 'symbol' : '1.0-2' }}<br />
+              <b>Others</b>: {{ others | currency : 'Rp ' : 'symbol' : '1.0-2' }}
             </div>
           </div>
           <!--end::Card body-->
@@ -278,18 +279,18 @@
           <!--begin::Card body-->
           <div class="card-body pt-0">
             <div class="mt-0">
-              <b>TOTAL DEBET</b>: {{ totalDebetPassenger | currency : 'Rp ' : true : '1.0-2' }}<br />
-              <b>TOTAL KREDIT</b>: {{ totalKreditPassenger | currency : 'Rp ' : true : '1.0-2' }}<br />
+              <b>TOTAL DEBET</b>: {{ totalDebetPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}<br />
+              <b>TOTAL KREDIT</b>: {{ totalKreditPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}<br />
               <b>TOTAL DEPOSIT OFFICE</b>:
               <span [ngClass]="{ negative: totalDepositOffice < 0 }">
-                {{ totalDepositOffice | currency : 'Rp ' : true : '1.0-2' }}
+                {{ totalDepositOffice | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
               <br />
               <span class="fs-1"
                 ><b
                   >DRIVER DEPOSIT:
                   <span [ngClass]="{ negative: totalDepositDriverPassenger < 0 }">
-                    {{ totalDepositDriverPassenger | currency : 'Rp ' : true : '1.0-2' }}
+                    {{ totalDepositDriverPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                   </span>
                 </b></span
               >
@@ -411,7 +412,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.cost | currency : 'Rp ' : true : '1.0-2' }}
+                {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
             <td>
@@ -423,7 +424,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.agent_commission | currency : 'Rp ' : true : '1.0-2' }}
+                {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
           </ng-template>
@@ -482,7 +483,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.cost | currency : 'Rp ' : true : '1.0-2' }}
+                {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
             <td>
@@ -494,7 +495,7 @@
             </td>
             <td>
               <span class="text-gray-900 d-block">
-                {{ row.agent_commission | currency : 'Rp ' : true : '1.0-2' }}
+                {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
           </ng-template>
@@ -505,29 +506,29 @@
       }
 
       <div class="mt-7">
-        <b>Total Deposit</b>: {{ totalCost | currency : 'Rp ' : true : '1.0-2' }}<br />
-        <b>Total Commission Driver</b>: {{ totalCommissionPackage | currency : 'Rp ' : true : '1.0-2' }}
+        <b>Total Deposit</b>: {{ totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}<br />
+        <b>Total Commission Driver</b>: {{ totalCommissionPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}
       </div>
 
       <div class="mt-3">
         <b><u>DEBET</u></b
         ><br />
-        <b>Total Deposit</b>: {{ totalCost | currency : 'Rp ' : true : '1.0-2' }}
+        <b>Total Deposit</b>: {{ totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
       </div>
 
       <div class="mt-3">
         <b><u>KREDIT</u></b
         ><br />
-        <b>Total Commission Driver</b>: {{ totalCommissionPackage | currency : 'Rp ' : true : '1.0-2' }} <br />
-        <b>Parking</b>: {{ totalParkingPackage | currency : 'Rp ' : true : '1.0-2' }}
+        <b>Total Commission Driver</b>: {{ totalCommissionPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }} <br />
+        <b>Parking</b>: {{ totalParkingPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}
       </div>
 
       <div class="mt-3">
-        <b>TOTAL DEBET</b>: {{ totalDebetPackage | currency : 'Rp ' : true : '1.0-2' }}<br />
-        <b>TOTAL KREDIT</b>: {{ totalKreditPackage | currency : 'Rp ' : true : '1.0-2' }}<br />
+        <b>TOTAL DEBET</b>: {{ totalDebetPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}<br />
+        <b>TOTAL KREDIT</b>: {{ totalKreditPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}<br />
         <b>TOTAL DEPOSIT DRIVER</b>:
         <span [ngClass]="{ negative: totalDepositDriverPackage < 0 }">
-          {{ totalDepositDriverPackage | currency : 'Rp ' : true : '1.0-2' }}
+          {{ totalDepositDriverPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}
         </span>
       </div>
     </div>

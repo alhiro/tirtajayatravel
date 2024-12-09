@@ -885,7 +885,7 @@ export class BsdComponent implements OnInit, OnDestroy {
       console.log('open package');
       // Edit cost
       this.formCost.patchValue({
-        cost_id: val.cost_id,
+        cost_id: val.cost?.cost_id,
         go_send_id: val.go_send_id,
         parking_package: val.cost?.parking_package,
       });
@@ -905,7 +905,7 @@ export class BsdComponent implements OnInit, OnDestroy {
     if (this.type === 'Passenger') {
       console.log('open passenger');
       this.formCost.patchValue({
-        cost_id: val.cost_id,
+        cost_id: val.cost?.cost_id,
         go_send_id: val.go_send_id,
         parking_passenger: val.cost?.parking_passenger,
         bbm: val.cost?.bbm,
