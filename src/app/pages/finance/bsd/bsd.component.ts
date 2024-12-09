@@ -115,6 +115,7 @@ export class BsdComponent implements OnInit, OnDestroy {
     startDate: '',
     endDate: '',
     status: 'Done',
+    city: '',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -381,6 +382,7 @@ export class BsdComponent implements OnInit, OnDestroy {
         startDate: this.pagination.startDate,
         endDate: this.pagination.endDate,
         status: 'Done',
+        city: '',
       };
       this.dataListBSD(this.params);
     } else if (this.currentTab === 'List') {
@@ -391,6 +393,7 @@ export class BsdComponent implements OnInit, OnDestroy {
         startDate: this.pagination.startDate,
         endDate: this.pagination.endDate,
         status: 'List',
+        city: '',
       };
       this.dataListBSD(this.params);
     }
@@ -1001,6 +1004,7 @@ export class BsdComponent implements OnInit, OnDestroy {
                   startDate: this.params.startDate,
                   endDate: this.params.endDate,
                   status: 'List',
+                  city: '',
                 };
                 this.dataListBSD(this.params);
               }
