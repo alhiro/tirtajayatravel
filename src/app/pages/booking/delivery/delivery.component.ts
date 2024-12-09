@@ -103,7 +103,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     startDate: '',
     endDate: '',
     city: 'Malang',
-    status: '',
+    status: 'List',
   };
   public params = {
     limit: 10,
@@ -112,7 +112,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     startDate: '',
     endDate: '',
     city: 'Malang',
-    status: '',
+    status: 'List',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -339,7 +339,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
         startDate: this.pagination.startDate,
         endDate: this.pagination.endDate,
         city: this.currentTab,
-        status: '',
+        status: 'List',
       };
       this.dataListGosend(this.params);
     } else if (this.currentTab === 'Surabaya') {
@@ -350,7 +350,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
         startDate: this.pagination.startDate,
         endDate: this.pagination.endDate,
         city: this.currentTab,
-        status: '',
+        status: 'List',
       };
       this.dataListGosend(this.params);
     }

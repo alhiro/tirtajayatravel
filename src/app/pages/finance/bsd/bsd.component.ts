@@ -114,7 +114,7 @@ export class BsdComponent implements OnInit, OnDestroy {
     search: '',
     startDate: '',
     endDate: '',
-    status: 'bsdDone',
+    status: 'Done',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -129,6 +129,8 @@ export class BsdComponent implements OnInit, OnDestroy {
   public groupCheckedBsdList: any[] = [];
   public groupCheckedPackages: any[] = [];
   public groupCheckedPassengers: any[] = [];
+  public groupCheckedPackagesEdit: any[] = [];
+  public groupCheckedPassengersEdit: any[] = [];
 
   get fsp() {
     return this.formSP.controls;
@@ -378,7 +380,7 @@ export class BsdComponent implements OnInit, OnDestroy {
         search: this.pagination.search,
         startDate: this.pagination.startDate,
         endDate: this.pagination.endDate,
-        status: 'bsdDone',
+        status: 'Done',
       };
       this.dataListBSD(this.params);
     } else if (this.currentTab === 'List') {
@@ -388,7 +390,7 @@ export class BsdComponent implements OnInit, OnDestroy {
         search: this.pagination.search,
         startDate: this.pagination.startDate,
         endDate: this.pagination.endDate,
-        status: 'bsdList',
+        status: 'List',
       };
       this.dataListBSD(this.params);
     }
@@ -428,6 +430,7 @@ export class BsdComponent implements OnInit, OnDestroy {
   }
 
   private dataListBSD(params: ExtendedPaginationContext): void {
+    console.log(params);
     this.configuration.isLoading = true;
     this.packageService
       .listSP(params)
@@ -617,6 +620,21 @@ export class BsdComponent implements OnInit, OnDestroy {
 
   checkSpEditSurabaya() {}
 
+  checkPaymentEdit(item: PackageModel, event: Event) {
+    const target = event.target as HTMLInputElement;
+    item.check_payment = target.checked;
+
+    const formPackage = {
+      package_id: item.package_id,
+      check_sp: item.check_sp,
+      check_date_sp: item.check_date_sp,
+      check_payment: item.check_payment,
+    };
+    this.groupCheckedPackagesEdit = this.groupCheckedPackagesEdit.filter((pkg) => pkg.package_id !== item.package_id);
+    this.groupCheckedPackagesEdit.push(formPackage);
+    console.log(this.groupCheckedPackagesEdit);
+  }
+
   checkPayment(item: PackageModel, event: Event) {
     const target = event.target as HTMLInputElement;
     item.check_payment = target.checked;
@@ -652,6 +670,21 @@ export class BsdComponent implements OnInit, OnDestroy {
       this.groupCheckedPackages = dataPackages;
       console.log(this.groupCheckedPackages);
     }
+  }
+
+  checkSpEdit(item: PackageModel, event: Event) {
+    const target = event.target as HTMLInputElement;
+    item.check_sp = target.checked;
+
+    const formPackage = {
+      package_id: item.package_id,
+      check_sp: item.check_sp,
+      check_date_sp: item.check_date_sp,
+      check_payment: item.check_payment,
+    };
+    this.groupCheckedPackagesEdit = this.groupCheckedPackagesEdit.filter((pkg) => pkg.package_id !== item.package_id);
+    this.groupCheckedPackagesEdit.push(formPackage);
+    console.log(this.groupCheckedPackagesEdit);
   }
 
   checkSp(item: PackageModel, event: Event) {
@@ -697,6 +730,23 @@ export class BsdComponent implements OnInit, OnDestroy {
     }
   }
 
+  checkPaymentPassengerEdit(item: PassengerModel, event: Event) {
+    const target = event.target as HTMLInputElement;
+    item.check_payment = target.checked;
+
+    const formPassenger = {
+      passenger_id: item.passenger_id,
+      check_sp: item.check_sp,
+      check_date_sp: item.check_date_sp,
+      check_payment: item.check_payment,
+    };
+    this.groupCheckedPassengersEdit = this.groupCheckedPassengersEdit.filter(
+      (pkg) => pkg.passenger_id !== item.passenger_id
+    );
+    this.groupCheckedPassengersEdit.push(formPassenger);
+    console.log(this.groupCheckedPassengersEdit);
+  }
+
   checkPaymentPassenger(item: PassengerModel, event: Event) {
     const target = event.target as HTMLInputElement;
     item.check_payment = target.checked;
@@ -732,6 +782,23 @@ export class BsdComponent implements OnInit, OnDestroy {
       this.groupCheckedPassengers = dataPassengers;
       console.log(this.groupCheckedPassengers);
     }
+  }
+
+  checkSpPassengerEdit(item: PassengerModel, event: Event) {
+    const target = event.target as HTMLInputElement;
+    item.check_sp = target.checked;
+
+    const formPassenger = {
+      passenger_id: item.passenger_id,
+      check_sp: item.check_sp,
+      check_date_sp: item.check_date_sp,
+      check_payment: item.check_payment,
+    };
+    this.groupCheckedPassengersEdit = this.groupCheckedPassengersEdit.filter(
+      (pkg) => pkg.passenger_id !== item.passenger_id
+    );
+    this.groupCheckedPassengersEdit.push(formPassenger);
+    console.log(this.groupCheckedPassengersEdit);
   }
 
   checkSpPassenger(item: PassengerModel, event: Event) {
@@ -804,6 +871,8 @@ export class BsdComponent implements OnInit, OnDestroy {
     this.dataGosend = val;
     this.type = item;
     console.log(this.type);
+
+    this.groupCheckedPackagesEdit = [];
 
     // edit Sp
     this.dataGosend.bsd_date = new Date();
@@ -884,16 +953,22 @@ export class BsdComponent implements OnInit, OnDestroy {
   dataEditBSD() {
     if (this.type === 'Package') {
       console.log('Package');
-      console.log(this.formPackage.value);
-      // update package
-      this.updatePackage();
+      // console.log(this.formPackage.value);
+      // update package per item
+      // this.updatePackage();
+
+      // update package group
+      this.editBsdGroupPackage();
     }
 
     if (this.type === 'Passenger') {
       console.log('Passenger');
-      console.log(this.formPassenger.value);
+      // console.log(this.formPassenger.value);
       // update passenger
-      this.updatePassenger();
+      // this.updatePassenger();
+
+      // update package group
+      this.editBsdGroupPassenger();
     }
   }
 
@@ -925,7 +1000,7 @@ export class BsdComponent implements OnInit, OnDestroy {
                   search: term,
                   startDate: this.params.startDate,
                   endDate: this.params.endDate,
-                  status: 'bsdList',
+                  status: 'List',
                 };
                 this.dataListBSD(this.params);
               }
@@ -1086,6 +1161,38 @@ export class BsdComponent implements OnInit, OnDestroy {
     return this.packageService.editSPGroup(data);
   }
 
+  editBsdGroupPackage() {
+    console.log(this.groupCheckedPackagesEdit);
+
+    this.packageService
+      .patchGroup(this.groupCheckedPackagesEdit)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataListBSD(this.params);
+            await this.modalComponentBSD.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
   updatePackage() {
     // update package
     this.packageService
@@ -1093,6 +1200,38 @@ export class BsdComponent implements OnInit, OnDestroy {
       .pipe(
         finalize(() => {
           this.formCost.markAsPristine();
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        async (resp: any) => {
+          if (resp) {
+            this.snackbar.open(resp.message, '', {
+              panelClass: 'snackbar-success',
+              duration: 10000,
+            });
+
+            this.dataListBSD(this.params);
+            await this.modalComponentBSD.dismiss();
+          } else {
+            this.isLoading = false;
+          }
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
+          this.handlerResponseService.failedResponse(error);
+        }
+      );
+  }
+
+  editBsdGroupPassenger() {
+    console.log(this.groupCheckedPassengersEdit);
+
+    this.passengerService
+      .patchGroup(this.groupCheckedPassengersEdit)
+      .pipe(
+        finalize(() => {
           this.isLoading = false;
         })
       )

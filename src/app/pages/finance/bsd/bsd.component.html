@@ -79,7 +79,7 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.bsd_date | date : 'yyyy/MM/dd' }}
+                  {{ row.bsd_date | date : 'dd/MM/yyyy' }}
                 </span>
               </td>
               <td>
@@ -181,7 +181,7 @@
               </td>
               <td>
                 <span class="text-gray-900 d-block">
-                  {{ row.send_date | date : 'yyyy/MM/dd H:mm:ss a' : 'GMT' }}
+                  {{ row.send_date | date : 'dd/MM/yyyy H:mm:ss a' : 'GMT' }}
                 </span>
               </td>
               <!-- <td class="text-end">
@@ -670,7 +670,7 @@
                               class="form-check-input f-none"
                               type="checkbox"
                               [checked]="row.check_payment"
-                              (change)="checkPaymentPassenger(row, $event)"
+                              (change)="checkPaymentPassengerEdit(row, $event)"
                             />
                             } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)' ||
                             row.payment === 'Customer (Bulanan)') { ^ } @else { * }
@@ -689,7 +689,7 @@
                               class="form-check-input f-none"
                               type="checkbox"
                               [checked]="row.check_sp"
-                              (change)="checkSpPassenger(row, $event)"
+                              (change)="checkSpPassengerEdit(row, $event)"
                             />
                           </label>
                         </span>
@@ -751,7 +751,7 @@
                               class="form-check-input f-none"
                               type="checkbox"
                               [checked]="row.check_payment"
-                              (change)="checkPaymentPassenger(row, $event)"
+                              (change)="checkPaymentPassengerEdit(row, $event)"
                             />
                             } @else if (row.payment === 'Lunas (Transfer)' || row.payment === 'Lunas (Kantor)' ||
                             row.payment === 'Customer (Bulanan)') { ^ } @else { * }
@@ -770,7 +770,7 @@
                               class="form-check-input f-none"
                               type="checkbox"
                               [checked]="row.check_sp"
-                              (change)="checkSpPassenger(row, $event)"
+                              (change)="checkSpPassengerEdit(row, $event)"
                             />
                           </label>
                         </span>
@@ -930,7 +930,7 @@
                               class="form-check-input f-none"
                               type="checkbox"
                               [checked]="row.check_payment"
-                              (change)="checkPayment(row, $event)"
+                              (change)="checkPaymentEdit(row, $event)"
                             />
                             } @else if (row.status === 'Lunas (Transfer)' || row.status === 'Lunas (Kantor)') { ^ }
                             @else { * }
@@ -949,7 +949,7 @@
                               class="form-check-input f-none"
                               type="checkbox"
                               [checked]="row.check_sp"
-                              (change)="checkSp(row, $event)"
+                              (change)="checkSpEdit(row, $event)"
                             />
                           </label>
                         </span>

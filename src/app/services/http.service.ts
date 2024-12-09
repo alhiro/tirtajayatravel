@@ -245,6 +245,16 @@ export class HttpService {
     return this.commonApi.patch('/package/update', body) as Observable<any>;
   }
 
+  packagePatchGroup(params: any): Observable<any> {
+    const body = params.map((param: any) => ({
+      package_id: param.package_id,
+      check_payment: param.check_payment,
+      check_sp: param.check_sp,
+      check_date_sp: param.check_date_sp,
+    }));
+    return this.commonApi.patch('/package/update-group', body) as Observable<any>;
+  }
+
   packageCreate(param: PackageModel): Observable<any> {
     const body = {
       sender_id: param.sender_id,
@@ -670,6 +680,16 @@ export class HttpService {
       check_date_sp: param.check_date_sp,
     };
     return this.commonApi.patch('/passenger/update', body) as Observable<any>;
+  }
+
+  passengerPatchGroup(params: any): Observable<any> {
+    const body = params.map((param: any) => ({
+      passenger_id: param.passenger_id,
+      check_payment: param.check_payment,
+      check_sp: param.check_sp,
+      check_date_sp: param.check_date_sp,
+    }));
+    return this.commonApi.patch('/passenger/update-group', body) as Observable<any>;
   }
 
   passengerCreate(param: PassengerModel): Observable<any> {

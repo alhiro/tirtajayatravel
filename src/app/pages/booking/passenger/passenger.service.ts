@@ -69,6 +69,17 @@ export class PassengerService {
     );
   }
 
+  patchGroup(context: any): Observable<any> {
+    return this.httpService.passengerPatchGroup(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   create(context: PassengerModel): Observable<PassengerModel> {
     return this.httpService.passengerCreate(context).pipe(
       map((result) => {

@@ -80,6 +80,17 @@ export class PackageService {
     );
   }
 
+  patchGroup(context: any): Observable<any> {
+    return this.httpService.packagePatchGroup(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
   create(context: PackageModel): Observable<PackageModel> {
     return this.httpService.packageCreate(context).pipe(
       map((result) => {
