@@ -347,6 +347,7 @@ export class BsdComponent implements OnInit, OnDestroy {
 
     this.formCost = this.formBuilder.group({
       cost_id: [''],
+      car_id: [''],
       go_send_id: [''],
       parking_package: [0],
       parking_passenger: [0],
@@ -886,6 +887,7 @@ export class BsdComponent implements OnInit, OnDestroy {
       // Edit cost
       this.formCost.patchValue({
         cost_id: val.cost?.cost_id,
+        car_id: val.car?.car_id,
         go_send_id: val.go_send_id,
         parking_package: val.cost?.parking_package,
       });
@@ -906,6 +908,7 @@ export class BsdComponent implements OnInit, OnDestroy {
       console.log('open passenger');
       this.formCost.patchValue({
         cost_id: val.cost?.cost_id,
+        car_id: val.car?.car_id,
         go_send_id: val.go_send_id,
         parking_passenger: val.cost?.parking_passenger,
         bbm: val.cost?.bbm,
@@ -1035,6 +1038,10 @@ export class BsdComponent implements OnInit, OnDestroy {
   }
 
   async openModalAddSPGroup() {
+    console.log(this.groupCheckedBsdList);
+
+    this.formCost.patchValue({ car_id: this.groupCheckedBsdList[0].car.car_id });
+
     this.formSP.patchValue({
       car: this.groupCheckedBsdList[0].employee.name,
       car_no: this.groupCheckedBsdList[0].car.car_number,

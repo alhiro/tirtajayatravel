@@ -1,5 +1,6 @@
 export class CostModel {
   cost_id!: number;
+  car_id!: number;
   go_send_id!: number;
   parking_package!: number;
   parking_passenger!: number;
@@ -19,6 +20,7 @@ export class CostModel {
   setCost(_costs: unknown) {
     const costs = _costs as CostModel;
     this.cost_id = costs.cost_id;
+    this.car_id = costs.car_id;
     this.go_send_id = costs.go_send_id;
     this.parking_package = costs.parking_package;
     this.parking_passenger = costs.parking_passenger;

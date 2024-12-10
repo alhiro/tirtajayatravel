@@ -875,6 +875,7 @@ export class HttpService {
   costEdit(param: CostModel): Observable<any> {
     const body = {
       cost_id: param.cost_id,
+      car_id: param.car_id,
       go_send_id: param.go_send_id,
       parking_package: param.parking_package,
       parking_passenger: param.parking_passenger,
@@ -897,6 +898,7 @@ export class HttpService {
   costCreate(param: CostModel): Observable<any> {
     const body = {
       go_send_id: param.go_send_id,
+      car_id: param.car_id,
       parking_package: param.parking_package,
       parking_passenger: param.parking_passenger,
       bbm: param.bbm,

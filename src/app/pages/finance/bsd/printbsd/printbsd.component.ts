@@ -125,8 +125,12 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
     this.mandatoryDeposit = this.data?.cost?.mandatory_deposit;
     this.depositDriver = this.data?.cost?.driver_deposit;
     this.voluntaryDeposit = this.data?.cost?.voluntary_deposit;
-    this.oldFullKm = this.data?.cost?.old_km;
+    this.oldFullKm = this.data?.car?.costs[0]?.current_km;
     this.currentFullKm = Number(this.data?.cost?.current_km) - Number(this.data?.cost?.old_km);
+
+    this.bbm = this.data?.cost?.bbm;
+    this.bbmTotal = this.data?.cost?.bbm_cost;
+
     // Cost/L
     this.differentInKm = Number(this.currentFullKm) - Number(this.oldFullKm);
     this.averageKm = this.utils.calculateAverageKmPerLiter(this.oldFullKm, this.currentFullKm, this.bbm);
@@ -136,8 +140,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
     this.totalCommissionPassenger = this.utils.sumTotal(
       filterCommissionPassenger?.map((data: PassengerModel) => data.agent_commission)
     );
-    this.bbm = this.data?.cost?.bbm;
-    this.bbmTotal = this.data?.cost?.bbm_cost;
+
     this.totalParkingPassenger = this.data?.cost?.parking_passenger;
     this.inToll = this.data?.cost?.toll_in;
     this.outToll = this.data?.cost?.toll_out;
