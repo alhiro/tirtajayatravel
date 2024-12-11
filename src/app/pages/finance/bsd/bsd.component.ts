@@ -388,6 +388,7 @@ export class BsdComponent implements OnInit, OnDestroy {
       this.dataListBSD(this.params);
     } else if (this.currentTab === 'List') {
       this.groupCheckedBsdList = [];
+      this.selected.clear();
 
       this.params = {
         limit: this.pagination.limit,
@@ -472,7 +473,9 @@ export class BsdComponent implements OnInit, OnDestroy {
         // });
 
         this.dataLength = response.length;
-        this.data = response.data;
+
+        const dataBsd = response.data.filter((data: any) => data.packages.length !== 0 && data.passengers.length !== 0);
+        this.data = dataBsd;
 
         // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
         this.pagination.count = response.length;
