@@ -387,6 +387,8 @@ export class BsdComponent implements OnInit, OnDestroy {
       };
       this.dataListBSD(this.params);
     } else if (this.currentTab === 'List') {
+      this.groupCheckedBsdList = [];
+
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
@@ -1146,6 +1148,8 @@ export class BsdComponent implements OnInit, OnDestroy {
               panelClass: 'snackbar-success',
               duration: 10000,
             });
+
+            this.groupCheckedBsdList = [];
 
             this.dataListBSD(this.params);
             await this.modalComponentBSDGroup.dismiss();
