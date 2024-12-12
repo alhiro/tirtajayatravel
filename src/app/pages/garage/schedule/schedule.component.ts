@@ -135,7 +135,7 @@ export class ScheduleComponent implements OnInit, OnDestroy {
       this.fromDate = date;
     } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
       this.toDate = date;
-      datepicker.close(); // Close datepicker popup
+      // datepicker.close(); // Close datepicker popup
 
       // const valueBookFromDate = new Date(
       //   Date.UTC(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day, 0, 0)
@@ -151,18 +151,24 @@ export class ScheduleComponent implements OnInit, OnDestroy {
       this.startDate = startDate;
       this.endDate = endDate;
 
-      const params = {
-        limit: this.pagination.limit,
-        page: this.pagination.offset,
-        search: this.pagination.search,
-        startDate: this.startDate,
-        endDate: this.endDate,
-      };
-      console.log(params);
-      this.dataList(params);
+      // const params = {
+      //   limit: this.pagination.limit,
+      //   page: this.pagination.offset,
+      //   search: this.pagination.search,
+      //   startDate: this.startDate,
+      //   endDate: this.endDate,
+      // };
+      // console.log(params);
+      // this.dataList(params);
     } else {
       this.toDate = null;
       this.fromDate = date;
+
+      const valueBookFromDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      const valueBookToDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      const { startDate, endDate } = this.utils.rangeDate(valueBookFromDate, valueBookToDate);
+      this.startDate = startDate;
+      this.endDate = endDate;
     }
   }
 
@@ -170,6 +176,19 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     this.fromDate = this.calendar.getToday();
     this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 0);
     this.dataList(this.params);
+    datepicker.close();
+  }
+
+  printFilterSelected(datepicker: any) {
+    const params = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      startDate: this.startDate,
+      endDate: this.endDate,
+    };
+    console.log(params);
+    this.dataList(params);
     datepicker.close();
   }
 
@@ -239,6 +258,19 @@ export class ScheduleComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    const inputDate = new Date();
+    const { startDate, endDate } = this.utils.singleDate(inputDate);
+
+    this.startDate = startDate;
+    this.endDate = endDate;
+
+    this.params = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      startDate: this.startDate,
+      endDate: this.endDate,
+    };
     this.dataList(this.params);
 
     this.configuration.resizeColumn = true;

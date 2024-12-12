@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Utils } from '@app/@shared';
 import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { CashoutModel } from '../../cashout/models/cashout.model';
+import { PackageModel } from '@app/pages/booking/package/models/package.model';
 
 @Component({
   selector: 'app-printdeposit',
@@ -17,6 +18,9 @@ export class PrintdepositComponent implements OnInit {
   public data: any;
   public dataPackage: any;
   public dataCashout: any;
+  public detailDataPackage: any;
+  public dataPackageBaMlg: any;
+  public dataPackageMlg: any;
 
   public totalOperationalDeposit: any;
 
@@ -166,6 +170,29 @@ export class PrintdepositComponent implements OnInit {
     const dataCashoutSby = JSON.parse(getCashoutSby);
     const getDataComba: any = sessionStorage.getItem('data-comba');
     const dataComba = JSON.parse(getDataComba);
+
+    // Check ba & commission
+    const detailDataPackage = Array.from(
+      dataComba?.data
+        .flatMap((item: any) => item?.standalone_packages)
+        .reduce((map: any, packageItem: PackageModel) => {
+          if (!map.has(packageItem?.package_id)) {
+            map.set(packageItem?.package_id, packageItem);
+          }
+          return map;
+        }, new Map())
+        .values()
+    );
+    console.log(detailDataPackage);
+    this.detailDataPackage = detailDataPackage;
+
+    this.dataPackageMlg = this.detailDataPackage?.filter(
+      (data: PackageModel) => data.check_sp === true && data?.city_id === 1
+    );
+    this.dataPackageBaMlg = this.detailDataPackage?.filter(
+      (data: PackageModel) =>
+        data?.status === 'Bayar Tujuan (COD)' && data.check_payment === true && data?.city_id === 1
+    );
 
     this.dataPackage = dataComba?.data;
     this.dataCashout = dataComba?.datacashout;

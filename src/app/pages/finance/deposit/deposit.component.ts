@@ -10,6 +10,8 @@ import { CashoutService } from '../cashout/cashout.service';
 import { CashoutModel } from '../cashout/models/cashout.model';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { PackageModel } from '@app/pages/booking/package/models/package.model';
+import { ScheduleService } from '@app/pages/garage/schedule/schedule.service';
+import { ScheduleModel } from '@app/pages/garage/schedule/models/schedule.model';
 
 @Component({
   selector: 'app-deposit',
@@ -31,6 +33,8 @@ export class DepositComponent implements OnInit, OnDestroy {
   public dataDeposit: any;
   public dataPackage: any[] = [];
   public dataPassenger: any[] = [];
+
+  public dataGarage: any;
 
   // table package
   public totalCost = 0;
@@ -135,6 +139,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     private readonly cdr: ChangeDetectorRef,
     private packageService: PackageService,
     private cashoutService: CashoutService,
+    private scheduleService: ScheduleService,
     private handlerResponseService: HandlerResponseService,
     private utils: Utils
   ) {
@@ -181,7 +186,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     this.startDate = startDate;
     this.endDate = endDate;
 
-    forkJoin([this.dataListCashout()]).subscribe({
+    forkJoin([this.dataListGarage(), this.dataListCashout()]).subscribe({
       next: () => {
         console.log('All functions completed');
         this.dataListDeposit();
@@ -214,7 +219,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     this.startDate = startDate;
     this.endDate = endDate;
 
-    forkJoin([this.dataListCashout()]).subscribe({
+    forkJoin([this.dataListGarage(), this.dataListCashout()]).subscribe({
       next: () => {
         console.log('All functions completed');
         this.dataListDeposit();
@@ -227,6 +232,7 @@ export class DepositComponent implements OnInit, OnDestroy {
 
   printDeposit() {
     sessionStorage.setItem('data-deposit', JSON.stringify(this.dataDeposit));
+    sessionStorage.setItem('data-garage', JSON.stringify(this.dataGarage));
     const commba = {
       totalDepositDriverPackage: this.totalDepositDriverPackage,
       totalDepositDriverPassenger: this.totalDepositDriverPassenger,
@@ -251,6 +257,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       totalCashOutSurabayaDaily: this.totalCashOutSurabayaDaily,
       totalDepositSurabayaDaily: this.totalDepositSurabayaDaily,
       totalDepositDaily: this.totalDepositDaily,
+      totalcashoutOnderdilService: this.cashoutOnderdilService,
     };
     sessionStorage.setItem('data-comba', JSON.stringify(commba));
     window.open('#/finance/deposit/daily/printdaily', '_blank');
@@ -313,38 +320,24 @@ export class DepositComponent implements OnInit, OnDestroy {
     );
   }
 
-  private dataListPackageBa(): Observable<void> {
+  private dataListGarage(): Observable<void> {
     const params = {
-      limit: '',
-      page: '',
-      search: 'listba',
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
       startDate: this.startDate,
       endDate: this.endDate,
-      city: '',
-      status: 'Delivery',
-      username: '',
     };
 
-    return this.packageService.listCom(params).pipe(
+    return this.scheduleService.list(params).pipe(
       takeUntil(this.ngUnsubscribe),
       map((response: any) => {
-        const dataBaMlg = response.data?.filter(
-          (data: PackageModel) =>
-            data.status === 'Bayar Tujuan (COD)' && data.check_payment === true && data.city_id === 1
-        );
-        this.totalPackageCodMalang = this.utils.sumTotal(dataBaMlg?.map((data: PackageModel) => data.cost));
-        console.log(this.totalPackageCodMalang);
-        const dataBaSby = response.data?.filter(
-          (data: PackageModel) =>
-            data.status === 'Bayar Tujuan (COD)' && data.check_payment === true && data.city_id === 2
-        );
-        this.totalPackageCodSurabaya = this.utils.sumTotal(dataBaSby?.map((data: PackageModel) => data.cost));
-        console.log(this.totalPackageCodSurabaya);
-
+        this.dataGarage = response.data;
+        this.cashoutOnderdilService = this.utils.sumTotal(this.dataGarage?.map((data: ScheduleModel) => data.cost));
         this.configuration.horizontalScroll = true;
       }),
       catchError((err) => {
-        console.error('Error in dataListPackageBa:', err);
+        console.error('Error in data list schedule garage:', err);
         return of(); // Emit an empty observable to prevent errors from propagating
       })
     );
@@ -396,7 +389,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       search: '',
       startDate: this.startDate,
       endDate: this.endDate,
-      city: this.city_id,
+      city: '',
       status: 'Delivery',
     };
     console.log(params);
@@ -482,7 +475,7 @@ export class DepositComponent implements OnInit, OnDestroy {
 
         // Deposit
         // deposit daily
-        this.dataDeposit = data;
+        this.dataDeposit = data.filter((data: PackageModel) => data.go_send_id !== null);
 
         this.totalDepositDriverPackage = this.utils.sumTotal(data?.map((data: any) => data.package?.total_cost));
         this.totalDepositDriverPassenger = this.utils.sumTotal(data?.map((data: any) => data.passenger?.total_tariff));
@@ -523,7 +516,8 @@ export class DepositComponent implements OnInit, OnDestroy {
           Number(this.totalPackagePaidMalang) +
           Number(this.totalPackageCodSurabaya);
 
-        this.totalCashOutMalangDaily = Number(this.totalCostMalang) + Number(this.cashoutCourierSurabaya);
+        this.totalCashOutMalangDaily =
+          Number(this.totalCostMalang) + Number(this.cashoutCourierSurabaya) + Number(this.cashoutOnderdilService);
         this.totalDepositMalangDaily = Number(this.totalCashInMalangDaily) - Number(this.totalCashOutMalangDaily);
 
         this.totalCashInSurabayaDaily =
@@ -617,6 +611,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
 
     sessionStorage.removeItem('data-deposit');
+    sessionStorage.removeItem('data-garage');
     sessionStorage.removeItem('data-deposit-sby');
     sessionStorage.removeItem('data-cashout-sby');
     sessionStorage.removeItem('data-comba');

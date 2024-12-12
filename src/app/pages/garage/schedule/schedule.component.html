@@ -80,6 +80,14 @@
             <button class="btn btn-primary btn-sm m-2 p-1 px-4 float-start" (click)="resetFilterDate(datepicker)">
               Reset
             </button>
+
+            <button
+              class="btn btn-info btn-sm m-2 p-1 px-4 float-end"
+              (click)="printFilterSelected(datepicker)"
+              translate
+            >
+              Filter
+            </button>
           </ng-template>
         </div>
       </div>
@@ -143,10 +151,15 @@
                 <div
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
                   (click)="openModalEdit(row)"
+                  [ngbTooltip]="'Edit' | translate"
                 >
                   <app-keenicon name="pencil" class="fs-3 text-primary"></app-keenicon>
                 </div>
-                <div class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm" (click)="openModalCancel(row)">
+                <div
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+                  (click)="openModalCancel(row)"
+                  [ngbTooltip]="'Cancel' | translate"
+                >
                   <app-keenicon name="archive" class="fs-3 text-warning"></app-keenicon>
                 </div>
               </td>

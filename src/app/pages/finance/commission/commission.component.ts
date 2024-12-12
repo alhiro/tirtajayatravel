@@ -188,10 +188,10 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
-      search: this.pagination.search,
-      startDate: this.pagination.startDate,
-      endDate: this.pagination.endDate,
-      city: getCity,
+      search: this.city_id === 1 ? this.pagination.search : 'Bayar Tujuan (COD)',
+      startDate: this.startDate,
+      endDate: this.endDate,
+      city: this.city_id === 1 ? 'Surabaya' : 'Malang',
       status: this.pagination.status,
     };
 
@@ -397,18 +397,13 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.startDate = startDate;
     this.endDate = endDate;
 
-    this.pagination.search = this.city_id === 1 ? this.pagination.search : 'Bayar Tujuan (COD)';
-    this.pagination.startDate = this.startDate;
-    this.pagination.endDate = this.endDate;
-    this.pagination.city = this.city_id === 1 ? 'Surabaya' : 'Malang';
-
     this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
-      search: this.pagination.search,
-      startDate: this.pagination.startDate,
-      endDate: this.pagination.endDate,
-      city: this.pagination.city,
+      search: this.city_id === 1 ? this.pagination.search : 'Bayar Tujuan (COD)',
+      startDate: this.startDate,
+      endDate: this.endDate,
+      city: this.city_id === 1 ? 'Surabaya' : 'Malang',
       status: this.pagination.status,
     };
     this.dataList(this.params);
@@ -498,9 +493,9 @@ export class CommissionComponent implements OnInit, OnDestroy {
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
-        search: this.pagination.search,
-        startDate: this.pagination.startDate,
-        endDate: this.pagination.endDate,
+        search: this.city_id === 1 ? this.pagination.search : 'Bayar Tujuan (COD)',
+        startDate: this.startDate,
+        endDate: this.endDate,
         city: this.currentTab,
         status: this.pagination.status,
       };
@@ -509,9 +504,9 @@ export class CommissionComponent implements OnInit, OnDestroy {
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
-        search: this.pagination.search,
-        startDate: this.pagination.startDate,
-        endDate: this.pagination.endDate,
+        search: this.city_id === 1 ? this.pagination.search : 'Bayar Tujuan (COD)',
+        startDate: this.startDate,
+        endDate: this.endDate,
         city: this.currentTab,
         status: this.pagination.status,
       };
@@ -539,9 +534,9 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
-      search: this.pagination.search,
-      startDate: this.pagination.startDate,
-      endDate: this.pagination.endDate,
+      search: this.city_id === 1 ? this.pagination.search : 'Bayar Tujuan (COD)',
+      startDate: this.startDate,
+      endDate: this.endDate,
       city: this.currentTab,
       status: this.pagination.status,
     };
@@ -586,8 +581,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
                   limit: this.pagination.limit,
                   page: this.pagination.offset,
                   search: term,
-                  startDate: this.pagination.startDate,
-                  endDate: this.pagination.endDate,
+                  startDate: this.startDate,
+                  endDate: this.endDate,
                   city: this.currentTab,
                   status: this.pagination.status,
                 };
