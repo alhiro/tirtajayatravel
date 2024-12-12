@@ -474,7 +474,7 @@ export class BsdComponent implements OnInit, OnDestroy {
 
         this.dataLength = response.length;
 
-        const dataBsd = response.data.filter((data: any) => data.packages.length !== 0 && data.passengers.length !== 0);
+        const dataBsd = response.data.filter((data: any) => data.packages.length !== 0 || data.passengers.length !== 0);
         this.data = dataBsd;
 
         // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
@@ -1153,6 +1153,7 @@ export class BsdComponent implements OnInit, OnDestroy {
             });
 
             this.groupCheckedBsdList = [];
+            this.selected.clear();
 
             this.dataListBSD(this.params);
             await this.modalComponentBSDGroup.dismiss();
