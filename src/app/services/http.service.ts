@@ -454,6 +454,10 @@ export class HttpService {
     ) as Observable<any>;
   }
 
+  SpGet(param: GoSendModel): Observable<any> {
+    return this.commonApi.get('/go-send/get?go_send_id=' + param.go_send_id) as Observable<any>;
+  }
+
   SpList(param: ExtendedPaginationContext): Observable<any> {
     return this.commonApi.get(
       '/go-send/list?limit=' +

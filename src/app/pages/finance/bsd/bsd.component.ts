@@ -994,27 +994,36 @@ export class BsdComponent implements OnInit, OnDestroy {
       debounceTime(1000),
       distinctUntilChanged(),
       switchMap((term) =>
-        this.deliveryService
-          .driver({
+        this.packageService
+          .listSP({
             limit: this.params.limit,
             page: this.params.page,
             search: term,
             startDate: this.params.startDate,
             endDate: this.params.endDate,
+            status: 'List',
+            city: '',
           })
           .pipe(
             map((response: any) => {
               if (response) {
-                this.params = {
-                  limit: this.params.limit,
-                  page: this.params.page,
-                  search: term,
-                  startDate: this.params.startDate,
-                  endDate: this.params.endDate,
-                  status: 'List',
-                  city: '',
-                };
-                this.dataListBSD(this.params);
+                this.dataLength = response.length;
+
+                const dataBsd = response.data.filter(
+                  (data: any) => data.packages.length !== 0 || data.passengers.length !== 0
+                );
+                this.data = dataBsd;
+
+                // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
+                this.pagination.count = response.length;
+                this.pagination = { ...this.pagination };
+
+                this.configuration.isLoading = false;
+
+                response?.length > 0
+                  ? (this.configuration.horizontalScroll = true)
+                  : (this.configuration.horizontalScroll = false);
+                this.cdr.detectChanges();
               }
             }),
             catchError((err) => {
