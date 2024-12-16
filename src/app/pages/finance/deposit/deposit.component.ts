@@ -288,6 +288,74 @@ export class DepositComponent implements OnInit, OnDestroy {
     window.open('#/finance/bsd/tirta-jaya/printbsd', '_blank');
   }
 
+  printFilterDatePaymentMlg() {
+    let getCity = '';
+    if (this.levelrule === 2 || this.levelrule === 3) {
+      getCity = 'Malang';
+    } else if (this.levelrule === 8) {
+      getCity = '';
+    }
+
+    const dateRange = {
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: getCity,
+      status: 'Lunas (Kantor)',
+    };
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    window.open('#/booking/package/transaction/printlist', '_blank');
+  }
+
+  printFilterDatePaymentSby() {
+    let getCity = '';
+    if (this.levelrule === 2 || this.levelrule === 3) {
+      getCity = 'Surabaya';
+    } else if (this.levelrule === 8) {
+      getCity = '';
+    }
+
+    const dateRange = {
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: getCity,
+      status: 'Lunas (Kantor)',
+    };
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    window.open('#/booking/package/transaction/printlist', '_blank');
+  }
+
+  printFilterBaMlg() {
+    const paramRange = {
+      limit: 10,
+      page: 1,
+      search: this.pagination.search,
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: 'Malang',
+      status: 'Delivery',
+      username: '',
+    };
+    console.log(paramRange);
+    sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
+    window.open('#/finance/commission/package/printcommission', '_blank');
+  }
+
+  printFilterBaSby() {
+    const paramRange = {
+      limit: 10,
+      page: 1,
+      search: this.pagination.search,
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: 'Surabaya',
+      status: 'Delivery',
+      username: '',
+    };
+    console.log(paramRange);
+    sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
+    window.open('#/finance/commission/package/printcommission', '_blank');
+  }
+
   private dataListCashout(): Observable<void> {
     const params = {
       limit: '',

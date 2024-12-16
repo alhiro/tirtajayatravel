@@ -161,7 +161,17 @@
             <tr>
               <td>{{ totalPackagePaidMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
-                <a><b>Detail</b></a>
+                <a
+                  (click)="printFilterDatePaymentMlg()"
+                  class="cursor-pointer text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Detail Lunas Malang"
+                >
+                  <b style="text-align: center">Detail</b>
+                </a>
               </td>
             </tr>
           </tbody>
@@ -179,7 +189,17 @@
             <tr>
               <td>{{ totalPackagePaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
-                <a><b>Detail</b></a>
+                <a
+                  (click)="printFilterDatePaymentSby()"
+                  class="cursor-pointer text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Detail Lunas Surabaya"
+                >
+                  <b style="text-align: center">Detail</b>
+                </a>
               </td>
             </tr>
           </tbody>
@@ -197,7 +217,17 @@
             <tr>
               <td>{{ totalPackageCodSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
-                <a><b>Detail</b></a>
+                <a
+                  (click)="printFilterBaSby()"
+                  class="cursor-pointer text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Detail BA Malang"
+                >
+                  <b style="text-align: center">Detail</b>
+                </a>
               </td>
             </tr>
           </tbody>
@@ -214,7 +244,17 @@
             <tr>
               <td>{{ totalPackageCodMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
-                <a><b>Detail</b></a>
+                <a
+                  (click)="printFilterBaMlg()"
+                  class="cursor-pointer text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Detail BA Surabaya"
+                >
+                  <b style="text-align: center">Detail</b>
+                </a>
               </td>
             </tr>
           </tbody>
