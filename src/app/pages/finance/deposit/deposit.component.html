@@ -271,7 +271,17 @@
             <tr>
               <td>{{ totalPassengerPaidMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
-                <a><b>Detail</b></a>
+                <a
+                  (click)="printPassengerPaidMlg()"
+                  class="cursor-pointer text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Penumpang Lunas Malang"
+                >
+                  <b style="text-align: center">Detail</b>
+                </a>
               </td>
             </tr>
           </tbody>
@@ -288,7 +298,17 @@
             <tr>
               <td>{{ totalPassengerPaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
-                <a><b>Detail</b></a>
+                <a
+                  (click)="printPassengerPaidSby()"
+                  class="cursor-pointer text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Penumpang Lunas Surabaya"
+                >
+                  <b style="text-align: center">Detail</b>
+                </a>
               </td>
             </tr>
           </tbody>
@@ -305,7 +325,17 @@
             <tr>
               <td>{{ piutangTransition | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
-                <a><b>Detail</b></a>
+                <a
+                  (click)="printPiutangTransition()"
+                  class="cursor-pointer text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Piutang Transition"
+                >
+                  <b style="text-align: center">Detail</b>
+                </a>
               </td>
             </tr>
           </tbody>
@@ -400,7 +430,18 @@
             <tr>
               <td>{{ cashoutCourierSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
-                <a><b>Detail</b></a>
+                <a
+                  (click)="printFilterBaSby()"
+                  class="cursor-pointer text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Detail 
+                  Komisi Surabaya"
+                >
+                  <b style="text-align: center">Detail</b>
+                </a>
               </td>
             </tr>
           </tbody>
@@ -417,7 +458,18 @@
             <tr>
               <td>{{ cashoutCourierMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
-                <a><b>Detail</b></a>
+                <a
+                  (click)="printFilterBaMlg()"
+                  class="cursor-pointer text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Detail 
+                  Komisi Malang"
+                >
+                  <b style="text-align: center">Detail</b>
+                </a>
               </td>
             </tr>
           </tbody>
@@ -435,14 +487,34 @@
               <td>Pembayaran Via Transfer</td>
               <td>{{ totalReminderPaymentTransfer | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
-                <a><b>Detail</b></a>
+                <a
+                  (click)="printViaTransfer()"
+                  class="cursor-pointer text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Detail Via Transfer"
+                >
+                  <b style="text-align: center">Detail</b>
+                </a>
               </td>
             </tr>
             <tr style="background-color: #ffb8b8">
               <td>Kustomer Bulanan</td>
               <td>{{ totalPaymentMonthly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
-                <a><b>Detail</b></a>
+                <a
+                  (click)="printMonthly()"
+                  class="cursor-pointer text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Detail Customer (Bulanan)"
+                >
+                  <b style="text-align: center">Detail</b>
+                </a>
               </td>
             </tr>
           </tbody>

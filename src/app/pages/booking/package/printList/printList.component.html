@@ -11,8 +11,10 @@
                   @if (lastSegment === 'printbayartujuan') { @if (city === 'Malang') { LIST PAKET BAYAR TUJUAN (BA)
                   MALANG } @else if (city === 'Surabaya') { LIST PAKET BAYAR TUJUAN (BA) SURABAYA } @else { LIST PAKET
                   BAYAR TUJUAN (BA) MALANG & SURABAYA } } @else { @if (city === 'Malang') { @if (status === 'Lunas
-                  (Kantor)') { LIST LUNAS PAKET MALANG } @else { LIST SEMUA PAKET MALANG } } @else { @if (status ===
-                  'Lunas (Kantor)') { LIST LUNAS PAKET SURABAYA } @else { LIST SEMUA PAKET SURABAYA } } }
+                  (Kantor)') { LIST LUNAS PAKET MALANG } @else { LIST SEMUA PAKET MALANG } } @else if (city ===
+                  'Surabaya') { @if (status === 'Lunas (Kantor)') { LIST LUNAS PAKET SURABAYA } @else { LIST SEMUA PAKET
+                  SURABAYA } } @else { @if (status === 'Customer (Bulanan)') { LIST CUSTOMER (BULANAN) } @else if
+                  (status === 'Lunas (Transfer)') { LIST LUNAS (TRANSFER) } } }
                 </span>
               </h3>
               @if (startDate && endDate) {

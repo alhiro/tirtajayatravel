@@ -289,17 +289,10 @@ export class DepositComponent implements OnInit, OnDestroy {
   }
 
   printFilterDatePaymentMlg() {
-    let getCity = '';
-    if (this.levelrule === 2 || this.levelrule === 3) {
-      getCity = 'Malang';
-    } else if (this.levelrule === 8) {
-      getCity = '';
-    }
-
     const dateRange = {
       fromDate: this.startDate,
       toDate: this.endDate,
-      city: getCity,
+      city: 'Malang',
       status: 'Lunas (Kantor)',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
@@ -307,17 +300,10 @@ export class DepositComponent implements OnInit, OnDestroy {
   }
 
   printFilterDatePaymentSby() {
-    let getCity = '';
-    if (this.levelrule === 2 || this.levelrule === 3) {
-      getCity = 'Surabaya';
-    } else if (this.levelrule === 8) {
-      getCity = '';
-    }
-
     const dateRange = {
       fromDate: this.startDate,
       toDate: this.endDate,
-      city: getCity,
+      city: 'Surabaya',
       status: 'Lunas (Kantor)',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
@@ -354,6 +340,54 @@ export class DepositComponent implements OnInit, OnDestroy {
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
     window.open('#/finance/commission/package/printcommission', '_blank');
+  }
+
+  printPassengerPaidMlg() {
+    const dateRange = {
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: 'Malang',
+      status: '',
+    };
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    window.open('#/booking/passenger/transaction/printlist', '_blank');
+  }
+
+  printPassengerPaidSby() {
+    const dateRange = {
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: 'Surabaya',
+      status: '',
+    };
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    window.open('#/booking/passenger/transaction/printlist', '_blank');
+  }
+
+  printPiutangTransition() {
+    window.open('#/booking/package/transaction/printlist', '_blank');
+  }
+
+  printViaTransfer() {
+    const dateRange = {
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: '',
+      status: 'Lunas (Transfer)',
+    };
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    window.open('#/booking/package/transaction/printlist', '_blank');
+  }
+
+  printMonthly() {
+    const dateRange = {
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: '',
+      status: 'Customer (Bulanan)',
+    };
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    window.open('#/booking/package/transaction/printlist', '_blank');
   }
 
   private dataListCashout(): Observable<void> {
@@ -573,10 +607,12 @@ export class DepositComponent implements OnInit, OnDestroy {
         //   0
         // );
 
-        this.totalReminderPaymentTransfer = this.utils.sumTotal(
-          data?.map((data: any) => data.package_transfer?.total_transfer)
+        const dataPaymentTransfer = this.dataPackage?.filter(
+          (data: PackageModel) => data?.status === 'Lunas (Transfer)'
         );
-        this.totalPaymentMonthly = this.utils.sumTotal(data?.map((data: any) => data.package_transfer?.total_bulanan));
+        this.totalReminderPaymentTransfer = this.utils.sumTotal(dataPaymentTransfer?.map((data: any) => data?.cost));
+        const dataMonthly = this.dataPackage?.filter((data: PackageModel) => data?.status === 'Customer (Bulanan)');
+        this.totalPaymentMonthly = this.utils.sumTotal(dataMonthly?.map((data: any) => data?.cost));
 
         this.totalCashInMalangDaily =
           Number(this.totalDepositDriverPackage) +
