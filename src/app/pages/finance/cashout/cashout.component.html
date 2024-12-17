@@ -76,6 +76,15 @@
             </button>
 
             <button
+              class="btn btn-primary btn-sm m-2 p-1 px-4 float-end"
+              [disabled]="configuration.isLoading"
+              (click)="printSelected(datepicker)"
+              translate
+            >
+              Print
+            </button>
+
+            <button
               class="btn btn-warning btn-sm m-2 p-1 px-4 float-end"
               [disabled]="configuration.isLoading"
               (click)="printFilterSelected(datepicker)"
@@ -116,7 +125,7 @@
                   [ngbTooltip]="'Edit Cashout' | translate"
                   (click)="openModalEdit(row)"
                 >
-                  {{ row.date | date : 'yyyy/MM/dd' }}
+                  {{ row.date | date : 'dd/MM/yyyy' }}
                 </span>
               </td>
               <td>
@@ -129,7 +138,7 @@
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.createdAt | date : 'yyyy/MM/dd hh:mm:ss' }}</span>
+                <span class="text-gray-900 d-block">{{ row.createdAt | date : 'dd/MM/yyyy hh:mm:ss' }}</span>
               </td>
               <td class="text-end">
                 <a
@@ -187,7 +196,7 @@
               </td> -->
               <td>
                 <span class="text-gray-900 fw-bolder text-hover-primary fs-6" (click)="openModalEdit(row)">
-                  {{ row.date | date : 'yyyy/MM/dd' }}
+                  {{ row.date | date : 'dd/MM/yyyy' }}
                 </span>
               </td>
               <td>
@@ -200,7 +209,7 @@
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.createdAt | date : 'yyyy/MM/dd hh:mm:ss' }}</span>
+                <span class="text-gray-900 d-block">{{ row.createdAt | date : 'dd/MM/yyyy hh:mm:ss' }}</span>
               </td>
               <td class="text-end">
                 <a

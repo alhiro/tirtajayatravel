@@ -1,0 +1,158 @@
+<div class="p-3">
+  <div class="m-0">
+    <div class="card-header border-0 pt-5">
+      <div class="card-toolbar">
+        <div class="col">
+          <!-- begin::Menu -->
+          <div class="menu-item">
+            <div class="menu-content px-0 text-center">
+              <h3 class="card-title align-items-start flex-column mb-2">
+                <span class="card-label fw-bolder fs-2">
+                  @if (lastSegment === 'printonderdil') { LIST PENGELUARAN ONDERDIL & SERVICE } @else { @if (city ===
+                  'Surabaya') { LIST OPERATIONAL PENGELUARAN SURABAYA } @else { LIST OPERATIONAL PENGELUARAN MALANG } }
+                </span>
+              </h3>
+              @if (startDate && endDate) {
+              <span class="card-label fw-bolder fs-5">
+                HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }}
+              </span>
+              }
+            </div>
+          </div>
+          <!-- end::Menu -->
+        </div>
+      </div>
+    </div>
+    <!-- end::Header -->
+    <!-- begin::Body -->
+    <div class="card-body py-3">
+      @if (lastSegment === 'printonderdil') {
+      <!-- begin::Table container -->
+      <div class="table-responsive table-custom">
+        <!-- begin::Table -->
+        <ngx-table
+          #table
+          [configuration]="configuration"
+          [data]="dataOnderdil"
+          [columns]="columnsOnderdil"
+          [pagination]="pagination"
+          tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+        >
+          <ng-template let-row let-index="index" ngx-table-row>
+            <td>
+              <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.name }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.service_date | date : 'dd/MM/yyyy' : 'GMT' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.service }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.description }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.createdAt | date : 'dd/MM/yyyy H:mm:ss' : 'GMT' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.created_by }}
+              </span>
+            </td>
+          </ng-template>
+        </ngx-table>
+        <!-- end::Table -->
+      </div>
+      <!-- end::Table container -->
+
+      <div class="mt-5 mb-7">
+        <span
+          ><b>TOTAL LIST PENGELUARAN: {{ totalOnderdil | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
+        ><br />
+      </div>
+      <div class="mt-1">
+        @for (admin of groupAdminOnderdil; track admin) {
+        <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+        <br />
+        }
+      </div>
+      } @else {
+      <!-- begin::Table container -->
+      <div class="table-responsive table-custom">
+        <!-- begin::Table -->
+        <ngx-table
+          #table
+          [configuration]="configuration"
+          [data]="data"
+          [columns]="columns"
+          [pagination]="pagination"
+          tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+        >
+          <ng-template let-row let-index="index" ngx-table-row>
+            <td>
+              <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.date | date : 'dd/MM/yyyy H:mm:ss' : 'GMT' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.type }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.fee | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.description }}
+              </span>
+            </td>
+            <td>
+              <span class="text-gray-900 d-block">
+                {{ row.created_by }}
+              </span>
+            </td>
+          </ng-template>
+        </ngx-table>
+        <!-- end::Table -->
+      </div>
+      <!-- end::Table container -->
+
+      <div class="mt-5 mb-7">
+        <span
+          ><b>TOTAL LIST PENGELUARAN: {{ totalCashout | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
+        ><br />
+      </div>
+      <div class="mt-1">
+        @for (admin of groupAdminCommission; track admin) {
+        <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+        <br />
+        }
+      </div>
+      }
+    </div>
+  </div>
+</div>

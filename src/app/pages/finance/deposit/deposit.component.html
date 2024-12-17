@@ -36,7 +36,7 @@
 
       <!--begin::Card body-->
       <div class="card-body pt-0">
-        @if (city_id === 1) {
+        @if (city_id === 1 || levelrule === 8) {
         <!-- begin::Table container -->
         <div class="table-responsive">
           <!-- begin::Table -->
@@ -206,7 +206,7 @@
         </table>
         <hr />
 
-        @if (city_id === 1) {
+        @if (city_id === 1 || levelrule === 8) {
         <b>LIST PAKET BAYAR TUJUAN MALANG</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -260,7 +260,7 @@
           </tbody>
         </table>
 
-        @if (city_id === 1) {
+        @if (city_id === 1 || levelrule === 8) {
         <b>PENUMPANG LUNAS MALANG</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -314,7 +314,7 @@
           </tbody>
         </table>
 
-        @if (city_id === 1) {
+        @if (city_id === 1 || levelrule === 8) {
         <b>RECEIVED PIUTANG TRANSITION</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -366,7 +366,7 @@
 
       <!--begin::Card body-->
       <div class="card-body pt-0">
-        @if (city_id === 1) {
+        @if (city_id === 1 || levelrule === 8) {
         <b>LIST PENGELUARAN OPERASIONAL MALANG</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -377,7 +377,17 @@
             <tr>
               <td>{{ totalCostMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
-                <a><b>Detail</b></a>
+                <a
+                  (click)="printCashoutMlg()"
+                  class="cursor-pointer text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Detail Pengeluaran Malang"
+                >
+                  <b style="text-align: center">Detail</b>
+                </a>
               </td>
             </tr>
           </tbody>
@@ -396,14 +406,24 @@
             <tr>
               <td>{{ totalCostSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
-                <a><b>Detail</b></a>
+                <a
+                  (click)="printCashoutSby()"
+                  class="cursor-pointer text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Detail Pengeluaran Surabaya"
+                >
+                  <b style="text-align: center">Detail</b>
+                </a>
               </td>
             </tr>
           </tbody>
         </table>
         <hr />
 
-        @if (city_id === 1) {
+        @if (city_id === 1 || levelrule === 8) {
         <b>LIST PENGELUARAN ONDERDIL &amp; SERVICE</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -414,7 +434,17 @@
             <tr>
               <td>{{ cashoutOnderdilService | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
               <td style="text-align: center">
-                <a><b>Detail</b></a>
+                <a
+                  (click)="printOnderdil()"
+                  class="cursor-pointer text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Detail Pengeluaran Onderdil & Service"
+                >
+                  <b style="text-align: center">Detail</b>
+                </a>
               </td>
             </tr>
           </tbody>
@@ -475,7 +505,7 @@
           </tbody>
         </table>
 
-        @if (city_id === 1) {
+        @if (city_id === 1 || levelrule === 8) {
         <b>PEMBAYARAN YANG AKAN MASUK</b>
         <table class="table table-striped table-bordered table-hover">
           <tbody>
@@ -523,7 +553,7 @@
 
         <hr />
 
-        @if (city_id === 1) {
+        @if (city_id === 1 || levelrule === 8) {
         <div class="activity-stream">
           <div class="stream">
             <h2>Setoran Pendapatan Harian Malang:</h2>
@@ -609,7 +639,7 @@
           </div>
         </div>
 
-        @if (city_id === 1) {
+        @if (city_id === 1 || levelrule === 8) {
         <div class="activity-stream">
           <div class="stream">
             <h2>Setoran Pendapatan Harian :</h2>

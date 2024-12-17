@@ -390,6 +390,45 @@ export class DepositComponent implements OnInit, OnDestroy {
     window.open('#/booking/package/transaction/printlist', '_blank');
   }
 
+  printCashoutMlg() {
+    const dateRange = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: 'Malang',
+    };
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    window.open('#/finance/cashout/printcashout', '_blank');
+  }
+
+  printCashoutSby() {
+    const dateRange = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: 'Surabaya',
+    };
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    window.open('#/finance/cashout/printcashout', '_blank');
+  }
+
+  printOnderdil() {
+    const dateRange = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: '',
+    };
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    window.open('#/finance/cashout/printonderdil', '_blank');
+  }
+
   private dataListCashout(): Observable<void> {
     const params = {
       limit: '',

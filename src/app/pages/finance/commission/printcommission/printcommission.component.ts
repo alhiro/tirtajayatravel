@@ -66,7 +66,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
     startDate: '',
     endDate: '',
     city: '',
-    status: 'Completed',
+    status: '',
   };
   public params = {
     limit: '',
@@ -75,7 +75,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
     startDate: '',
     endDate: '',
     city: '',
-    status: 'Completed',
+    status: '',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 

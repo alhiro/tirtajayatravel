@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '@app/services/http.service';
 import { Observable, map } from 'rxjs';
-import { Dates, PaginationContext } from '@app/@shared/interfaces/pagination';
+import { Dates, ExtendedPaginationContext, PaginationContext } from '@app/@shared/interfaces/pagination';
 import { CashoutModel } from './models/cashout.model';
 
 @Injectable({
@@ -11,6 +11,17 @@ export class CashoutService {
   constructor(private httpService: HttpService) {}
 
   list(context: PaginationContext): Observable<CashoutModel> {
+    return this.httpService.cashoutList(context).pipe(
+      map((result) => {
+        if (!result) {
+          return result;
+        }
+        return result;
+      })
+    );
+  }
+
+  listExtended(context: ExtendedPaginationContext): Observable<CashoutModel> {
     return this.httpService.cashoutList(context).pipe(
       map((result) => {
         if (!result) {

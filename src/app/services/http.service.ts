@@ -813,7 +813,7 @@ export class HttpService {
     return this.commonApi.get('/cashout/get?cashout_id=' + param.cashout_id) as Observable<any>;
   }
 
-  cashoutList(param: PaginationContext): Observable<any> {
+  cashoutList(param: ExtendedPaginationContext): Observable<any> {
     return this.commonApi.get(
       '/cashout/list?limit=' +
         param.limit +
@@ -824,7 +824,9 @@ export class HttpService {
         '&startDate=' +
         param.startDate +
         '&endDate=' +
-        param.endDate
+        param.endDate +
+        '&city=' +
+        param.city
     ) as Observable<any>;
   }
 

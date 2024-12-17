@@ -39,6 +39,7 @@ import { PrintcommissionComponent } from '@app/pages/finance/commission/printcom
 import { PrintpiutangComponent } from '@app/pages/finance/piutang/printpiutang/printpiutang.component';
 import { PrintrecapitulationComponent } from '@app/pages/finance/recapitulation/printrecapitulation/printrecapitulation.component';
 import { PrintPassengerComponent } from '@app/pages/booking/passenger/printPassenger/printPassenger.component';
+import { PrintcashoutComponent } from '@app/pages/finance/cashout/printcashout/printcashout.component';
 
 const routes: Routes = [
   {
@@ -189,6 +190,19 @@ const routes: Routes = [
       import('../../pages/finance/recapitulation/printrecapitulation/printrecapitulation.module').then(
         (m) => m.PrintrecapitulationModule
       ),
+  },
+  // print cashout
+  {
+    path: 'finance/cashout/printcashout',
+    component: PrintcashoutComponent,
+    loadChildren: () =>
+      import('../../pages/finance/cashout/printcashout/printcashout.module').then((m) => m.PrintcashoutModule),
+  },
+  {
+    path: 'finance/cashout/printonderdil',
+    component: PrintcashoutComponent,
+    loadChildren: () =>
+      import('../../pages/finance/cashout/printcashout/printcashout.module').then((m) => m.PrintcashoutModule),
   },
 ];
 

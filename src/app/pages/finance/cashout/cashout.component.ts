@@ -233,6 +233,19 @@ export class CashoutComponent implements OnInit {
     datepicker.close();
   }
 
+  printSelected(datepicker: any) {
+    const dateRange = {
+      limit: this.pagination.limit,
+      page: this.pagination.offset,
+      search: this.pagination.search,
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: this.levelrule === 8 ? this.currentTab : this.city_id,
+    };
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
+    window.open('#/finance/cashout/printcashout', '_blank');
+  }
+
   isHovered(date: NgbDate) {
     return (
       this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate)
