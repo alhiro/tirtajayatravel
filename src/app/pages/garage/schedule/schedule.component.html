@@ -117,12 +117,14 @@
                 <span class="text-gray-900 d-block">{{ row.Car_id }}</span>
               </td> -->
               <td>
-                <span
-                  class="text-gray-900 fw-bolder text-hover-primary fs-6 cursor-pointer"
+                <div
+                  class="text-gray-900 text-gray-900 fw-bolder text-hover-primary fs-6 cursor-pointer"
                   (click)="openModalEdit(row)"
                 >
-                  {{ row.name }}
-                </span>
+                  {{ row.vendor_garage?.name }}
+                </div>
+                <div class="text-gray-900">{{ row.vendor_garage?.address }}</div>
+                <div class="text-gray-900">{{ row.vendor_garage?.telp }}</div>
               </td>
               <td>
                 <div class="text-gray-900">{{ row.car?.name }}</div>
@@ -253,7 +255,7 @@
           />
         </div>
       </label>
-      <label class="d-block mb-8">
+      <!-- <label class="d-block mb-8">
         <input
           type="text"
           class="form-control"
@@ -262,6 +264,52 @@
           [placeholder]="'Garage Name' | translate"
         />
         <span hidden translate>Garage Name</span>
+      </label> -->
+      <label class="d-block mb-4">
+        <input
+          id="select-garage"
+          type="text"
+          class="form-control"
+          [class.is-invalid]="searchFailedGarage"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="modelGarage"
+          [ngbTypeahead]="searchDataGarage"
+          [resultTemplate]="rtg"
+          [inputFormatter]="formatter"
+          placeholder="Garage search"
+        />
+        <ng-template #rtg let-r="result" let-t="term"> {{ r.name }} - {{ r.address }} - {{ r.telp }} </ng-template>
+
+        @if (searchingGarage) {
+        <small class="form-text text-muted">Searching. Please wait...</small>
+        } @if (searchFailedGarage) {
+        <div class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+        } @if (modelGarage) {
+        <!--begin::Details toggle-->
+        <div class="d-flex flex-stack fs-4 py-3">
+          <div
+            class="fw-bold rotate collapsible"
+            role="button"
+            aria-expanded="false"
+            aria-controls="kt_user_view_details"
+          >
+            Details
+          </div>
+        </div>
+        <!--end::Details toggle-->
+
+        <div class="separator"></div>
+
+        <!--begin::Details content-->
+        <div id="kt_user_view_details" class="collapse show">
+          <div class="pb-5 fs-6">
+            <div class="fw-bold">Name</div>
+            <div class="text-gray-600">{{ modelGarage?.name }}</div>
+            <div class="fw-bold mt-3">Address</div>
+            <div class="text-gray-600">{{ modelGarage?.address }} ({{ modelGarage?.telp }})</div>
+          </div>
+        </div>
+        }
       </label>
       <label class="d-block mb-4">
         <input

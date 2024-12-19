@@ -71,6 +71,10 @@ const Routing: Routes = [
     path: 'garage/schedule',
     loadChildren: () => import('./garage/schedule/schedule.module').then((m) => m.ScheduleModule),
   },
+  {
+    path: 'garage/vendor',
+    loadChildren: () => import('./garage/vendor/vendor.module').then((m) => m.VendorGarageModule),
+  },
 
   // Management
   {

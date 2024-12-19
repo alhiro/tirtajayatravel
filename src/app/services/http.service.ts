@@ -20,6 +20,7 @@ import { DestinationModel } from '@app/pages/booking/passenger/models/destinatio
 import { CashoutModel } from '@app/pages/finance/cashout/models/cashout.model';
 import { CostModel } from '@app/pages/finance/bsd/models/cost.model';
 import { ScheduleModel } from '@app/pages/garage/schedule/models/schedule.model';
+import { VendorModel } from '@app/pages/garage/vendor/models/vendor.model';
 
 @Injectable({
   providedIn: 'root',
@@ -945,6 +946,7 @@ export class HttpService {
       garage_id: param.garage_id,
       employee_id: param.employee_id,
       car_id: param.car_id,
+      vendor_garage_id: param.vendor_garage_id,
       go_send_id: param.go_send_id,
       name: param.name,
       service_date: param.service_date,
@@ -963,6 +965,7 @@ export class HttpService {
     const body = {
       employee_id: param.employee_id,
       car_id: param.car_id,
+      vendor_garage_id: param.vendor_garage_id,
       go_send_id: param.go_send_id,
       name: param.name,
       service_date: param.service_date,
@@ -982,6 +985,58 @@ export class HttpService {
       garage_id: param.garage_id,
     };
     return this.commonApi.delete('/garage/delete', body) as Observable<any>;
+  }
+
+  //Vendor
+  vendorGarageList(param: PaginationContext): Observable<any> {
+    return this.commonApi.get(
+      '/garage/vendor/list?limit=' +
+        param.limit +
+        '&page=' +
+        param.page +
+        '&search=' +
+        param.search +
+        '&startDate=' +
+        param.startDate +
+        '&endDate=' +
+        param.endDate
+    ) as Observable<any>;
+  }
+
+  vendorGarageEdit(param: VendorModel): Observable<any> {
+    const body = {
+      vendor_garage_id: param.vendor_garage_id,
+      car_id: param.car_id,
+      name: param.name,
+      type: param.type,
+      address: param.address,
+      telp: param.telp,
+      status: param.status,
+      description: param.description,
+      updated_by: param.updated_by,
+    };
+    return this.commonApi.put('/garage/vendor/update', body) as Observable<any>;
+  }
+
+  vendorGarageCreate(param: VendorModel): Observable<any> {
+    const body = {
+      car_id: param.car_id,
+      name: param.name,
+      type: param.type,
+      address: param.address,
+      telp: param.telp,
+      status: param.status,
+      description: param.description,
+      created_by: param.created_by,
+    };
+    return this.commonApi.post('/garage/vendor/create', body) as Observable<any>;
+  }
+
+  vendorGarageDelete(param: VendorModel): Observable<any> {
+    const body = {
+      vendor_garage_id: param.vendor_garage_id,
+    };
+    return this.commonApi.delete('/garage/vendor/delete', body) as Observable<any>;
   }
 
   // MASTER
