@@ -1927,6 +1927,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       package_id: event.package_id,
       go_send_id: this.delivery.go_send_id,
       status_package: 'Delivery',
+      send_date: this.delivery.send_date,
     };
     console.log(updateSP);
 
@@ -1972,6 +1973,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       package_id: event.package_id,
       go_send_id: null,
       status_package: 'Progress',
+      send_date: null,
     };
     console.log(updateSP);
 

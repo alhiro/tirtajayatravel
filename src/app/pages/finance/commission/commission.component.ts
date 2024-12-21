@@ -33,6 +33,7 @@ import Swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
 import { DeliveryService } from '@app/pages/booking/delivery/delivery.service';
 import { CustomerService } from '@app/pages/master/customer/customer.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 interface EventObject {
   event: string;
@@ -85,6 +86,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     endDate: '',
     city: 'Malang',
     status: 'Delivery',
+    username: '',
   };
   public params = {
     limit: 10,
@@ -94,6 +96,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     endDate: '',
     city: 'Malang',
     status: 'Delivery',
+    username: '',
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -135,6 +138,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
   startDate: any;
   endDate: any;
 
+  isMobile: boolean = false;
+
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
 
@@ -149,7 +154,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
     private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
     private utils: Utils,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private breakpointObserver: BreakpointObserver
   ) {
     this.initForm();
 
@@ -188,11 +194,12 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
-      search: this.city_id === 1 ? this.pagination.search : 'Bayar Tujuan (COD)',
+      search: this.city_id === 1 || this.city_id === null ? this.pagination.search : 'Bayar Tujuan (COD)',
       startDate: this.startDate,
       endDate: this.endDate,
       city: this.city_id === 1 ? 'Surabaya' : 'Malang',
       status: this.pagination.status,
+      username: this.levelrule === 5 ? this.username : '',
     };
 
     this.dataList(this.params);
@@ -345,6 +352,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
       endDate: this.pagination.endDate,
       city: this.currentTab,
       status: this.pagination.status,
+      username: this.levelrule === 5 ? this.username : '',
     };
     this.dataList(this.params);
     datepicker.close();
@@ -370,6 +378,15 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.breakpointObserver.observe(['(max-width: 440px)']).subscribe((result) => {
+      this.isMobile = result.matches;
+      if (this.isMobile) {
+        console.log('Mobile screen detected');
+      } else {
+        console.log('Desktop screen detected');
+      }
+    });
+
     // this.configuration.resizeColumn = true;
     // this.configuration.fixedColumnWidth = false;
     this.configuration.showDetailsArrow = true;
@@ -400,11 +417,12 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
-      search: this.city_id === 1 ? this.pagination.search : 'Bayar Tujuan (COD)',
+      search: this.city_id === 1 || this.city_id === null ? this.pagination.search : 'Bayar Tujuan (COD)',
       startDate: this.startDate,
       endDate: this.endDate,
       city: this.city_id === 1 ? 'Surabaya' : 'Malang',
       status: this.pagination.status,
+      username: this.levelrule === 5 ? this.username : '',
     };
     this.dataList(this.params);
   }
@@ -493,22 +511,24 @@ export class CommissionComponent implements OnInit, OnDestroy {
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
-        search: this.city_id === 1 ? this.pagination.search : 'Bayar Tujuan (COD)',
+        search: this.city_id === 1 || this.city_id === null ? this.pagination.search : 'Bayar Tujuan (COD)',
         startDate: this.startDate,
         endDate: this.endDate,
         city: this.currentTab,
         status: this.pagination.status,
+        username: this.levelrule === 5 ? this.username : '',
       };
       this.dataList(this.params);
     } else if (this.currentTab === 'Surabaya') {
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
-        search: this.city_id === 1 ? this.pagination.search : 'Bayar Tujuan (COD)',
+        search: this.city_id === 1 || this.city_id === null ? this.pagination.search : 'Bayar Tujuan (COD)',
         startDate: this.startDate,
         endDate: this.endDate,
         city: this.currentTab,
         status: this.pagination.status,
+        username: this.levelrule === 5 ? this.username : '',
       };
       this.dataList(this.params);
     }
@@ -531,14 +551,18 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   private parseEvent(obj: EventObject): void {
+    this.pagination.limit = obj.value.limit ? obj.value.limit : this.pagination.limit;
+    this.pagination.offset = obj.value.page ? obj.value.page : this.pagination.offset;
+    this.pagination = { ...this.pagination };
     this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
-      search: this.city_id === 1 ? this.pagination.search : 'Bayar Tujuan (COD)',
+      search: this.city_id === 1 || this.city_id === null ? this.pagination.search : 'Bayar Tujuan (COD)',
       startDate: this.startDate,
       endDate: this.endDate,
       city: this.currentTab,
       status: this.pagination.status,
+      username: this.levelrule === 5 ? this.username : '',
     };
     this.dataList(this.params);
   }
@@ -580,11 +604,12 @@ export class CommissionComponent implements OnInit, OnDestroy {
                 this.params = {
                   limit: this.pagination.limit,
                   page: this.pagination.offset,
-                  search: term,
+                  search: this.city_id === 1 || this.city_id === null ? this.pagination.search : 'Bayar Tujuan (COD)',
                   startDate: this.startDate,
                   endDate: this.endDate,
                   city: this.currentTab,
                   status: this.pagination.status,
+                  username: this.levelrule === 5 ? this.username : '',
                 };
                 this.dataList(this.params);
               }
@@ -697,7 +722,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
   async openModalEdit(event: PackageModel) {
     console.log(event);
 
-    const nameCourier = { name: event.recipient?.courier };
+    const nameCourier = { name: this.username ? this.username : event.recipient?.courier };
     this.modelEmployee = nameCourier;
     this.formatDateValue(new Date());
 

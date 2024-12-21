@@ -1,6 +1,6 @@
 <!-- begin::Header -->
 <div class="card">
-  <div class="card-header border-0 pt-5">
+  <div class="card-header border-0 pt-5" [ngClass]="{ 'p-0 d-block': isMobile }">
     <h3 class="card-title align-items-start flex-column">
       <span class="card-label fw-bolder fs-3 mb-1">
         <ng-container [ngSwitch]="currentTab">
@@ -19,8 +19,8 @@
         {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLength | number } }}
       </span>
     </h3>
-    @if (levelrule === 8) {
-    <div class="card-toolbar">
+    @if (levelrule === 8 || levelrule === 5) {
+    <div class="card-toolbar" [ngClass]="{ 'd-block py-5': isMobile }">
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
           <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Malang'" data-toggle="tab">Malang</a>
@@ -31,10 +31,10 @@
       </ul>
     </div>
     }
-    <div class="card-toolbar">
+    <div class="card-toolbar" [ngClass]="{ 'd-block': isMobile }">
       <!-- begin::Menu -->
       <div class="menu-item">
-        <div class="menu-content">
+        <div class="menu-content" [ngClass]="{ 'p-0': isMobile }">
           <input
             id="select-customer"
             type="text"
@@ -128,7 +128,7 @@
   </div>
   <!-- end::Header -->
   <!-- begin::Body -->
-  <div class="card-body py-3">
+  <div class="card-body py-3" [ngClass]="{ 'p-0': isMobile }">
     <div class="tab-content mt-5" id="tabPackage">
       <!--begin::Tap pane-->
       <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Malang' }">
@@ -149,7 +149,7 @@
                     <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
                   </td> -->
               <td>
-                <span class="text-gray-900 d-block">
+                <span class="text-gray-900 d-block" (click)="openModalEdit(row)">
                   {{ row.resi_number }}
                 </span>
               </td>
@@ -278,7 +278,7 @@
                     <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
                   </td> -->
               <td>
-                <span class="text-gray-900 d-block">
+                <span class="text-gray-900 d-block" (click)="openModalEdit(row)">
                   {{ row.resi_number }}
                 </span>
               </td>

@@ -122,7 +122,9 @@ export class HttpService {
         '&city=' +
         param.city +
         '&status=' +
-        param.status
+        param.status +
+        '&username=' +
+        param.username
     ) as Observable<any>;
   }
 

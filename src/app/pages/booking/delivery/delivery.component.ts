@@ -907,6 +907,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       package_id: event.package_id,
       go_send_id: event.go_send_id,
       status_package: 'Progress',
+      send_date: null,
     };
     console.log(updateSP);
 

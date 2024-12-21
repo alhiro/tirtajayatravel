@@ -890,6 +890,32 @@
         </div>
       </div>
     </div>
+    } @if (levelrule === 5) {
+    <!-- Separator -->
+    <div class="menu-item">
+      <div class="menu-content pt-8 pb-2">
+        <span class="menu-section text-muted text-uppercase fs-8 ls-1" translate>Delivery</span>
+      </div>
+    </div>
+
+    <!-- Monitoring -->
+    <div class="menu-item">
+      <a class="menu-link without-sub" routerLink="/finance/commission/package" routerLinkActive="active">
+        <span class="menu-icon">
+          <app-keenicon name="switch" class="fs-2"></app-keenicon>
+        </span>
+        <span class="menu-title" translate>Monitoring</span>
+      </a>
+    </div>
+
+    <div class="menu-item">
+      <a class="menu-link without-sub" routerLink="finance/commission/monthly" routerLinkActive="active">
+        <span class="menu-icon">
+          <app-keenicon name="monitor-mobile" class="fs-2"></app-keenicon>
+        </span>
+        <span class="menu-title" translate>Courier Commission </span>
+      </a>
+    </div>
     }
   </div>
   <!--end::Menu-->
