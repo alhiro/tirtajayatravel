@@ -404,12 +404,14 @@ export class PassengerComponent implements OnInit, OnDestroy {
       valueBookFromDate = moment(this.delivery?.send_date).utc().startOf('day').format('YYYY-MM-DD HH:mm:ss');
       valueBookToDate = moment(this.delivery?.send_date).utc().endOf('day').format('YYYY-MM-DD HH:mm:ss');
     } else {
-      valueBookFromDate = moment().utc().startOf('day').format('YYYY-MM-DD HH:mm:ss');
-      valueBookToDate = moment().utc().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+      valueBookFromDate = moment().startOf('day').format('YYYY-MM-DD HH:mm:ss');
+      valueBookToDate = moment().endOf('day').format('YYYY-MM-DD HH:mm:ss');
     }
 
     this.startDate = valueBookFromDate;
     this.endDate = valueBookToDate;
+    console.log(valueBookFromDate);
+    console.log(valueBookToDate);
 
     this.params = {
       limit: this.pagination.limit,

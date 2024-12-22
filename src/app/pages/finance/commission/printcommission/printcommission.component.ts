@@ -34,6 +34,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
   public username: any;
 
   public groupAdminCommission: any;
+  public groupAdminCommissionPiutang: any;
   public groupAdminPiutang: any;
   public groupAdminMonthly: any;
 
@@ -45,6 +46,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
 
   public totalPiutang: any = 0;
   public totalCommission: any = 0;
+  public totalCommissionPiutang: any = 0;
   public totalMonthly: any = 0;
 
   public totalKoli: any = 0;
@@ -203,6 +205,29 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         } else {
           this.dataPiutang = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
         }
+
+        const dataCommissionPiutang = this.dataPiutang?.filter((data: any) => data.check_sp === true);
+        this.totalCommissionPiutang = this.utils.sumTotal(
+          dataCommission?.map((data: PackageModel) => data.agent_commission)
+        );
+
+        const groupedDataCommissionPiutang: GroupedDataCost[] = Object.values(
+          dataCommission.reduce((acc: any, item: any) => {
+            if (!acc[item.updated_by]) {
+              acc[item.updated_by] = {
+                id: Object.keys(acc).length + 1,
+                admin: item.updated_by,
+                totalCost: 0,
+                check_sp: item.check_sp,
+                city_id: item.city_id,
+              };
+            }
+            acc[item.updated_by].totalCost += Number(item.agent_commission);
+            return acc;
+          }, {} as { [key: string]: GroupedDataCost })
+        );
+        this.groupAdminCommissionPiutang = groupedDataCommissionPiutang;
+        console.log(groupedDataCommissionPiutang);
 
         const dataPiutang = this.dataPiutang?.filter((data: any) => data.check_payment === true);
         this.totalPiutang = this.utils.sumTotal(dataPiutang?.map((data: PackageModel) => data.cost));

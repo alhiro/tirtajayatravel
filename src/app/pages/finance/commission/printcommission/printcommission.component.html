@@ -269,6 +269,19 @@
 
       <div class="mt-5 mb-7">
         <span
+          ><b
+            >TOTAL SETORAN KOMISI PAKET BA: {{ totalCommissionPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+          ></span
+        ><br />
+      </div>
+      <div class="mt-1">
+        @for (admin of groupAdminCommissionPiutang; track admin) {
+        <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+        <br />
+        }
+      </div>
+      <div class="mt-5 mb-7">
+        <span
           ><b>TOTAL SETORAN PELUNASAN PAKET BA: {{ totalPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
         ><br />
       </div>
