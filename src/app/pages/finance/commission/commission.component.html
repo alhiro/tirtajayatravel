@@ -89,6 +89,7 @@
               Reset
             </button>
 
+            @if (levelrule !== 5) {
             <button
               class="btn btn-success btn-sm m-2 p-1 px-4 float-end"
               [disabled]="configuration.isLoading"
@@ -106,6 +107,8 @@
             >
               Commission & BA
             </button>
+            }
+
             <!-- <button
               class="btn btn-primary btn-sm m-2 p-1 px-4 float-end"
               [disabled]="configuration.isLoading"

@@ -180,24 +180,13 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   printFilterSelected(datepicker: any) {
-    let getCity = '';
-    if (this.levelrule === 2) {
-      if (this.city_id === 1) {
-        getCity = 'Surabaya';
-      } else {
-        getCity = 'Malang';
-      }
-    } else {
-      getCity = '';
-    }
-
     this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
       search: this.city_id === 1 || this.city_id === null ? this.pagination.search : 'Bayar Tujuan (COD)',
       startDate: this.startDate,
       endDate: this.endDate,
-      city: this.city_id === 1 ? 'Surabaya' : 'Malang',
+      city: this.currentTab,
       status: this.pagination.status,
       username: this.levelrule === 5 ? this.username : '',
     };
@@ -209,26 +198,15 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   printFilterDate(datepicker: any) {
-    let getCity = '';
-    if (this.levelrule === 2) {
-      if (this.city_id === 1) {
-        getCity = 'Surabaya';
-      } else {
-        getCity = 'Malang';
-      }
-    } else {
-      getCity = '';
-    }
-
     const paramRange = {
       limit: 10,
       page: 1,
       search: this.pagination.search,
       fromDate: this.startDate,
       toDate: this.endDate,
-      city: getCity,
+      city: this.currentTab,
       status: 'Delivery',
-      username: '',
+      username: this.levelrule === 5 ? this.username : '',
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
@@ -236,26 +214,15 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   printFilterBa(datepicker: any) {
-    let getCity = '';
-    if (this.levelrule === 2) {
-      if (this.city_id === 1) {
-        getCity = 'Surabaya';
-      } else {
-        getCity = 'Malang';
-      }
-    } else {
-      getCity = '';
-    }
-
     const paramRange = {
       limit: 10,
       page: 1,
       search: 'Bayar Tujuan (COD)',
       fromDate: this.startDate,
       toDate: this.endDate,
-      city: getCity,
+      city: this.currentTab,
       status: 'Delivery',
-      username: '',
+      username: this.levelrule === 5 ? this.username : '',
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
