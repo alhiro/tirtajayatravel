@@ -771,11 +771,14 @@
                 </div>
                 <!-- end::Table container -->
 
-                <b>TOTAL PAKET LUNAS: {{ totalDataLunasMonthlyPaid | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b> <br />
-                <b
-                  >TOTAL PAKET BELUM LUNAS:
-                  {{ totalDataLunasMonthlyNotPaid | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
-                >
+                <div class="mt-5">
+                  <b>TOTAL PAKET LUNAS: {{ totalDataLunasMonthlyPaid | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+                  <br />
+                  <b
+                    >TOTAL PAKET BELUM LUNAS:
+                    {{ totalDataLunasMonthlyNotPaid | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+                  >
+                </div>
               </div>
             </div>
           </div>

@@ -756,13 +756,15 @@ export class DepositComponent implements OnInit, OnDestroy {
         const dataLunasMonthlyPaid = this.dataLunasMonthly.filter(
           (data: PackageModel) => data.payment !== null || data.payment !== 0
         );
-        this.totalDataLunasMonthlyPaid = this.utils.sumTotal(dataLunasMonthlyPaid?.map((data: any) => data?.cost));
+        this.totalDataLunasMonthlyPaid = this.utils.sumTotal(
+          dataLunasMonthlyPaid?.map((data: PackageModel) => data?.payment)
+        );
 
         const dataLunasMonthlyNotPaid = this.dataLunasMonthly.filter(
           (data: PackageModel) => data.payment === null || data.payment === 0
         );
         this.totalDataLunasMonthlyNotPaid = this.utils.sumTotal(
-          dataLunasMonthlyNotPaid?.map((data: any) => data?.cost)
+          dataLunasMonthlyNotPaid?.map((data: PackageModel) => data?.cost)
         );
 
         this.configuration.isLoading = false;
