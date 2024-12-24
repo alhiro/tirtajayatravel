@@ -1,7 +1,7 @@
 <!--begin::Row-->
 <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
-  <div class="card-toolbar">
-    <div class="col-md-4 mb-5 mx-auto">
+  <div class="card-toolbar" [ngClass]="{ 'pt-5': isMobile }">
+    <div class="col-md-5 mb-5 mx-auto">
       <div class="input-group">
         <input
           class="form-control p-1 px-4"
@@ -13,661 +13,775 @@
           (ngModelChange)="onDateChange($event)"
           [readonly]="true"
         />
-        <a class="btn btn-info btn-sm p-2 px-4 cursor-pointer" (click)="datePicker.toggle()"> Filter Date </a>
+        <a class="btn btn-info btn-sm p-2 px-4 cursor-pointer me-5" (click)="datePicker.toggle()"> Filter Date </a>
+
+        <ul class="nav nav-pills nav-pills-sm nav-dark-75" style="justify-content: center">
+          <li class="nav-item" (click)="setCurrentTab('Daily')" [style.cursor]="'pointer'">
+            <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Daily'" data-toggle="tab">Daily</a>
+          </li>
+          <li class="nav-item" (click)="setCurrentTab('Monthly')" [style.cursor]="'pointer'">
+            <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Monthly'" data-toggle="tab">Transfer</a>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
 
-  <!--begin::Col-->
-  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-5 mb-xl-10 mt-2">
-    <!--begin::Card-->
-    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end">
-      <!--begin::Header-->
-      <div class="card-header pt-5">
-        <!--begin::Title-->
-        <div class="card-title d-flex flex-column">
-          <!--begin::Subtitle-->
-          <span class="text-gray-900 opacity-75 pt-1 fw-semibold fs-6"> Cash In </span>
-          <!--end::Subtitle-->
-        </div>
-        <!--end::Title-->
-      </div>
-      <!--end::Header-->
+  <!-- <div class="card-toolbar mb-3 mt-0" [ngClass]="{ 'd-block py-5': isMobile }">
+    <ul class="nav nav-pills nav-pills-sm nav-dark-75" style="justify-content: center;">
+      <li class="nav-item" (click)="setCurrentTab('Daily')" [style.cursor]="'pointer'">
+        <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Daily'" data-toggle="tab">Daily</a>
+      </li>
+      <li class="nav-item" (click)="setCurrentTab('Monthly')" [style.cursor]="'pointer'">
+        <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Monthly'" data-toggle="tab">Monthly</a>
+      </li>
+    </ul>
+  </div> -->
 
-      <!--begin::Card body-->
-      <div class="card-body pt-0">
-        @if (city_id === 1 || levelrule === 8) {
-        <!-- begin::Table container -->
-        <div class="table-responsive">
-          <!-- begin::Table -->
-          <ngx-table
-            #table
-            [configuration]="configuration"
-            [data]="dataDeposit"
-            [columns]="columnsPackage"
-            (event)="eventEmitted($event)"
-            tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
-          >
-            <ng-template let-row let-index="index">
-              <!-- <td>
+  <div class="card-body mt-0" [ngClass]="{ 'p-0': isMobile }">
+    <div class="tab-content" id="tabPackage">
+      <!--begin::Tap pane-->
+      <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Daily' }">
+        <div class="row col-md-12 col-lg-12 col-xl-12 col-xxl-12 mb-md-5 mb-xl-10 mt-2">
+          <!--begin::Col-->
+          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-5 mb-xl-10 mt-2">
+            <!--begin::Card-->
+            <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end">
+              <!--begin::Header-->
+              <div class="card-header pt-0" style="min-height: 35px">
+                <!--begin::Title-->
+                <div class="card-title d-flex flex-column">
+                  <!--begin::Subtitle-->
+                  <span class="text-gray-900 opacity-75 pt-1 fw-semibold fs-6"> Cash In </span>
+                  <!--end::Subtitle-->
+                </div>
+                <!--end::Title-->
+              </div>
+              <!--end::Header-->
+
+              <!--begin::Card body-->
+              <div class="card-body pt-0">
+                @if (city_id === 1 || levelrule === 8 || levelrule === 7) {
+                <!-- begin::Table container -->
+                <div class="table-responsive">
+                  <!-- begin::Table -->
+                  <ngx-table
+                    #table
+                    [configuration]="configuration"
+                    [data]="dataDeposit"
+                    [columns]="columnsPackage"
+                    (event)="eventEmitted($event)"
+                    tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+                  >
+                    <ng-template let-row let-index="index">
+                      <!-- <td>
                   <span class="text-gray-900 d-block">{{ index }}</span>
                 </td> -->
-              <td>
-                <span class="text-gray-900 d-block">
-                  {{ row.package.bsd }}
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">
-                  {{ row.package.driver }}
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">
-                  {{ row.package.total_cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.package.admin }}</span>
-              </td>
-              <td class="text-end">
-                <a
-                  (click)="printBSD(row, 'Package')"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Detail BSD"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </ng-template>
-          </ngx-table>
-          <!-- end::Table -->
-        </div>
-        <!-- end::Table container -->
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.package.bsd }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.package.driver }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.package.total_cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">{{ row.package.admin }}</span>
+                      </td>
+                      <td class="text-end">
+                        <a
+                          (click)="printBSD(row, 'Package')"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Detail BSD"
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </ng-template>
+                  </ngx-table>
+                  <!-- end::Table -->
+                </div>
+                <!-- end::Table container -->
 
-        <div class="mt-4 mb-9">
-          <b>Total BSD Paket</b>: {{ totalDepositDriverPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-        </div>
+                <div class="mt-4 mb-9">
+                  <b>Total BSD Paket</b>: {{ totalDepositDriverPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                </div>
 
-        <!-- begin::Table container -->
-        <div class="table-responsive">
-          <!-- begin::Table -->
-          <ngx-table
-            #table
-            [configuration]="configuration"
-            [data]="dataDeposit"
-            [columns]="columnsPassenger"
-            (event)="eventEmitted($event)"
-            tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
-          >
-            <ng-template let-row let-index="index">
-              <!-- <td>
+                <!-- begin::Table container -->
+                <div class="table-responsive">
+                  <!-- begin::Table -->
+                  <ngx-table
+                    #table
+                    [configuration]="configuration"
+                    [data]="dataDeposit"
+                    [columns]="columnsPassenger"
+                    (event)="eventEmitted($event)"
+                    tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+                  >
+                    <ng-template let-row let-index="index">
+                      <!-- <td>
                     <span class="text-gray-900 d-block">{{ index }}</span>
                   </td> -->
-              <td>
-                <span class="text-gray-900 d-block">
-                  {{ row.passenger.bsd }}
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">
-                  {{ row.passenger.driver }}
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">
-                  {{ row.passenger.total_tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                </span>
-              </td>
-              <td>
-                <span class="text-gray-900 d-block">{{ row.passenger.admin }}</span>
-              </td>
-              <td class="text-end">
-                <a
-                  (click)="printBSD(row, 'Passenger')"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Detail BSD"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </ng-template>
-          </ngx-table>
-          <!-- end::Table -->
-        </div>
-        <!-- end::Table container -->
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.passenger.bsd }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.passenger.driver }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.passenger.total_tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">{{ row.passenger.admin }}</span>
+                      </td>
+                      <td class="text-end">
+                        <a
+                          (click)="printBSD(row, 'Passenger')"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Detail BSD"
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </ng-template>
+                  </ngx-table>
+                  <!-- end::Table -->
+                </div>
+                <!-- end::Table container -->
 
-        <div class="mt-5 mb-10">
-          <b>Total BSD Penumpang</b>: {{ totalDepositDriverPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-        </div>
+                <div class="mt-5 mb-10">
+                  <b>Total BSD Penumpang</b>: {{ totalDepositDriverPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                </div>
 
-        <hr class="my-5" />
+                <hr class="my-5" />
 
-        <b>LIST PAKET LUNAS MALANG</b>
-        <table class="table table-striped table-bordered table-hover">
-          <tbody>
-            <tr>
-              <td>Total Paket Lunas</td>
-              <td style="text-align: center">Action</td>
-            </tr>
-            <tr>
-              <td>{{ totalPackagePaidMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a
-                  (click)="printFilterDatePaymentMlg()"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Detail Lunas Malang"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <hr />
-        }
+                <b>LIST PAKET LUNAS MALANG</b>
+                <table class="table table-striped table-bordered table-hover">
+                  <tbody>
+                    <tr>
+                      <td>Total Paket Lunas</td>
+                      <td style="text-align: center">Action</td>
+                    </tr>
+                    <tr>
+                      <td>{{ totalPackagePaidMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                      <td style="text-align: center">
+                        <a
+                          (click)="printFilterDatePaymentMlg()"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Detail Lunas Malang"
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <hr />
+                }
 
-        <b>LIST PAKET LUNAS SURABAYA</b>
-        <table class="table table-striped table-bordered table-hover">
-          <tbody>
-            <tr>
-              <td>Total Paket Lunas</td>
-              <td style="text-align: center">Action</td>
-            </tr>
-            <tr>
-              <td>{{ totalPackagePaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a
-                  (click)="printFilterDatePaymentSby()"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Detail Lunas Surabaya"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <hr />
+                <b>LIST PAKET LUNAS SURABAYA</b>
+                <table class="table table-striped table-bordered table-hover">
+                  <tbody>
+                    <tr>
+                      <td>Total Paket Lunas</td>
+                      <td style="text-align: center">Action</td>
+                    </tr>
+                    <tr>
+                      <td>{{ totalPackagePaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                      <td style="text-align: center">
+                        <a
+                          (click)="printFilterDatePaymentSby()"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Detail Lunas Surabaya"
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <hr />
 
-        @if (city_id === 1 || levelrule === 8) {
-        <b>LIST PAKET BAYAR TUJUAN MALANG</b>
-        <table class="table table-striped table-bordered table-hover">
-          <tbody>
-            <tr>
-              <td>Total Bayar Tujuan Malang</td>
-              <td style="text-align: center">Action</td>
-            </tr>
-            <tr>
-              <td>{{ totalPackageCodSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a
-                  (click)="printFilterBaSby()"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Detail BA Malang"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        }
+                @if (city_id === 1 || levelrule === 8 || levelrule === 7) {
+                <b>LIST PAKET BAYAR TUJUAN MALANG</b>
+                <table class="table table-striped table-bordered table-hover">
+                  <tbody>
+                    <tr>
+                      <td>Total Bayar Tujuan Malang</td>
+                      <td style="text-align: center">Action</td>
+                    </tr>
+                    <tr>
+                      <td>{{ totalPackageCodSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                      <td style="text-align: center">
+                        <a
+                          (click)="printFilterBaSby()"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Detail BA Malang"
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                }
 
-        <b>LIST PAKET BAYAR TUJUAN SURABAYA</b>
-        <table class="table table-striped table-bordered table-hover">
-          <tbody>
-            <tr>
-              <td>Total Bayar Tujuan Surabaya</td>
-              <td style="text-align: center">Action</td>
-            </tr>
-            <tr>
-              <td>{{ totalPackageCodMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a
-                  (click)="printFilterBaMlg()"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Detail BA Surabaya"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <b>LIST PAKET BAYAR TUJUAN SURABAYA</b>
+                <table class="table table-striped table-bordered table-hover">
+                  <tbody>
+                    <tr>
+                      <td>Total Bayar Tujuan Surabaya</td>
+                      <td style="text-align: center">Action</td>
+                    </tr>
+                    <tr>
+                      <td>{{ totalPackageCodMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                      <td style="text-align: center">
+                        <a
+                          (click)="printFilterBaMlg()"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Detail BA Surabaya"
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
-        @if (city_id === 1 || levelrule === 8) {
-        <b>PENUMPANG LUNAS MALANG</b>
-        <table class="table table-striped table-bordered table-hover">
-          <tbody>
-            <tr>
-              <td>Total Penumpang Lunas Malang</td>
-              <td style="text-align: center" style="text-align: center">Action</td>
-            </tr>
-            <tr>
-              <td>{{ totalPassengerPaidMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a
-                  (click)="printPassengerPaidMlg()"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Penumpang Lunas Malang"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        }
+                @if (city_id === 1 || levelrule === 8 || levelrule === 7) {
+                <b>PENUMPANG LUNAS MALANG</b>
+                <table class="table table-striped table-bordered table-hover">
+                  <tbody>
+                    <tr>
+                      <td>Total Penumpang Lunas Malang</td>
+                      <td style="text-align: center" style="text-align: center">Action</td>
+                    </tr>
+                    <tr>
+                      <td>{{ totalPassengerPaidMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                      <td style="text-align: center">
+                        <a
+                          (click)="printPassengerPaidMlg()"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Penumpang Lunas Malang"
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                }
 
-        <b>PENUMPANG LUNAS SURABAYA</b>
-        <table class="table table-striped table-bordered table-hover">
-          <tbody>
-            <tr>
-              <td>Total Penumpang Lunas Surabaya</td>
-              <td style="text-align: center">Action</td>
-            </tr>
-            <tr>
-              <td>{{ totalPassengerPaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a
-                  (click)="printPassengerPaidSby()"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Penumpang Lunas Surabaya"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <b>PENUMPANG LUNAS SURABAYA</b>
+                <table class="table table-striped table-bordered table-hover">
+                  <tbody>
+                    <tr>
+                      <td>Total Penumpang Lunas Surabaya</td>
+                      <td style="text-align: center">Action</td>
+                    </tr>
+                    <tr>
+                      <td>{{ totalPassengerPaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                      <td style="text-align: center">
+                        <a
+                          (click)="printPassengerPaidSby()"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Penumpang Lunas Surabaya"
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
-        @if (city_id === 1 || levelrule === 8) {
-        <b>RECEIVED PIUTANG TRANSITION</b>
-        <table class="table table-striped table-bordered table-hover">
-          <tbody>
-            <tr>
-              <td>Total Cash In</td>
-              <td style="text-align: center">Action</td>
-            </tr>
-            <tr>
-              <td>{{ piutangTransition | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a
-                  (click)="printPiutangTransition()"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Piutang Transition"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        }
-      </div>
-      <!--end::Card body-->
-    </div>
-    <!--end::Card widget 20-->
-  </div>
-  <!--end::Col-->
+                @if (city_id === 1 || levelrule === 8 || levelrule === 7) {
+                <b>RECEIVED PIUTANG TRANSITION</b>
+                <table class="table table-striped table-bordered table-hover">
+                  <tbody>
+                    <tr>
+                      <td>Total Cash In</td>
+                      <td style="text-align: center">Action</td>
+                    </tr>
+                    <tr>
+                      <td>{{ piutangTransition | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                      <td style="text-align: center">
+                        <a
+                          (click)="printPiutangTransition()"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Piutang Transition"
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                }
+              </div>
+              <!--end::Card body-->
+            </div>
+            <!--end::Card widget 20-->
+          </div>
+          <!--end::Col-->
 
-  <!--begin::Col-->
-  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-5 mb-xl-10 mt-2">
-    <!--begin::Card-->
-    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end">
-      <!--begin::Header-->
-      <div class="card-header pt-5">
-        <!--begin::Title-->
-        <div class="card-title d-flex flex-column">
-          <!--begin::Subtitle-->
-          <span class="text-gray-900 opacity-75 pt-1 fw-semibold fs-6"> Cash Out </span>
-          <!--end::Subtitle-->
-        </div>
-        <!--end::Title-->
-      </div>
-      <!--end::Header-->
+          <!--begin::Col-->
+          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-md-5 mb-xl-10 mt-2">
+            <!--begin::Card-->
+            <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end">
+              <!--begin::Header-->
+              <div class="card-header pt-0" style="min-height: 35px">
+                <!--begin::Title-->
+                <div class="card-title d-flex flex-column">
+                  <!--begin::Subtitle-->
+                  <span class="text-gray-900 opacity-75 pt-1 fw-semibold fs-6"> Cash Out </span>
+                  <!--end::Subtitle-->
+                </div>
+                <!--end::Title-->
+              </div>
+              <!--end::Header-->
 
-      <!--begin::Card body-->
-      <div class="card-body pt-0">
-        @if (city_id === 1 || levelrule === 8) {
-        <b>LIST PENGELUARAN OPERASIONAL MALANG</b>
-        <table class="table table-striped table-bordered table-hover">
-          <tbody>
-            <tr>
-              <td>Total Pengeluaran</td>
-              <td style="text-align: center"><b>Action</b></td>
-            </tr>
-            <tr>
-              <td>{{ totalCostMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a
-                  (click)="printCashoutMlg()"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Detail Pengeluaran Malang"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <hr />
-        }
+              <!--begin::Card body-->
+              <div class="card-body pt-0">
+                @if (city_id === 1 || levelrule === 8 || levelrule === 7) {
+                <b>LIST PENGELUARAN OPERASIONAL MALANG</b>
+                <table class="table table-striped table-bordered table-hover">
+                  <tbody>
+                    <tr>
+                      <td>Total Pengeluaran</td>
+                      <td style="text-align: center"><b>Action</b></td>
+                    </tr>
+                    <tr>
+                      <td>{{ totalCostMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                      <td style="text-align: center">
+                        <a
+                          (click)="printCashoutMlg()"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Detail Pengeluaran Malang"
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <hr />
+                }
 
-        <b>LIST PENGELUARAN OPERASIONAL SURABAYA</b>
-        <table class="table table-striped table-bordered table-hover">
-          <tbody>
-            <tr>
-              <td>Total Pengeluaran</td>
-              <td style="text-align: center"><b>Action</b></td>
-            </tr>
+                <b>LIST PENGELUARAN OPERASIONAL SURABAYA</b>
+                <table class="table table-striped table-bordered table-hover">
+                  <tbody>
+                    <tr>
+                      <td>Total Pengeluaran</td>
+                      <td style="text-align: center"><b>Action</b></td>
+                    </tr>
 
-            <tr>
-              <td>{{ totalCostSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a
-                  (click)="printCashoutSby()"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Detail Pengeluaran Surabaya"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <hr />
+                    <tr>
+                      <td>{{ totalCostSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                      <td style="text-align: center">
+                        <a
+                          (click)="printCashoutSby()"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Detail Pengeluaran Surabaya"
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <hr />
 
-        @if (city_id === 1 || levelrule === 8) {
-        <b>LIST PENGELUARAN ONDERDIL &amp; SERVICE</b>
-        <table class="table table-striped table-bordered table-hover">
-          <tbody>
-            <tr>
-              <td>Total Pengeluaran</td>
-              <td style="text-align: center"><b>Action</b></td>
-            </tr>
-            <tr>
-              <td>{{ cashoutOnderdilService | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a
-                  (click)="printOnderdil()"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Detail Pengeluaran Onderdil & Service"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <hr />
-        <b>LIST KOMISI KURIR MALANG</b>
-        <table class="table table-striped table-bordered table-hover">
-          <tbody>
-            <tr>
-              <td>Total Pengeluaran</td>
-              <td style="text-align: center"><b>Action</b></td>
-            </tr>
-            <tr>
-              <td>{{ cashoutCourierSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a
-                  (click)="printFilterBaSby()"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Detail 
+                @if (city_id === 1 || levelrule === 8 || levelrule === 7) {
+                <b>LIST PENGELUARAN ONDERDIL &amp; SERVICE</b>
+                <table class="table table-striped table-bordered table-hover">
+                  <tbody>
+                    <tr>
+                      <td>Total Pengeluaran</td>
+                      <td style="text-align: center"><b>Action</b></td>
+                    </tr>
+                    <tr>
+                      <td>{{ cashoutOnderdilService | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                      <td style="text-align: center">
+                        <a
+                          (click)="printOnderdil()"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Detail Pengeluaran Onderdil & Service"
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <hr />
+                <b>LIST KOMISI KURIR MALANG</b>
+                <table class="table table-striped table-bordered table-hover">
+                  <tbody>
+                    <tr>
+                      <td>Total Pengeluaran</td>
+                      <td style="text-align: center"><b>Action</b></td>
+                    </tr>
+                    <tr>
+                      <td>{{ cashoutCourierSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                      <td style="text-align: center">
+                        <a
+                          (click)="printFilterBaSby()"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Detail 
                   Komisi Surabaya"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        }
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                }
 
-        <b>LIST KOMISI KURIR SURABAYA</b>
-        <table class="table table-striped table-bordered table-hover">
-          <tbody>
-            <tr>
-              <td>Total Pengeluaran</td>
-              <td style="text-align: center"><b>Action</b></td>
-            </tr>
-            <tr>
-              <td>{{ cashoutCourierMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a
-                  (click)="printFilterBaMlg()"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Detail 
+                <b>LIST KOMISI KURIR SURABAYA</b>
+                <table class="table table-striped table-bordered table-hover">
+                  <tbody>
+                    <tr>
+                      <td>Total Pengeluaran</td>
+                      <td style="text-align: center"><b>Action</b></td>
+                    </tr>
+                    <tr>
+                      <td>{{ cashoutCourierMalang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                      <td style="text-align: center">
+                        <a
+                          (click)="printFilterBaMlg()"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Detail 
                   Komisi Malang"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
-        @if (city_id === 1 || levelrule === 8) {
-        <b>PEMBAYARAN YANG AKAN MASUK</b>
-        <table class="table table-striped table-bordered table-hover">
-          <tbody>
-            <tr style="background-color: #ffb8b8">
-              <td colspan="2">Total Piutang And Transfer</td>
-              <td style="text-align: center"><b>Action</b></td>
-            </tr>
-            <tr style="background-color: #ffb8b8">
-              <td>Pembayaran Via Transfer</td>
-              <td>{{ totalReminderPaymentTransfer | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a
-                  (click)="printViaTransfer()"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Detail Via Transfer"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </tr>
-            <tr style="background-color: #ffb8b8">
-              <td>Kustomer Bulanan</td>
-              <td>{{ totalPaymentMonthly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-              <td style="text-align: center">
-                <a
-                  (click)="printMonthly()"
-                  class="cursor-pointer text-primary"
-                  data-bs-toggle="tooltip"
-                  data-bs-trigger="hover"
-                  data-bs-dismiss-="click"
-                  data-bs-placement="top"
-                  title="Detail Customer (Bulanan)"
-                >
-                  <b style="text-align: center">Detail</b>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        }
+                @if (city_id === 1 || levelrule === 8 || levelrule === 7) {
+                <b>PEMBAYARAN YANG AKAN MASUK</b>
+                <table class="table table-striped table-bordered table-hover">
+                  <tbody>
+                    <tr style="background-color: #ffb8b8">
+                      <td colspan="2">Total Piutang And Transfer</td>
+                      <td style="text-align: center"><b>Action</b></td>
+                    </tr>
+                    <tr style="background-color: #ffb8b8">
+                      <td>Pembayaran Via Transfer</td>
+                      <td>{{ totalReminderPaymentTransfer | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                      <td style="text-align: center">
+                        <a
+                          (click)="printViaTransfer()"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Detail Via Transfer"
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </tr>
+                    <tr style="background-color: #ffb8b8">
+                      <td>Kustomer Bulanan</td>
+                      <td>{{ totalPaymentMonthly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                      <td style="text-align: center">
+                        <a
+                          (click)="printMonthly()"
+                          class="cursor-pointer text-primary"
+                          data-bs-toggle="tooltip"
+                          data-bs-trigger="hover"
+                          data-bs-dismiss-="click"
+                          data-bs-placement="top"
+                          title="Detail Customer (Bulanan)"
+                        >
+                          <b style="text-align: center">Detail</b>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                }
 
-        <hr />
+                <hr />
 
-        @if (city_id === 1 || levelrule === 8) {
-        <div class="activity-stream">
-          <div class="stream">
-            <h2>Setoran Pendapatan Harian Malang:</h2>
-            <table class="table table-striped table-bordered table-hover">
-              <tbody>
-                <tr align="left">
-                  <td>Keterangan</td>
-                  <td class="text-end">Total</td>
-                </tr>
-                <tr align="left">
-                  <td>Total Pendapatan</td>
-                  <td align="right">{{ totalCashInMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-                </tr>
-                <tr align="left">
-                  <td>Total Pengeluaran</td>
-                  <td align="right">{{ totalCashOutMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-                </tr>
+                @if (city_id === 1 || levelrule === 8 || levelrule === 7) {
+                <div class="activity-stream">
+                  <div class="stream">
+                    <h2>Setoran Pendapatan Harian Malang:</h2>
+                    <table class="table table-striped table-bordered table-hover">
+                      <tbody>
+                        <tr align="left">
+                          <td>Keterangan</td>
+                          <td class="text-end">Total</td>
+                        </tr>
+                        <tr align="left">
+                          <td>Total Pendapatan</td>
+                          <td align="right">{{ totalCashInMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                        </tr>
+                        <tr align="left">
+                          <td>Total Pengeluaran</td>
+                          <td align="right">{{ totalCashOutMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                        </tr>
 
-                <tr align="left">
-                  <td>Total Setoran</td>
-                  <td align="right">
-                    <b>{{ totalDepositMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                        <tr align="left">
+                          <td>Total Setoran</td>
+                          <td align="right">
+                            <b>{{ totalDepositMalangDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="activity-stream">
+                  <div class="stream">
+                    <h2>Informasi Pendapatan:</h2>
+                    <table class="table table-striped table-bordered table-hover">
+                      <tbody>
+                        <tr align="left">
+                          <td>Keterangan</td>
+                          <td class="text-end">Total</td>
+                        </tr>
+                        <tr align="left">
+                          <td>Pembayaran Bulanan</td>
+                          <td align="right">{{ totalPaymentMonthly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                        </tr>
+                        <tr align="left">
+                          <td>Pembayaran Via Transfer</td>
+                          <td align="right">
+                            {{ totalReminderPaymentTransfer | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                }
+
+                <div class="activity-stream">
+                  <div class="stream">
+                    <h2>Setoran Pendapatan Harian Surabaya:</h2>
+                    <table class="table table-striped table-bordered table-hover">
+                      <tbody>
+                        <tr align="left">
+                          <td>Keterangan</td>
+                          <td class="text-end">Total</td>
+                        </tr>
+                        <tr align="left">
+                          <td>Total Pendapatan</td>
+                          <td align="right">{{ totalCashInSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                        </tr>
+                        <tr align="left">
+                          <td>Total Pengeluaran</td>
+                          <td align="right">{{ totalCashOutSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+                        </tr>
+                        <tr align="left">
+                          <td>Total Setoran</td>
+                          <td align="right">
+                            <b>{{ totalDepositSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    @if (city_id === 2) {
+                    <a (click)="printDepositSurabaya()">
+                      <button type="button" class="btn btn-flat btn-primary p-2 px-4">
+                        <i class="fa fa-save"></i> Print
+                      </button>
+                    </a>
+                    }
+                  </div>
+                </div>
+
+                @if (city_id === 1 || levelrule === 8 || levelrule === 7) {
+                <div class="activity-stream">
+                  <div class="stream">
+                    <h2>Setoran Pendapatan Harian :</h2>
+                    <table class="table table-striped table-bordered table-hover">
+                      <tbody>
+                        <tr align="left">
+                          <td>Keterangan</td>
+                          <td class="text-end">Total</td>
+                        </tr>
+                        <tr align="left">
+                          <td>Total Setoran</td>
+                          <td align="right">
+                            <b>{{ totalDepositDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <a (click)="printDeposit()">
+                      <button type="button" class="btn btn-flat btn-primary p-2 px-4">
+                        <i class="fa fa-save"></i> Print
+                      </button>
+                    </a>
+                  </div>
+                </div>
+                }
+              </div>
+              <!--end::Card body-->
+            </div>
+            <!--end::Card widget 20-->
           </div>
+          <!--end::Col-->
         </div>
-
-        <div class="activity-stream">
-          <div class="stream">
-            <h2>Informasi Pendapatan:</h2>
-            <table class="table table-striped table-bordered table-hover">
-              <tbody>
-                <tr align="left">
-                  <td>Keterangan</td>
-                  <td class="text-end">Total</td>
-                </tr>
-                <tr align="left">
-                  <td>Pembayaran Bulanan</td>
-                  <td align="right">{{ totalPaymentMonthly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-                </tr>
-                <tr align="left">
-                  <td>Pembayaran Via Transfer</td>
-                  <td align="right">{{ totalReminderPaymentTransfer | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        }
-
-        <div class="activity-stream">
-          <div class="stream">
-            <h2>Setoran Pendapatan Harian Surabaya:</h2>
-            <table class="table table-striped table-bordered table-hover">
-              <tbody>
-                <tr align="left">
-                  <td>Keterangan</td>
-                  <td class="text-end">Total</td>
-                </tr>
-                <tr align="left">
-                  <td>Total Pendapatan</td>
-                  <td align="right">{{ totalCashInSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-                </tr>
-                <tr align="left">
-                  <td>Total Pengeluaran</td>
-                  <td align="right">{{ totalCashOutSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
-                </tr>
-                <tr align="left">
-                  <td>Total Setoran</td>
-                  <td align="right">
-                    <b>{{ totalDepositSurabayaDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            @if (city_id === 2) {
-            <a (click)="printDepositSurabaya()">
-              <button type="button" class="btn btn-flat btn-primary p-2 px-4"><i class="fa fa-save"></i> Print</button>
-            </a>
-            }
-          </div>
-        </div>
-
-        @if (city_id === 1 || levelrule === 8) {
-        <div class="activity-stream">
-          <div class="stream">
-            <h2>Setoran Pendapatan Harian :</h2>
-            <table class="table table-striped table-bordered table-hover">
-              <tbody>
-                <tr align="left">
-                  <td>Keterangan</td>
-                  <td class="text-end">Total</td>
-                </tr>
-                <tr align="left">
-                  <td>Total Setoran</td>
-                  <td align="right">
-                    <b>{{ totalDepositDaily | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <a (click)="printDeposit()">
-              <button type="button" class="btn btn-flat btn-primary p-2 px-4"><i class="fa fa-save"></i> Print</button>
-            </a>
-          </div>
-        </div>
-        }
       </div>
-      <!--end::Card body-->
+      <!--begin::Tap pane-->
+      <div class="tab-pane fade" role="tabpanel" [ngClass]="{ 'active show': currentTab === 'Monthly' }">
+        <div class="row col-md-12 col-lg-12 col-xl-12 col-xxl-12 mb-md-5 mb-xl-10 mt-2">
+          <!--begin::Col-->
+          <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 mb-md-5 mb-xl-10 mt-2">
+            <div class="card">
+              <div class="card-body" [ngClass]="{ 'pt-0': isMobile }">
+                <!-- begin::Table container -->
+                <div class="table-responsive">
+                  <!-- begin::Table -->
+                  <ngx-table
+                    #table
+                    [configuration]="configuration"
+                    [data]="dataLunasMonthly"
+                    [columns]="columnsMonthly"
+                    [pagination]="pagination"
+                    (event)="eventEmitted($event)"
+                    tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+                  >
+                    <ng-template let-row let-index="index">
+                      <td>
+                        <span class="text-gray-900 d-block">{{ getIndex(index) }}</span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block" (click)="openModalEdit(row)">
+                          <b>{{ row.resi_number }}</b>
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.book_date | date : 'dd/MM/yyyy' : 'GMT' }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">
+                          {{ row.sender?.name }} <br />
+                          {{ row.sender?.address }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block">{{
+                          row.cost | currency : 'Rp ' : 'symbol' : '1.0-2'
+                        }}</span>
+                      </td>
+                      <td>
+                        <span class="text-gray-900 d-block"> @if (row.payment) { Lunas } @else { Belum Lunas } </span>
+                      </td>
+                      <td class="text-end">
+                        <div class="d-block">
+                          <a
+                            class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
+                            data-bs-toggle="tooltip"
+                            data-bs-trigger="hover"
+                            data-bs-dismiss-="click"
+                            data-bs-placement="top"
+                            title="Edit"
+                            (click)="openModalEdit(row)"
+                            ngbTooltip="Edit Status"
+                          >
+                            <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
+                          </a>
+                        </div>
+                      </td>
+                    </ng-template>
+                  </ngx-table>
+                  <!-- end::Table -->
+                </div>
+                <!-- end::Table container -->
+
+                <b>TOTAL PAKET LUNAS: {{ totalDataLunasMonthlyPaid | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b> <br />
+                <b
+                  >TOTAL PAKET BELUM LUNAS:
+                  {{ totalDataLunasMonthlyNotPaid | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <!--end::Card widget 20-->
   </div>
-  <!--end::Col-->
 </div>
 <!--end::Row-->

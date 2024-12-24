@@ -683,12 +683,12 @@
         <span class="menu-icon">
           <app-keenicon name="message-text-2" class="fs-2"></app-keenicon>
         </span>
-        <span class="menu-title" data-link="/apps/chat" translate>Chat </span>
+        <span class="menu-title" data-link="/apps/chat" translate>Chat (Cooming Soon)</span>
         <span class="menu-arrow"></span>
       </span>
       <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
         <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/apps/chat/private-chat">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/management/users">
             <span class="menu-bullet">
               <span class="bullet bullet-dot"></span>
             </span>
@@ -696,7 +696,7 @@
           </a>
         </div>
         <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/apps/chat/group-chat">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/management/users">
             <span class="menu-bullet">
               <span class="bullet bullet-dot"></span>
             </span>
@@ -712,7 +712,7 @@
         <span class="menu-icon">
           <app-keenicon name="profile-user" class="fs-2"></app-keenicon>
         </span>
-        <span class="menu-title" data-link="/management" translate>User Management </span>
+        <span class="menu-title" data-link="/management" translate>User Management (Cooming Soon) </span>
         <span class="menu-arrow"></span>
       </span>
       <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
@@ -802,7 +802,7 @@
         <span class="menu-icon">
           <app-keenicon name="wallet" class="fs-2"></app-keenicon>
         </span>
-        <span class="menu-title" data-link="/mutation" translate>Mutation </span>
+        <span class="menu-title" data-link="/mutation" translate>Mutation (Cooming Soon)</span>
         <span class="menu-arrow"></span>
       </span>
       <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
@@ -916,6 +916,179 @@
         <span class="menu-title" translate>Courier Commission </span>
       </a>
     </div> -->
+    } @if (levelrule === 7) {
+    <!-- Separator -->
+    <div class="menu-item">
+      <div class="menu-content pt-8 pb-2">
+        <span class="menu-section text-muted text-uppercase fs-8 ls-1" translate>Deposit</span>
+      </div>
+    </div>
+
+    <!-- Monitoring -->
+    <div class="menu-item">
+      <a class="menu-link without-sub" routerLinkActive="active" routerLink="/finance/deposit/daily">
+        <span class="menu-icon">
+          <app-keenicon name="save-deposit" class="fs-2"></app-keenicon>
+        </span>
+        <span class="menu-title" data-link="/finance/deposit" translate> Deposit </span>
+        <!-- <span class="menu-arrow"></span> -->
+      </a>
+    </div>
+
+    <!-- Separator -->
+    <div class="menu-item">
+      <div class="menu-content pt-8 pb-2">
+        <span class="menu-section text-muted text-uppercase fs-8 ls-1" translate>Apps</span>
+      </div>
+    </div>
+
+    <!-- Chat -->
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+      <span class="menu-link">
+        <span class="menu-icon">
+          <app-keenicon name="message-text-2" class="fs-2"></app-keenicon>
+        </span>
+        <span class="menu-title" data-link="/apps/chat" translate>Chat (Cooming Soon)</span>
+        <span class="menu-arrow"></span>
+      </span>
+      <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/management/users">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>Private Chat </span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/management/users">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>Group Chat </span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Management -->
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+      <span class="menu-link">
+        <span class="menu-icon">
+          <app-keenicon name="profile-user" class="fs-2"></app-keenicon>
+        </span>
+        <span class="menu-title" data-link="/management" translate>User Management (Cooming Soon)</span>
+        <span class="menu-arrow"></span>
+      </span>
+      <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/management/users">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>Users </span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/management/users">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>Roles </span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/management/users">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>Permissions </span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Master -->
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+      <span class="menu-link">
+        <span class="menu-icon">
+          <app-keenicon name="data" class="fs-2"></app-keenicon>
+        </span>
+        <span class="menu-title" data-link="/master" translate>Master </span>
+        <span class="menu-arrow"></span>
+      </span>
+      <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/master/category">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>Category </span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/master/sub-category">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>Sub Category </span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/master/customer">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>Customer </span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/master/employee">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>Employee </span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/master/car">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>Car </span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mutation -->
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+      <span class="menu-link">
+        <span class="menu-icon">
+          <app-keenicon name="wallet" class="fs-2"></app-keenicon>
+        </span>
+        <span class="menu-title" data-link="/mutation" translate>Mutation (Cooming Soon)</span>
+        <span class="menu-arrow"></span>
+      </span>
+      <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/management/users">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>BCA </span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/management/users">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" translate>Mandiri </span>
+          </a>
+        </div>
+      </div>
+    </div>
     }
   </div>
   <!--end::Menu-->

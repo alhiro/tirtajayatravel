@@ -258,7 +258,9 @@
   "SWAL": {
     "ARE_YOU_SURE": "Apakah Anda Yakin?",
     "REVERT_TEXT": "Kamu bisa mengubahnya kembali di menu lainnya (Batal)",
+    "EDIT_TEXT": "Kamu bisa mengubahnya kembali",
     "YES_CANCEL_IT": "Iya, Batalkan",
+    "YES_PAID": "Iya, Sudah Lunas",
     "REVERT_WARNING": "Kamu tidak akan bisa mengembalikannya!",
     "CONFIRM_DELETE": "Iya, Hapuskan",
     "BACK_BUTTON": "Kembali",

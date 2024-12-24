@@ -12,6 +12,10 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { PackageModel } from '@app/pages/booking/package/models/package.model';
 import { ScheduleService } from '@app/pages/garage/schedule/schedule.service';
 import { ScheduleModel } from '@app/pages/garage/schedule/models/schedule.model';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import Swal from 'sweetalert2';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-deposit',
@@ -25,6 +29,7 @@ export class DepositComponent implements OnInit, OnDestroy {
 
   public columnsPackage!: Columns[];
   public columnsPassenger!: Columns[];
+  public columnsMonthly!: Columns[];
 
   public configuration: Config = { ...DefaultConfig };
 
@@ -33,8 +38,12 @@ export class DepositComponent implements OnInit, OnDestroy {
   public dataDeposit: any;
   public dataPackage: any[] = [];
   public dataPassenger: any[] = [];
+  public dataLunasMonthly: any;
 
   public dataGarage: any;
+
+  public totalDataLunasMonthlyPaid = 0;
+  public totalDataLunasMonthlyNotPaid = 0;
 
   // table package
   public totalCost = 0;
@@ -110,6 +119,10 @@ export class DepositComponent implements OnInit, OnDestroy {
   public startDate: any;
   public endDate: any;
 
+  currentTab = 'Daily';
+  isMobile: boolean = false;
+  isLoading = false;
+
   public pagination = {
     limit: 100,
     offset: 1,
@@ -140,8 +153,11 @@ export class DepositComponent implements OnInit, OnDestroy {
     private packageService: PackageService,
     private cashoutService: CashoutService,
     private scheduleService: ScheduleService,
+    private snackbar: MatSnackBar,
     private handlerResponseService: HandlerResponseService,
-    private utils: Utils
+    private utils: Utils,
+    private translate: TranslateService,
+    private breakpointObserver: BreakpointObserver
   ) {
     this.levelrule = this.utils.getLevel();
     this.city_id = this.utils.getCity();
@@ -154,6 +170,15 @@ export class DepositComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.breakpointObserver.observe(['(max-width: 440px)']).subscribe((result) => {
+      this.isMobile = result.matches;
+      if (this.isMobile) {
+        console.log('Mobile screen detected');
+      } else {
+        console.log('Desktop screen detected');
+      }
+    });
+
     this.configuration.resizeColumn = false;
     this.configuration.fixedColumnWidth = true;
     this.configuration.horizontalScroll = false;
@@ -180,6 +205,16 @@ export class DepositComponent implements OnInit, OnDestroy {
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
 
+    this.columnsMonthly = [
+      { key: '', title: 'No.', width: '3%' },
+      { key: 'resi_number', title: 'No Resi' },
+      { key: 'book_date', title: 'Send Date' },
+      { key: 'sender_id', title: 'Sender' },
+      { key: 'cost', title: 'Cost' },
+      { key: 'payment', title: 'Status' },
+      { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
+    ];
+
     const inputDate = new Date();
     const { startDate, endDate } = this.utils.singleDate(inputDate);
 
@@ -195,6 +230,36 @@ export class DepositComponent implements OnInit, OnDestroy {
         console.error('Error in one or more functions:', err);
       },
     });
+  }
+
+  setCurrentTab(tab: string) {
+    this.currentTab = tab;
+
+    if (this.currentTab === 'Daily') {
+      // const inputDate = new Date();
+      // const { startDate, endDate } = this.utils.singleDate(inputDate);
+
+      // this.startDate = startDate;
+      // this.endDate = endDate;
+
+      forkJoin([this.dataListGarage(), this.dataListCashout()]).subscribe({
+        next: () => {
+          console.log('All functions completed');
+          this.dataListDeposit();
+        },
+        error: (err: any) => {
+          console.error('Error in one or more functions:', err);
+        },
+      });
+    } else if (this.currentTab === 'Monthly') {
+      // const inputDate = new Date();
+      // const { startDate, endDate } = this.utils.singleDate(inputDate);
+
+      // this.startDate = startDate;
+      // this.endDate = endDate;
+
+      this.dataListDeposit();
+    }
   }
 
   formatDateNow(event: any) {
@@ -228,6 +293,11 @@ export class DepositComponent implements OnInit, OnDestroy {
         console.error('Error in one or more functions:', err);
       },
     });
+  }
+
+  printFilterMonthly(datepicker: any) {
+    sessionStorage.setItem('printlistmonthly', JSON.stringify(this.dataPackage));
+    window.open('#/finance/commission/package/printlunasmonthly', '_blank');
   }
 
   printDeposit() {
@@ -674,8 +744,89 @@ export class DepositComponent implements OnInit, OnDestroy {
 
         this.totalDepositDaily = Number(this.totalDepositMalangDaily) + Number(this.totalDepositSurabayaDaily);
 
+        this.dataLunasMonthly = [...dataMonthly, ...dataPaymentTransfer];
+
+        this.dataLunasMonthly.sort((a: any, b: any) => {
+          if (dataMonthly.includes(a) && !dataMonthly.includes(b)) return -1;
+          if (!dataMonthly.includes(a) && dataMonthly.includes(b)) return 1;
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        });
+        console.log(this.dataLunasMonthly);
+
+        const dataLunasMonthlyPaid = this.dataLunasMonthly.filter(
+          (data: PackageModel) => data.payment !== null || data.payment !== 0
+        );
+        this.totalDataLunasMonthlyPaid = this.utils.sumTotal(dataLunasMonthlyPaid?.map((data: any) => data?.cost));
+
+        const dataLunasMonthlyNotPaid = this.dataLunasMonthly.filter(
+          (data: PackageModel) => data.payment === null || data.payment === 0
+        );
+        this.totalDataLunasMonthlyNotPaid = this.utils.sumTotal(
+          dataLunasMonthlyNotPaid?.map((data: any) => data?.cost)
+        );
+
         this.configuration.isLoading = false;
         this.cdr.detectChanges();
+      });
+  }
+
+  getIndex(i: number): number {
+    return (this.pagination.offset - 1) * this.pagination.limit + (i + 1);
+  }
+
+  async openModalEdit(event: PackageModel) {
+    console.log(event);
+    const updatePayment: any = {
+      package_id: event.package_id,
+      go_send_id: event.go_send_id,
+      resi_number: event.resi_number,
+      payment: event.cost,
+    };
+
+    this.translate
+      .get(['SWAL.ARE_YOU_SURE', 'SWAL.REVERT_WARNING', 'SWAL.YES_PAID', 'SWAL.BACK_BUTTON'])
+      .subscribe((translations) => {
+        Swal.fire({
+          title: translations['SWAL.ARE_YOU_SURE'],
+          text: translations['SWAL.REVERT_WARNING'],
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#22D868FF',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: translations['SWAL.YES_PAID'],
+          cancelButtonText: translations['SWAL.BACK_BUTTON'],
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // edit package
+            this.isLoading = true;
+            this.packageService
+              .patch(updatePayment)
+              .pipe(
+                finalize(() => {
+                  this.isLoading = false;
+                })
+              )
+              .subscribe(
+                async (resp: any) => {
+                  if (resp) {
+                    this.snackbar.open(resp.message, '', {
+                      panelClass: 'snackbar-success',
+                      duration: 5000,
+                    });
+
+                    this.dataListDeposit();
+                  } else {
+                    this.isLoading = false;
+                  }
+                },
+                (error: any) => {
+                  console.log(error);
+                  this.isLoading = false;
+                  this.handlerResponseService.failedResponse(error);
+                }
+              );
+          }
+        });
       });
   }
 

@@ -162,7 +162,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.levelrule = this.utils.getLevel();
     this.city_id = this.utils.getCity();
     this.username = this.utils.getUsername();
-    if ((this.levelrule === 2 && this.city_id == 2) || this.levelrule === 8) {
+    if (this.levelrule === 2 && this.city_id == 2) {
       this.currentTab = 'Malang';
     } else if ((this.levelrule === 2 && this.city_id == 1) || (this.levelrule === 3 && this.city_id == 1)) {
       this.currentTab = 'Surabaya';
