@@ -40,7 +40,7 @@
             type="text"
             class="form-control p-2"
             [(ngModel)]="modelDriver"
-            [ngbTypeahead]="searchDataDriver"
+            [ngbTypeahead]="searchDataPackage"
             placeholder="Search Resi..."
           />
         </div>
@@ -198,7 +198,8 @@
               <td>
                 @if (row.check_sp) {
                 <span>{{ row.check_date_sp | date : 'dd/MM/yyyy' : 'GMT' }} </span>
-                } @else { @if (row.recipient?.received_by) { @if (levelrule === 8 || levelrule === 2 && city_id === 2) {
+                } @else { @if (row.recipient?.received_by) { @if (levelrule === 8 || (levelrule === 2 && city_id === 2))
+                {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -219,26 +220,24 @@
               <td>
                 @if (row.check_payment) {
                 <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
-                }
+                } @else { @if (row.status === 'Bayar Tujuan (COD)') {
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer me-2"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Edit"
+                  (click)="openModalEditPayment(row)"
+                  ngbTooltip="Check BA"
+                >
+                  <app-keenicon name="wallet" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+                } }
               </td>
               <td class="text-end">
                 <div class="d-block">
-                  @if (row.recipient?.received_by) { @if (!row.check_payment && city_id === 2 || !row.check_payment &&
-                  levelrule === 8) { @if (row.status === 'Bayar Tujuan (COD)') {
-                  <a
-                    class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer me-2"
-                    data-bs-toggle="tooltip"
-                    data-bs-trigger="hover"
-                    data-bs-dismiss-="click"
-                    data-bs-placement="top"
-                    title="Edit"
-                    (click)="openModalEditPayment(row)"
-                    ngbTooltip="Check BA"
-                  >
-                    <app-keenicon name="wallet" class="fs-md-3 text-primary"></app-keenicon>
-                  </a>
-                  } }
-
+                  @if (row.recipient?.received_by) {
                   <a
                     class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                     data-bs-toggle="tooltip"
@@ -327,7 +326,8 @@
               <td>
                 @if (row.check_sp) {
                 <span>{{ row.check_date_sp | date : 'dd/MM/yyyy' : 'GMT' }} </span>
-                } @else { @if (row.recipient?.received_by) { @if (levelrule === 8 || levelrule === 2 && city_id === 1) {
+                } @else { @if (row.recipient?.received_by) { @if (levelrule === 8 || (levelrule === 2 && city_id === 1))
+                {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -348,26 +348,24 @@
               <td>
                 @if (row.check_payment) {
                 <span class="text-gray-900 d-flex">{{ row.updated_by }}</span>
-                }
+                } @else { @if (row.status === 'Bayar Tujuan (COD)') {
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer me-2"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  title="Edit"
+                  (click)="openModalEditPayment(row)"
+                  ngbTooltip="Check BA"
+                >
+                  <app-keenicon name="wallet" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+                } }
               </td>
               <td class="text-end">
                 <div class="d-flex">
-                  @if (row.recipient?.received_by) { @if (!row.check_payment && city_id === 1 || !row.check_payment &&
-                  levelrule === 8) { @if (row.status === 'Bayar Tujuan (COD)') {
-                  <a
-                    class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer me-2"
-                    data-bs-toggle="tooltip"
-                    data-bs-trigger="hover"
-                    data-bs-dismiss-="click"
-                    data-bs-placement="top"
-                    title="Edit"
-                    (click)="openModalEditPayment(row)"
-                    ngbTooltip="Check BA"
-                  >
-                    <app-keenicon name="wallet" class="fs-md-3 text-primary"></app-keenicon>
-                  </a>
-                  } }
-
+                  @if (row.recipient?.received_by) {
                   <a
                     class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                     data-bs-toggle="tooltip"

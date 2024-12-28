@@ -19,9 +19,11 @@
           <li class="nav-item" (click)="setCurrentTab('Daily')" [style.cursor]="'pointer'">
             <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Daily'" data-toggle="tab">Daily</a>
           </li>
+          @if (city_id === 1 || levelrule === 8 || levelrule === 7) {
           <li class="nav-item" (click)="setCurrentTab('Monthly')" [style.cursor]="'pointer'">
             <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Monthly'" data-toggle="tab">Transfer</a>
           </li>
+          }
         </ul>
       </div>
     </div>

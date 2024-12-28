@@ -196,7 +196,7 @@
                 <span class="text-gray-900 d-block">{{ row.status }}</span>
               </td>
               <td class="text-end">
-                @if (levelrule === 2 && city_id === 1) {
+                @if (levelrule === 2 && city_id === 1 || levelrule === 8) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -254,8 +254,8 @@
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
                 </a> -->
 
-                @if (levelrule === 2 && city_id === 1) { @if (row?.packages?.length === 0 && row?.passengers?.length ===
-                0) {
+                @if (levelrule === 2 && city_id === 1 || levelrule === 8) { @if (row?.packages?.length === 0 &&
+                row?.passengers?.length === 0) {
                 <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
@@ -359,7 +359,7 @@
                 <span class="text-gray-900 d-block">{{ row.status }}</span>
               </td>
               <td class="text-end">
-                @if (levelrule === 2 && city_id === 2) {
+                @if (levelrule === 2 && city_id === 2 || levelrule === 8) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -417,8 +417,8 @@
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
                 </a> -->
 
-                @if (levelrule === 2 && city_id === 2) { @if (row?.packages?.length === 0 && row?.passengers?.length ===
-                0) {
+                @if (levelrule === 2 && city_id === 2 || levelrule === 8) { @if (row?.packages?.length === 0 &&
+                row?.passengers?.length === 0) {
                 <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
@@ -832,7 +832,8 @@
           </span>
         </td>
         <td class="text-end">
-          @if (currentTab === 'Malang' && levelrule === 2 && city_id === 1) {
+          @if (currentTab === 'Malang' && levelrule === 2 && city_id === 1 || currentTab === 'Malang' && levelrule ===
+          8) {
           <a
             class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
             data-bs-toggle="tooltip"
@@ -844,7 +845,8 @@
           >
             <app-keenicon name="minus" class="fs-md-3 text-danger"></app-keenicon>
           </a>
-          } @if (currentTab === 'Surabaya' && levelrule === 2 && city_id === 2) {
+          } @if (currentTab === 'Surabaya' && levelrule === 2 && city_id === 2 || currentTab === 'Surabaya' && levelrule
+          === 8) {
           <a
             class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
             data-bs-toggle="tooltip"
@@ -960,7 +962,8 @@
           </span>
         </td>
         <td class="text-end">
-          @if (currentTab === 'Malang' && levelrule === 2 && city_id === 1) {
+          @if (currentTab === 'Malang' && levelrule === 2 && city_id === 1 || currentTab === 'Malang' && levelrule ===
+          8) {
           <a
             class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
             data-bs-toggle="tooltip"
@@ -972,7 +975,8 @@
           >
             <app-keenicon name="minus" class="fs-md-3 text-danger"></app-keenicon>
           </a>
-          } @if (currentTab === 'Surabaya' && levelrule === 2 && city_id === 2) {
+          } @if (currentTab === 'Surabaya' && levelrule === 2 && city_id === 2 || currentTab === 'Surabaya' && levelrule
+          === 8) {
           <a
             class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
             data-bs-toggle="tooltip"

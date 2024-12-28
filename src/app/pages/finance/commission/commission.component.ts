@@ -183,7 +183,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
-      search: this.city_id === 1 || this.city_id === null ? this.pagination.search : 'Bayar Tujuan (COD)',
+      search: this.pagination.search,
       startDate: this.startDate,
       endDate: this.endDate,
       city: this.currentTab,
@@ -384,7 +384,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
-      search: this.city_id === 1 || this.city_id === null ? this.pagination.search : 'Bayar Tujuan (COD)',
+      search: this.pagination.search,
       startDate: this.startDate,
       endDate: this.endDate,
       city: this.city_id === 1 ? 'Surabaya' : 'Malang',
@@ -478,7 +478,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
-        search: this.city_id === 1 || this.city_id === null ? this.pagination.search : 'Bayar Tujuan (COD)',
+        search: this.pagination.search,
         startDate: this.startDate,
         endDate: this.endDate,
         city: this.currentTab,
@@ -490,7 +490,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
       this.params = {
         limit: this.pagination.limit,
         page: this.pagination.offset,
-        search: this.city_id === 1 || this.city_id === null ? this.pagination.search : 'Bayar Tujuan (COD)',
+        search: this.pagination.search,
         startDate: this.startDate,
         endDate: this.endDate,
         city: this.currentTab,
@@ -524,7 +524,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
-      search: this.city_id === 1 || this.city_id === null ? this.pagination.search : 'Bayar Tujuan (COD)',
+      search: this.pagination.search,
       startDate: this.startDate,
       endDate: this.endDate,
       city: this.currentTab,
@@ -552,33 +552,31 @@ export class CommissionComponent implements OnInit, OnDestroy {
       });
   }
 
-  searchDataDriver: any = (text$: Observable<string>) =>
+  searchDataPackage: any = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(1000),
       distinctUntilChanged(),
       switchMap((term) =>
-        this.deliveryService
-          .driver({
+        this.packageService
+          .list({
             limit: this.params.limit,
             page: this.params.page,
             search: term,
-            startDate: this.params.startDate,
-            endDate: this.params.endDate,
+            startDate: '',
+            endDate: '',
+            city: this.currentTab,
+            status: this.pagination.status,
+            username: this.levelrule === 5 ? this.username : '',
           })
           .pipe(
             map((response: any) => {
               if (response) {
-                this.params = {
-                  limit: this.pagination.limit,
-                  page: this.pagination.offset,
-                  search: this.city_id === 1 || this.city_id === null ? this.pagination.search : 'Bayar Tujuan (COD)',
-                  startDate: this.startDate,
-                  endDate: this.endDate,
-                  city: this.currentTab,
-                  status: this.pagination.status,
-                  username: this.levelrule === 5 ? this.username : '',
-                };
-                this.dataList(this.params);
+                this.data = response.data;
+                this.dataLength = response.length;
+
+                // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
+                this.pagination.count = response.length;
+                this.pagination = { ...this.pagination };
               }
             }),
             catchError((err) => {

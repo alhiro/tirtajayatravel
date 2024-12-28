@@ -388,7 +388,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       fromDate: this.startDate,
       toDate: this.endDate,
       city: 'Malang',
-      status: 'Delivery',
+      status: '',
       username: '',
     };
     console.log(paramRange);
@@ -404,7 +404,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       fromDate: this.startDate,
       toDate: this.endDate,
       city: 'Surabaya',
-      status: 'Delivery',
+      status: '',
       username: '',
     };
     console.log(paramRange);
@@ -562,7 +562,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       startDate: this.startDate,
       endDate: this.endDate,
       city: '',
-      status: 'Delivery',
+      status: '',
       username: '',
     };
 
@@ -601,7 +601,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       startDate: this.startDate,
       endDate: this.endDate,
       city: '',
-      status: 'Delivery',
+      status: '',
     };
     console.log(params);
 
