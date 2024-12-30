@@ -183,7 +183,8 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
           (data: PackageModel) => data.status === 'Lunas (Kantor)' || data.status === 'Lunas (Transfer)'
         );
 
-        const dataCommission = this.data?.filter((data: PackageModel) => data.check_sp === true);
+        const dataCash = response?.data?.filter((data: PackageModel) => data.status === 'Lunas (Kantor)');
+        const dataCommission = dataCash?.filter((data: PackageModel) => data.check_sp === true);
         this.totalCommission = this.utils.sumTotal(dataCommission?.map((data: PackageModel) => data.agent_commission));
 
         const groupedDataCommission: GroupedDataCost[] = Object.values(
@@ -206,14 +207,13 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
 
         // Data Lunas (Transfer)
         const dataTransfer = response?.data?.filter((data: PackageModel) => data.status === 'Lunas (Transfer)');
-
         const dataCommissionTransfer = dataTransfer?.filter((data: PackageModel) => data.check_sp === true);
         this.totalCommissionTransfer = this.utils.sumTotal(
           dataCommissionTransfer?.map((data: PackageModel) => data.agent_commission)
         );
 
         const groupedDataCommissionTransfer: GroupedDataCost[] = Object.values(
-          dataCommission.reduce((acc: any, item: any) => {
+          dataCommissionTransfer.reduce((acc: any, item: any) => {
             if (!acc[item.updated_by]) {
               acc[item.updated_by] = {
                 id: Object.keys(acc).length + 1,
@@ -258,7 +258,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         this.groupAdminCommissionPiutang = groupedDataCommissionPiutang;
         console.log(groupedDataCommissionPiutang);
 
-        const dataPiutang = this.dataPiutang?.filter((data: any) => data.check_payment === true);
+        const dataPiutang = this.dataPiutang?.filter((data: PackageModel) => data.check_payment === true);
         this.totalPiutang = this.utils.sumTotal(dataPiutang?.map((data: PackageModel) => data.cost));
         this.totalKoliPiutang = this.dataPiutang?.length;
 
@@ -288,7 +288,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         this.totalKoliMonthly = this.dataMonthly?.length;
 
         const groupedDataMonthly: GroupedDataCost[] = Object.values(
-          dataPiutang.reduce((acc: any, item: any) => {
+          dataMonthly.reduce((acc: any, item: any) => {
             if (!acc[item.updated_by]) {
               acc[item.updated_by] = {
                 id: Object.keys(acc).length + 1,
