@@ -34,6 +34,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
   public username: any;
 
   public groupAdminCommission: any;
+  public groupAdminCommissionTransfer: any;
   public groupAdminCommissionPiutang: any;
   public groupAdminPiutang: any;
   public groupAdminMonthly: any;
@@ -46,6 +47,8 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
 
   public totalPiutang: any = 0;
   public totalCommission: any = 0;
+  public totalCommissionTransfer: any = 0;
+  public totalCommissionPackage: any = 0;
   public totalCommissionPiutang: any = 0;
   public totalMonthly: any = 0;
 
@@ -175,7 +178,11 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         //     data.status === 'Piutang' || data.status === 'Lunas (Kantor)' || data.status === 'Bayar Tujuan (COD)'
         // );
 
-        this.data = response?.data?.filter((data: PackageModel) => data.status === 'Lunas (Kantor)');
+        // Data Lunas (Kantor)
+        this.data = response?.data?.filter(
+          (data: PackageModel) => data.status === 'Lunas (Kantor)' || data.status === 'Lunas (Transfer)'
+        );
+
         const dataCommission = this.data?.filter((data: PackageModel) => data.check_sp === true);
         this.totalCommission = this.utils.sumTotal(dataCommission?.map((data: PackageModel) => data.agent_commission));
 
@@ -197,14 +204,36 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         this.groupAdminCommission = groupedDataCommission;
         console.log(groupedDataCommission);
 
+        // Data Lunas (Transfer)
+        const dataTransfer = response?.data?.filter((data: PackageModel) => data.status === 'Lunas (Transfer)');
+
+        const dataCommissionTransfer = dataTransfer?.filter((data: PackageModel) => data.check_sp === true);
+        this.totalCommissionTransfer = this.utils.sumTotal(
+          dataCommissionTransfer?.map((data: PackageModel) => data.agent_commission)
+        );
+
+        const groupedDataCommissionTransfer: GroupedDataCost[] = Object.values(
+          dataCommission.reduce((acc: any, item: any) => {
+            if (!acc[item.updated_by]) {
+              acc[item.updated_by] = {
+                id: Object.keys(acc).length + 1,
+                admin: item.updated_by,
+                totalCost: 0,
+                check_sp: item.check_sp,
+                city_id: item.city_id,
+              };
+            }
+            acc[item.updated_by].totalCost += Number(item.agent_commission);
+            return acc;
+          }, {} as { [key: string]: GroupedDataCost })
+        );
+        this.groupAdminCommissionTransfer = groupedDataCommissionTransfer;
+        console.log(groupedDataCommissionTransfer);
+
         // Data piutang & ba
-        if (this.city_id === 1) {
-          this.dataPiutang = response.data?.filter(
-            (data: PackageModel) => data.status === 'Piutang' || data.status === 'Bayar Tujuan (COD)'
-          );
-        } else {
-          this.dataPiutang = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
-        }
+        this.dataPiutang = response.data?.filter(
+          (data: PackageModel) => data.status === 'Piutang' || data.status === 'Bayar Tujuan (COD)'
+        );
 
         const dataCommissionPiutang = this.dataPiutang?.filter((data: PackageModel) => data.check_payment === true);
         this.totalCommissionPiutang = this.utils.sumTotal(
@@ -212,7 +241,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         );
 
         const groupedDataCommissionPiutang: GroupedDataCost[] = Object.values(
-          dataCommission.reduce((acc: any, item: any) => {
+          dataCommissionPiutang.reduce((acc: any, item: any) => {
             if (!acc[item.updated_by]) {
               acc[item.updated_by] = {
                 id: Object.keys(acc).length + 1,
@@ -275,6 +304,9 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         );
         this.groupAdminMonthly = groupedDataMonthly;
         console.log(groupedDataMonthly);
+
+        this.totalCommissionPackage =
+          Number(this.totalCommission) + Number(this.totalCommissionTransfer) + this.totalCommissionPiutang;
 
         this.configuration.isLoading = false;
         this.cdr.detectChanges();

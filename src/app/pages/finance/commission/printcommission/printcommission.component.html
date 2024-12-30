@@ -141,16 +141,38 @@
       </div>
       <!-- end::Table container -->
 
-      <div class="mt-5 mb-7">
-        <span
-          ><b>TOTAL SETORAN KOMISI PAKET: {{ totalCommission | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
-        ><br />
-      </div>
-      <div class="mt-1">
-        @for (admin of groupAdminCommission; track admin) {
-        <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
-        <br />
-        }
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mt-3 mb-1">
+            <span
+              ><b
+                >TOTAL SETORAN KOMISI PAKET CASH: {{ totalCommission | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+              ></span
+            ><br />
+          </div>
+          <div class="mt-1">
+            @for (admin of groupAdminCommission; track admin) {
+            <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+            <br />
+            }
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mt-3 mb-1">
+            <span
+              ><b
+                >TOTAL SETORAN KOMISI PAKET TRANSFER:
+                {{ totalCommissionTransfer | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+              ></span
+            ><br />
+          </div>
+          <div class="mt-1">
+            @for (admin of groupAdminCommissionTransfer; track admin) {
+            <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+            <br />
+            }
+          </div>
+        </div>
       </div>
 
       <hr class="mb-7" />
@@ -267,10 +289,11 @@
       </div>
       <!-- end::Table container -->
 
-      <div class="mt-5 mb-7">
+      <div class="mt-3 mb-1">
         <span
           ><b
-            >TOTAL SETORAN KOMISI PAKET BA: {{ totalCommissionPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+            >TOTAL SETORAN KOMISI PAKET BA & Piutang:
+            {{ totalCommissionPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
           ></span
         ><br />
       </div>
@@ -280,9 +303,11 @@
         <br />
         }
       </div>
-      <div class="mt-5 mb-7">
+      <div class="mt-3 mb-1">
         <span
-          ><b>TOTAL SETORAN PELUNASAN PAKET BA: {{ totalPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
+          ><b
+            >TOTAL SETORAN PELUNASAN PAKET BA & Piutang: {{ totalPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+          ></span
         ><br />
       </div>
       <div class="mt-1">
@@ -291,6 +316,16 @@
         <br />
         }
       </div>
+      <div class="col-md-12">
+        <div class="mt-5 mb-7 text-center">
+          <span class="fs-4"
+            ><b
+              >TOTAL SETORAN KOMISI PAKET: {{ totalCommissionPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+            ></span
+          ><br />
+        </div>
+      </div>
+
       } @if (lastSegment === 'printmonthly') {
       <!-- begin::Table container -->
       <span>Nama: {{ username }}</span>
