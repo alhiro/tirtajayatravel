@@ -246,8 +246,8 @@
             </tr>
             @for (data of dataPackage; track data) {
             <tr>
-              <td class="p-0" style="width: 70%">{{ data.package?.driver }}</td>
-              <td class="p-0">{{ data.package?.total_cost_paid_sby | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+              <td class="p-0" style="width: 70%">{{ data.package_paid?.driver }}</td>
+              <td class="p-0">{{ data.package_paid?.total_lunas_sby | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
             </tr>
             }
           </tbody>
