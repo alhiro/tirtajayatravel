@@ -368,8 +368,9 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         this.totalCommissionPackage =
           Number(this.totalCommission) +
           Number(this.totalCommissionTransfer) +
-          +Number(this.totalCommissionBa) +
-          Number(this.totalCommissionPiutang);
+          Number(this.totalCommissionBa) +
+          Number(this.totalCommissionPiutang) +
+          Number(this.totalCommissionCustomerMonthly);
 
         this.configuration.isLoading = false;
         this.cdr.detectChanges();
