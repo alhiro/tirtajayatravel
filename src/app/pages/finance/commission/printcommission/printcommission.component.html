@@ -142,7 +142,7 @@
       <!-- end::Table container -->
 
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="mt-3 mb-1">
             <span
               ><b
@@ -157,7 +157,7 @@
             }
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="mt-3 mb-1">
             <span
               ><b
@@ -173,7 +173,7 @@
             }
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="mt-3 mb-1">
             <span
               ><b
@@ -183,6 +183,22 @@
           </div>
           <div class="mt-1">
             @for (admin of groupAdminCommissionBa; track admin) {
+            <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+            <br />
+            }
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mt-3 mb-1">
+            <span
+              ><b
+                >TOTAL SETORAN KOMISI PAKET CUSTOMER (MONTHLY):
+                {{ totalCommissionCustomerMonthly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+              ></span
+            ><br />
+          </div>
+          <div class="mt-1">
+            @for (admin of groupAdminCommissionCustomerMonthly; track admin) {
             <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
             <br />
             }

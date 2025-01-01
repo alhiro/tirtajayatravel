@@ -472,12 +472,11 @@ export class BsdComponent implements OnInit, OnDestroy {
         //   }
         // });
 
-        this.dataLength = response.length;
-
         const dataBsd = response.data?.filter(
           (data: any) => data.packages.length !== 0 || data.passengers.length !== 0
         );
-        this.data = dataBsd;
+        this.data = dataBsd.filter((data: any) => data.car_id !== null);
+        this.dataLength = this.data.length;
 
         // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
         this.pagination.count = response.length;
@@ -1055,40 +1054,50 @@ export class BsdComponent implements OnInit, OnDestroy {
 
   async openModalAddSPGroup() {
     console.log(this.groupCheckedBsdList);
+    console.log(this.groupCheckedBsdList?.length);
 
-    this.formCost.patchValue({ car_id: this.groupCheckedBsdList[0].car.car_id });
+    if (this.groupCheckedBsdList?.length === 0) {
+      this.snackbar.open('Pilih SP terlebih dahulu!', '', {
+        panelClass: 'snackbar-error',
+        duration: 10000,
+      });
+    } else {
+      this.formCost.patchValue({ car_id: this.groupCheckedBsdList[0]?.car?.car_id });
 
-    this.formSP.patchValue({
-      car: this.groupCheckedBsdList[0].employee.name,
-      car_no: this.groupCheckedBsdList[0].car.car_number,
-      send_date_city1: this.datePipe.transform(this.groupCheckedBsdList[0]?.send_date, 'dd-MM-yyyy, HH:mm'),
-      send_date_city2: this.datePipe.transform(this.groupCheckedBsdList[1]?.send_date, 'dd-MM-yyyy, HH:mm'),
-    });
+      this.formSP.patchValue({
+        car: this.groupCheckedBsdList[0]?.employee?.name,
+        car_no: this.groupCheckedBsdList[0]?.car?.car_number,
+        send_date_city1: this.datePipe.transform(this.groupCheckedBsdList[0]?.send_date, 'dd-MM-yyyy, HH:mm'),
+        send_date_city2: this.datePipe.transform(this.groupCheckedBsdList[1]?.send_date, 'dd-MM-yyyy, HH:mm'),
+      });
 
-    const dataPackages = this.groupCheckedBsdList.map((item) => item?.packages).flat();
-    const filterPackagesMlg = dataPackages.filter((packageItem) => packageItem.city_id === 1);
-    this.dataMalangPackage = filterPackagesMlg;
-    const filterPackagesSby = dataPackages.filter((packageItem) => packageItem.city_id === 2);
-    this.dataSurabayaPackage = filterPackagesSby;
-    console.log(this.dataMalangPackage);
-    console.log(this.dataSurabayaPackage);
+      const dataPackages = this.groupCheckedBsdList.map((item) => item?.packages).flat();
+      const filterPackagesMlg = dataPackages.filter((packageItem) => packageItem.city_id === 1);
+      this.dataMalangPackage = filterPackagesMlg;
+      const filterPackagesSby = dataPackages.filter((packageItem) => packageItem.city_id === 2);
+      this.dataSurabayaPackage = filterPackagesSby;
+      console.log(this.dataMalangPackage);
+      console.log(this.dataSurabayaPackage);
 
-    const dataPassengers = this.groupCheckedBsdList.map((item) => item?.passengers).flat();
-    const dataPassengersMlg = dataPassengers.filter((passengerItem) => passengerItem.city_id === 1);
-    this.dataMalangPassenger = dataPassengersMlg;
-    const dataPassengersSby = dataPassengers.filter((passengerItem) => passengerItem.city_id === 2);
-    this.dataSurabayaPassenger = dataPassengersSby;
-    console.log(this.dataMalangPassenger);
-    console.log(this.dataSurabayaPassenger);
+      const dataPassengers = this.groupCheckedBsdList.map((item) => item?.passengers).flat();
+      const dataPassengersMlg = dataPassengers.filter((passengerItem) => passengerItem.city_id === 1);
+      this.dataMalangPassenger = dataPassengersMlg;
+      const dataPassengersSby = dataPassengers.filter((passengerItem) => passengerItem.city_id === 2);
+      this.dataSurabayaPassenger = dataPassengersSby;
+      console.log(this.dataMalangPassenger);
+      console.log(this.dataSurabayaPassenger);
 
-    this.totalTariffPassenger = this.utils.sumTotal(
-      this.dataMalangPassenger.map((data: PassengerModel) => data.tariff)
-    );
-    this.totalPassenger = this.utils.sumTotal(
-      this.dataMalangPassenger.map((data: PassengerModel) => data.total_passenger)
-    );
+      this.totalTariffPassenger = this.utils.sumTotal(
+        this.dataMalangPassenger.map((data: PassengerModel) => data.tariff)
+      );
+      this.totalPassenger = this.utils.sumTotal(
+        this.dataMalangPassenger.map((data: PassengerModel) => data.total_passenger)
+      );
 
-    return await this.modalComponentBSDGroup.open();
+      return await this.modalComponentBSDGroup.open();
+    }
+
+    return;
   }
 
   addBsdGroup() {
