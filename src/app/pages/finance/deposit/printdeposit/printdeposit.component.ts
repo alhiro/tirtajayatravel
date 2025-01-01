@@ -82,6 +82,8 @@ export class PrintdepositComponent implements OnInit {
 
   public totalDepositDaily = 0;
 
+  public dataDate: any;
+
   constructor(private utils: Utils, private router: Router) {
     const url = this.router.url;
     this.lastSegment = url.substring(url.lastIndexOf('/') + 1);
@@ -170,6 +172,8 @@ export class PrintdepositComponent implements OnInit {
     const dataCashoutSby = JSON.parse(getCashoutSby);
     const getDataComba: any = sessionStorage.getItem('data-comba');
     const dataComba = JSON.parse(getDataComba);
+    const getDataDate: any = sessionStorage.getItem('printlistdate');
+    this.dataDate = JSON.parse(getDataDate);
 
     // Check ba & commission
     const detailDataPackage = Array.from(

@@ -345,6 +345,14 @@ export class DepositComponent implements OnInit, OnDestroy {
       pengeluaranKomisiSurabaya: this.cashoutCourierSurabaya,
     };
     sessionStorage.setItem('data-comba', JSON.stringify(commba));
+
+    const dateRange = {
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: 'Surabaya',
+      status: '',
+    };
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
     window.open('#/finance/deposit/daily/printdailysby', '_blank');
   }
 

@@ -36,6 +36,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
   public groupAdminCommission: any;
   public groupAdminCommissionTransfer: any;
   public groupAdminCommissionPiutang: any;
+  public groupAdminCommissionBa: any;
   public groupAdminPiutang: any;
   public groupAdminMonthly: any;
 
@@ -50,6 +51,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
   public totalCommissionTransfer: any = 0;
   public totalCommissionPackage: any = 0;
   public totalCommissionPiutang: any = 0;
+  public totalCommissionBa: any = 0;
   public totalMonthly: any = 0;
 
   public totalKoli: any = 0;
@@ -230,10 +232,33 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         this.groupAdminCommissionTransfer = groupedDataCommissionTransfer;
         console.log(groupedDataCommissionTransfer);
 
-        // Data piutang & ba
-        this.dataPiutang = response.data?.filter(
-          (data: PackageModel) => data.status === 'Piutang' || data.status === 'Bayar Tujuan (COD)'
+        // Data Piutang
+        const dataBa = response?.data?.filter((data: PackageModel) => data.status === 'Piutang');
+        const dataCommissionBa = dataBa?.filter((data: PackageModel) => data.check_sp === true);
+        this.totalCommissionBa = this.utils.sumTotal(
+          dataCommissionBa?.map((data: PackageModel) => data.agent_commission)
         );
+
+        const groupedDataCommissionBa: GroupedDataCost[] = Object.values(
+          dataCommissionBa.reduce((acc: any, item: any) => {
+            if (!acc[item.updated_by]) {
+              acc[item.updated_by] = {
+                id: Object.keys(acc).length + 1,
+                admin: item.updated_by,
+                totalCost: 0,
+                check_sp: item.check_sp,
+                city_id: item.city_id,
+              };
+            }
+            acc[item.updated_by].totalCost += Number(item.agent_commission);
+            return acc;
+          }, {} as { [key: string]: GroupedDataCost })
+        );
+        this.groupAdminCommissionBa = groupedDataCommissionBa;
+        console.log(groupedDataCommissionBa);
+
+        // Data piutang & ba
+        this.dataPiutang = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
 
         const dataCommissionPiutang = this.dataPiutang?.filter((data: PackageModel) => data.check_payment === true);
         this.totalCommissionPiutang = this.utils.sumTotal(
