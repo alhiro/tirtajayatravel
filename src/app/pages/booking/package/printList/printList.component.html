@@ -18,7 +18,9 @@
                 </span>
               </h3>
               @if (startDate && endDate) {
-              <span class="card-label fw-bolder fs-5"> PERIODE: {{ startDateDisplay }} - {{ endDateDisplay }} </span>
+              <span class="card-label fw-bolder fs-5">
+                PERIODE: {{ startDateDisplay | date : 'dd/MM/yyyy' }} - {{ endDateDisplay | date : 'dd/MM/yyyy' }}
+              </span>
               }
             </div>
           </div>
@@ -54,7 +56,7 @@
                 {{ row.resi_number }}
               </span>
               <span class="text-gray-900 fs-9">
-                {{ row.createdAt | date : 'dd/MM/yyyy H:mm:ss' : 'GMT' }}
+                {{ row.createdAt | date : 'dd/MM/yyyy H:mm:ss' }}
               </span>
             </td>
             <td
