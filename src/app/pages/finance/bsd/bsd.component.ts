@@ -101,7 +101,7 @@ export class BsdComponent implements OnInit, OnDestroy {
   currentDisplayModal: boolean = false;
 
   public pagination = {
-    limit: 20,
+    limit: 10,
     offset: 1,
     count: -1,
     search: '',
@@ -109,7 +109,7 @@ export class BsdComponent implements OnInit, OnDestroy {
     endDate: '',
   };
   public params = {
-    limit: 20,
+    limit: 10,
     page: 1,
     search: '',
     startDate: '',
@@ -378,7 +378,7 @@ export class BsdComponent implements OnInit, OnDestroy {
     if (this.currentTab === 'Done') {
       this.params = {
         limit: this.pagination.limit,
-        page: this.pagination.offset,
+        page: 1,
         search: this.pagination.search,
         startDate: this.pagination.startDate,
         endDate: this.pagination.endDate,
@@ -392,7 +392,7 @@ export class BsdComponent implements OnInit, OnDestroy {
 
       this.params = {
         limit: this.pagination.limit,
-        page: this.pagination.offset,
+        page: 1,
         search: this.pagination.search,
         startDate: this.pagination.startDate,
         endDate: this.pagination.endDate,
