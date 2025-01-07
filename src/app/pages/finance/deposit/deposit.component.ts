@@ -694,10 +694,14 @@ export class DepositComponent implements OnInit, OnDestroy {
 
         // Deposit
         // deposit daily
-        this.dataDeposit = data.filter((data: PackageModel) => data.go_send_id !== null);
+        this.dataDeposit = data.filter((data: GoSendModel) => data.go_send_id !== null && data.bsd_date !== null);
 
-        this.totalDepositDriverPackage = this.utils.sumTotal(data?.map((data: any) => data.package?.total_cost));
-        this.totalDepositDriverPassenger = this.utils.sumTotal(data?.map((data: any) => data.passenger?.total_tariff));
+        this.totalDepositDriverPackage = this.utils.sumTotal(
+          this.dataDeposit?.map((data: any) => data.package?.total_cost)
+        );
+        this.totalDepositDriverPassenger = this.utils.sumTotal(
+          this.dataDeposit?.map((data: any) => data.passenger?.total_tariff)
+        );
 
         // this.totalPackagePaidMalang = data.reduce((acc: any, item: any) => acc + item.package_paid.total_lunas_mlg, 0);
         // this.totalPackagePaidSurabaya = this.utils.sumTotal(data?.map((data: any) => data.package_paid?.total_lunas_sby));
