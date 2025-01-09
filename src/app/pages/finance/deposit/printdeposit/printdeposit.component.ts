@@ -191,7 +191,7 @@ export class PrintdepositComponent implements OnInit {
     this.detailDataPackage = detailDataPackage;
 
     this.dataPackageMlg = this.detailDataPackage?.filter(
-      (data: PackageModel) => data.check_sp === true && data?.city_id === 1
+      (data: PackageModel) => data?.check_sp === true && data?.city_id === 1
     );
     this.dataPackageBaMlg = this.detailDataPackage?.filter(
       (data: PackageModel) =>

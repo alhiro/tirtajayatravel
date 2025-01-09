@@ -16,6 +16,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
+import { PassengerModel } from '@app/pages/booking/passenger/models/passenger.model';
 
 @Component({
   selector: 'app-deposit',
@@ -505,6 +506,49 @@ export class DepositComponent implements OnInit, OnDestroy {
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
     window.open('#/finance/cashout/printonderdil', '_blank');
+  }
+
+  getTotalPackage(row: any): number {
+    this.totalDebetPackage = this.utils.sumNumbers(
+      row.package?.total_cost_ba,
+      row.package_piutang?.total_piutang_mlg,
+      row.package?.total_cost_ba_sby,
+      row.package_piutang?.total_piutang_sby
+    );
+
+    const totalDepositDriverPackage = Number(this.totalDebetPackage) - Number(row.cost?.cost?.parking_package);
+    return totalDepositDriverPackage;
+  }
+
+  getTotalPassenger(row: any): number {
+    this.totalDebetPassenger = this.utils.sumNumbers(
+      row.passenger?.total_tariff,
+      row.cost?.cost?.mandatory_deposit,
+      row.cost?.cost?.driver_deposit,
+      row.cost?.cost?.voluntary_deposit
+    );
+
+    const totalPassenger = row.passenger?.total_length;
+    const commissionToll = (Number(row.cost?.cost?.toll_out) * 0.15) / totalPassenger;
+    const remapDataSurabayaAll = row.passenger_commission?.total_commission_mlg?.map((data: PassengerModel) => ({
+      ...data,
+      agent_commission: data.agent_commission - commissionToll,
+    }));
+    const totalCommissionPassengerKredit = this.utils.sumTotal(
+      remapDataSurabayaAll?.map((data: PassengerModel) => data.agent_commission)
+    );
+    this.totalKreditPassenger = this.utils.sumNumbers(
+      totalCommissionPassengerKredit,
+      row.cost?.cost?.bbm_cost,
+      row.cost?.cost?.parking_passenger,
+      row.cost?.cost?.toll_in,
+      row.cost?.cost?.toll_out,
+      row.cost?.cost?.overnight,
+      row.cost?.cost?.extra,
+      row.cost?.cost?.others
+    );
+    const totalDepositDriverPassenger = Number(this.totalDebetPassenger) - Number(this.totalKreditPassenger);
+    return totalDepositDriverPassenger;
   }
 
   private dataListCashout(): Observable<void> {
