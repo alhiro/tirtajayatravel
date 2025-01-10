@@ -91,7 +91,7 @@
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ getTotalPackage(row) | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                          {{ row.package.new_total_cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                         </span>
                       </td>
                       <td>
@@ -147,7 +147,7 @@
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ getTotalPassenger(row) | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                          {{ row.passenger.new_total_cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                         </span>
                       </td>
                       <td>

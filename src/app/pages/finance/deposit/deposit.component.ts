@@ -508,49 +508,6 @@ export class DepositComponent implements OnInit, OnDestroy {
     window.open('#/finance/cashout/printonderdil', '_blank');
   }
 
-  getTotalPackage(row: any): number {
-    this.totalDebetPackage = this.utils.sumNumbers(
-      row.package?.total_cost_ba,
-      row.package_piutang?.total_piutang_mlg,
-      row.package?.total_cost_ba_sby,
-      row.package_piutang?.total_piutang_sby
-    );
-
-    const totalDepositDriverPackage = Number(this.totalDebetPackage) - Number(row.cost?.cost?.parking_package);
-    return totalDepositDriverPackage;
-  }
-
-  getTotalPassenger(row: any): number {
-    this.totalDebetPassenger = this.utils.sumNumbers(
-      row.passenger?.total_tariff,
-      row.cost?.cost?.mandatory_deposit,
-      row.cost?.cost?.driver_deposit,
-      row.cost?.cost?.voluntary_deposit
-    );
-
-    const totalPassenger = row.passenger?.total_length;
-    const commissionToll = (Number(row.cost?.cost?.toll_out) * 0.15) / totalPassenger;
-    const remapDataSurabayaAll = row.passenger_commission?.total_commission_mlg?.map((data: PassengerModel) => ({
-      ...data,
-      agent_commission: data.agent_commission - commissionToll,
-    }));
-    const totalCommissionPassengerKredit = this.utils.sumTotal(
-      remapDataSurabayaAll?.map((data: PassengerModel) => data.agent_commission)
-    );
-    this.totalKreditPassenger = this.utils.sumNumbers(
-      totalCommissionPassengerKredit,
-      row.cost?.cost?.bbm_cost,
-      row.cost?.cost?.parking_passenger,
-      row.cost?.cost?.toll_in,
-      row.cost?.cost?.toll_out,
-      row.cost?.cost?.overnight,
-      row.cost?.cost?.extra,
-      row.cost?.cost?.others
-    );
-    const totalDepositDriverPassenger = Number(this.totalDebetPassenger) - Number(this.totalKreditPassenger);
-    return totalDepositDriverPassenger;
-  }
-
   private dataListCashout(): Observable<void> {
     const params = {
       limit: '',
@@ -738,14 +695,73 @@ export class DepositComponent implements OnInit, OnDestroy {
 
         // Deposit
         // deposit daily
-        this.dataDeposit = data.filter((data: GoSendModel) => data.go_send_id !== null && data.bsd_date !== null);
+        const dataDeposit = data.filter((data: GoSendModel) => data.go_send_id !== null && data.bsd_date !== null);
+        console.log('dataDeposit');
+        console.log(this.dataDeposit);
+
+        const remapDeposit = dataDeposit.map((value: any) => {
+          // remap cost package
+          const totalCost = this.utils.sumNumbers(
+            value.package?.total_cost_ba,
+            value.package_piutang?.total_piutang_mlg,
+            value.package?.total_cost_ba_sby,
+            value.package_piutang?.total_piutang_sby
+          );
+
+          // remap cost passenger
+          const totalDebetPassenger = this.utils.sumNumbers(
+            value.passenger?.total_tariff,
+            value.cost?.cost?.mandatory_deposit,
+            value.cost?.cost?.driver_deposit,
+            value.cost?.cost?.voluntary_deposit
+          );
+
+          const commissionToll = Number(value.cost?.cost?.toll_out) * 0.15;
+          console.log('commissionToll ', commissionToll);
+          const remapDataSurabayaAll = value.passenger_commission?.total_commission_mlg - commissionToll;
+          console.log('total_commission_mlg ', remapDataSurabayaAll);
+
+          const totalCommissionPassengerKredit = remapDataSurabayaAll;
+          const totalKreditPassenger = this.utils.sumNumbers(
+            totalCommissionPassengerKredit,
+            value.cost?.cost?.bbm_cost,
+            value.cost?.cost?.parking_passenger,
+            value.cost?.cost?.toll_in,
+            value.cost?.cost?.toll_out,
+            value.cost?.cost?.overnight,
+            value.cost?.cost?.extra,
+            value.cost?.cost?.others
+          );
+
+          return {
+            ...value,
+            package: {
+              ...value.package,
+              new_total_cost: totalCost - Number(value.cost?.cost?.parking_package || 0),
+            },
+            passenger: {
+              ...value.passenger,
+              new_total_cost: Number(totalDebetPassenger || 0) - Number(totalKreditPassenger || 0),
+            },
+          };
+        });
+        console.log('remapDeposit');
+        console.log(remapDeposit);
+        this.dataDeposit = remapDeposit;
 
         this.totalDepositDriverPackage = this.utils.sumTotal(
-          this.dataDeposit?.map((data: any) => data.package?.total_cost)
+          this.dataDeposit?.map((data: any) => data?.package.new_total_cost)
         );
         this.totalDepositDriverPassenger = this.utils.sumTotal(
-          this.dataDeposit?.map((data: any) => data.passenger?.total_tariff)
+          this.dataDeposit?.map((data: any) => data.passenger?.new_total_cost)
         );
+
+        // this.totalDepositDriverPackage = this.utils.sumTotal(
+        //   this.dataDeposit?.map((data: any) => data.package?.total_cost)
+        // );
+        // this.totalDepositDriverPassenger = this.utils.sumTotal(
+        //   this.dataDeposit?.map((data: any) => data.passenger?.total_tariff)
+        // );
 
         // this.totalPackagePaidMalang = data.reduce((acc: any, item: any) => acc + item.package_paid.total_lunas_mlg, 0);
         // this.totalPackagePaidSurabaya = this.utils.sumTotal(data?.map((data: any) => data.package_paid?.total_lunas_sby));
