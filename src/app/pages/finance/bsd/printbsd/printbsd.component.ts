@@ -158,6 +158,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
         this.totalParkingPassenger = this.data?.cost?.parking_passenger;
         this.inToll = this.data?.cost?.toll_in;
         this.outToll = this.data?.cost?.toll_out;
+        this.overnight = this.data?.cost?.overnight;
         this.extra = this.data?.cost?.extra;
         this.others = this.data?.cost?.others;
 

@@ -701,27 +701,37 @@ export class DepositComponent implements OnInit, OnDestroy {
 
         const remapDeposit = dataDeposit.map((value: any) => {
           // remap cost package
-          const totalCost = this.utils.sumNumbers(
-            value.package?.total_cost_ba,
+          const totalDebetPackage = this.utils.sumNumbers(
+            value.package_ba?.total_ba_mlg,
+            value.package_ba?.total_ba_sby,
             value.package_piutang?.total_piutang_mlg,
-            value.package?.total_cost_ba_sby,
             value.package_piutang?.total_piutang_sby
           );
+          console.log('totalDebetPackage ', totalDebetPackage);
+
+          const totalKreditPackage = this.utils.sumNumbers(
+            value.package_commission?.total_commission_mlg,
+            // value.package_commission?.total_commission_sby,
+            value.cost?.cost?.parking_package
+          );
+          console.log('totalKreditPackage ', totalKreditPackage);
 
           // remap cost passenger
           const totalDebetPassenger = this.utils.sumNumbers(
-            value.passenger?.total_tariff,
+            value.passenger_commission?.total_tariff,
             value.cost?.cost?.mandatory_deposit,
             value.cost?.cost?.driver_deposit,
             value.cost?.cost?.voluntary_deposit
           );
+          console.log('totalDebetPassenger ', totalDebetPassenger);
 
           const commissionToll = Number(value.cost?.cost?.toll_out) * 0.15;
           console.log('commissionToll ', commissionToll);
-          const remapDataSurabayaAll = value.passenger_commission?.total_commission_mlg - commissionToll;
-          console.log('total_commission_mlg ', remapDataSurabayaAll);
+          const remapDataMalangAll = value.passenger_commission?.total_commission_mlg - commissionToll;
+          console.log('total_commission_mlg ', value.passenger_commission?.total_commission_mlg);
+          console.log('remapDataMalangAll ', remapDataMalangAll);
 
-          const totalCommissionPassengerKredit = remapDataSurabayaAll;
+          const totalCommissionPassengerKredit = value.city_id === 1 ? remapDataMalangAll : 0;
           const totalKreditPassenger = this.utils.sumNumbers(
             totalCommissionPassengerKredit,
             value.cost?.cost?.bbm_cost,
@@ -732,12 +742,13 @@ export class DepositComponent implements OnInit, OnDestroy {
             value.cost?.cost?.extra,
             value.cost?.cost?.others
           );
+          console.log('totalKreditPassenger ', totalKreditPassenger);
 
           return {
             ...value,
             package: {
               ...value.package,
-              new_total_cost: totalCost - Number(value.cost?.cost?.parking_package || 0),
+              new_total_cost: Number(totalDebetPackage || 0) - Number(totalKreditPackage || 0),
             },
             passenger: {
               ...value.passenger,
