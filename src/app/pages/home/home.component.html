@@ -19,7 +19,7 @@
       title="Paket Penumpang"
       description="Malang"
       [data]="getDataPackagePassengerMalang"
-      color="#F69E9E"
+      color="#EF7F7FFF"
     ></app-cards-widget20>
   </div>
   <!--end::Col-->
@@ -53,7 +53,7 @@
       title="Paket"
       description="Malang"
       [data]="listDataPackageMalang"
-      color="#F69E9E"
+      color="#EF7F7FFF"
     ></app-cards-widget20>
   </div>
   <!--end::Col-->
@@ -111,7 +111,7 @@
       title="Sudah Kirim"
       description="Malang"
       [data]="listDataPackageSendMalang"
-      color="#F69E9E"
+      color="#DC6B6BFF"
     ></app-cards-widget20>
   </div>
   <!--end::Col-->
@@ -125,7 +125,7 @@
       title="Belum Diambil"
       description="MLG"
       [data]="listDataPackageNoTakeMalang"
-      color="#6DBE76"
+      color="#5CA865FF"
     ></app-cards-widget20>
   </div>
   <!--end::Col-->
@@ -139,7 +139,7 @@
       title="Sudah Kirim"
       description="Surabaya"
       [data]="listDataPackageSendSurabaya"
-      color="#5BA0B7"
+      color="#4D8A9FFF"
     ></app-cards-widget20>
   </div>
   <!--end::Col-->
@@ -150,10 +150,10 @@
 
     <app-cards-widget20
       cssClass="h-lg-150 mb-5 mb-xl-10"
-      title="Belum diambil"
+      title="Belum Diambil"
       description="SBY"
       [data]="listDataPackageNoTakeSurabaya"
-      color="#C2AB77"
+      color="#958358FF"
     ></app-cards-widget20>
 
     <!-- <app-cards-widget20
@@ -165,6 +165,40 @@
       img="./assets/media/patterns/vector-1.png"
     ></app-cards-widget20> -->
   </div>
+  <!--end::Col-->
+</div>
+<!--end::Row-->
+
+<!--begin::Row-->
+<div class="row g-5 g-xl-10">
+  <!--begin::Col-->
+  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mt-0">
+    <app-cards-widget20
+      cssClass="h-lg-150 mb-5 mb-xl-10"
+      title="Sudah Diambil"
+      description="Malang"
+      [data]="listDataPackageTakeMalang"
+      color="#D6AE3EFF"
+    ></app-cards-widget20>
+  </div>
+  <!--end::Col-->
+
+  <!--begin::Col-->
+  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 mt-0">
+    <!-- <app-cards-widget17 cssClass="h-md-50 mb-5 mb-xl-10"></app-cards-widget17> -->
+
+    <app-cards-widget20
+      cssClass="h-lg-150 mb-5 mb-xl-10"
+      title="Sudah Diambil"
+      description="Surabaya"
+      [data]="listDataPackageTakeSurabaya"
+      color="#D6AE3EFF"
+    ></app-cards-widget20>
+  </div>
+  <!--end::Col-->
+
+  <!--begin::Col-->
+  <!-- <app-engage-widget10 class="col-xxl-6" cssClass="h-md-100"></app-engage-widget10> -->
   <!--end::Col-->
 </div>
 <!--end::Row-->
