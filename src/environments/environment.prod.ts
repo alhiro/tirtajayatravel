@@ -11,7 +11,7 @@ export const environment = {
   version: env['npm_package_version'],
   firebaseToken:
     '1//0geGdpWBIc4UaCgYIARAAGBASNwF-L9IrSdVgAT3zdB7VokPGN1AyQeosWqFxQ50WGr9r-xVhgOjEcV1gDDHYtjgNFbk9t7d5xf4',
-  serverUrl: 'https://tirtajaya.vip/api',
+  serverUrl: 'https://tirtajaya.vip/v1/api',
   defaultLanguage: 'id-ID',
   supportedLanguages: ['en-US', 'id-ID'],
 };
