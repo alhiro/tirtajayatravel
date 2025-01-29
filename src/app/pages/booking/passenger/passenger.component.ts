@@ -363,7 +363,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
     };
     console.log(dateRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/booking/passenger/transaction/printlist', '_blank');
+    window.open('booking/passenger/transaction/printlist', '_blank');
   }
 
   isHovered(date: NgbDate) {
@@ -1405,7 +1405,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
 
   openModalPrint(event: PassengerModel) {
     sessionStorage.setItem('printpassenger', JSON.stringify(event));
-    window.open('#/booking/passenger/transaction/printpassenger', '_blank');
+    window.open('booking/passenger/transaction/printpassenger', '_blank');
   }
 
   async openModalCancel(event: PassengerModel) {

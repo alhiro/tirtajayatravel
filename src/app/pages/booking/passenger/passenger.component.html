@@ -205,20 +205,20 @@
                 <span class="text-gray-900 d-block">
                   {{ row.waybill?.name }} <br />
                   {{ row.waybill?.telp }} <br />
-                  ({{ row.position }})
+                  <!-- ({{ row.position }}) -->
                 </span>
               </td>
               <td>
-                @for (value of row.waybills; track value) {
                 <span class="text-gray-900 d-block">
-                  <ul>
+                  <ul class="numbering">
+                    @for (value of row.waybills; track value) {
                     <li>
                       {{ value?.name }} <br />
                       {{ value?.address }}
                     </li>
+                    }
                   </ul>
                 </span>
-                }
               </td>
               <td>
                 @for (value of row.destinations; track value) {
@@ -371,20 +371,20 @@
                 <span class="text-gray-900 d-block">
                   {{ row.waybill?.name }} <br />
                   {{ row.waybill?.telp }} <br />
-                  ({{ row.position }})
+                  <!-- ({{ row.position }}) -->
                 </span>
               </td>
               <td>
-                @for (value of row.waybills; track value) {
                 <span class="text-gray-900 d-block">
                   <ul class="numbering">
+                    @for (value of row.waybills; track value) {
                     <li>
                       {{ value?.name }} <br />
                       {{ value?.address }}
                     </li>
+                    }
                   </ul>
                 </span>
-                }
               </td>
               <td>
                 @for (value of row.destinations; track value) {
@@ -537,20 +537,20 @@
                 <span class="text-gray-900 d-block">
                   {{ row.waybill?.name }} <br />
                   {{ row.waybill?.telp }} <br />
-                  ({{ row.position }})
+                  <!-- ({{ row.position }}) -->
                 </span>
               </td>
               <td>
-                @for (value of row.waybills; track value) {
                 <span class="text-gray-900 d-block">
                   <ul class="numbering">
+                    @for (value of row.waybills; track value) {
                     <li>
                       {{ value?.name }} <br />
                       {{ value?.address }}
                     </li>
+                    }
                   </ul>
                 </span>
-                }
               </td>
               <td>
                 @for (value of row.destinations; track value) {
@@ -645,20 +645,20 @@
                 <span class="text-gray-900 d-block">
                   {{ row.waybill?.name }} <br />
                   {{ row.waybill?.telp }} <br />
-                  ({{ row.position }})
+                  <!-- ({{ row.position }}) -->
                 </span>
               </td>
               <td>
-                @for (value of row.waybills; track value) {
                 <span class="text-gray-900 d-block">
                   <ul class="numbering">
+                    @for (value of row.waybills; track value) {
                     <li>
                       {{ value?.name }} <br />
                       {{ value?.address }}
                     </li>
+                    }
                   </ul>
                 </span>
-                }
               </td>
               <td>
                 @for (value of row.destinations; track value) {

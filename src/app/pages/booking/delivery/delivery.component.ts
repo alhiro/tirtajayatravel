@@ -255,7 +255,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
       { key: 'description', title: 'Description' },
       { key: '', title: 'Items' },
       { key: 'car', title: 'Car' },
-      { key: 'status', title: 'Status' },
+      // { key: 'status', title: 'Status' },
       { key: '', title: 'Action', cssClass: { includeHeader: true, name: 'text-end' } },
     ];
 
@@ -408,6 +408,8 @@ export class DeliveryComponent implements OnInit, OnDestroy {
             .reduce((acc: any, value: any) => Number(acc) + Number(value), 0),
         }));
         this.data = remapData;
+        console.log('data gosend');
+        console.log(this.data);
 
         // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
         this.pagination.count = this.dataLength;
@@ -484,14 +486,14 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     sessionStorage.setItem('printsp', JSON.stringify(val));
     sessionStorage.setItem('detailsp', JSON.stringify(this.dataDetail));
     sessionStorage.setItem('type', JSON.stringify(item));
-    window.open('#/booking/departure/delivery/printsp', '_blank');
+    window.open('booking/departure/delivery/printsp', '_blank');
   }
 
   async printTicket(val: any, item: any) {
     sessionStorage.setItem('printsp', JSON.stringify(val));
     sessionStorage.setItem('detailsp', JSON.stringify(this.dataDetail));
     sessionStorage.setItem('type', JSON.stringify(item));
-    window.open('#/booking/departure/delivery/print-ticket', '_blank');
+    window.open('booking/departure/delivery/print-ticket', '_blank');
   }
 
   async openModalView(val: GoSendModel) {
@@ -514,7 +516,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
         console.log(resp);
 
         if (resp === true || resp === 1) {
-          this.dataListGosend(this.params);
+          // this.dataListGosend(this.params);
           console.log('User closes or esc');
         }
       },

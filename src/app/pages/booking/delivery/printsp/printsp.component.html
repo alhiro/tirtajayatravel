@@ -73,30 +73,30 @@
               </span>
             </td>
             <td>
-              @for (value of row.waybills; track value) {
               <span class="text-gray-900 d-block">
                 <ul style="padding-left: 20px; text-align: left; margin: 0; list-style: decimal">
+                  @for (value of row.waybills; track value) {
                   <li>
                     {{ value?.name }} <br />
                     {{ value?.address }} <br />
                     <b>{{ value?.telp }}</b>
                   </li>
+                  }
                 </ul>
               </span>
-              }
             </td>
             <td>
-              @for (value of row.destinations; track value) {
               <span class="text-gray-900 d-block">
                 <ul style="padding-left: 20px; text-align: left; margin: 0; list-style: decimal">
+                  @for (value of row.destinations; track value) {
                   <li>
                     {{ value?.name }} <br />
                     {{ value?.address }} <br />
                     <b>{{ value?.telp }}</b>
                   </li>
+                  }
                 </ul>
               </span>
-              }
             </td>
             <td>
               <span class="text-gray-900 d-block">
@@ -126,7 +126,7 @@
       <div class="mt-7">
         <span class="fs-5"><b>Total Tariff</b>: {{ totalTariff | currency : 'Rp ' : true : '1.0-2' }}</span
         ><br />
-        <span class="fs-5"><b>Total Passenger</b>: {{ data?.length | number }}</span>
+        <span class="fs-5"><b>Total Passenger</b>: {{ totalPassenger | number }}</span>
       </div>
     </div>
   </div>

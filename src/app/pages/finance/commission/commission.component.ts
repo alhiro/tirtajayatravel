@@ -210,7 +210,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
-    window.open('#/finance/commission/package/printcommission', '_blank');
+    window.open('finance/commission/package/printcommission', '_blank');
   }
 
   printFilterBa(datepicker: any) {
@@ -226,7 +226,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
-    window.open('#/finance/commission/package/printbayartujuan', '_blank');
+    window.open('finance/commission/package/printbayartujuan', '_blank');
   }
 
   async printUser() {
@@ -260,7 +260,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
-    window.open('#/finance/commission/package/printmonthly', '_blank');
+    window.open('finance/commission/package/printmonthly', '_blank');
   }
 
   onDateChange(date: NgbDateStruct): void {

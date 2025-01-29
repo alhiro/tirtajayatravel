@@ -243,7 +243,7 @@ export class CashoutComponent implements OnInit {
       city: this.levelrule === 8 ? this.currentTab : this.city_id,
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/finance/cashout/printcashout', '_blank');
+    window.open('finance/cashout/printcashout', '_blank');
   }
 
   isHovered(date: NgbDate) {

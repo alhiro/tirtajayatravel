@@ -183,13 +183,15 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         // );
 
         // Data Lunas (Kantor)
-        this.data = response?.data?.filter(
+        const data = response?.data?.filter(
           (data: PackageModel) =>
             data.status === 'Lunas (Kantor)' ||
             data.status === 'Lunas (Transfer)' ||
             data.status === 'Piutang' ||
             data.status === 'Customer (Bulanan)'
         );
+
+        this.data = data.filter((data: PackageModel) => data.check_sp === true);
 
         const dataCash = response?.data?.filter((data: PackageModel) => data.status === 'Lunas (Kantor)');
         const dataCommission = dataCash?.filter((data: PackageModel) => data.check_sp === true);
@@ -293,7 +295,9 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         console.log(groupedDataCommissionCustomerMonthly);
 
         // Data ba
-        this.dataPiutang = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
+        this.dataPiutang = response.data?.filter(
+          (data: PackageModel) => data.status === 'Bayar Tujuan (COD)' && data.check_payment === true
+        );
 
         const dataCommissionPiutang = this.dataPiutang?.filter((data: PackageModel) => data.check_payment === true);
         this.totalCommissionPiutang = this.utils.sumTotal(

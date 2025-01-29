@@ -159,8 +159,8 @@
               <td>
                 <span class="text-gray-900 d-block">
                   @if (row.packages) {
-                  {{ row.packages?.length }} Paket, } @else { 0 Paket, } @if (row.packages) {
-                  {{ row.passengers?.length }} Orang } @else { 0 Orang } <br />
+                  {{ row.packages?.length }} Paket, } @else { 0 Paket, } @if (row.passengers) {
+                  {{ row.total_passenger }} Orang } @else { 0 Orang } <br />
                   {{ row.description }}
                 </span>
               </td>
@@ -192,9 +192,9 @@
                   <span>{{ row.car?.car_number }}</span>
                 </span>
               </td>
-              <td>
+              <!-- <td>
                 <span class="text-gray-900 d-block">{{ row.status }}</span>
-              </td>
+              </td> -->
               <td class="text-end">
                 @if (levelrule === 2 && city_id === 1 || levelrule === 8) {
                 <a
@@ -322,8 +322,8 @@
               <td>
                 <span class="text-gray-900 d-block">
                   @if (row.packages) {
-                  {{ row.packages?.length }} Paket, } @else { 0 Paket, } @if (row.packages) {
-                  {{ row.passengers?.length }} Orang } @else { 0 Orang } <br />
+                  {{ row.packages?.length }} Paket, } @else { 0 Paket, } @if (row.passengers) {
+                  {{ row.total_passenger }} Orang } @else { 0 Orang } <br />
                   {{ row.description }}
                 </span>
               </td>
@@ -355,9 +355,9 @@
                   <span>{{ row.car?.car_number }}</span>
                 </span>
               </td>
-              <td>
+              <!-- <td>
                 <span class="text-gray-900 d-block">{{ row.status }}</span>
-              </td>
+              </td> -->
               <td class="text-end">
                 @if (levelrule === 2 && city_id === 2 || levelrule === 8) {
                 <a

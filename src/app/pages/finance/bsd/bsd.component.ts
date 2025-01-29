@@ -987,7 +987,7 @@ export class BsdComponent implements OnInit, OnDestroy {
   printBSD(val: GoSendModel, item: string) {
     sessionStorage.setItem('printbsd', JSON.stringify(val));
     sessionStorage.setItem('type', JSON.stringify(item));
-    window.open('#/finance/bsd/tirta-jaya/printbsd', '_blank');
+    window.open('finance/bsd/tirta-jaya/printbsd', '_blank');
   }
 
   searchDataDriver: any = (text$: Observable<string>) =>

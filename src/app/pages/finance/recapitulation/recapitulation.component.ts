@@ -117,7 +117,7 @@ export class RecapitulationComponent implements OnInit, OnDestroy {
     };
     console.log(dateRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/booking/passenger/transaction/printlist', '_blank');
+    window.open('booking/passenger/transaction/printlist', '_blank');
   }
 
   isHovered(date: NgbDate) {
@@ -255,7 +255,7 @@ export class RecapitulationComponent implements OnInit, OnDestroy {
     };
     console.log(paramRange);
     sessionStorage.setItem('printrecapitulation', JSON.stringify(paramRange));
-    window.open('#/finance/recapitulation/deposit/printrecapitulation', '_blank');
+    window.open('finance/recapitulation/deposit/printrecapitulation', '_blank');
   }
 
   piutangData() {
@@ -270,7 +270,7 @@ export class RecapitulationComponent implements OnInit, OnDestroy {
     };
     console.log(paramRange);
     sessionStorage.setItem('printrecapitulation', JSON.stringify(paramRange));
-    window.open('#/finance/recapitulation/deposit/printpiutang', '_blank');
+    window.open('finance/recapitulation/deposit/printpiutang', '_blank');
   }
 
   revenueData() {
@@ -285,7 +285,7 @@ export class RecapitulationComponent implements OnInit, OnDestroy {
     };
     console.log(paramRange);
     sessionStorage.setItem('printrecapitulation', JSON.stringify(paramRange));
-    window.open('#/finance/recapitulation/deposit/printrevenue', '_blank');
+    window.open('finance/recapitulation/deposit/printrevenue', '_blank');
   }
 
   bsdPnpData() {
@@ -300,7 +300,7 @@ export class RecapitulationComponent implements OnInit, OnDestroy {
     };
     console.log(paramRange);
     sessionStorage.setItem('printrecapitulation', JSON.stringify(paramRange));
-    window.open('#/finance/recapitulation/deposit/printbsdpnp', '_blank');
+    window.open('finance/recapitulation/deposit/printbsdpnp', '_blank');
   }
 
   bsdPktData() {
@@ -315,7 +315,7 @@ export class RecapitulationComponent implements OnInit, OnDestroy {
     };
     console.log(paramRange);
     sessionStorage.setItem('printrecapitulation', JSON.stringify(paramRange));
-    window.open('#/finance/recapitulation/deposit/printbsdpkt', '_blank');
+    window.open('finance/recapitulation/deposit/printbsdpkt', '_blank');
   }
 
   bbmData() {
@@ -330,7 +330,7 @@ export class RecapitulationComponent implements OnInit, OnDestroy {
     };
     console.log(paramRange);
     sessionStorage.setItem('printrecapitulation', JSON.stringify(paramRange));
-    window.open('#/finance/recapitulation/deposit/printbbm', '_blank');
+    window.open('finance/recapitulation/deposit/printbbm', '_blank');
   }
 
   ngOnDestroy() {

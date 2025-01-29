@@ -365,7 +365,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       status: '',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/booking/package/transaction/printlist', '_blank');
+    window.open('booking/package/transaction/printlist', '_blank');
   }
 
   printFilterDatePayment(datepicker: any) {
@@ -387,7 +387,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       status: 'Lunas (Kantor)',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/booking/package/transaction/printlist', '_blank');
+    window.open('booking/package/transaction/printlist', '_blank');
   }
 
   printFilterDatePaymentUser(datepicker: any) {
@@ -410,7 +410,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       username: this.username,
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/booking/package/transaction/printlistuser', '_blank');
+    window.open('booking/package/transaction/printlistuser', '_blank');
   }
 
   isHovered(date: NgbDate) {
@@ -1075,7 +1075,7 @@ export class PackageComponent implements OnInit, OnDestroy {
   dataPrintResi() {
     console.log(this.resiNumber);
     sessionStorage.setItem('printpackage', JSON.stringify(this.resiNumber));
-    window.open('#/booking/package/transaction/printpackage', '_blank');
+    window.open('booking/package/transaction/printpackage', '_blank');
   }
 
   searchDataPackage = (text$: Observable<string>) => {
@@ -1511,7 +1511,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       );
 
     sessionStorage.setItem('printpackage', JSON.stringify(event));
-    window.open('#/booking/package/transaction/printpackage', '_blank');
+    window.open('booking/package/transaction/printpackage', '_blank');
   }
 
   async openModalCancel(event: PackageModel) {

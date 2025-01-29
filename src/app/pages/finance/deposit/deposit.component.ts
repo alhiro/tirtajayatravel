@@ -298,7 +298,7 @@ export class DepositComponent implements OnInit, OnDestroy {
 
   printFilterMonthly(datepicker: any) {
     sessionStorage.setItem('printlistmonthly', JSON.stringify(this.dataPackage));
-    window.open('#/finance/commission/package/printlunasmonthly', '_blank');
+    window.open('finance/commission/package/printlunasmonthly', '_blank');
   }
 
   printDeposit() {
@@ -331,7 +331,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       totalcashoutOnderdilService: this.cashoutOnderdilService,
     };
     sessionStorage.setItem('data-comba', JSON.stringify(commba));
-    window.open('#/finance/deposit/daily/printdaily', '_blank');
+    window.open('finance/deposit/daily/printdaily', '_blank');
   }
 
   printDepositSurabaya() {
@@ -354,7 +354,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       status: '',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/finance/deposit/daily/printdailysby', '_blank');
+    window.open('finance/deposit/daily/printdailysby', '_blank');
   }
 
   eventEmitted($event: { event: string; value: any }): void {
@@ -364,7 +364,7 @@ export class DepositComponent implements OnInit, OnDestroy {
   printBSD(val: GoSendModel, item: string) {
     sessionStorage.setItem('printbsd', JSON.stringify(val));
     sessionStorage.setItem('type', JSON.stringify(item));
-    window.open('#/finance/bsd/tirta-jaya/printbsd', '_blank');
+    window.open('finance/bsd/tirta-jaya/printbsd', '_blank');
   }
 
   printFilterDatePaymentMlg() {
@@ -375,7 +375,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       status: 'Lunas (Kantor)',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/booking/package/transaction/printlist', '_blank');
+    window.open('booking/package/transaction/printlist', '_blank');
   }
 
   printFilterDatePaymentSby() {
@@ -386,7 +386,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       status: 'Lunas (Kantor)',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/booking/package/transaction/printlist', '_blank');
+    window.open('booking/package/transaction/printlist', '_blank');
   }
 
   printFilterBaMlg() {
@@ -402,7 +402,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
-    window.open('#/finance/commission/package/printcommission', '_blank');
+    window.open('finance/commission/package/printcommission', '_blank');
   }
 
   printFilterBaSby() {
@@ -418,7 +418,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
-    window.open('#/finance/commission/package/printcommission', '_blank');
+    window.open('finance/commission/package/printcommission', '_blank');
   }
 
   printPassengerPaidMlg() {
@@ -429,7 +429,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       status: '',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/booking/passenger/transaction/printlist', '_blank');
+    window.open('booking/passenger/transaction/printlist', '_blank');
   }
 
   printPassengerPaidSby() {
@@ -440,11 +440,11 @@ export class DepositComponent implements OnInit, OnDestroy {
       status: '',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/booking/passenger/transaction/printlist', '_blank');
+    window.open('booking/passenger/transaction/printlist', '_blank');
   }
 
   printPiutangTransition() {
-    window.open('#/booking/package/transaction/printlist', '_blank');
+    window.open('booking/package/transaction/printlist', '_blank');
   }
 
   printViaTransfer() {
@@ -455,7 +455,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       status: 'Lunas (Transfer)',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/booking/package/transaction/printlist', '_blank');
+    window.open('booking/package/transaction/printlist', '_blank');
   }
 
   printMonthly() {
@@ -466,7 +466,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       status: 'Customer (Bulanan)',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/booking/package/transaction/printlist', '_blank');
+    window.open('booking/package/transaction/printlist', '_blank');
   }
 
   printCashoutMlg() {
@@ -479,7 +479,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       city: 'Malang',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/finance/cashout/printcashout', '_blank');
+    window.open('finance/cashout/printcashout', '_blank');
   }
 
   printCashoutSby() {
@@ -492,7 +492,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       city: 'Surabaya',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/finance/cashout/printcashout', '_blank');
+    window.open('finance/cashout/printcashout', '_blank');
   }
 
   printOnderdil() {
@@ -505,7 +505,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       city: '',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
-    window.open('#/finance/cashout/printonderdil', '_blank');
+    window.open('finance/cashout/printonderdil', '_blank');
   }
 
   private dataListCashout(): Observable<void> {

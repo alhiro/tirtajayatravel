@@ -178,7 +178,7 @@ export class PiutangComponent implements OnInit, OnDestroy {
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
-    window.open('#/finance/piutang/bill/printpiutang', '_blank');
+    window.open('finance/piutang/bill/printpiutang', '_blank');
   }
 
   onDateChange(date: NgbDateStruct): void {
