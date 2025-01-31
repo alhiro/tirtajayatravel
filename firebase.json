@@ -2,12 +2,14 @@
   "hosting": {
     "site": "tirtajaya-dev",
     "public": "dist",
+    "cleanUrls": true,
     "rewrites": [
       {
         "source": "/**",
         "destination": "/index.html"
       }
     ],
+    "redirects": [],
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   }
 }

@@ -211,7 +211,7 @@ export class NewChartsWidget8Component implements OnInit {
         },
         y: {
           formatter: function (val: number) {
-            return 'Rp ' + val;
+            return 'Rp ' + val.toLocaleString('id-ID');
           },
         },
       },

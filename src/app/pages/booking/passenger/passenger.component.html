@@ -43,15 +43,21 @@
     <div class="card-toolbar">
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
-          <a class="nav-link py-2 px-4 active" data-toggle="tab">Malang</a>
+          <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Malang'" data-toggle="tab">Malang</a>
+        </li>
+        <li class="nav-item" (click)="setCurrentTab('Surabaya')" [style.cursor]="'pointer'">
+          <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Surabaya'" data-toggle="tab">Surabaya</a>
         </li>
       </ul>
     </div>
     } @else if (city_id === 2) {
     <div class="card-toolbar">
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+        <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
+          <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Malang'" data-toggle="tab">Malang</a>
+        </li>
         <li class="nav-item" (click)="setCurrentTab('Surabaya')" [style.cursor]="'pointer'">
-          <a class="nav-link py-2 px-4 active" data-toggle="tab">Surabaya</a>
+          <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Surabaya'" data-toggle="tab">Surabaya</a>
         </li>
       </ul>
     </div>
@@ -240,6 +246,7 @@
               </td>
               @if (!delivery) {
               <td class="text-end">
+                @if (city_id === 1) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -251,6 +258,7 @@
                 >
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
+                }
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
                   data-bs-toggle="tooltip"
@@ -262,6 +270,7 @@
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-success"></app-keenicon>
                 </a>
+                @if (city_id === 1) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -273,6 +282,7 @@
                 >
                   <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
                 </a>
+                }
                 <!-- <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"
@@ -406,6 +416,7 @@
               </td>
               @if (!delivery) {
               <td class="text-end">
+                @if (city_id === 2) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -417,6 +428,7 @@
                 >
                   <app-keenicon name="pencil" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
+                }
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
                   data-bs-toggle="tooltip"
@@ -428,6 +440,7 @@
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-success"></app-keenicon>
                 </a>
+                @if (city_id === 2) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -439,6 +452,7 @@
                 >
                   <app-keenicon name="document" class="fs-md-3 text-info"></app-keenicon>
                 </a>
+                }
                 <!-- <a
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
                   data-bs-toggle="tooltip"

@@ -389,6 +389,7 @@ export class BsdComponent implements OnInit, OnDestroy {
     } else if (this.currentTab === 'List') {
       this.groupCheckedBsdList = [];
       this.selected.clear();
+      this.modelDriver = '';
 
       this.params = {
         limit: this.pagination.limit,
@@ -428,10 +429,11 @@ export class BsdComponent implements OnInit, OnDestroy {
     const params = {
       limit: this.pagination.limit,
       page: this.pagination.offset,
-      search: this.pagination.search,
+      search: this.modelDriver,
       startDate: this.pagination.startDate,
       endDate: this.pagination.endDate,
       status: this.currentTab,
+      city: '',
     }; // see https://github.com/typicode/json-server
     this.dataListBSD(params);
   }
