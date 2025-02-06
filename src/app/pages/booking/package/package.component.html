@@ -311,7 +311,19 @@
               </td>
               } @else {
               <td class="text-end">
-                @if (row.status_package === 'Delivery') {
+                @if (row.print !== 1) {
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  [ngbTooltip]="'TOOLTIP.PRINT_PACKAGE' | translate"
+                  (click)="openModalPrint(row)"
+                >
+                  <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+                } @if (row.status_package === 'Delivery') {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
                   data-bs-toggle="tooltip"
@@ -450,7 +462,19 @@
               </td>
               } @else {
               <td class="text-end">
-                @if (row.status_package === 'Delivery') {
+                @if (row.print !== 1) {
+                <a
+                  class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover"
+                  data-bs-dismiss-="click"
+                  data-bs-placement="top"
+                  [ngbTooltip]="'TOOLTIP.PRINT_PACKAGE' | translate"
+                  (click)="openModalPrint(row)"
+                >
+                  <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
+                </a>
+                } @if (row.status_package === 'Delivery') {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
                   data-bs-toggle="tooltip"
