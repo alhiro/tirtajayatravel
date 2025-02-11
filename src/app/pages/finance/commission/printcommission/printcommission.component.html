@@ -264,7 +264,7 @@
                 'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
               }"
             >
-              @if (row.check_payment) {
+              @if (row.check_sp) {
               <span class="text-gray-900 d-block">
                 {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>

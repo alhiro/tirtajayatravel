@@ -220,7 +220,7 @@
               <td>
                 @if (row.check_payment) {
                 <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
-                } @else { @if (row.status === 'Bayar Tujuan (COD)') {
+                } @else { @if (row.recipient?.received_by) { @if (row.status === 'Bayar Tujuan (COD)') {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer me-2"
                   data-bs-toggle="tooltip"
@@ -233,7 +233,7 @@
                 >
                   <app-keenicon name="wallet" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                } }
+                } } }
               </td>
               <td class="text-end">
                 <div class="d-block">
@@ -348,7 +348,7 @@
               <td>
                 @if (row.check_payment) {
                 <span class="text-gray-900 d-flex">{{ row.updated_by }}</span>
-                } @else { @if (row.status === 'Bayar Tujuan (COD)') {
+                } @else { @if (row.recipient?.received_by) { @if (row.status === 'Bayar Tujuan (COD)') {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer me-2"
                   data-bs-toggle="tooltip"
@@ -361,7 +361,7 @@
                 >
                   <app-keenicon name="wallet" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                } }
+                } } }
               </td>
               <td class="text-end">
                 <div class="d-flex">

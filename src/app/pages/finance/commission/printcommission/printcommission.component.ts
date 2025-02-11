@@ -307,7 +307,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
           this.dataPiutang = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
         }
 
-        const dataCommissionPiutang = this.dataPiutang?.filter((data: PackageModel) => data.check_payment === true);
+        const dataCommissionPiutang = this.dataPiutang?.filter((data: PackageModel) => data.check_sp === true);
         this.totalCommissionPiutang = this.utils.sumTotal(
           dataCommissionPiutang?.map((data: PackageModel) => data.agent_commission)
         );
