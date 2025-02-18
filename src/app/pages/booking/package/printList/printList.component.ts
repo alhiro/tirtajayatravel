@@ -163,7 +163,9 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
           //   filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
           // }
 
-          filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
+          filterData = response.data?.filter(
+            (data: PackageModel) => !data.check_payment && !data.check_sp && data.status_package !== 'Cancel'
+          );
           this.data = filterData;
           console.log(this.data);
 

@@ -117,6 +117,8 @@
   "Layout Builder": "Layout Builder",
   "Booking": "Booking",
   "Package": "Package",
+  "History Package": "History Package",
+  "History Passenger": "History Passenger",
   "Transaction": "Transaction",
   "Passenger": "Passenger",
   "Departure": "Departure",
@@ -130,6 +132,7 @@
   "Spareparts": "Spareparts",
   "Recapitulation Finance": "Recapitulation Finance",
   "Commission": "Commission",
+  "Commission & BA": "Commission & BA",
   "Courier Commission": "Courier Commission",
   "Garage": "Garage",
   "Schedule": "Schedule",
@@ -152,5 +155,115 @@
   "Mandiri": "Mandiri",
 
   "Performance Overview": "Performance Overview",
-  "Orders from all transactions": "Orders from all transaction"
+  "Orders from all transactions": "Orders from all transaction",
+
+  "PACKAGE": {
+    "TITLE": "Table Package {{ title }}",
+    "LENGTH": "Have {{ dataLength }} data",
+    "NO_DATA": "Data not available"
+  },
+
+  "PASSENGER": {
+    "TITLE": "Table passenger {{ title }}",
+    "LENGTH": "Have {{ dataLength }} data",
+    "NO_DATA": "Data not available"
+  },
+
+  "My Profile": "My Profile",
+  "My Trip": "My Trip",
+  "Language": "Language",
+  "Account Settings": "Account Settings",
+  "Sign Out": "Sign Out",
+
+  "More Action": "More Action",
+  "Cancel": "Cancel",
+  "Completed": "Completed",
+  "Filter Date": "Filter Date",
+
+  "Reset": "Reset",
+  "Print": "Print",
+  "Print Payment": "Print Payment",
+  "Print Payment User": "Print Payment User",
+  "Print All": "Print All",
+
+  "TABLE": {
+    "RESI_NUMBER": "Resi Number",
+    "LEVEL": "Level",
+    "SEND_DATE": "Send Date",
+    "SENDER": "Sender",
+    "RECIPIENT": "Recipient",
+    "COST": "Cost",
+    "ADMIN": "Admin",
+    "STATUS": "Status",
+    "ACTION": "Action",
+
+    "BOOK_DATE": "Book Date",
+    "TOTAL_PASSENGER": "Total Passenger",
+    "NAME": "Name",
+    "PICKUP_ADDRESS": "Pickup Address",
+    "DESTINATION_ADDRESS": "Destination Address",
+    "DESCRIPTION": "Description",
+    "CREATED_BY": "Created By",
+    "STATUS_PASSENGER": "Status Passennger"
+  },
+
+  "Searching. Please wait...": "Searching. Please wait...",
+  "Sorry, suggestions could not be loaded.": "Sorry, suggestions could not be loaded.",
+  "Choose Sender:": "Choose Sender",
+  "Address:": "Address:",
+  "Choose Recipient:": "Choose Recipient",
+  "Cost": "Cost",
+  "Amount Koli": "Amount Koli",
+  "Select category": "Select category",
+  "Special Request": "Special Request",
+  "Select Request": "Select Request",
+  "Request Description": "Request Description",
+  "Description": "Description",
+  "Payment status:": "Payment status",
+  "Origin From:": "Origin From:",
+  "Submit": "Submit",
+
+  "Name": "Name",
+  "Address": "Address",
+  "Discount": "Discount",
+  "Plat Number": "Plat Number",
+  "Car Number": "Car Number",
+  "Description Name": "Description Name",
+  "Add New Address": "Add New Address",
+
+  "TOOLTIP": {
+    "EDIT_PACKAGE": "Edit Package",
+    "PRINT_PACKAGE": "Print Package",
+    "SHARE_PACKAGE": "Share Package",
+    "DOWNLOAD_TICKET": "Download Ticket",
+    "CANCEL_PACKAGE": "Cancel Package",
+    "DELETE_PACKAGE": "Delete Package",
+    "REMOVE_DRIVER": "Remove Driver",
+    "ASSIGN_PACKAGE": "Assign Package",
+    "DETAIL_PACKAGE": "Detail Package"
+  },
+
+  "PLACEHOLDER": {
+    "CUSTOMER": {
+      "SEARCH": "Search Customer"
+    },
+    "EMPLOYEE": {
+      "SEARCH": "Search Employee"
+    },
+    "CAR": {
+      "SEARCH": "Search Car"
+    }
+  },
+
+  "SWAL": {
+    "ARE_YOU_SURE": "Are You Sure?",
+    "REVERT_TEXT": "You can change again in other menu (Cancel)",
+    "EDIT_TEXT": "You can change it again",
+    "YES_CANCEL_IT": "Yes, Cancel it",
+    "YES_PAID": "Yes, Have paid",
+    "REVERT_WARNING": "You can not reverse it!",
+    "CONFIRM_DELETE": "Yes, Delete it!",
+    "BACK_BUTTON": "Back",
+    "CONFIRM_SUBMIT": "Yes, Continue"
+  }
 }
