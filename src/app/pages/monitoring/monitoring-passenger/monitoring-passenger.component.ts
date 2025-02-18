@@ -328,21 +328,15 @@ export class MonitoringPassengerComponent implements OnInit {
             map((response: any) => {
               this.configuration.isLoading = false;
 
-              if (response) {
-                this.dataLength = response.length;
-                this.data = response.data;
+              this.dataLength = response.length;
+              this.data = response.data;
 
-                // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-                this.pagination.count =
-                  this.pagination.count === -1 ? (this.data ? this.data.length : 0) : this.pagination.count;
-                this.pagination = { ...this.pagination };
+              // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
+              this.pagination.count = response.length;
+              this.pagination = { ...this.pagination };
 
-                this.configuration.isLoading = false;
-                this.cdr.detectChanges();
-              } else {
-                this.dataLength = 0;
-                this.data = [];
-              }
+              this.configuration.isLoading = false;
+              this.cdr.detectChanges();
             }),
             catchError(() => {
               this.configuration.isLoading = false;
