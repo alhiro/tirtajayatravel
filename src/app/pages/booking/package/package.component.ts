@@ -347,21 +347,21 @@ export class PackageComponent implements OnInit, OnDestroy {
   }
 
   printFilterDate(datepicker: any) {
-    let getCity = '';
-    if (this.levelrule === 2) {
-      if (this.city_id === 1) {
-        getCity = 'Malang';
-      } else {
-        getCity = 'Surabaya';
-      }
-    } else if (this.levelrule === 8) {
-      getCity = this.city;
-    }
+    // let getCity = '';
+    // if (this.levelrule === 2) {
+    //   if (this.city_id === 1) {
+    //     getCity = 'Malang';
+    //   } else {
+    //     getCity = 'Surabaya';
+    //   }
+    // } else if (this.levelrule === 8) {
+    //   getCity = this.city;
+    // }
 
     const dateRange = {
       fromDate: this.startDate,
       toDate: this.endDate,
-      city: getCity,
+      city: this.currentTab,
       status: '',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
@@ -369,21 +369,21 @@ export class PackageComponent implements OnInit, OnDestroy {
   }
 
   printFilterDatePayment(datepicker: any) {
-    let getCity = '';
-    if (this.levelrule === 2 || this.levelrule === 3) {
-      if (this.city_id === 1) {
-        getCity = 'Malang';
-      } else {
-        getCity = 'Surabaya';
-      }
-    } else if (this.levelrule === 8) {
-      getCity = this.currentTab;
-    }
+    // let getCity = '';
+    // if (this.levelrule === 2 || this.levelrule === 3) {
+    //   if (this.city_id === 1) {
+    //     getCity = 'Malang';
+    //   } else {
+    //     getCity = 'Surabaya';
+    //   }
+    // } else if (this.levelrule === 8) {
+    //   getCity = this.currentTab;
+    // }
 
     const dateRange = {
       fromDate: this.startDate,
       toDate: this.endDate,
-      city: getCity,
+      city: this.currentTab,
       status: 'Lunas (Kantor)',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
@@ -391,21 +391,21 @@ export class PackageComponent implements OnInit, OnDestroy {
   }
 
   printFilterDatePaymentUser(datepicker: any) {
-    let getCity = '';
-    if (this.levelrule === 2 || this.levelrule === 3) {
-      if (this.city_id === 1) {
-        getCity = 'Malang';
-      } else {
-        getCity = 'Surabaya';
-      }
-    } else if (this.levelrule === 8) {
-      getCity = this.currentTab;
-    }
+    // let getCity = '';
+    // if (this.levelrule === 2 || this.levelrule === 3) {
+    //   if (this.city_id === 1) {
+    //     getCity = 'Malang';
+    //   } else {
+    //     getCity = 'Surabaya';
+    //   }
+    // } else if (this.levelrule === 8) {
+    //   getCity = this.currentTab;
+    // }
 
     const dateRange = {
       fromDate: this.startDate,
       toDate: this.endDate,
-      city: getCity,
+      city: this.currentTab,
       status: 'Lunas (Kantor)',
       username: this.username,
     };

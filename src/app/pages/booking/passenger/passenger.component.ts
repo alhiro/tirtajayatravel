@@ -344,21 +344,21 @@ export class PassengerComponent implements OnInit, OnDestroy {
   }
 
   printFilterDate(datepicker: any) {
-    let getCity = '';
-    if (this.levelrule === 2) {
-      if (this.city_id === 1) {
-        getCity = 'Malang';
-      } else {
-        getCity = 'Surabaya';
-      }
-    } else if (this.levelrule === 8) {
-      getCity = this.city;
-    }
+    // let getCity = '';
+    // if (this.levelrule === 2) {
+    //   if (this.city_id === 1) {
+    //     getCity = 'Malang';
+    //   } else {
+    //     getCity = 'Surabaya';
+    //   }
+    // } else if (this.levelrule === 8) {
+    //   getCity = this.city;
+    // }
 
     const dateRange = {
       fromDate: this.startDate,
       toDate: this.endDate,
-      city: getCity,
+      city: this.currentTab,
       status: '',
     };
     console.log(dateRange);
