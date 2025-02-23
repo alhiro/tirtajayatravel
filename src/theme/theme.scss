@@ -162,6 +162,10 @@ tr:hover {
   background-color: #b3e6b7;
 }
 
+.soft-warning-bg {
+  background-color: #e6b3b3;
+}
+
 .transparent-bg {
   background-color: transparent;
 }
@@ -265,4 +269,100 @@ table {
   margin: 0 !important;
   padding: 0 !important;
   float: none !important;
+}
+
+.sticky-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 45px;
+  height: 45px;
+  margin: 20px;
+
+  .wrapper-sticky {
+    background-color: #1ba8cf;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    align-content: center;
+    text-align: center;
+    cursor: pointer;
+
+    span {
+      color: white;
+    }
+  }
+
+  .menu-sticky {
+    opacity: 0;
+    visibility: hidden;
+    top: -55px;
+    position: absolute;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, top 0.3s ease-in-out;
+    cursor: pointer;
+    margin-left: -185px;
+    width: 250px;
+
+    ul {
+      text-align: right;
+      background: #1ba8cf;
+      list-style: none;
+      padding: 9px 0;
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+
+      li {
+        padding: 3px 0;
+      }
+
+      a {
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 8px 20px;
+
+        &:hover {
+          color: #9fdbec;
+        }
+      }
+    }
+  }
+
+  &:hover .menu-sticky {
+    opacity: 1;
+    visibility: visible;
+    top: -135px;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-mode {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .print-mode .table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    page-break-inside: auto;
+  }
+
+  .print-mode .table-custom tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  .print-mode .table-custom th,
+  .print-mode .table-custom td {
+    border: 1px solid #333333;
+    padding: 2px;
+    text-align: center;
+    white-space: normal;
+  }
 }

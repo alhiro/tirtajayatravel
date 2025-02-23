@@ -185,7 +185,8 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
           console.log(this.dataDriver);
 
           // Count calculation total package except cancel
-          this.totalCost = this.utils.sumTotal(filterData?.map((data: any) => data.cost));
+          const totalCost = filterData.filter((data: PackageModel) => data.go_send_id != null);
+          this.totalCost = this.utils.sumTotal(totalCost?.map((data: any) => data.cost));
           // this.totalCost = filterData?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
           // this.totalKoli = filterData?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
 

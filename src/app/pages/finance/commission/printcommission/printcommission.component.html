@@ -437,6 +437,770 @@
   </div>
 </div>
 
-<div class="wrapper-sticky hidden">
-  <app-keenicon name="plus" class="fs-md-3 text-primary"></app-keenicon>
+<!-- Area Print -->
+<div class="hidden card-body py-3">
+  <div class="hidden commission-click">
+    <div class="menu-content px-0 text-center">
+      <h3 class="card-title align-items-start flex-column mb-2">
+        <span class="card-label fw-bolder fs-2">
+          @if (city === 'Surabaya') { PENCAIRAN KOMISI MALANG } @else { PENCAIRAN KOMISI SURABAYA }
+        </span>
+      </h3>
+      @if (startDate && endDate) {
+      <span class="card-label fw-bolder fs-5">
+        HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }}
+      </span>
+      }
+    </div>
+
+    <!-- begin::Table container -->
+    <div class="table-responsive table-custom">
+      <!-- begin::Table -->
+      <ngx-table
+        #table
+        [configuration]="configuration"
+        [data]="dataCommissionClick"
+        [columns]="columns"
+        [pagination]="pagination"
+        tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+      >
+        <ng-template let-row let-index="index" ngx-table-row>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 fw-bolder fs-7">
+              {{ row.resi_number }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.book_date | date : 'yyyy/MM/dd H:mm:ss' : 'GMT' }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            @if (row.check_sp) {
+            <span class="text-gray-900 d-block">
+              {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+            </span>
+            }
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.sender?.name }} <br />
+              {{ row.sender?.address }} <br />
+              {{ row.sender?.telp }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.recipient?.name }}<br />
+              {{ row.recipient?.address }}<br />
+              {{ row.recipient?.telp }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.status }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            @if (row.check_sp) {
+            <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
+            }
+          </td>
+        </ng-template>
+      </ngx-table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mt-3 mb-1">
+          <span
+            ><b>TOTAL SETORAN KOMISI PAKET CASH: {{ totalCommission | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
+          ><br />
+        </div>
+        <div class="mt-1">
+          @for (admin of groupAdminCommission; track admin) {
+          <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+          <br />
+          }
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mt-3 mb-1">
+          <span
+            ><b
+              >TOTAL SETORAN KOMISI PAKET TRANSFER:
+              {{ totalCommissionTransfer | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+            ></span
+          ><br />
+        </div>
+        <div class="mt-1">
+          @for (admin of groupAdminCommissionTransfer; track admin) {
+          <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+          <br />
+          }
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mt-3 mb-1">
+          <span
+            ><b
+              >TOTAL SETORAN KOMISI PAKET PIUTANG: {{ totalCommissionBa | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+            ></span
+          ><br />
+        </div>
+        <div class="mt-1">
+          @for (admin of groupAdminCommissionBa; track admin) {
+          <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+          <br />
+          }
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mt-3 mb-1">
+          <span
+            ><b
+              >TOTAL SETORAN KOMISI PAKET CUSTOMER (MONTHLY):
+              {{ totalCommissionCustomerMonthly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+            ></span
+          ><br />
+        </div>
+        <div class="mt-1">
+          @for (admin of groupAdminCommissionCustomerMonthly; track admin) {
+          <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+          <br />
+          }
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="mt-3 mb-1">
+          <span class="fs-4"
+            ><b
+              >TOTAL SETORAN KOMISI PAKET: {{ totalCommissionPackageOnly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+            ></span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hidden commission-noclick">
+    <div class="menu-content px-0 text-center">
+      <h3 class="card-title align-items-start flex-column mb-2">
+        <span class="card-label fw-bolder fs-2">
+          @if (city === 'Surabaya') { PENCAIRAN KOMISI MALANG } @else { PENCAIRAN KOMISI SURABAYA }
+        </span>
+      </h3>
+      @if (startDate && endDate) {
+      <span class="card-label fw-bolder fs-5">
+        HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }}
+      </span>
+      }
+    </div>
+
+    <!-- begin::Table container -->
+    <div class="table-responsive table-custom">
+      <!-- begin::Table -->
+      <ngx-table
+        #table
+        [configuration]="configuration"
+        [data]="dataCommissionNoClick"
+        [columns]="columns"
+        [pagination]="pagination"
+        tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+      >
+        <ng-template let-row let-index="index" ngx-table-row>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 fw-bolder fs-7">
+              {{ row.resi_number }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.book_date | date : 'yyyy/MM/dd H:mm:ss' : 'GMT' }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            @if (row.check_sp) {
+            <span class="text-gray-900 d-block">
+              {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+            </span>
+            }
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.sender?.name }} <br />
+              {{ row.sender?.address }} <br />
+              {{ row.sender?.telp }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.recipient?.name }}<br />
+              {{ row.recipient?.address }}<br />
+              {{ row.recipient?.telp }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.status }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            @if (row.check_sp) {
+            <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
+            }
+          </td>
+        </ng-template>
+      </ngx-table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+
+    <!-- <div class="row">
+      <div class="col-md-6">
+        <div class="mt-3 mb-1">
+          <span
+            ><b
+              >TOTAL SETORAN KOMISI PAKET CASH: {{ totalCommissionNoClick | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+            ></span
+          ><br />
+        </div>
+        <div class="mt-1">
+          @for (admin of groupAdminCommissionNoClick; track admin) {
+          <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+          <br />
+          }
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mt-3 mb-1">
+          <span
+            ><b
+              >TOTAL SETORAN KOMISI PAKET TRANSFER:
+              {{ totalCommissionTransferNoClick | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+            ></span
+          ><br />
+        </div>
+        <div class="mt-1">
+          @for (admin of groupAdminCommissionTransferNoClick; track admin) {
+          <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+          <br />
+          }
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mt-3 mb-1">
+          <span
+            ><b
+              >TOTAL SETORAN KOMISI PAKET PIUTANG: {{ totalCommissionBaNoClick | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+            ></span
+          ><br />
+        </div>
+        <div class="mt-1">
+          @for (admin of groupAdminCommissionBaNoClick; track admin) {
+          <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+          <br />
+          }
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mt-3 mb-1">
+          <span
+            ><b
+              >TOTAL SETORAN KOMISI PAKET CUSTOMER (MONTHLY):
+              {{ totalCommissionCustomerMonthlyNoClick | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+            ></span
+          ><br />
+        </div>
+        <div class="mt-1">
+          @for (admin of groupAdminCommissionCustomerMonthlyNoClick; track admin) {
+          <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+          <br />
+          }
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="mt-3 mb-1">
+          <span class="fs-4"
+            ><b
+              >TOTAL SETORAN KOMISI PAKET: {{ totalCommissionPackageOnlyNoClick | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+            ></span>
+        </div>
+      </div>
+    </div> -->
+  </div>
+
+  <div class="hidden ba-click">
+    <div class="menu-content px-0 text-center">
+      <h3 class="card-title align-items-start flex-column mb-2">
+        <span class="card-label fw-bolder fs-2">
+          @if (city === 'Surabaya') { PENCAIRAN PAKET BA MALANG } @else { PENCAIRAN PAKET BA SURABAYA }
+        </span>
+      </h3>
+      @if (startDate && endDate) {
+      <span class="card-label fw-bolder fs-5">
+        HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }}
+      </span>
+      }
+    </div>
+
+    <!-- begin::Table container -->
+    <div class="table-responsive table-custom">
+      <!-- begin::Table -->
+      <ngx-table
+        #table
+        [configuration]="configuration"
+        [data]="dataPiutang"
+        [columns]="columns"
+        [pagination]="pagination"
+        tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+      >
+        <ng-template let-row let-index="index" ngx-table-row>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 fw-bolder fs-7">
+              {{ row.resi_number }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.book_date | date : 'yyyy/MM/dd H:mm:ss' : 'GMT' }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            @if (row.check_sp) {
+            <span class="text-gray-900 d-block">
+              {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+            </span>
+            }
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.sender?.name }} <br />
+              {{ row.sender?.address }} <br />
+              {{ row.sender?.telp }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.recipient?.name }}<br />
+              {{ row.recipient?.address }}<br />
+              {{ row.recipient?.telp }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.status }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            @if (row.check_payment) {
+            <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
+            }
+          </td>
+        </ng-template>
+      </ngx-table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+
+    <div class="mt-3 mb-1">
+      <span
+        ><b
+          >TOTAL SETORAN KOMISI PAKET BA: {{ totalCommissionPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+        ></span
+      ><br />
+    </div>
+    <div class="mt-1">
+      @for (admin of groupAdminCommissionPiutang; track admin) {
+      <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+      <br />
+      }
+    </div>
+    <div class="mt-3 mb-1">
+      <span
+        ><b>TOTAL SETORAN PELUNASAN PAKET BA: {{ totalPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
+      ><br />
+    </div>
+    <div class="mt-1">
+      @for (admin of groupAdminPiutang; track admin) {
+      <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+      <br />
+      }
+    </div>
+    <div class="col-md-12">
+      <div class="mt-5 mb-7 text-center">
+        <span class="fs-4"
+          ><b
+            >TOTAL SETORAN KOMISI PAKET BA: {{ totalCommissionPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+          ></span
+        ><br />
+        <span class="fs-4"
+          ><b
+            >TOTAL SETORAN BA: {{ totalPiutang - totalCommissionPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+          ></span
+        ><br />
+      </div>
+    </div>
+  </div>
+
+  <div class="hidden ba-noclick">
+    <div class="menu-content px-0 text-center">
+      <h3 class="card-title align-items-start flex-column mb-2">
+        <span class="card-label fw-bolder fs-2">
+          @if (city === 'Surabaya') { PENCAIRAN PAKET BA MALANG } @else { PENCAIRAN PAKET BA SURABAYA }
+        </span>
+      </h3>
+      @if (startDate && endDate) {
+      <span class="card-label fw-bolder fs-5">
+        HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }}
+      </span>
+      }
+    </div>
+
+    <!-- begin::Table container -->
+    <div class="table-responsive table-custom">
+      <!-- begin::Table -->
+      <ngx-table
+        #table
+        [configuration]="configuration"
+        [data]="dataPiutangNoClick"
+        [columns]="columns"
+        [pagination]="pagination"
+        tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+      >
+        <ng-template let-row let-index="index" ngx-table-row>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 fw-bolder fs-7">
+              {{ row.resi_number }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.book_date | date : 'yyyy/MM/dd H:mm:ss' : 'GMT' }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            @if (row.check_sp) {
+            <span class="text-gray-900 d-block">
+              {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+            </span>
+            }
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.sender?.name }} <br />
+              {{ row.sender?.address }} <br />
+              {{ row.sender?.telp }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.recipient?.name }}<br />
+              {{ row.recipient?.address }}<br />
+              {{ row.recipient?.telp }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            <span class="text-gray-900 d-block">
+              {{ row.status }}
+            </span>
+          </td>
+          <td
+            [ngClass]="{
+              'soft-success-bg': row.status === 'Bayar Tujuan (COD)' && row.check_payment === true,
+              'transparent-bg': row.status !== 'Bayar Tujuan (COD)'
+            }"
+          >
+            @if (row.check_payment) {
+            <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
+            }
+          </td>
+        </ng-template>
+      </ngx-table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+
+    <!-- <div class="mt-3 mb-1">
+      <span
+        ><b
+          >TOTAL SETORAN KOMISI PAKET BA: {{ totalCommissionPiutangNoClick | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+        ></span
+      ><br />
+    </div>
+    <div class="mt-1">
+      @for (admin of groupAdminCommissionPiutangNoClick; track admin) {
+      <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+      <br />
+      }
+    </div>
+    <div class="mt-3 mb-1">
+      <span
+        ><b>TOTAL SETORAN PELUNASAN PAKET BA: {{ totalPiutangNoClick | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
+      ><br />
+    </div>
+    <div class="mt-1">
+      @for (admin of groupAdminPiutangNoClick; track admin) {
+      <span>{{ admin.admin }} = {{ admin.totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+      <br />
+      }
+    </div>
+    <div class="col-md-12">
+      <div class="mt-5 mb-7 text-center">
+        <span class="fs-4"
+          ><b
+            >TOTAL SETORAN KOMISI PAKET BA: {{ totalCommissionBaNoClick | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+          ></span
+        ><br />
+        <span class="fs-4"
+          ><b
+            >TOTAL SETORAN BA: {{ totalPiutangNoClick - totalCommissionBaNoClick | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+          ></span
+        ><br />
+      </div>
+    </div> -->
+  </div>
+</div>
+<!-- End Area Print -->
+
+<div class="sticky-container no-print">
+  <div class="wrapper-sticky">
+    <app-keenicon name="plus" class="fs-md-3 fw-bold"></app-keenicon>
+  </div>
+
+  <div class="menu-sticky">
+    <ul>
+      <li>
+        <a href="javascript:void(0)" (click)="printWithClass('commission-click')">
+          <span>Print Komisi Ceklist</span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)" (click)="printWithClass('commission-noclick')">
+          <span>Print Komisi Belum Ceklist</span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)" (click)="printWithClass('ba-click')">
+          <span>Print BA Ceklist</span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)" (click)="printWithClass('ba-noclick')">
+          <span>Print BA Belum Ceklist</span>
+        </a>
+      </li>
+    </ul>
+  </div>
 </div>
