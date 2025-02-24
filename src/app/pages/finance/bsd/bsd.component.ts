@@ -110,6 +110,14 @@ export class BsdComponent implements OnInit, OnDestroy {
     startDate: '',
     endDate: '',
   };
+  public paginationGroup = {
+    limit: 1000,
+    offset: 1,
+    count: -1,
+    search: '',
+    startDate: '',
+    endDate: '',
+  };
   public params = {
     limit: 10,
     page: 1,
@@ -233,7 +241,7 @@ export class BsdComponent implements OnInit, OnDestroy {
     ];
 
     this.columnsPackage = [
-      // { key: 'package_id', title: 'No' },
+      { key: 'package_id', title: 'No' },
       { key: 'resi_number', title: 'Number Resi' },
       { key: 'cost', title: 'Cost' },
       { key: 'discount', title: 'Disc.' },
@@ -247,7 +255,7 @@ export class BsdComponent implements OnInit, OnDestroy {
     ];
 
     this.columnsPassenger = [
-      // { key: 'passenger_id', title: 'No' },
+      { key: 'passenger_id', title: 'No' },
       { key: 'resi_number', title: 'Number Resi' },
       { key: 'tariff', title: 'Tariff' },
       { key: 'discount', title: 'Disc.' },
@@ -412,6 +420,8 @@ export class BsdComponent implements OnInit, OnDestroy {
   eventEmitted($event: { event: string; value: any }): void {
     console.log($event);
     if ($event.event === 'onPagination') {
+      this.groupCheckedBsdList = [];
+      this.selected.clear();
       this.parseEvent($event);
     }
   }
@@ -431,6 +441,10 @@ export class BsdComponent implements OnInit, OnDestroy {
     }; // see https://github.com/typicode/json-server
     console.log(params);
     this.dataListBSD(params);
+  }
+
+  getIndex(i: number): number {
+    return (this.pagination.offset - 1) * this.pagination.limit + (i + 1);
   }
 
   private dataListBSD(params: any): void {
