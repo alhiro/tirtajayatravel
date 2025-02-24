@@ -74,6 +74,8 @@ export class BsdComponent implements OnInit, OnDestroy {
 
   public data: any;
   public dataLength: any;
+  public dataDone: any;
+  public dataDoneLength: any;
 
   public modelEmployee: any;
   public modelCar: any;
@@ -192,6 +194,10 @@ export class BsdComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.groupCheckedBsdList = [];
+    this.selected.clear();
+    this.modelDriver = '';
+
     this.dataListBSD(this.params);
     this.city = this.localService.getCity();
     this.level = this.localService.getPosition();
@@ -375,33 +381,20 @@ export class BsdComponent implements OnInit, OnDestroy {
     this.currentTab = tab;
     console.log(this.currentTab);
 
-    if (this.currentTab === 'Done') {
-      this.params = {
-        limit: this.pagination.limit,
-        page: 1,
-        search: this.pagination.search,
-        startDate: this.pagination.startDate,
-        endDate: this.pagination.endDate,
-        status: 'Done',
-        city: '',
-      };
-      this.dataListBSD(this.params);
-    } else if (this.currentTab === 'List') {
-      this.groupCheckedBsdList = [];
-      this.selected.clear();
-      this.modelDriver = '';
+    this.groupCheckedBsdList = [];
+    this.selected.clear();
+    this.modelDriver = '';
 
-      this.params = {
-        limit: this.pagination.limit,
-        page: 1,
-        search: this.pagination.search,
-        startDate: this.pagination.startDate,
-        endDate: this.pagination.endDate,
-        status: 'List',
-        city: '',
-      };
-      this.dataListBSD(this.params);
-    }
+    this.params = {
+      limit: this.pagination.limit,
+      page: 1,
+      search: this.pagination.search,
+      startDate: this.pagination.startDate,
+      endDate: this.pagination.endDate,
+      status: this.currentTab === 'Done' ? 'Done' : 'List',
+      city: '',
+    };
+    this.dataListBSD(this.params);
   }
 
   setCurrentDisplay() {
@@ -417,6 +410,7 @@ export class BsdComponent implements OnInit, OnDestroy {
   }
 
   eventEmitted($event: { event: string; value: any }): void {
+    console.log($event);
     if ($event.event === 'onPagination') {
       this.parseEvent($event);
     }
@@ -435,10 +429,11 @@ export class BsdComponent implements OnInit, OnDestroy {
       status: this.currentTab,
       city: '',
     }; // see https://github.com/typicode/json-server
+    console.log(params);
     this.dataListBSD(params);
   }
 
-  private dataListBSD(params: ExtendedPaginationContext): void {
+  private dataListBSD(params: any): void {
     console.log(params);
     this.configuration.isLoading = true;
     this.packageService
@@ -452,43 +447,14 @@ export class BsdComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((response: any) => {
-        // const combinedData: any = [];
-
-        // response.data.forEach((item: any) => {
-        //   // Check if there's an existing item in the combined array with the same bsd
-        //   const existing = combinedData.find(
-        //     (combinedItem: any) => combinedItem.bsd === item.bsd || combinedItem.bsd_passenger === item.bsd_passenger
-        //   );
-
-        //   if (existing) {
-        //     //If exists, merge the packages and passengers
-        //     existing.packages = [...existing.packages, ...item.packages];
-        //     existing.passengers = [...existing.passengers, ...item.passengers];
-        //   } else {
-        //     // If not exists, add a new item
-        //     combinedData.push({
-        //       ...item,
-        //       packages: [...item.packages],
-        //       passengers: [...item.passengers],
-        //     });
-        //   }
-        // });
-
-        const dataBsd = response.data?.filter(
-          (data: any) => data.packages.length !== 0 || data.passengers.length !== 0
-        );
-        this.data = dataBsd.filter((data: any) => data.car_id !== null);
-        this.dataLength = this.data.length;
+        this.data = response.data;
+        this.dataLength = response.length;
 
         // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
-        this.pagination.count = response.length;
+        this.pagination.count = this.dataLength;
         this.pagination = { ...this.pagination };
 
         this.configuration.isLoading = false;
-
-        response?.length > 0
-          ? (this.configuration.horizontalScroll = true)
-          : (this.configuration.horizontalScroll = false);
         this.cdr.detectChanges();
       });
   }

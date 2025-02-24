@@ -53,7 +53,7 @@
       </span>
     </h3>
 
-    @if (!delivery) { @if (username === 'admin_11' && levelrule === 8) {
+    @if (!delivery) {
     <div class="card-toolbar">
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
@@ -64,35 +64,16 @@
         </li>
       </ul>
     </div>
-    } @if (city_id === 1) {
-    <div class="card-toolbar">
-      <ul class="nav nav-pills nav-pills-sm nav-dark-75">
-        <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
-          <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Malang'" data-toggle="tab">Malang</a>
-        </li>
-        <li class="nav-item" (click)="setCurrentTab('Surabaya')" [style.cursor]="'pointer'">
-          <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Surabaya'" data-toggle="tab">Surabaya</a>
-        </li>
-      </ul>
-    </div>
-    } @else if (city_id === 2) {
-    <div class="card-toolbar">
-      <ul class="nav nav-pills nav-pills-sm nav-dark-75">
-        <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
-          <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Malang'" data-toggle="tab">Malang</a>
-        </li>
-        <li class="nav-item" (click)="setCurrentTab('Surabaya')" [style.cursor]="'pointer'">
-          <a class="nav-link py-2 px-4" [class.active]="currentTab === 'Surabaya'" data-toggle="tab">Surabaya</a>
-        </li>
-      </ul>
-    </div>
-    }
 
     <div class="card-toolbar">
       <!-- begin::Menu -->
       <div class="menu-item px-3">
         <div class="menu-content px-3 py-3">
-          @if (currentTab === 'Malang') { @if (city_id === 1) {
+          @if (username === 'admin_11') { @if (currentTab === 'Malang') {
+          <div class="btn btn-primary btn-sm px-4 cursor-pointer" (click)="openModalNew()">Booking Malang</div>
+          } @else if (currentTab === 'Surabaya') {
+          <div class="btn btn-primary btn-sm px-4 cursor-pointer" (click)="openModalNew()">Booking Surabaya</div>
+          } } @if (currentTab === 'Malang') { @if (city_id === 1) {
           <div class="btn btn-primary btn-sm px-4 cursor-pointer" (click)="openModalNew()">Booking Malang</div>
           } } @else if (currentTab === 'Surabaya') { @if (city_id === 2) {
           <div class="btn btn-primary btn-sm px-4 cursor-pointer" (click)="openModalNew()">Booking Surabaya</div>
@@ -273,7 +254,7 @@
               </td> -->
               @if (!delivery) {
               <td class="text-end">
-                @if (city_id === 1) {
+                @if (username === 'admin_11' || city_id === 1) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
                   data-bs-toggle="tooltip"
@@ -297,7 +278,7 @@
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                } @if (city_id === 1) {
+                } @if (username === 'admin_11' || city_id === 1) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -432,7 +413,7 @@
               </td> -->
               @if (!delivery) {
               <td class="text-end">
-                @if (city_id === 2) {
+                @if (username === 'admin_11' || city_id === 2) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer fs-9"
                   data-bs-toggle="tooltip"
@@ -456,7 +437,7 @@
                 >
                   <app-keenicon name="printer" class="fs-md-3 text-primary"></app-keenicon>
                 </a>
-                } @if (city_id === 2) {
+                } @if (username === 'admin_11' || city_id === 2) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
