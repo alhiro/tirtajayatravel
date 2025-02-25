@@ -48,7 +48,9 @@
                 'soft-warning-bg': row.go_send_id == null
               }"
             >
-              <span class="text-gray-900 d-block">{{ getIndex(index) }}</span>
+              <span [ngbTooltip]="'Belum Dibawa Driver' | translate" class="text-gray-900 d-block">{{
+                getIndex(index)
+              }}</span>
             </td>
             <td
               [ngClass]="{
