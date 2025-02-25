@@ -103,7 +103,7 @@ export class BsdComponent implements OnInit, OnDestroy {
   currentDisplayModal: boolean = false;
 
   public pagination = {
-    limit: 10,
+    limit: 50,
     offset: 1,
     count: -1,
     search: '',
@@ -119,7 +119,7 @@ export class BsdComponent implements OnInit, OnDestroy {
     endDate: '',
   };
   public params = {
-    limit: 10,
+    limit: 50,
     page: 1,
     search: '',
     startDate: '',
@@ -422,7 +422,16 @@ export class BsdComponent implements OnInit, OnDestroy {
     if ($event.event === 'onPagination') {
       this.groupCheckedBsdList = [];
       this.selected.clear();
-      this.parseEvent($event);
+
+      const pagination = {
+        event: $event.event,
+        value: {
+          limit: this.pagination.limit,
+          page: $event.value.page,
+        },
+      };
+
+      this.parseEvent(pagination);
     }
   }
 
@@ -439,7 +448,6 @@ export class BsdComponent implements OnInit, OnDestroy {
       status: this.currentTab,
       city: '',
     }; // see https://github.com/typicode/json-server
-    console.log(params);
     this.dataListBSD(params);
   }
 
@@ -991,21 +999,13 @@ export class BsdComponent implements OnInit, OnDestroy {
             map((response: any) => {
               if (response) {
                 this.dataLength = response.length;
-
-                const dataBsd = response.data.filter(
-                  (data: any) => data.packages.length !== 0 || data.passengers.length !== 0
-                );
-                this.data = dataBsd;
+                this.data = response.data;
 
                 // ensure this.pagination.count is set only once and contains count of the whole array, not just paginated one
                 this.pagination.count = response.length;
                 this.pagination = { ...this.pagination };
 
                 this.configuration.isLoading = false;
-
-                response?.length > 0
-                  ? (this.configuration.horizontalScroll = true)
-                  : (this.configuration.horizontalScroll = false);
                 this.cdr.detectChanges();
               }
             }),
