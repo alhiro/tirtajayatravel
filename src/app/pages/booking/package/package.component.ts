@@ -136,7 +136,7 @@ export class PackageComponent implements OnInit, OnDestroy {
   public configuration: Config = { ...DefaultConfig };
 
   public pagination = {
-    limit: 10,
+    limit: 20,
     offset: 1,
     count: -1,
     search: '',
@@ -146,7 +146,7 @@ export class PackageComponent implements OnInit, OnDestroy {
     status: 'Progress',
   };
   public params = {
-    limit: 10,
+    limit: 20,
     page: 1,
     search: '',
     startDate: '',
@@ -647,7 +647,7 @@ export class PackageComponent implements OnInit, OnDestroy {
     if (this.currentTab === 'Malang') {
       this.city = 'Malang';
       this.params = {
-        limit: 10,
+        limit: 20,
         page: 1,
         search: this.pagination.search,
         startDate: this.pagination.startDate,
@@ -659,7 +659,7 @@ export class PackageComponent implements OnInit, OnDestroy {
     } else if (this.currentTab === 'Surabaya') {
       this.city = 'Surabaya';
       this.params = {
-        limit: 10,
+        limit: 20,
         page: 1,
         search: this.pagination.search,
         startDate: this.pagination.startDate,
@@ -681,7 +681,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       }
 
       this.params = {
-        limit: 10,
+        limit: 20,
         page: 1,
         search: this.pagination.search,
         startDate: this.pagination.startDate,
@@ -703,7 +703,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       }
 
       this.params = {
-        limit: 10,
+        limit: 20,
         page: 1,
         search: this.pagination.search,
         startDate: this.pagination.startDate,
@@ -745,7 +745,15 @@ export class PackageComponent implements OnInit, OnDestroy {
     this.dataRow = $event.value.row;
 
     if ($event.event === 'onPagination') {
-      this.parseEvent($event);
+      const pagination = {
+        event: $event.event,
+        value: {
+          limit: this.pagination.limit,
+          page: $event.value.page,
+        },
+      };
+
+      this.parseEvent(pagination);
     }
   }
 

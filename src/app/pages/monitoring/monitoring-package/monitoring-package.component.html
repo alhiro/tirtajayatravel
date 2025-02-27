@@ -102,7 +102,13 @@
                     }
                     <br />
                     <span class="text-gray-900 d-block">{{ row.status }}</span>
-                    <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : true : '1.0-2' }}</span>
+                    <span class="text-gray-900 d-block">
+                      @if (row.discount) {
+                      {{ row.discount | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                      } @else {
+                      {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                      }
+                    </span>
                   </span>
                 </td>
                 <td
@@ -224,7 +230,13 @@
                     }
                     <br />
                     <span class="text-gray-900 d-block">{{ row.status }}</span>
-                    <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : true : '1.0-2' }}</span>
+                    <span class="text-gray-900 d-block">
+                      @if (row.discount) {
+                      {{ row.discount | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                      } @else {
+                      {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                      }
+                    </span>
                   </span>
                 </td>
                 <td

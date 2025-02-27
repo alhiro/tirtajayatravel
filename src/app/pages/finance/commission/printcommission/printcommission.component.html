@@ -16,7 +16,8 @@
               </h3>
               @if (startDate && endDate) {
               <span class="card-label fw-bolder fs-5">
-                HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }}
+                HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }} -
+                {{ endDateDisplay | date : 'EEEE' }}, {{ endDateDisplay | date : 'dd-MM-yyyy' }}
               </span>
               }
             </div>
@@ -87,7 +88,11 @@
             >
               @if (row.check_sp) {
               <span class="text-gray-900 d-block">
+                @if (row.discount) {
+                {{ row.discount | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                } @else {
                 {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                }
               </span>
               }
             </td>
@@ -448,7 +453,8 @@
       </h3>
       @if (startDate && endDate) {
       <span class="card-label fw-bolder fs-5">
-        HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }}
+        HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }} -
+        {{ endDateDisplay | date : 'EEEE' }}, {{ endDateDisplay | date : 'dd-MM-yyyy' }}
       </span>
       }
     </div>
@@ -648,7 +654,8 @@
       </h3>
       @if (startDate && endDate) {
       <span class="card-label fw-bolder fs-5">
-        HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }}
+        HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }} -
+        {{ endDateDisplay | date : 'EEEE' }}, {{ endDateDisplay | date : 'dd-MM-yyyy' }}
       </span>
       }
     </div>
@@ -849,7 +856,8 @@
       </h3>
       @if (startDate && endDate) {
       <span class="card-label fw-bolder fs-5">
-        HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }}
+        HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }} -
+        {{ endDateDisplay | date : 'EEEE' }}, {{ endDateDisplay | date : 'dd-MM-yyyy' }}
       </span>
       }
     </div>
@@ -1015,7 +1023,8 @@
       </h3>
       @if (startDate && endDate) {
       <span class="card-label fw-bolder fs-5">
-        HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }}
+        HARI: {{ startDateDisplay | date : 'EEEE' }}, {{ startDateDisplay | date : 'dd-MM-yyyy' }} -
+        {{ endDateDisplay | date : 'EEEE' }}, {{ endDateDisplay | date : 'dd-MM-yyyy' }}
       </span>
       }
     </div>
