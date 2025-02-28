@@ -129,6 +129,9 @@
                     {{ row.recipient?.address }} <br />
                     {{ row.recipient?.telp }} <br />
                     {{ row.description }}
+                    @if (row.new_resi_number) {
+                    <br />
+                    (Pindah ke No. resi {{ row.new_resi_number }}) }
                   </span>
                 </td>
                 <td
@@ -257,6 +260,9 @@
                     {{ row.recipient?.address }} <br />
                     {{ row.recipient?.telp }} <br />
                     {{ row.description }}
+                    @if (row.new_resi_number) {
+                    <br />
+                    (Pindah ke No. resi {{ row.new_resi_number }}) }
                   </span>
                 </td>
                 <td
