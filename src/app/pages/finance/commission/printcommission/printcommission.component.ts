@@ -214,7 +214,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
             data.status === 'Piutang' ||
             data.status === 'Customer (Bulanan)'
         );
-        this.data = data?.filter((data: PackageModel) => data.check_sp === true);
+        this.data = data;
 
         this.dataCommissionClick = data?.filter((data: PackageModel) => data.check_sp === true);
         this.dataCommissionNoClick = data?.filter((data: PackageModel) => data.check_sp == null);
@@ -416,6 +416,8 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
 
         // Data ba
         const dataPiutang = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
+        this.dataBa = dataPiutang;
+
         this.dataPiutang = dataPiutang?.filter((data: PackageModel) => data.check_payment === true);
         console.log(this.dataPiutang);
         this.dataPiutangNoClick = dataPiutang?.filter((data: PackageModel) => data.check_payment == null);
@@ -424,7 +426,6 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         this.totalCommissionPiutang = this.utils.sumTotal(
           dataCommissionPiutang?.map((data: PackageModel) => data.agent_commission)
         );
-
         const dataCommissionPiutangNoClick = this.dataPiutang?.filter((data: PackageModel) => data.check_sp == null);
         this.totalCommissionPiutangNoClick = this.utils.sumTotal(
           dataCommissionPiutangNoClick?.map((data: PackageModel) => data.agent_commission)
