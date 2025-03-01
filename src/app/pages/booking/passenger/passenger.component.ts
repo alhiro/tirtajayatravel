@@ -685,6 +685,10 @@ export class PassengerComponent implements OnInit, OnDestroy {
     }
   }
 
+  formatPosition(position: string[]): string {
+    return position.join(', ');
+  }
+
   checkLevel(event: Event) {
     console.log(event.target);
   }

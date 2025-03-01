@@ -216,8 +216,7 @@
               <td>
                 <span class="text-gray-900 d-block">
                   {{ row.waybill?.name }} <br />
-                  {{ row.waybill?.telp }} <br />
-                  <!-- ({{ row.position }}) -->
+                  {{ row.waybill?.telp }}
                 </span>
               </td>
               <td>
@@ -245,7 +244,8 @@
                 }
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.description }}</span>
+                <span class="text-gray-900 d-block">{{ row.description }}</span> <br />
+                <span class="text-gray-900 d-block">{{ formatPosition(row.position) }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.created_by }}</span>
@@ -392,8 +392,7 @@
               <td>
                 <span class="text-gray-900 d-block">
                   {{ row.waybill?.name }} <br />
-                  {{ row.waybill?.telp }} <br />
-                  <!-- ({{ row.position }}) -->
+                  {{ row.waybill?.telp }}
                 </span>
               </td>
               <td>
@@ -421,7 +420,8 @@
                 }
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.description }}</span>
+                <span class="text-gray-900 d-block">{{ row.description }}</span> <br />
+                <span class="text-gray-900 d-block">{{ formatPosition(row.position) }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.created_by }}</span>
@@ -594,7 +594,8 @@
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
               </td> -->
               <td>
-                <span class="text-gray-900 d-block">{{ row.description }}</span>
+                <span class="text-gray-900 d-block">{{ row.description }}</span> <br />
+                <span class="text-gray-900 d-block">{{ formatPosition(row.position) }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.created_by }}</span>
@@ -702,7 +703,8 @@
                 <span class="text-gray-900 d-block">{{ row.description }}</span>
               </td> -->
               <td>
-                <span class="text-gray-900 d-block">{{ row.description }}</span>
+                <span class="text-gray-900 d-block">{{ row.description }}</span> <br />
+                <span class="text-gray-900 d-block">{{ formatPosition(row.position) }}</span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.created_by }}</span>
