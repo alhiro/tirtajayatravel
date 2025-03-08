@@ -8,13 +8,7 @@
             <div class="menu-content px-0 text-center">
               <h3 class="card-title align-items-start flex-column mb-2">
                 <span class="card-label fw-bolder fs-2">
-                  @if (lastSegment === 'printbayartujuan') { @if (city === 'Malang') { LIST PAKET BAYAR TUJUAN (BA)
-                  MALANG } @else if (city === 'Surabaya') { LIST PAKET BAYAR TUJUAN (BA) SURABAYA } @else { LIST PAKET
-                  BAYAR TUJUAN (BA) MALANG & SURABAYA } } @else { @if (city === 'Malang') { @if (status === 'Lunas
-                  (Kantor)') { LIST LUNAS PAKET MALANG } @else { LIST SEMUA PAKET MALANG } } @else if (city ===
-                  'Surabaya') { @if (status === 'Lunas (Kantor)') { LIST LUNAS PAKET SURABAYA } @else { LIST SEMUA PAKET
-                  SURABAYA } } @else { @if (status === 'Customer (Bulanan)') { LIST CUSTOMER (BULANAN) } @else if
-                  (status === 'Lunas (Transfer)') { LIST LUNAS (TRANSFER) } } }
+                  {{ displayTitle }}
                 </span>
               </h3>
               @if (startDate && endDate) {
@@ -144,11 +138,7 @@
               }"
             >
               <span class="text-gray-900 d-block">
-                @if (row.status === 'Bayar Tujuan (COD)' && row.check_payment === true) {
-                {{ row.updated_by }}
-                } @if (row.status !== 'Bayar Tujuan (COD)') {
                 {{ row.created_by }}
-                }
               </span>
             </td>
             <td

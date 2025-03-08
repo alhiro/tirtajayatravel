@@ -35,6 +35,7 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
 
   public totalCost: any = 0;
   public totalKoli: any = 0;
+  public displayTitle: any = '';
 
   public configuration: Config = { ...DefaultConfig };
   public columns!: Columns[];
@@ -108,6 +109,8 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
     this.endDate = objDataDate.toDate;
     this.endDateDisplay = this.endDate?.split(' ')[0];
 
+    this.displayTitle = this.getListTitle(this.lastSegment, this.city, this.status);
+
     if (this.lastSegment === 'printlistuser') {
       const params = {
         limit: '',
@@ -163,14 +166,12 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
           //   filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
           // }
 
-          filterData = response.data?.filter(
-            (data: PackageModel) => !data.check_payment && !data.check_sp && data.status_package !== 'Cancel'
-          );
+          filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
           this.data = filterData;
           console.log(this.data);
 
           const uniqueDrivers = Object?.values(
-            this.data
+            filterData
               ?.filter((item: any) => item?.go_send) // Keep only items with a driver
               .reduce((acc: any, item: any) => {
                 const { go_send_id, send_date, total_cost, total_packages, employee } = item?.go_send;
@@ -185,8 +186,8 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
           console.log(this.dataDriver);
 
           // Count calculation total package except cancel
-          const totalCost = filterData.filter((data: PackageModel) => data.go_send_id != null);
-          this.totalCost = this.utils.sumTotal(totalCost?.map((data: any) => data.cost));
+          // const totalCost = filterData.filter((data: PackageModel) => data.go_send_id != null);
+          this.totalCost = this.utils.sumTotal(filterData?.map((data: any) => data.cost));
           // this.totalCost = filterData?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
           // this.totalKoli = filterData?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
 
@@ -200,9 +201,19 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
             }, {} as { [key: string]: GroupedDataCost })
           );
           this.groupAdmin = groupedDataCost;
-          console.log(groupedDataCost);
+          console.log(this.groupAdmin);
 
-          console.log(this.data);
+          // const uniqueDrivers = Object?.values(
+          //   filterData
+          //     ?.filter((item: any) => item?.go_send) // Keep only items with a driver
+          //     .reduce((acc: any, item: any) => {
+          //       const { go_send_id, send_date, total_cost, total_packages, employee } = item?.go_send;
+          //       if (!acc[go_send_id]) {
+          //         acc[go_send_id] = { go_send_id, send_date, total_cost, total_packages, employee }; // Add driver to accumulator if not already present
+          //       }
+          //       return acc;
+          //     }, {})
+          // );
 
           this.configuration.isLoading = false;
           this.cdr.detectChanges();
@@ -210,6 +221,41 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
           this.data = [];
         }
       });
+  }
+
+  getListTitle(lastSegment: string, city: string, status: string): string {
+    if (lastSegment === 'printbayartujuan') {
+      if (city === 'Malang') {
+        return 'DAFTAR PAKET BAYAR TUJUAN (BA) MALANG';
+      } else if (city === 'Surabaya') {
+        return 'DAFTAR PAKET BAYAR TUJUAN (BA) SURABAYA';
+      }
+    } else {
+      if (city === 'Malang') {
+        if (this.username) {
+          return status === 'Lunas (Kantor)'
+            ? `DAFTAR LUNAS PAKET MALANG (${this.username})`
+            : 'DAFTAR SEMUA PAKET MALANG';
+        } else {
+          return status === 'Lunas (Kantor)' ? 'DAFTAR LUNAS SEMUA PAKET MALANG' : 'DAFTAR SEMUA PAKET MALANG';
+        }
+      } else if (city === 'Surabaya') {
+        if (this.username) {
+          return status === 'Lunas (Kantor)'
+            ? `DAFTAR LUNAS PAKET SURABAYA (${this.username})`
+            : 'DAFTAR SEMUA PAKET SURABAYA';
+        } else {
+          return status === 'Lunas (Kantor)' ? 'DAFTAR LUNAS SEMUA PAKET SURABAYA' : 'DAFTAR SEMUA PAKET SURABAYA';
+        }
+      } else {
+        if (status === 'Customer (Bulanan)') {
+          return 'DAFTAR CUSTOMER (BULANAN)';
+        } else if (status === 'Lunas (Transfer)') {
+          return 'DAFTAR LUNAS (TRANSFER)';
+        }
+      }
+    }
+    return '';
   }
 
   // getPrint() {
