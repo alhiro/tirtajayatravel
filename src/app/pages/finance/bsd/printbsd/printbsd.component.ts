@@ -130,7 +130,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
         // );
         this.totalPassenger = this.data?.passengers?.length;
 
-        const filterPaymentPassenger = this.data?.passengers.filter((row: any) => row.check_payment === true);
+        const filterPaymentPassenger = this.data?.passengers?.filter((row: any) => row.check_payment === true);
         this.totalTariff = this.utils.sumTotal(filterPaymentPassenger?.map((data: PassengerModel) => data.tariff));
 
         // Debet
@@ -148,7 +148,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
         this.averageKm = this.utils.calculateAverageKmPerLiter(this.oldFullKm, this.currentFullKm, this.bbm);
 
         // Kredit
-        const filterCommissionPassenger = this.data?.passengers.filter(
+        const filterCommissionPassenger = this.data?.passengers?.filter(
           (row: any) => row.check_sp === true && row.city_id === 1
         );
         this.totalCommissionPassenger = this.utils.sumTotal(
@@ -169,7 +169,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
         const commissionToll = (Number(this.outToll) * 0.15) / this.totalPassenger;
 
         // Remapping value commission Malang
-        const dataPassengerMalang = this.data?.passengers.filter((val: GoSendModel) => val.city_id === 1);
+        const dataPassengerMalang = this.data?.passengers?.filter((val: GoSendModel) => val.city_id === 1);
         const remapDataMalang = dataPassengerMalang?.map((data: PassengerModel) => ({
           ...data,
           agent_commission: data.agent_commission - commissionToll,
@@ -179,7 +179,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
 
         // Remapping value commission Surabaya
         const dataPassengerSurabaya = this.data?.passengers?.filter((val: GoSendModel) => val.city_id === 2);
-        const remapDataSurabaya = dataPassengerSurabaya.map((data: PassengerModel) => ({
+        const remapDataSurabaya = dataPassengerSurabaya?.map((data: PassengerModel) => ({
           ...data,
           agent_commission: data.agent_commission - commissionToll,
         }));
@@ -217,13 +217,16 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
         this.totalDepositOffice = Number(this.totalTariff) - Number(this.totalKreditPassenger);
 
         // Package
-        const filterPaymentPackage = this.data?.packages.filter(
+        const filterPaymentPackage = this.data?.packages?.filter(
           (row: PackageModel) =>
-            row.check_payment === true && (row.status === 'Piutang' || row.status === 'Bayar Tujuan (COD)')
+            (row.city_id === 1 && row.check_payment === true && row.status === 'Piutang') ||
+            (row.city_id === 2 &&
+              row.check_payment === true &&
+              (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang'))
         );
         this.totalCost = this.utils.sumTotal(filterPaymentPackage?.map((data: PackageModel) => data.cost));
 
-        const filterPaymentPackageSp = this.data?.packages.filter(
+        const filterPaymentPackageSp = this.data?.packages?.filter(
           (row: PackageModel) => row.check_sp === true && row.city_id === 1
         );
         this.totalCommissionPackage = this.utils.sumTotal(
@@ -252,10 +255,126 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
 
     this.type = objType;
 
-    const params = {
-      go_send_id: objData.go_send_id,
-    };
-    this.dataListBSD(params);
+    // const params = {
+    //   go_send_id: objData.go_send_id,
+    // };
+    // this.dataListBSD(params);
+
+    this.data = objData;
+
+    this.dataMalangPackage = this.data?.packages?.filter((val: GoSendModel) => val.city_id === 1);
+    this.dataSurabayaPackage = this.data?.packages?.filter((val: GoSendModel) => val.city_id === 2);
+
+    // Passenger
+    // this.totalPassenger = this.utils.sumTotal(
+    //   this.data?.passengers?.map((data: PassengerModel) => data.total_passenger)
+    // );
+    this.totalPassenger = this.data?.passengers?.length;
+
+    const filterPaymentPassenger = this.data?.passengers?.filter((row: any) => row.check_payment === true);
+    this.totalTariff = this.utils.sumTotal(filterPaymentPassenger?.map((data: PassengerModel) => data.tariff));
+
+    // Debet
+    this.mandatoryDeposit = this.data?.cost?.mandatory_deposit;
+    this.depositDriver = this.data?.cost?.driver_deposit;
+    this.voluntaryDeposit = this.data?.cost?.voluntary_deposit;
+    this.oldFullKm = this.data?.car?.costs[0]?.current_km;
+    this.currentFullKm = Number(this.data?.cost?.current_km) - Number(this.data?.cost?.old_km);
+
+    this.bbm = this.data?.cost?.bbm;
+    this.bbmTotal = this.data?.cost?.bbm_cost;
+
+    // Cost/L
+    this.differentInKm = Number(this.currentFullKm) - Number(this.oldFullKm);
+    this.averageKm = this.utils.calculateAverageKmPerLiter(this.oldFullKm, this.currentFullKm, this.bbm);
+
+    // Kredit
+    const filterCommissionPassenger = this.data?.passengers?.filter((row: PassengerModel) => row.check_sp === true);
+    this.totalCommissionPassenger = this.utils.sumTotal(
+      filterCommissionPassenger?.map((data: PassengerModel) => data.agent_commission)
+    );
+
+    this.totalParkingPassenger = this.data?.cost?.parking_passenger;
+    this.inToll = this.data?.cost?.toll_in;
+    this.outToll = this.data?.cost?.toll_out;
+    this.overnight = this.data?.cost?.overnight;
+    this.extra = this.data?.cost?.extra;
+    this.others = this.data?.cost?.others;
+
+    // const totalAllCommissionPassenger = this.utils.sumTotal(
+    //   this.data?.passengers?.map((data: PassengerModel) => data.agent_commission)
+    // );
+
+    const commissionToll = (Number(this.outToll) * 0.15) / this.totalPassenger;
+
+    // Remapping value commission Malang
+    const dataPassengerMalang = this.data?.passengers?.filter((val: GoSendModel) => val.city_id === 1);
+    const remapDataMalang = dataPassengerMalang?.map((data: PassengerModel) => ({
+      ...data,
+      agent_commission: data.agent_commission - commissionToll,
+    }));
+    this.dataMalangPassenger = remapDataMalang;
+    console.log(this.dataMalangPassenger);
+
+    // Remapping value commission Surabaya
+    const dataPassengerSurabaya = this.data?.passengers?.filter((val: GoSendModel) => val.city_id === 2);
+    const remapDataSurabaya = dataPassengerSurabaya?.map((data: PassengerModel) => ({
+      ...data,
+      agent_commission: data.agent_commission - commissionToll,
+    }));
+    this.dataSurabayaPassenger = remapDataSurabaya;
+
+    // Count all agent commission after calc
+    const remapDataSurabayaAll = filterCommissionPassenger?.map((data: PassengerModel) => ({
+      ...data,
+      agent_commission: data.agent_commission - commissionToll,
+    }));
+
+    this.totalCommissionPassengerKredit = this.utils.sumTotal(
+      remapDataSurabayaAll?.map((data: PassengerModel) => data.agent_commission)
+    );
+    console.log('remapDataSurabayaAll');
+    console.log(remapDataSurabayaAll);
+
+    this.totalDebetPassenger = this.utils.sumNumbers(
+      this.totalTariff,
+      this.mandatoryDeposit,
+      this.depositDriver,
+      this.voluntaryDeposit
+    );
+    this.totalKreditPassenger = this.utils.sumNumbers(
+      this.totalCommissionPassengerKredit,
+      this.bbmTotal,
+      this.totalParkingPassenger,
+      this.inToll,
+      this.outToll,
+      this.overnight,
+      this.extra,
+      this.others
+    );
+    this.totalDepositDriverPassenger = Number(this.totalDebetPassenger) - Number(this.totalKreditPassenger);
+    this.totalDepositOffice = Number(this.totalTariff) - Number(this.totalKreditPassenger);
+
+    // Package
+    const filterPaymentPackage = this.data?.packages?.filter(
+      (row: PackageModel) =>
+        (row.city_id === 1 && row.check_payment === true && row.status === 'Piutang') ||
+        (row.city_id === 2 &&
+          row.check_payment === true &&
+          (row.status === 'Bayar Tujuan (COD)' || row.status === 'Piutang'))
+    );
+    this.totalCost = this.utils.sumTotal(filterPaymentPackage?.map((data: PackageModel) => data.cost));
+
+    const filterPaymentPackageSp = this.data?.packages?.filter(
+      (row: PackageModel) => row.check_sp === true && row.city_id === 2
+    );
+    this.totalCommissionPackage = this.utils.sumTotal(
+      filterPaymentPackageSp?.map((data: PackageModel) => data.agent_commission)
+    );
+    this.totalParkingPackage = this.data?.cost?.parking_package;
+    this.totalDebetPackage = this.totalCost;
+    this.totalKreditPackage = Number(this.totalCommissionPackage) + Number(this.totalParkingPackage);
+    this.totalDepositDriverPackage = Number(this.totalDebetPackage) - Number(this.totalKreditPackage);
   }
 
   ngOnDestroy() {

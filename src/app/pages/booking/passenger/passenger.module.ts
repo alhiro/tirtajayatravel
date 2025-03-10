@@ -19,6 +19,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { DateTimeModule } from '@app/@shared/component/date-time.module';
 import { NgbTimepickerModuleCustom } from '@app/@shared/component/timepicker-custom/timepicker.module';
+import { CustomerModule } from '@app/pages/master/customer/customer.module';
 
 @NgModule({
   declarations: [PassengerComponent],
@@ -42,6 +43,7 @@ import { NgbTimepickerModuleCustom } from '@app/@shared/component/timepicker-cus
     TableModule,
     ModalsModule,
     DateTimeModule,
+    CustomerModule,
     NgbTimepickerModuleCustom,
   ],
   exports: [PassengerComponent],

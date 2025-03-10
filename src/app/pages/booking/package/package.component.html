@@ -2,11 +2,6 @@
 <div class="card">
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <!-- <span class="card-label fw-bolder fs-3 mb-1">
-        @if (currentTab === 'Malang') { Package Table Malang } @else if (currentTab === 'Surabaya') { Package Table
-        Surabaya } @else if (currentTab === 'Move') { Package Table Move } @else if (currentTab === 'Cancel') { Package
-        Table Cancel } @else if (currentTab === 'History') { Package Table Complete }
-      </span> -->
       <span class="card-label fw-bolder fs-3 mb-1">
         <ng-container [ngSwitch]="currentTab">
           <ng-container *ngSwitchCase="'Malang'">
@@ -31,25 +26,6 @@
       </span>
       <span class="text-muted mt-1 fw-bold fs-7">
         {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLength | number } }}
-
-        <!-- <ng-container [ngSwitch]="currentTab">
-          <ng-container *ngSwitchCase="'Malang'">
-            {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLengthMalang | number } }}
-          </ng-container>
-          <ng-container *ngSwitchCase="'Surabaya'">
-            {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLengthSurabaya | number } }}
-          </ng-container>
-          <ng-container *ngSwitchCase="'Move'">
-            {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLengthMove | number } }}
-          </ng-container>
-          <ng-container *ngSwitchCase="'Cancel'">
-            {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLengthCancel | number } }}
-          </ng-container>
-          <ng-container *ngSwitchCase="'History'">
-            {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLengthHistory | number } }}
-          </ng-container>
-          <ng-container *ngSwitchDefault> - </ng-container>
-        </ng-container> -->
       </span>
     </h3>
 
@@ -728,7 +704,7 @@
                   </ngb-timepicker-custom>
                 </div>
               </div>
-              <div class="d-flex flex-center flex-column py-2">
+              <div class="d-flex flex-center py-2">
                 <input
                   id="select-customer"
                   type="text"
@@ -746,6 +722,16 @@
                   #instance="ngbTypeahead"
                   [placeholder]="'PLACEHOLDER.CUSTOMER.SEARCH' | translate"
                 />
+                &nbsp;
+                <div
+                  class="btn btn-primary fs-8 cursor-pointer btn-sm"
+                  (click)="openModalNewCustomer()"
+                  [ngbTooltip]="'ECOMMERCE.CUSTOMERS.NEW_CUSTOMER' | translate"
+                  translate
+                >
+                  <app-keenicon name="plus" class="fs-md-3 text-light"></app-keenicon>
+                </div>
+
                 <ng-template #rt let-r="result" let-t="term">
                   {{ r.name }} - {{ r.address }} - {{ r.telp }}
                 </ng-template>
@@ -1368,6 +1354,13 @@
 </app-modal-xl>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
 <!-- end:: Modal customer -->
+
+<!-- begin:: Modal create new customer -->
+<app-modal-full #modalCustomer [modalConfig]="modalConfigCustomer" [modalClass]="addClass">
+  <app-customer></app-customer>
+</app-modal-full>
+<!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
+<!-- end:: Modal create new customer -->
 
 <!-- begin:: Modal Address -->
 <app-modal #modalAddress [modalConfig]="isCreateAddress ? modalConfigCreateAddress : modalConfigEditAddress">

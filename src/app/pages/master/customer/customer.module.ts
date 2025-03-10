@@ -39,5 +39,6 @@ import {
     TableModule,
     ModalsModule,
   ],
+  exports: [CustomerComponent],
 })
 export class CustomerModule {}

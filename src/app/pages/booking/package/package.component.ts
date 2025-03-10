@@ -213,7 +213,14 @@ export class PackageComponent implements OnInit, OnDestroy {
     dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
+  modalConfigCustomer: ModalConfig = {
+    modalTitle: 'List Customer',
+    // dismissButtonLabel: 'Submit',
+    // closeButtonLabel: 'Cancel',
+  };
+  addClass = 'modal-clean';
   @ViewChild('modal') private modalComponent!: ModalXlComponent;
+  @ViewChild('modalCustomer') private modalComponentCustomers!: ModalXlComponent;
   @ViewChild('modalAddress') private modalComponentAddress!: ModalComponent;
   @ViewChild('modalSP') private modalComponentSP!: ModalComponent;
   @ViewChild('assignSP') private modalComponentAssignSP!: ModalComponent;
@@ -362,7 +369,7 @@ export class PackageComponent implements OnInit, OnDestroy {
       fromDate: this.startDate,
       toDate: this.endDate,
       city: this.currentTab,
-      status: '',
+      status: 'All',
     };
     sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
     window.open('booking/package/transaction/printlist', '_blank');
@@ -1638,6 +1645,10 @@ export class PackageComponent implements OnInit, OnDestroy {
   // Address
   clearFormAddress() {
     this.formAddress.reset();
+  }
+
+  async openModalNewCustomer() {
+    return await this.modalComponentCustomers.open();
   }
 
   async openModalNewAddress(event: AddressModel) {

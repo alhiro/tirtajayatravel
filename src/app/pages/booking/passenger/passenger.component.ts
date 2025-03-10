@@ -202,7 +202,14 @@ export class PassengerComponent implements OnInit, OnDestroy {
     dismissButtonLabel: 'Submit',
     closeButtonLabel: 'Cancel',
   };
+  modalConfigCustomer: ModalConfig = {
+    modalTitle: 'List Customer',
+    // dismissButtonLabel: 'Submit',
+    // closeButtonLabel: 'Cancel',
+  };
+  addClass = 'modal-clean';
   @ViewChild('modal') private modalComponent!: ModalXlComponent;
+  @ViewChild('modalCustomer') private modalComponentCustomers!: ModalXlComponent;
   @ViewChild('modalAddress') private modalComponentAddress!: ModalComponent;
   @ViewChild('modalSP') private modalComponentSP!: ModalComponent;
 
@@ -1536,6 +1543,10 @@ export class PassengerComponent implements OnInit, OnDestroy {
   // Address
   clearFormAddress() {
     this.formAddress.reset();
+  }
+
+  async openModalNewCustomer() {
+    return await this.modalComponentCustomers.open();
   }
 
   async openModalNewAddress(event: AddressModel) {

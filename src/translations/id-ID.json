@@ -88,7 +88,7 @@
     },
     "ECOMMERCE": "eCommerce",
     "CUSTOMERS": {
-      "CUSTOMERS": "Pelanggan",
+      "CUSTOMER": "Pelanggan",
       "CUSTOMERS_LIST": "Daftar pelanggan",
       "NEW_CUSTOMER": "Pelanggan Baru",
       "DELETE_CUSTOMER_SIMPLE": {
