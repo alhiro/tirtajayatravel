@@ -123,7 +123,8 @@ export class MonitoringPassengerComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private handlerResponseService: HandlerResponseService,
     private utils: Utils,
-    private passengerService: PassengerService
+    private passengerService: PassengerService,
+    private translate: TranslateService
   ) {
     this.levelrule = this.utils.getLevel();
     this.city_id = this.utils.getCity();
@@ -163,16 +164,26 @@ export class MonitoringPassengerComponent implements OnInit {
     this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = true;
 
-    this.columns = [
-      // { key: 'category_sub_id', title: 'No' },
-      { key: 'resi_number', title: 'Resi Number' },
-      { key: 'level', title: 'Level' },
-      { key: 'waybill_id', title: 'Waybill' },
-      { key: 'destination_id', title: 'Destination' },
-      { key: 'book_date', title: 'Book Date' },
-      { key: 'created_at', title: 'Created At' },
-      // { key: 'status_passenger', title: 'Status Passenger' },
-    ];
+    this.translate
+      .get([
+        'TABLE.RESI_NUMBER',
+        'TABLE.LEVEL',
+        'TABLE.PICKUP_ADDRESS',
+        'TABLE.DESTINATION_ADDRESS',
+        'TABLE.BOOK_DATE',
+        'TABLE.CREATED_AT',
+      ])
+      .subscribe((translations: any) => {
+        this.columns = [
+          // { key: 'category_sub_id', title: 'No' },
+          { key: 'resi_number', title: translations['TABLE.RESI_NUMBER'] },
+          { key: 'level', title: translations['TABLE.LEVEL'] },
+          { key: 'sender_id', title: translations['TABLE.PICKUP_ADDRESS'] },
+          { key: 'recipient_id', title: translations['TABLE.DESTINATION_ADDRESS'] },
+          { key: 'book_date', title: translations['TABLE.BOOK_DATE'] },
+          { key: 'created_at', title: translations['TABLE.CREATED_AT'] },
+        ];
+      });
   }
 
   ngOnDestroy(): void {

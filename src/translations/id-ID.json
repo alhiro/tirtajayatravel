@@ -195,9 +195,11 @@
     "COST": "Biaya",
     "ADMIN": "Admin",
     "STATUS": "Status",
+    "CREATED_AT": "Tgl Booking",
+    "RECEIVED_BY": "Penerima",
     "ACTION": "Action",
 
-    "BOOK_DATE": "Tanggal Berangkat",
+    "BOOK_DATE": "Tgl Berangkat",
     "TOTAL_PASSENGER": "Total",
     "NAME": "Nama",
     "PICKUP_ADDRESS": "Alamat Penjemputan",
@@ -265,5 +267,13 @@
     "CONFIRM_DELETE": "Iya, Hapuskan",
     "BACK_BUTTON": "Kembali",
     "CONFIRM_SUBMIT": "Iya, Lanjutkan"
-  }
+  },
+
+  "TOTAL_PACKAGE": "JUMLAH PAKET",
+  "TOTAL_PAID_TRANSFER_COST": "TOTAL PAKET LUNAS (TRANSFER)",
+  "TOTAL_PAID_OFFICE_COST": "TOTAL PAKET LUNAS (KANTOR)",
+  "TOTAL_PIUTANG_COST": "TOTAL PAKET PIUTANG",
+  "TOTAL_BA_COST": "TOTAL PAKET BAYAR TUJUAN (BA)",
+  "TOTAL_MONTHLY_COST": "TOTAL PAKET BULANAN",
+  "TOTAL_COST": "TOTAL HARGA"
 }

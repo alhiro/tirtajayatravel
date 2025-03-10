@@ -112,17 +112,17 @@
                     'transparent-bg': row.status_passenger !== 'Cancel'
                   }"
                 >
-                  @for (value of row.waybills; track value) {
                   <span class="text-gray-900 d-block">
-                    <ul>
+                    <ul class="numbering">
+                      @for (value of row.waybills; track value) {
                       <li>
                         {{ value?.name }} <br />
                         {{ value?.address }} <br />
                         {{ value?.telp }}
                       </li>
+                      }
                     </ul>
                   </span>
-                  }
                 </td>
                 <td
                   [ngClass]="{
@@ -130,17 +130,17 @@
                     'transparent-bg': row.status_passenger !== 'Cancel'
                   }"
                 >
-                  @for (value of row.destinations; track value) {
                   <span class="text-gray-900 d-block">
-                    <ul>
+                    <ul class="numbering">
+                      @for (value of row.destinations; track value) {
                       <li>
                         {{ value?.name }} <br />
                         {{ value?.address }} <br />
                         {{ value?.telp }}
                       </li>
+                      }
                     </ul>
                   </span>
-                  }
                 </td>
                 <td
                   [ngClass]="{

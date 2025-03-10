@@ -91,7 +91,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
   public statusPassenger: any;
   public city: any = 'Malang';
 
-  public dataLength!: number;
+  public dataLength = 0;
   public dataLengthMalang!: number;
   public dataLengthSurabaya!: number;
   public dataLengthMove!: number;
@@ -212,6 +212,8 @@ export class PassengerComponent implements OnInit, OnDestroy {
   @ViewChild('modalCustomer') private modalComponentCustomers!: ModalXlComponent;
   @ViewChild('modalAddress') private modalComponentAddress!: ModalComponent;
   @ViewChild('modalSP') private modalComponentSP!: ModalComponent;
+
+  isCustomerModalOpen = false;
 
   @Input() cssClass!: '';
   currentTab = 'Malang';
@@ -429,7 +431,6 @@ export class PassengerComponent implements OnInit, OnDestroy {
       city: this.currentTab,
       status: this.pagination.status,
     };
-
     this.dataList(this.params);
 
     this.company = this.localService.getCompany();
@@ -726,7 +727,7 @@ export class PassengerComponent implements OnInit, OnDestroy {
         },
       };
 
-      this.parseEvent($event);
+      this.parseEvent(pagination);
     }
   }
 
@@ -1546,7 +1547,14 @@ export class PassengerComponent implements OnInit, OnDestroy {
   }
 
   async openModalNewCustomer() {
+    this.isCustomerModalOpen = true;
     return await this.modalComponentCustomers.open();
+  }
+
+  async closeModalCustomer() {
+    console.log('Modal dismissed!');
+    this.isCustomerModalOpen = false;
+    this.dataList(this.params);
   }
 
   async openModalNewAddress(event: AddressModel) {

@@ -186,11 +186,44 @@
       <!-- end::Table container -->
 
       <div class="mt-7">
+        @if (status === 'All') {
         <span
-          ><b>TOTAL PACKAGE: {{ data?.length | number }}</b></span
+          ><b
+            >{{ 'TOTAL_PAID_TRANSFER_COST' | translate }} :
+            {{ totalCostTransfer | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+          ></span
+        >
+        <br />
+        <span
+          ><b
+            >{{ 'TOTAL_PAID_OFFICE_COST' | translate }} :
+            {{ totalCostOffice | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+          ></span
+        >
+        <br />
+        <span
+          ><b
+            >{{ 'TOTAL_PIUTANG_COST' | translate }} : {{ totalCostPiutang | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+          ></span
+        >
+        <br />
+        <span
+          ><b>{{ 'TOTAL_BA_COST' | translate }} : {{ totalCostBa | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
+        >
+        <br />
+        <span
+          ><b
+            >{{ 'TOTAL_MONTHLY_COST' | translate }} : {{ totalCostMonthly | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b
+          ></span
+        >
+        <br />
+        }
+        <br />
+        <span
+          ><b>{{ 'TOTAL_PACKAGE' | translate }}: {{ data?.length | number }}</b></span
         ><br />
         <span
-          ><b>TOTAL COST: {{ totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
+          ><b>{{ 'TOTAL_COST' | translate }} : {{ totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
         ><br />
       </div>
       <div class="mt-1">

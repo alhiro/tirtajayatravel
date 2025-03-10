@@ -124,7 +124,8 @@ export class MonitoringPackageComponent implements OnInit, OnDestroy {
     private readonly cdr: ChangeDetectorRef,
     private handlerResponseService: HandlerResponseService,
     private utils: Utils,
-    private packageService: PackageService
+    private packageService: PackageService,
+    private translate: TranslateService
   ) {
     this.levelrule = this.utils.getLevel();
     this.city_id = this.utils.getCity();
@@ -164,16 +165,28 @@ export class MonitoringPackageComponent implements OnInit, OnDestroy {
     this.configuration.horizontalScroll = false;
     this.configuration.orderEnabled = true;
 
-    this.columnsPackage = [
-      // { key: 'category_sub_id', title: 'No' },
-      { key: 'resi_number', title: 'Resi Number' },
-      { key: 'level', title: 'Level' },
-      { key: 'sender_id', title: 'Sender' },
-      { key: 'recipient_id', title: 'Recipient' },
-      { key: 'book_date', title: 'Book Date' },
-      { key: 'created_at', title: 'Created At' },
-      { key: 'received_by', title: 'Received' },
-    ];
+    this.translate
+      .get([
+        'TABLE.RESI_NUMBER',
+        'TABLE.LEVEL',
+        'TABLE.SENDER',
+        'TABLE.RECIPIENT',
+        'TABLE.SEND_DATE',
+        'TABLE.CREATED_AT',
+        'TABLE.RECEIVED_BY',
+      ])
+      .subscribe((translations: any) => {
+        this.columnsPackage = [
+          // { key: 'category_sub_id', title: 'No' },
+          { key: 'resi_number', title: translations['TABLE.RESI_NUMBER'] },
+          { key: 'level', title: translations['TABLE.LEVEL'] },
+          { key: 'sender_id', title: translations['TABLE.SENDER'] },
+          { key: 'recipient_id', title: translations['TABLE.RECIPIENT'] },
+          { key: 'book_date', title: translations['TABLE.SEND_DATE'] },
+          { key: 'created_at', title: translations['TABLE.CREATED_AT'] },
+          { key: 'received_by', title: translations['TABLE.RECEIVED_BY'] },
+        ];
+      });
   }
 
   ngOnDestroy(): void {

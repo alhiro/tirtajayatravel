@@ -228,6 +228,8 @@ export class PackageComponent implements OnInit, OnDestroy {
 
   @ViewChild('datepicker') datePicker!: any;
 
+  isCustomerModalOpen = false;
+
   @Input() cssClass!: '';
   currentTab = 'Malang';
 
@@ -1648,7 +1650,14 @@ export class PackageComponent implements OnInit, OnDestroy {
   }
 
   async openModalNewCustomer() {
+    this.isCustomerModalOpen = true;
     return await this.modalComponentCustomers.open();
+  }
+
+  async closeModalCustomer() {
+    console.log('Modal dismissed!');
+    this.isCustomerModalOpen = false;
+    this.dataList(this.params);
   }
 
   async openModalNewAddress(event: AddressModel) {

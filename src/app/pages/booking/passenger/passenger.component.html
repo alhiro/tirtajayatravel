@@ -1522,8 +1522,15 @@
 <!-- end:: Modal customer -->
 
 <!-- begin:: Modal create new customer -->
-<app-modal-full #modalCustomer [modalConfig]="modalConfigCustomer" [modalClass]="addClass">
-  <app-customer></app-customer>
+<app-modal-full
+  #modalCustomer
+  [modalConfig]="modalConfigCustomer"
+  [modalClass]="addClass"
+  (onDismiss)="closeModalCustomer()"
+>
+  <ng-container *ngIf="isCustomerModalOpen">
+    <app-customer></app-customer>
+  </ng-container>
 </app-modal-full>
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
 <!-- end:: Modal create new customer -->

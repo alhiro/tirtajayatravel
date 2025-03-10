@@ -88,7 +88,7 @@
     },
     "ECOMMERCE": "eCommerce",
     "CUSTOMERS": {
-      "CUSTOMERS": "Customers",
+      "CUSTOMER": "Customers",
       "CUSTOMERS_LIST": "Customers list",
       "NEW_CUSTOMER": "New Customer",
       "DELETE_CUSTOMER_SIMPLE": {

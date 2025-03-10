@@ -37,6 +37,12 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
   public totalKoli: any = 0;
   public displayTitle: any = '';
 
+  public totalCostTransfer: any = 0;
+  public totalCostOffice: any = 0;
+  public totalCostPiutang: any = 0;
+  public totalCostBa: any = 0;
+  public totalCostMonthly: any = 0;
+
   public configuration: Config = { ...DefaultConfig };
   public columns!: Columns[];
   public columnsDriver!: Columns[];
@@ -190,6 +196,44 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
           this.totalCost = this.utils.sumTotal(filterData?.map((data: any) => data.cost));
           // this.totalCost = filterData?.reduce((acc: any, item: any) => acc + Number(item?.cost), 0);
           // this.totalKoli = filterData?.reduce((acc: any, item: any) => acc + Number(item?.koli), 0);
+
+          const totals = filterData?.reduce(
+            (acc: any, data: PackageModel) => {
+              const cost = Number(data.cost) || 0;
+              switch (data.status) {
+                case 'Lunas (Transfer)':
+                  acc.totalCostTransfer += cost;
+                  break;
+                case 'Lunas (Office)':
+                  acc.totalCostOffice += cost;
+                  break;
+                case 'Piutang':
+                  acc.totalCostPiutang += cost;
+                  break;
+                case 'Bayar Tujuan (COD)':
+                  acc.totalCostBa += cost;
+                  break;
+                case 'Customer (Bulanan)':
+                  acc.totalCostMonthly += cost;
+                  break;
+              }
+
+              return acc;
+            },
+            {
+              totalCostTransfer: 0,
+              totalCostOffice: 0,
+              totalCostPiutang: 0,
+              totalCostBa: 0,
+              totalCostMonthly: 0,
+            }
+          );
+
+          this.totalCostTransfer = this.utils.sumTotal([totals.totalCostTransfer]);
+          this.totalCostOffice = this.utils.sumTotal([totals.totalCostOffice]);
+          this.totalCostPiutang = this.utils.sumTotal([totals.totalCostPiutang]);
+          this.totalCostBa = this.utils.sumTotal([totals.totalCostBa]);
+          this.totalCostMonthly = this.utils.sumTotal([totals.totalCostMonthly]);
 
           const groupedDataCost: GroupedDataCost[] = Object.values(
             filterData.reduce((acc: any, item: any) => {
