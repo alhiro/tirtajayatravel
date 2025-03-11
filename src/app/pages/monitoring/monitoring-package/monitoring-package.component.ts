@@ -329,8 +329,8 @@ export class MonitoringPackageComponent implements OnInit, OnDestroy {
       switchMap((term) =>
         this.packageService
           .search({
-            limit: this.params.limit,
-            page: this.params.page,
+            limit: this.pagination.limit,
+            page: this.pagination.offset,
             search: term,
             startDate: this.params.startDate,
             endDate: this.params.endDate,
