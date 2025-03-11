@@ -19,7 +19,7 @@
         {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLength | number } }}
       </span>
     </h3>
-    @if (levelrule === 8 || levelrule === 5) {
+    @if (levelrule === 8 || levelrule === 5 || levelrule === 2) {
     <div class="card-toolbar" [ngClass]="{ 'd-block py-5': isMobile }">
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">
@@ -181,7 +181,7 @@
                   @if (row.recipient?.received_by) {
                   {{ row.recipient?.received_by }} <br />
                   {{ row.recipient?.received_date | date : 'dd/MM/yyyy' : 'GMT' }}
-                  } @else {
+                  } @else { @if (city_id === 2) {
                   <div
                     class="btn btn-primary btn-sm px-2 p-1 cursor-pointer d-flex"
                     (click)="openModalEdit(row)"
@@ -189,7 +189,7 @@
                   >
                     <app-keenicon name="send" class="p-1 text-light fs-7"></app-keenicon> Diterima
                   </div>
-                  }
+                  } }
                 </span>
               </td>
               <td>
@@ -309,7 +309,7 @@
                   @if (row.recipient?.received_by) {
                   {{ row.recipient?.received_by }} <br />
                   {{ row.recipient?.received_date | date : 'dd/MM/yyyy' : 'GMT' }}
-                  } @else {
+                  } @else { @if (city_id === 1) {
                   <div
                     class="btn btn-primary btn-sm px-2 p-1 cursor-pointer d-flex"
                     (click)="openModalEdit(row)"
@@ -317,7 +317,7 @@
                   >
                     <app-keenicon name="send" class="p-1 text-light fs-7"></app-keenicon> Receive
                   </div>
-                  }
+                  } }
                 </span>
               </td>
               <td>
