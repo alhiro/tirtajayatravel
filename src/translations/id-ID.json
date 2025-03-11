@@ -198,6 +198,7 @@
     "CREATED_AT": "Tgl Booking",
     "RECEIVED_BY": "Penerima",
     "ACTION": "Action",
+    "ORIGIN": "Lokasi",
 
     "BOOK_DATE": "Tgl Berangkat",
     "TOTAL_PASSENGER": "Total",
