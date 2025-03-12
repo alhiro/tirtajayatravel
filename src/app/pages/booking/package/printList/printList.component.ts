@@ -172,9 +172,9 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
           //   filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
           // }
 
+          this.data = response.data;
+
           filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
-          this.data = filterData;
-          console.log(this.data);
 
           const uniqueDrivers = Object?.values(
             filterData

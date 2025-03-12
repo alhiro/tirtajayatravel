@@ -663,17 +663,18 @@ export class DepositComponent implements OnInit, OnDestroy {
         this.totalPackagePaidSurabaya = this.utils.sumTotal(dataPackageSby?.map((data: PackageModel) => data?.cost));
 
         // Check commission mlg
-        const dataKomisiMlg = this.dataPackage?.filter(
-          (data: PackageModel) => data?.check_sp === true && data?.city_id === 1
-        );
+        const dataKomisiMlg = this.dataPackage
+          ?.filter((data: PackageModel) => data.check_payment === true)
+          .filter((data: PackageModel) => data.check_sp === true && data.city_id === 1);
         this.cashoutCourierMalang = this.utils.sumTotal(
           dataKomisiMlg?.map((data: PackageModel) => data?.agent_commission)
         );
         console.log(this.cashoutCourierMalang);
+
         // Check commission sby
-        const dataKomisiSby = this.dataPackage?.filter(
-          (data: PackageModel) => data?.check_sp === true && data?.city_id === 2
-        );
+        const dataKomisiSby = this.dataPackage
+          ?.filter((data: PackageModel) => data.check_payment === true)
+          .filter((data: PackageModel) => data.check_sp === true && data.city_id === 2);
         this.cashoutCourierSurabaya = this.utils.sumTotal(
           dataKomisiSby?.map((data: PackageModel) => data?.agent_commission)
         );
