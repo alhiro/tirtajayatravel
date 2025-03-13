@@ -77,11 +77,12 @@
               }"
             >
               <span class="text-gray-900 d-block">
-                @if (row.discount) {
+                <!-- @if (row.discount) {
                 {{ row.discount | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                 } @else {
                 {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                }
+                } -->
+                {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
             <td
@@ -264,11 +265,12 @@
               }"
             >
               <span class="text-gray-900 d-block">
-                @if (row.discount) {
+                <!-- @if (row.discount) {
                 {{ row.discount | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                 } @else {
                 {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                }
+                } -->
+                {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
             <td

@@ -664,8 +664,8 @@ export class DepositComponent implements OnInit, OnDestroy {
 
         // Check commission mlg
         const dataKomisiMlg = this.dataPackage
-          ?.filter((data: PackageModel) => data.check_payment === true)
-          .filter((data: PackageModel) => data.check_sp === true && data.city_id === 1);
+          ?.filter((data: PackageModel) => data?.check_payment === true)
+          .filter((data: PackageModel) => data?.check_sp === true && data.city_id === 1);
         this.cashoutCourierMalang = this.utils.sumTotal(
           dataKomisiMlg?.map((data: PackageModel) => data?.agent_commission)
         );
@@ -673,8 +673,8 @@ export class DepositComponent implements OnInit, OnDestroy {
 
         // Check commission sby
         const dataKomisiSby = this.dataPackage
-          ?.filter((data: PackageModel) => data.check_payment === true)
-          .filter((data: PackageModel) => data.check_sp === true && data.city_id === 2);
+          ?.filter((data: PackageModel) => data?.check_payment === true)
+          .filter((data: PackageModel) => data?.check_sp === true && data.city_id === 2);
         this.cashoutCourierSurabaya = this.utils.sumTotal(
           dataKomisiSby?.map((data: PackageModel) => data?.agent_commission)
         );
@@ -969,13 +969,13 @@ export class DepositComponent implements OnInit, OnDestroy {
         // Check Ba
         const dataBaMlg = filterData?.filter(
           (data: PackageModel) =>
-            data.status === 'Bayar Tujuan (COD)' && data.check_payment === true && data.city_id === 1
+            data.status === 'Bayar Tujuan (COD)' && data?.check_payment === true && data.city_id === 1
         );
         this.totalPackageCodMalang = this.utils.sumTotal(dataBaMlg?.map((data: PackageModel) => data.cost));
         console.log(this.totalPackageCodMalang);
         const dataBaSby = filterData?.filter(
           (data: PackageModel) =>
-            data.status === 'Bayar Tujuan (COD)' && data.check_payment === true && data.city_id === 2
+            data.status === 'Bayar Tujuan (COD)' && data?.check_payment === true && data.city_id === 2
         );
         this.totalPackageCodSurabaya = this.utils.sumTotal(dataBaSby?.map((data: PackageModel) => data.cost));
         console.log(this.totalPackageCodSurabaya);
