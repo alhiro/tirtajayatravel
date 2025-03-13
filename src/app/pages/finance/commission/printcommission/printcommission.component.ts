@@ -148,13 +148,11 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
 
     this.columnsMonthly = [
       { key: '', title: 'No', width: '3%' },
-      { key: 'resi_number', title: 'Resi Number' },
       { key: 'book_date', title: 'Date' },
-      { key: 'cost', title: 'Cost' },
+      { key: 'resi_number', title: 'Resi Number' },
       { key: 'sender_id', title: 'Sender' },
       { key: 'recipient_id', title: 'Recipient' },
-      { key: 'status', title: 'Status Payment' },
-      { key: 'sign', title: 'Admin' },
+      { key: 'cost', title: 'Cost' },
     ];
 
     this.nowDate = new Date();
@@ -419,14 +417,13 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         this.dataBa = dataPiutang;
 
         this.dataPiutang = dataPiutang?.filter((data: PackageModel) => data.check_payment === true);
-        console.log(this.dataPiutang);
-        this.dataPiutangNoClick = dataPiutang?.filter((data: PackageModel) => data.check_payment == null);
-
-        const dataCommissionPiutang = this.dataPiutang?.filter((data: PackageModel) => data.check_sp === true);
+        const dataCommissionPiutang = dataPiutang?.filter((data: PackageModel) => data.check_sp === true);
         this.totalCommissionPiutang = this.utils.sumTotal(
           dataCommissionPiutang?.map((data: PackageModel) => data.agent_commission)
         );
-        const dataCommissionPiutangNoClick = this.dataPiutang?.filter((data: PackageModel) => data.check_sp == null);
+
+        this.dataPiutangNoClick = dataPiutang?.filter((data: PackageModel) => data.check_payment == null);
+        const dataCommissionPiutangNoClick = dataPiutang?.filter((data: PackageModel) => data.check_sp == null);
         this.totalCommissionPiutangNoClick = this.utils.sumTotal(
           dataCommissionPiutangNoClick?.map((data: PackageModel) => data.agent_commission)
         );

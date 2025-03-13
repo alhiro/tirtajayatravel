@@ -152,17 +152,27 @@
                     <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
                   </td> -->
               <td>
-                <span class="text-gray-900 d-block" (click)="openModalEdit(row)">
+                <span class="text-gray-900 d-block">
                   {{ row.resi_number }}
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+                <span class="text-gray-900 d-block">
+                  @if (row.discount) {
+                  {{ row.discount | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  } @else {
+                  {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  }
+                </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{
-                  row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2'
-                }}</span>
+                <span class="text-gray-900 d-block">
+                  @if (row.discount) {
+                  {{ row.discount * 0.15 | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  } @else {
+                  {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  }
+                </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">
@@ -280,17 +290,27 @@
                     <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
                   </td> -->
               <td>
-                <span class="text-gray-900 d-block" (click)="openModalEdit(row)">
+                <span class="text-gray-900 d-block">
                   {{ row.resi_number }}
                 </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</span>
+                <span class="text-gray-900 d-block">
+                  @if (row.discount) {
+                  {{ row.discount | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  } @else {
+                  {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  }
+                </span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{
-                  row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2'
-                }}</span>
+                <span class="text-gray-900 d-block">
+                  @if (row.discount) {
+                  {{ row.discount * 0.15 | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  } @else {
+                  {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                  }
+                </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">

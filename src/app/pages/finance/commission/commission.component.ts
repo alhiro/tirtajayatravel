@@ -237,16 +237,16 @@ export class CommissionComponent implements OnInit, OnDestroy {
   }
 
   printFilterMonthly() {
-    let getCity = '';
-    if (this.levelrule === 2) {
-      if (this.city_id === 1) {
-        getCity = 'Malang';
-      } else {
-        getCity = 'Surabaya';
-      }
-    } else {
-      getCity = '';
-    }
+    // let getCity = '';
+    // if (this.levelrule === 2) {
+    //   if (this.city_id === 1) {
+    //     getCity = 'Malang';
+    //   } else {
+    //     getCity = 'Surabaya';
+    //   }
+    // } else {
+    //   getCity = '';
+    // }
 
     const paramRange = {
       limit: 10,
@@ -254,7 +254,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
       search: 'Customer (Bulanan)',
       fromDate: this.startDate,
       toDate: this.endDate,
-      city: getCity,
+      city: this.currentTab,
       status: 'Delivery',
       username: this.modelCustomer?.name,
     };
