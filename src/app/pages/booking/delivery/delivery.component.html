@@ -196,7 +196,7 @@
                 <span class="text-gray-900 d-block">{{ row.status }}</span>
               </td> -->
               <td class="text-end">
-                @if (levelrule === 2 && city_id === 1 || levelrule === 8) {
+                @if (levelrule === 2 && city_id === 1 || levelrule === 8) { @if (!row.bsd_date) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -230,7 +230,7 @@
                 >
                   <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
                 </a>
-                }
+                } }
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -359,7 +359,7 @@
                 <span class="text-gray-900 d-block">{{ row.status }}</span>
               </td> -->
               <td class="text-end">
-                @if (levelrule === 2 && city_id === 2 || levelrule === 8) {
+                @if (levelrule === 2 && city_id === 2 || levelrule === 8) { @if (!row.bsd_date) {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"
@@ -393,7 +393,7 @@
                 >
                   <app-keenicon name="people" class="fs-md-3 text-light"></app-keenicon>
                 </a>
-                }
+                } }
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer"
                   data-bs-toggle="tooltip"

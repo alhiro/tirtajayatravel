@@ -40,6 +40,7 @@ export class PackageModel {
   taking_by!: string;
   taking_status!: boolean;
   office!: string;
+  created_at!: Date;
 
   setPackage(_packages: unknown) {
     const packages = _packages as PackageModel;
@@ -76,5 +77,6 @@ export class PackageModel {
     this.taking_by = packages.taking_by || '';
     this.taking_status = packages.taking_status;
     this.office = packages.office || '';
+    this.created_at = packages.created_at || '';
   }
 }

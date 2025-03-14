@@ -652,14 +652,25 @@ export class DepositComponent implements OnInit, OnDestroy {
         // this.dataBsd = uniqueDrivers;
         // console.log(uniqueDrivers);
 
+        const startDateTime = new Date(this.startDate);
+        const endDateTime = new Date(this.endDate);
+
         const dataPackageMlg = this.dataPackage?.filter(
-          (data: PackageModel) => data?.status === 'Lunas (Kantor)' && data?.city_id === 1
+          (data: PackageModel) =>
+            data?.status === 'Lunas (Kantor)' &&
+            data?.city_id === 1 &&
+            new Date(data?.created_at) >= startDateTime &&
+            new Date(data?.created_at) <= endDateTime
         );
         this.totalPackagePaidMalang = this.utils.sumTotal(dataPackageMlg?.map((data: PackageModel) => data?.cost));
+
         const dataPackageSby = this.dataPackage?.filter(
-          (data: PackageModel) => data?.status === 'Lunas (Kantor)' && data?.city_id === 2
+          (data: PackageModel) =>
+            data?.status === 'Lunas (Kantor)' &&
+            data?.city_id === 2 &&
+            new Date(data?.created_at) >= startDateTime &&
+            new Date(data?.created_at) <= endDateTime
         );
-        console.log(dataPackageSby);
         this.totalPackagePaidSurabaya = this.utils.sumTotal(dataPackageSby?.map((data: PackageModel) => data?.cost));
 
         // Check commission mlg
