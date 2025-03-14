@@ -6,7 +6,7 @@
     "ng": "ng",
     "build": "npm run write:env -s && ng build",
     "build-token": "npm run write:env -s && ng build && firebase login --reauth",
-    "build-deploy": "npm run write:env -s && firebase login --reauth && ng build && firebase deploy --only hosting",
+    "build-deploy": "npm run write:env -s && ng build && firebase deploy --only hosting",
     "deploy": "firebase deploy --only hosting",
     "start": "npm run write:env -s && ng serve --proxy-config proxy.conf.js",
     "serve:sw": "npm run build -s && npx http-server ./dist -p 4200",
