@@ -100,6 +100,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
   };
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
+  public terms: any = '';
   form!: FormGroup;
   formRecipient!: FormGroup;
   isLoading = false;
@@ -570,6 +571,8 @@ export class CommissionComponent implements OnInit, OnDestroy {
           })
           .pipe(
             map((response: any) => {
+              this.terms = term;
+
               if (response) {
                 this.data = response.data;
                 this.dataLength = response.length;
@@ -737,7 +740,17 @@ export class CommissionComponent implements OnInit, OnDestroy {
               duration: 5000,
             });
 
-            this.dataList(this.params);
+            const params = {
+              limit: 10,
+              page: 1,
+              search: this.terms,
+              startDate: '',
+              endDate: '',
+              city: 'Malang',
+              status: 'Delivery',
+              username: '',
+            };
+            this.dataList(params);
             await this.modalComponent.dismiss();
           } else {
             this.isLoading = false;
@@ -799,7 +812,17 @@ export class CommissionComponent implements OnInit, OnDestroy {
               duration: 5000,
             });
 
-            this.dataList(this.params);
+            const params = {
+              limit: 10,
+              page: 1,
+              search: this.terms,
+              startDate: '',
+              endDate: '',
+              city: 'Malang',
+              status: 'Delivery',
+              username: '',
+            };
+            this.dataList(params);
             await this.modalComponent.dismiss();
           } else {
             this.isLoading = false;
@@ -837,7 +860,17 @@ export class CommissionComponent implements OnInit, OnDestroy {
               duration: 5000,
             });
 
-            this.dataList(this.params);
+            const params = {
+              limit: 10,
+              page: 1,
+              search: this.terms,
+              startDate: '',
+              endDate: '',
+              city: 'Malang',
+              status: 'Delivery',
+              username: '',
+            };
+            this.dataList(params);
             await this.modalComponent.dismiss();
           } else {
             this.isLoading = false;
@@ -900,7 +933,17 @@ export class CommissionComponent implements OnInit, OnDestroy {
               duration: 5000,
             });
 
-            this.dataList(this.params);
+            const params = {
+              limit: 10,
+              page: 1,
+              search: this.terms,
+              startDate: '',
+              endDate: '',
+              city: 'Malang',
+              status: 'Delivery',
+              username: '',
+            };
+            this.dataList(params);
             await this.modalComponent.dismiss();
           } else {
             this.isLoading = false;
@@ -938,7 +981,17 @@ export class CommissionComponent implements OnInit, OnDestroy {
               duration: 5000,
             });
 
-            this.dataList(this.params);
+            const params = {
+              limit: 10,
+              page: 1,
+              search: this.terms,
+              startDate: '',
+              endDate: '',
+              city: 'Malang',
+              status: 'Delivery',
+              username: '',
+            };
+            this.dataList(params);
             await this.modalComponent.dismiss();
           } else {
             this.isLoading = false;
