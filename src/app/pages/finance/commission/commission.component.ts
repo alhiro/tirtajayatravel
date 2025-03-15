@@ -474,6 +474,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
 
   setCurrentTab(tab: string) {
     this.currentTab = tab;
+    this.terms = '';
 
     if (this.currentTab === 'Malang') {
       this.params = {
@@ -791,6 +792,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
   dataEditPayment() {
     this.form.patchValue({
       check_payment: true,
+      check_sp: undefined,
       // status_package: 'Completed',
     });
     console.log(this.form.value);
@@ -912,6 +914,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
     this.form.patchValue({
       check_date_sp: new Date(),
       check_sp: true,
+      check_payment: undefined,
       // status_package: 'Completed',
     });
     console.log(this.form.value);

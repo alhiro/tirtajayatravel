@@ -38,6 +38,7 @@ export class DepositComponent implements OnInit, OnDestroy {
   public dataBsd: any;
   public dataDeposit: any;
   public dataPackage: any[] = [];
+  public dataPackageCommission: any[] = [];
   public dataPassenger: any[] = [];
   public dataLunasMonthly: any;
 
@@ -623,6 +624,10 @@ export class DepositComponent implements OnInit, OnDestroy {
         this.data = data;
 
         // Check ba & commission
+        const dataPackageCommission = Array.from(data.flatMap((item: any) => item?.standalone_commission).values());
+        console.log(dataPackageCommission);
+        this.dataPackageCommission = dataPackageCommission;
+
         const dataPackage = Array.from(
           data
             .flatMap((item: any) => item?.standalone_packages)
@@ -634,7 +639,6 @@ export class DepositComponent implements OnInit, OnDestroy {
             }, new Map())
             .values()
         );
-
         console.log(dataPackage);
         this.dataPackage = dataPackage;
 
