@@ -132,7 +132,7 @@
                 <div class="text-gray-900">{{ row.car?.car_number }}</div>
               </td>
               <td>
-                <span class="text-gray-900 d-block"> {{ row.service_date | date : 'yyyy/MM/dd' : 'GMT' }} </span>
+                <span class="text-gray-900 d-block"> {{ row.service_date | date : 'dd/MM/yyyy' : 'GMT' }} </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.service }}</span>
@@ -147,7 +147,7 @@
                 <span class="badge badge-light-primary">{{ row.status }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.createdAt | date : 'yyyy/MM/dd H:mm:ss a' }}</span>
+                <span class="text-gray-900 d-block">{{ row.createdAt | date : 'dd/MM/yyyy H:mm:ss a' }}</span>
               </td>
               <td class="text-end">
                 <div
@@ -198,7 +198,7 @@
                 <div class="text-gray-900">{{ row.car?.car_number }}</div>
               </td>
               <td>
-                <span class="text-gray-900 d-block"> {{ row.service_date | date : 'yyyy/MM/dd' : 'GMT' }} </span>
+                <span class="text-gray-900 d-block"> {{ row.service_date | date : 'dd/MM/yyyy' : 'GMT' }} </span>
               </td>
               <td>
                 <span class="text-gray-900 d-block">{{ row.service }}</span>
@@ -213,7 +213,7 @@
                 <span class="badge badge-light-warning">{{ row.status }}</span>
               </td>
               <td>
-                <span class="text-gray-900 d-block">{{ row.createdAt | date : 'yyyy/MM/dd H:mm:ss a' }}</span>
+                <span class="text-gray-900 d-block">{{ row.createdAt | date : 'dd/MM/yyyy H:mm:ss a' }}</span>
               </td>
               <td class="text-end">
                 <div class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">

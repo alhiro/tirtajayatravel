@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "build": "npm run write:env -s && ng build",
+    "build": "npm run write:env -s && node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng build",
     "build-token-deploy": "npm run write:env -s && ng build && firebase login --reauth && firebase deploy --only hosting",
     "build-deploy": "npm run write:env -s && ng build && firebase deploy --only hosting",
     "deploy": "firebase deploy --only hosting",

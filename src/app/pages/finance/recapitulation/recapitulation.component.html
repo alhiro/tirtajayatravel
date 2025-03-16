@@ -4,7 +4,7 @@
     <h3 class="card-title align-items-start flex-column">
       <span class="card-label fw-bolder fs-3 mb-1"> Rekapitulasi Setoran Operasional </span>
       <span class="mt-1 fw-bold fs-7">
-        Date: {{ startDate | date : 'yyyy/MM/dd' }} - {{ endDate | date : 'yyyy/MM/dd' }}
+        Date: {{ startDate | date : 'dd/MM/yyyy' }} - {{ endDate | date : 'dd/MM/yyyy' }}
       </span>
     </h3>
     <div class="card-toolbar">
@@ -139,7 +139,7 @@
           <td>
             <span class="text-gray-900 d-block">
               @if (row.date === 'Total') { Total } @else {
-              {{ row.date | date : 'yyyy/MM/dd H:mm:ss' : 'GMT' }}
+              {{ row.date | date : 'dd/MM/yyyy H:mm:ss' : 'GMT' }}
               }
             </span>
           </td>

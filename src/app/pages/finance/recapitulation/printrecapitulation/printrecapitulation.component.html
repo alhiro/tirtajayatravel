@@ -44,7 +44,7 @@
             <td>
               <span class="text-gray-900 d-block">
                 @if (row.date === 'Total') { Total } @else {
-                {{ row.date | date : 'yyyy/MM/dd H:mm:ss' : 'GMT' }}
+                {{ row.date | date : 'dd/MM/yyyy H:mm:ss' : 'GMT' }}
                 }
               </span>
             </td>

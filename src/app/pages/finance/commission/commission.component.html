@@ -230,6 +230,9 @@
               <td>
                 @if (row.check_payment) {
                 <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
+                <span class="text-gray-900 d-block">
+                  {{ row.updatedAt | date : 'dd/MM/yyyy' : 'GMT' }}
+                </span>
                 } @else { @if (row.recipient?.received_by) { @if (row.status === 'Bayar Tujuan (COD)') {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer me-2"
@@ -368,6 +371,9 @@
               <td>
                 @if (row.check_payment) {
                 <span class="text-gray-900 d-flex">{{ row.updated_by }}</span>
+                <span class="text-gray-900 d-block">
+                  {{ row.updatedAt | date : 'dd/MM/yyyy' : 'GMT' }}
+                </span>
                 } @else { @if (row.recipient?.received_by) { @if (row.status === 'Bayar Tujuan (COD)') {
                 <a
                   class="btn btn-icon btn-light btn-hover-primary btn-sm cursor-pointer me-2"
