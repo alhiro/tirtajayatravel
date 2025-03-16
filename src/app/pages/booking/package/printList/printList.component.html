@@ -185,7 +185,7 @@
       </div>
       <!-- end::Table container -->
 
-      <div class="mt-7">
+      <div class="mt-5">
         @if (status === 'All') {
         <span
           ><b
@@ -217,12 +217,12 @@
           ></span
         >
         <br />
-        }
         <br />
+        }
         <span
           ><b>{{ 'TOTAL_PACKAGE' | translate }}: {{ data?.length | number }}</b></span
         ><br />
-        <span
+        <span class="fs-3"
           ><b>{{ 'TOTAL_COST' | translate }} : {{ totalCost | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b></span
         ><br />
       </div>
