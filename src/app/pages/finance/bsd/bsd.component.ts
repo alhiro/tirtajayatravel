@@ -241,7 +241,7 @@ export class BsdComponent implements OnInit, OnDestroy {
     ];
 
     this.columnsPackage = [
-      { key: 'package_id', title: 'No' },
+      { key: 'package_id', title: 'No', width: '3%' },
       { key: 'resi_number', title: 'Number Resi' },
       { key: 'cost', title: 'Cost' },
       { key: 'discount', title: 'Disc.' },

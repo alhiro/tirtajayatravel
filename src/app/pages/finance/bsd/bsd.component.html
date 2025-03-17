@@ -643,9 +643,9 @@
                     tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
                   >
                     <ng-template let-row let-index="index">
-                      <!-- <td>
-                              <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
-                            </td> -->
+                      <td>
+                        <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+                      </td>
                       <td>
                         <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
                           {{ row.resi_number }}
@@ -727,9 +727,9 @@
                     tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
                   >
                     <ng-template let-row let-index="index">
-                      <!-- <td>
-                              <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
-                            </td> -->
+                      <td>
+                        <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+                      </td>
                       <td>
                         <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
                           {{ row.resi_number }}
@@ -817,9 +817,9 @@
                     tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
                   >
                     <ng-template let-row let-index="index">
-                      <!-- <td>
-                            <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
-                          </td> -->
+                      <td>
+                        <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+                      </td>
                       <td>
                         <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
                           {{ row.resi_number }}
@@ -858,7 +858,7 @@
                               class="form-check-input f-none"
                               type="checkbox"
                               [checked]="row.check_payment"
-                              (change)="checkPayment(row, $event)"
+                              (change)="checkPaymentEdit(row, $event)"
                             />
                             } @else if (row.status === 'Lunas (Transfer)' || row.status === 'Lunas (Kantor)' ) { ^ }
                             @else { * }
@@ -907,9 +907,9 @@
                     tableClass="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
                   >
                     <ng-template let-row let-index="index">
-                      <!-- <td>
-                            <span class="text-gray-900 d-block">{{ row.category_sub_id }}</span>
-                          </td> -->
+                      <td>
+                        <span class="text-gray-900 d-block">{{ index + 1 }}</span>
+                      </td>
                       <td>
                         <span class="text-gray-900 fw-bolder text-hover-primary fs-6">
                           {{ row.resi_number }}
