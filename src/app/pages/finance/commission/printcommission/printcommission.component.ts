@@ -29,10 +29,12 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
   public dataPiutang: any;
   public dataMonthly: any;
 
+  public dataNoClick: any;
   public dataPiutangClick: any;
   public dataPiutangNoClick: any;
   public dataCommissionClick: any;
   public dataCommissionNoClick: any;
+  public dataBaNoClick: any;
 
   public city: any;
   public status: any;
@@ -45,6 +47,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
   public groupAdminCommissionCustomerMonthly: any;
   public groupAdminPiutang: any;
   public groupAdminMonthly: any;
+  public groupAdminBa: any;
 
   public groupAdminCommissionNoClick: any;
   public groupAdminCommissionTransferNoClick: any;
@@ -52,6 +55,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
   public groupAdminCommissionCustomerMonthlyNoClick: any;
   public groupAdminCommissionPiutangNoClick: any;
   public groupAdminPiutangNoClick: any;
+  public groupAdminBaNoClick: any;
 
   public startDate: any;
   public endDate: any;
@@ -59,6 +63,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
   public endDateDisplay: any;
   public nowDate!: Date;
 
+  public totalBa: any = 0;
   public totalPiutang: any = 0;
   public totalCommission: any = 0;
   public totalCommissionTransfer: any = 0;
@@ -79,14 +84,17 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
 
   public totalKoli: any = 0;
   public totalKoliBa: any = 0;
+  public totalKoliBaNoClick: any = 0;
   public totalKoliPiutang: any = 0;
   public totalKoliMonthly: any = 0;
-
-  public totalPiutangNoClick: any = 0;
   public totalKoliPiutangNoClick: any = 0;
+
+  public totalBaNoClick: any = 0;
+  public totalPiutangNoClick: any = 0;
 
   public configuration: Config = { ...DefaultConfig };
   public columns!: Columns[];
+  public columnsBa!: Columns[];
   public columnsMonthly!: Columns[];
 
   lastSegment: string = '';
@@ -137,21 +145,33 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
     this.columns = [
       { key: '', title: 'No', width: '3%' },
       { key: 'resi_number', title: 'Resi Number' },
-      { key: 'book_date', title: 'Date' },
-      { key: 'cost', title: 'Cost' },
-      { key: 'agent_commission', title: 'Commission' },
-      { key: 'sender_id', title: 'Sender' },
-      { key: 'recipient_id', title: 'Recipient' },
+      { key: 'book_date', title: 'Date', width: '7%' },
+      { key: 'cost', title: 'Cost', width: '8%' },
+      { key: 'agent_commission', title: 'Commission', width: '8%' },
+      { key: 'sender_id', title: 'Sender', width: '18%' },
+      { key: 'recipient_id', title: 'Recipient', width: '18%' },
+      { key: 'status', title: 'Status Payment' },
+      { key: 'sign', title: 'Admin' },
+    ];
+
+    this.columnsBa = [
+      { key: '', title: 'No', width: '3%' },
+      { key: 'resi_number', title: 'Resi Number' },
+      { key: 'book_date', title: 'Date', width: '7%' },
+      { key: 'cost', title: 'Cost', width: '8%' },
+      // { key: 'agent_commission', title: 'Commission', width: '8%' },
+      { key: 'sender_id', title: 'Sender', width: '18%' },
+      { key: 'recipient_id', title: 'Recipient', width: '18%' },
       { key: 'status', title: 'Status Payment' },
       { key: 'sign', title: 'Admin' },
     ];
 
     this.columnsMonthly = [
       { key: '', title: 'No', width: '3%' },
-      { key: 'book_date', title: 'Date' },
+      { key: 'book_date', title: 'Date', width: '7%' },
       { key: 'resi_number', title: 'Resi Number' },
-      { key: 'sender_id', title: 'Sender' },
-      { key: 'recipient_id', title: 'Recipient' },
+      { key: 'sender_id', title: 'Sender', width: '18%' },
+      { key: 'recipient_id', title: 'Recipient', width: '18%' },
       { key: 'cost', title: 'Cost' },
     ];
 
@@ -173,7 +193,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
     const params = {
       limit: '',
       page: '',
-      search: objDataDate.search,
+      search: 'Commission Driver',
       startDate: this.startDate,
       endDate: this.endDate,
       city: this.city,
@@ -181,6 +201,18 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
       username: this.username,
     };
     this.dataListFilter(params);
+
+    const paramsBa = {
+      limit: '',
+      page: '',
+      search: objDataDate.search,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      city: this.city,
+      status: this.status,
+      username: this.username,
+    };
+    this.dataListFilterBa(paramsBa);
   }
 
   getIndex(i: number): number {
@@ -198,24 +230,18 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((response: any) => {
-        // Data commission status lunas & bayar tujuan
-        // this.data = response.data?.filter(
-        //   (data: PackageModel) =>
-        //     data.status === 'Piutang' || data.status === 'Lunas (Kantor)' || data.status === 'Bayar Tujuan (COD)'
-        // );
-
         // Data Lunas (Kantor)
-        const data = response?.data?.filter(
-          (data: PackageModel) =>
-            data.status === 'Lunas (Kantor)' ||
-            data.status === 'Lunas (Transfer)' ||
-            data.status === 'Piutang' ||
-            data.status === 'Customer (Bulanan)'
-        );
-        this.data = data;
+        // const data = response?.data?.filter(
+        //   (data: PackageModel) =>
+        //     data.status === 'Lunas (Kantor)' ||
+        //     data.status === 'Lunas (Transfer)' ||
+        //     data.status === 'Piutang' ||
+        //     data.status === 'Customer (Bulanan)'
+        // );
+        // this.data = data;
 
-        this.dataCommissionClick = data?.filter((data: PackageModel) => data.check_sp === true);
-        this.dataCommissionNoClick = data?.filter((data: PackageModel) => data.check_sp == null);
+        this.data = response?.data?.filter((data: PackageModel) => data.check_sp == true);
+        this.dataNoClick = response?.data?.filter((data: PackageModel) => data.check_sp == null);
 
         const dataCash = response?.data?.filter((data: PackageModel) => data.status === 'Lunas (Kantor)');
         const dataCommission = dataCash?.filter((data: PackageModel) => data.check_sp === true);
@@ -315,19 +341,22 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         console.log(groupedDataCommissionTransferNoClick);
 
         // Data Piutang
-        const dataBa = response?.data?.filter((data: PackageModel) => data.status === 'Piutang');
-        const dataCommissionBa = dataBa?.filter((data: PackageModel) => data.check_sp === true);
-        this.totalCommissionBa = this.utils.sumTotal(
-          dataCommissionBa?.map((data: PackageModel) => (data?.discount ? data.discount * 0.15 : data.agent_commission))
+        const dataPiutang = response?.data?.filter((data: PackageModel) => data.status === 'Piutang');
+        this.dataPiutang = dataPiutang?.filter((data: PackageModel) => data.check_payment === true);
+        const dataCommissionPiutang = dataPiutang?.filter((data: PackageModel) => data.check_sp === true);
+        this.totalCommissionPiutang = this.utils.sumTotal(
+          dataCommissionPiutang?.map((data: PackageModel) =>
+            data?.discount ? data.discount * 0.15 : data.agent_commission
+          )
         );
 
-        const dataCommissionBaNoClick = dataBa?.filter((data: PackageModel) => data.check_sp == null);
-        this.totalCommissionBaNoClick = this.utils.sumTotal(
-          dataCommissionBaNoClick?.map((data: PackageModel) => data.agent_commission)
+        const dataCommissionPiutangNoClick = dataPiutang?.filter((data: PackageModel) => data.check_sp == null);
+        this.totalCommissionPiutangNoClick = this.utils.sumTotal(
+          dataCommissionPiutangNoClick?.map((data: PackageModel) => data.agent_commission)
         );
 
-        const groupedDataCommissionBa: GroupedDataCost[] = Object.values(
-          dataCommissionBa.reduce((acc: any, item: any) => {
+        const groupedDataCommissionPiutang: GroupedDataCost[] = Object.values(
+          dataCommissionPiutang.reduce((acc: any, item: any) => {
             if (!acc[item.updated_by]) {
               acc[item.updated_by] = {
                 id: Object.keys(acc).length + 1,
@@ -341,11 +370,11 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
             return acc;
           }, {} as { [key: string]: GroupedDataCost })
         );
-        this.groupAdminCommissionBa = groupedDataCommissionBa;
-        console.log(groupedDataCommissionBa);
+        this.groupAdminCommissionPiutang = groupedDataCommissionPiutang;
+        console.log(groupedDataCommissionPiutang);
 
-        const groupedDataCommissionBaNoClick: GroupedDataCost[] = Object.values(
-          dataCommissionBaNoClick.reduce((acc: any, item: any) => {
+        const groupedDataCommissionPiutangNoClick: GroupedDataCost[] = Object.values(
+          dataCommissionPiutangNoClick.reduce((acc: any, item: any) => {
             if (!acc[item.updated_by]) {
               acc[item.updated_by] = {
                 id: Object.keys(acc).length + 1,
@@ -359,8 +388,8 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
             return acc;
           }, {} as { [key: string]: GroupedDataCost })
         );
-        this.groupAdminCommissionBaNoClick = groupedDataCommissionBaNoClick;
-        console.log(groupedDataCommissionBaNoClick);
+        this.groupAdminCommissionPiutangNoClick = groupedDataCommissionPiutangNoClick;
+        console.log(groupedDataCommissionPiutangNoClick);
 
         // Data Customer (Bulanan)
         const dataCustomerMonthly = response?.data?.filter(
@@ -419,30 +448,19 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         console.log(groupedDataCommissionCustomerMonthlyNoClick);
 
         // Data ba
-        const dataPiutang = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
-        this.dataBa = dataPiutang;
-
-        this.dataPiutang = dataPiutang?.filter((data: PackageModel) => data.check_payment === true);
-        const dataCommissionPiutang = dataPiutang?.filter((data: PackageModel) => data.check_sp === true);
-        this.totalCommissionPiutang = this.utils.sumTotal(
-          dataCommissionPiutang?.map((data: PackageModel) =>
-            data?.discount ? data.discount * 0.15 : data.agent_commission
-          )
+        const dataBa = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
+        const dataCommissionBa = dataBa?.filter((data: PackageModel) => data.check_sp === true);
+        this.totalCommissionBa = this.utils.sumTotal(
+          dataCommissionBa?.map((data: PackageModel) => (data?.discount ? data.discount * 0.15 : data.agent_commission))
         );
 
-        this.dataPiutangNoClick = dataPiutang?.filter((data: PackageModel) => data.check_payment == null);
-        const dataCommissionPiutangNoClick = dataPiutang?.filter((data: PackageModel) => data.check_sp == null);
-        this.totalCommissionPiutangNoClick = this.utils.sumTotal(
-          dataCommissionPiutangNoClick?.map((data: PackageModel) => data.agent_commission)
+        const dataCommissionBaNoClick = dataBa?.filter((data: PackageModel) => data.check_sp == null);
+        this.totalCommissionBaNoClick = this.utils.sumTotal(
+          dataCommissionBaNoClick?.map((data: PackageModel) => data.agent_commission)
         );
 
-        this.totalPiutang = this.utils.sumTotal(this.dataPiutang?.map((data: PackageModel) => data.cost));
-        this.totalKoliPiutang = this.dataPiutang?.length;
-        this.totalPiutangNoClick = this.utils.sumTotal(this.dataPiutangNoClick?.map((data: PackageModel) => data.cost));
-        this.totalKoliPiutangNoClick = this.dataPiutangNoClick?.length;
-
-        const groupedDataCommissionPiutang: GroupedDataCost[] = Object.values(
-          dataCommissionPiutang.reduce((acc: any, item: any) => {
+        const groupedDataCommissionBa: GroupedDataCost[] = Object.values(
+          dataCommissionBa.reduce((acc: any, item: any) => {
             if (!acc[item.updated_by]) {
               acc[item.updated_by] = {
                 id: Object.keys(acc).length + 1,
@@ -456,11 +474,11 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
             return acc;
           }, {} as { [key: string]: GroupedDataCost })
         );
-        this.groupAdminCommissionPiutang = groupedDataCommissionPiutang;
-        console.log(groupedDataCommissionPiutang);
+        this.groupAdminCommissionBa = groupedDataCommissionBa;
+        console.log(groupedDataCommissionBa);
 
-        const groupedDataCommissionPiutangNoClick: GroupedDataCost[] = Object.values(
-          dataCommissionPiutangNoClick.reduce((acc: any, item: any) => {
+        const groupedDataCommissionBaNoClick: GroupedDataCost[] = Object.values(
+          dataCommissionBaNoClick.reduce((acc: any, item: any) => {
             if (!acc[item.updated_by]) {
               acc[item.updated_by] = {
                 id: Object.keys(acc).length + 1,
@@ -474,44 +492,8 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
             return acc;
           }, {} as { [key: string]: GroupedDataCost })
         );
-        this.groupAdminCommissionPiutangNoClick = groupedDataCommissionPiutangNoClick;
-        console.log(groupedDataCommissionPiutangNoClick);
-
-        const groupedDataPiutang: GroupedDataCost[] = Object.values(
-          this.dataPiutang.reduce((acc: any, item: any) => {
-            if (!acc[item.updated_by]) {
-              acc[item.updated_by] = {
-                id: Object.keys(acc).length + 1,
-                admin: item.updated_by,
-                totalCost: 0,
-                check_payment: item.check_payment,
-                city_id: item.city_id,
-              };
-            }
-            acc[item.updated_by].totalCost += Number(item.cost);
-            return acc;
-          }, {} as { [key: string]: GroupedDataCost })
-        );
-        this.groupAdminPiutang = groupedDataPiutang;
-        console.log(groupedDataPiutang);
-
-        const groupedDataPiutangNoClick: GroupedDataCost[] = Object.values(
-          this.dataPiutangNoClick.reduce((acc: any, item: any) => {
-            if (!acc[item.updated_by]) {
-              acc[item.updated_by] = {
-                id: Object.keys(acc).length + 1,
-                admin: item.updated_by,
-                totalCost: 0,
-                check_payment: item.check_payment,
-                city_id: item.city_id,
-              };
-            }
-            acc[item.updated_by].totalCost += Number(item.cost);
-            return acc;
-          }, {} as { [key: string]: GroupedDataCost })
-        );
-        this.groupAdminPiutangNoClick = groupedDataPiutangNoClick;
-        console.log(groupedDataPiutangNoClick);
+        this.groupAdminCommissionBaNoClick = groupedDataCommissionBaNoClick;
+        console.log(groupedDataCommissionBaNoClick);
 
         // Data bulanan
         this.dataMonthly = response.data?.filter((data: PackageModel) => data.status === 'Customer (Bulanan)');
@@ -545,17 +527,114 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
           Number(this.totalCommissionPiutang) +
           Number(this.totalCommissionCustomerMonthly);
 
-        this.totalCommissionPackageOnly =
-          Number(this.totalCommission) +
-          Number(this.totalCommissionTransfer) +
-          Number(this.totalCommissionBa) +
-          Number(this.totalCommissionCustomerMonthly);
+        this.configuration.isLoading = false;
+        this.cdr.detectChanges();
+      });
+  }
 
-        this.totalCommissionPackageOnlyNoClick =
-          Number(this.totalCommissionNoClick) +
-          Number(this.totalCommissionTransferNoClick) +
-          Number(this.totalCommissionBaNoClick) +
-          Number(this.totalCommissionCustomerMonthlyNoClick);
+  private dataListFilterBa(params: ExtendedPaginationContext): void {
+    this.configuration.isLoading = true;
+    this.packageService
+      .listAll(params)
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        finalize(() => {
+          this.configuration.isLoading = false;
+        })
+      )
+      .subscribe((response: any) => {
+        // Data ba
+        const dataBa = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
+        this.dataBa = dataBa?.filter((data: PackageModel) => data.check_payment === true);
+        // const dataCommissionBa = dataBa?.filter((data: PackageModel) => data.check_sp === true);
+        // this.totalCommissionBa = this.utils.sumTotal(
+        //   dataCommissionBa?.map((data: PackageModel) =>
+        //     data?.discount ? data.discount * 0.15 : data.agent_commission
+        //   )
+        // );
+
+        this.dataBaNoClick = dataBa?.filter((data: PackageModel) => data.check_payment == null);
+        // const dataCommissionBaNoClick = dataBa?.filter((data: PackageModel) => data.check_sp == null);
+        // this.totalCommissionBaNoClick = this.utils.sumTotal(
+        //   dataCommissionBaNoClick?.map((data: PackageModel) => data.agent_commission)
+        // );
+
+        this.totalBa = this.utils.sumTotal(this.dataBa?.map((data: PackageModel) => data.cost));
+        this.totalKoliBa = this.dataBa?.length;
+        this.totalBaNoClick = this.utils.sumTotal(this.dataBaNoClick?.map((data: PackageModel) => data.cost));
+        this.totalKoliBaNoClick = this.dataBaNoClick?.length;
+
+        // const groupedDataCommissionBa: GroupedDataCost[] = Object.values(
+        //   dataCommissionBa.reduce((acc: any, item: any) => {
+        //     if (!acc[item.updated_by]) {
+        //       acc[item.updated_by] = {
+        //         id: Object.keys(acc).length + 1,
+        //         admin: item.updated_by,
+        //         totalCost: 0,
+        //         check_sp: item.check_sp,
+        //         city_id: item.city_id,
+        //       };
+        //     }
+        //     acc[item.updated_by].totalCost += Number(item.agent_commission);
+        //     return acc;
+        //   }, {} as { [key: string]: GroupedDataCost })
+        // );
+        // this.groupAdminCommissionBa = groupedDataCommissionBa;
+        // console.log(groupedDataCommissionBa);
+
+        // const groupedDataCommissionBaNoClick: GroupedDataCost[] = Object.values(
+        //   dataCommissionBaNoClick.reduce((acc: any, item: any) => {
+        //     if (!acc[item.updated_by]) {
+        //       acc[item.updated_by] = {
+        //         id: Object.keys(acc).length + 1,
+        //         admin: item.updated_by,
+        //         totalCost: 0,
+        //         check_sp: item.check_sp,
+        //         city_id: item.city_id,
+        //       };
+        //     }
+        //     acc[item.updated_by].totalCost += Number(item.agent_commission);
+        //     return acc;
+        //   }, {} as { [key: string]: GroupedDataCost })
+        // );
+        // this.groupAdminCommissionBaNoClick = groupedDataCommissionBaNoClick;
+        // console.log(groupedDataCommissionBaNoClick);
+
+        const groupedDataBa: GroupedDataCost[] = Object.values(
+          this.dataBa.reduce((acc: any, item: any) => {
+            if (!acc[item.updated_by]) {
+              acc[item.updated_by] = {
+                id: Object.keys(acc).length + 1,
+                admin: item.updated_by,
+                totalCost: 0,
+                check_payment: item.check_payment,
+                city_id: item.city_id,
+              };
+            }
+            acc[item.updated_by].totalCost += Number(item.cost);
+            return acc;
+          }, {} as { [key: string]: GroupedDataCost })
+        );
+        this.groupAdminBa = groupedDataBa;
+        console.log(groupedDataBa);
+
+        const groupedDataBaNoClick: GroupedDataCost[] = Object.values(
+          this.dataBaNoClick.reduce((acc: any, item: any) => {
+            if (!acc[item.updated_by]) {
+              acc[item.updated_by] = {
+                id: Object.keys(acc).length + 1,
+                admin: item.updated_by,
+                totalCost: 0,
+                check_payment: item.check_payment,
+                city_id: item.city_id,
+              };
+            }
+            acc[item.updated_by].totalCost += Number(item.cost);
+            return acc;
+          }, {} as { [key: string]: GroupedDataCost })
+        );
+        this.groupAdminBaNoClick = groupedDataBaNoClick;
+        console.log(groupedDataBaNoClick);
 
         this.configuration.isLoading = false;
         this.cdr.detectChanges();
@@ -565,13 +644,52 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
   printWithClass(className: string): void {
     const printContents = document.querySelector(`.${className}`)?.innerHTML;
     if (printContents) {
-      const originalContents = document.body.innerHTML;
-      document.body.innerHTML = printContents;
-      document.body.classList.add('print-mode');
-      window.print();
-      document.body.classList.remove('print-mode');
-      document.body.innerHTML = originalContents;
-      location.reload();
+      const printWindow = window.open('', '_blank');
+      printWindow?.document.write(`
+          <html>
+          <head>
+              <title>Print Preview</title>
+              <style>
+                  body { font-family: Arial, sans-serif; padding: 20px; }
+                  body {
+                      font-family: Arial, sans-serif;
+                      padding: 20px;
+                      background-color: #f4f4f4;
+                  }
+                  table {
+                      width: 100%; /* Table takes full width */
+                      border-collapse: collapse;
+                  }
+                  th, td {
+                      border: 1px solid black;
+                      padding: 8px;
+                      font-size: 12px; /* Set font size */
+                  }
+                  th {
+                      background-color: #ddd; /* Optional: Add header background */
+                      text-align: left;
+                  }
+                  .card-label {
+                      font-size: 13px;
+                  }
+                  .row {
+                      margin-top: 15px;
+                      font-size: 13px;
+                  }
+                  .col-md-6 {
+                      margin-bottom: 10px;
+                  }
+                  @media print {
+                      body { margin: 0; }
+                  }
+              </style>
+          </head>
+          <body>
+              ${printContents}
+          </body>
+          </html>
+      `);
+      printWindow?.document.close();
     }
   }
 
