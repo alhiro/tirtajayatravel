@@ -79,6 +79,7 @@ export class PrintbsdComponent implements OnInit, OnDestroy {
     this.configuration.fixedColumnWidth = false;
     this.configuration.paginationEnabled = false;
     this.configuration.orderEnabled = false;
+    this.configuration.rows = 10000;
 
     this.columnsPassenger = [
       // { key: 'category_sub_id', title: 'No' },

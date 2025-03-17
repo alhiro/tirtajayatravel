@@ -204,7 +204,7 @@ export class PrintListPackageComponent implements OnInit, OnDestroy {
                 case 'Lunas (Transfer)':
                   acc.totalCostTransfer += cost;
                   break;
-                case 'Lunas (Office)':
+                case 'Lunas (Kantor)':
                   acc.totalCostOffice += cost;
                   break;
                 case 'Piutang':

@@ -81,21 +81,21 @@
                 </td> -->
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ row.package.bsd }}
+                          {{ row.bsd }}
                         </span>
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ row.package.driver }}
+                          {{ row.employee?.name }}
                         </span>
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ row.package.new_total_cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                          {{ 0 | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                         </span>
                       </td>
                       <td>
-                        <span class="text-gray-900 d-block">{{ row.package.admin }}</span>
+                        <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
                       </td>
                       <td class="text-end">
                         <a
@@ -137,21 +137,21 @@
                   </td> -->
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ row.passenger.bsd }}
+                          {{ row.bsd_passenger }}
                         </span>
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ row.passenger.driver }}
+                          {{ row.employee?.name }}
                         </span>
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ row.passenger.new_total_cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                          {{ 0 | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                         </span>
                       </td>
                       <td>
-                        <span class="text-gray-900 d-block">{{ row.passenger.admin }}</span>
+                        <span class="text-gray-900 d-block">{{ row.updated_by }}</span>
                       </td>
                       <td class="text-end">
                         <a
@@ -729,27 +729,27 @@
                       </td>
                       <td>
                         <span class="text-gray-900 d-block" (click)="openModalEdit(row)">
-                          <b>{{ row.resi_number }}</b>
+                          <b>{{ row?.resi_number }}</b>
                         </span>
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ row.book_date | date : 'dd/MM/yyyy' : 'GMT' }}
+                          {{ row?.book_date | date : 'dd/MM/yyyy' : 'GMT' }}
                         </span>
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ row.sender?.name }} <br />
-                          {{ row.sender?.address }}
+                          {{ row?.sender?.name }} <br />
+                          {{ row?.sender?.address }}
                         </span>
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">{{
-                          row.cost | currency : 'Rp ' : 'symbol' : '1.0-2'
+                          row?.cost | currency : 'Rp ' : 'symbol' : '1.0-2'
                         }}</span>
                       </td>
                       <td>
-                        <span class="text-gray-900 d-block"> @if (row.payment) { Lunas } @else { Belum Lunas } </span>
+                        <span class="text-gray-900 d-block"> @if (row?.payment) { Lunas } @else { Belum Lunas } </span>
                       </td>
                       <td class="text-end">
                         <div class="d-block">

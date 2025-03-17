@@ -186,7 +186,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     this.configuration.horizontalScroll = false;
 
     this.configuration.paginationEnabled = false;
-    this.configuration.rows = 100;
+    this.configuration.rows = 10000;
     this.configuration.orderEnabled = false;
 
     this.columnsPackage = [
@@ -223,7 +223,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     this.startDate = startDate;
     this.endDate = endDate;
 
-    forkJoin([this.dataListGarage(), this.dataListCashout()]).subscribe({
+    forkJoin([this.dataListGosend(), this.dataListGarage(), this.dataListCashout()]).subscribe({
       next: () => {
         console.log('All functions completed');
         this.dataListDeposit();
@@ -244,7 +244,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       // this.startDate = startDate;
       // this.endDate = endDate;
 
-      forkJoin([this.dataListGarage(), this.dataListCashout()]).subscribe({
+      forkJoin([this.dataListGosend(), this.dataListGarage(), this.dataListCashout()]).subscribe({
         next: () => {
           console.log('All functions completed');
           this.dataListDeposit();
@@ -286,7 +286,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     this.startDate = startDate;
     this.endDate = endDate;
 
-    forkJoin([this.dataListGarage(), this.dataListCashout()]).subscribe({
+    forkJoin([this.dataListGosend(), this.dataListGarage(), this.dataListCashout()]).subscribe({
       next: () => {
         console.log('All functions completed');
         this.dataListDeposit();
@@ -445,6 +445,13 @@ export class DepositComponent implements OnInit, OnDestroy {
   }
 
   printPiutangTransition() {
+    const dateRange = {
+      fromDate: this.startDate,
+      toDate: this.endDate,
+      city: '',
+      status: 'Piutang',
+    };
+    sessionStorage.setItem('printlistdate', JSON.stringify(dateRange));
     window.open('booking/package/transaction/printlist', '_blank');
   }
 
@@ -516,7 +523,7 @@ export class DepositComponent implements OnInit, OnDestroy {
       search: '',
       startDate: this.startDate,
       endDate: this.endDate,
-      city: this.city_id,
+      city: '',
       status: '',
     };
     console.log(params);
@@ -624,7 +631,9 @@ export class DepositComponent implements OnInit, OnDestroy {
         this.data = data;
 
         // Check ba & commission
-        const dataPackageCommission = Array.from(data.flatMap((item: any) => item?.standalone_commission).values());
+        const dataPackageCommission = Array.from(
+          data.flatMap((item: any) => item?.standalone_commission ?? []).filter(Boolean)
+        );
         console.log(dataPackageCommission);
         this.dataPackageCommission = dataPackageCommission;
 
@@ -666,6 +675,7 @@ export class DepositComponent implements OnInit, OnDestroy {
             new Date(data?.created_at) >= startDateTime &&
             new Date(data?.created_at) <= endDateTime
         );
+        console.log(dataPackageMlg);
         this.totalPackagePaidMalang = this.utils.sumTotal(dataPackageMlg?.map((data: PackageModel) => data?.cost));
 
         const dataPackageSby = this.dataPackage?.filter(
@@ -718,87 +728,9 @@ export class DepositComponent implements OnInit, OnDestroy {
 
         // Deposit
         // deposit daily
-        const dataDeposit = data.filter((data: GoSendModel) => data.go_send_id !== null && data.bsd_date !== null);
-        console.log('dataDeposit');
-        console.log(this.dataDeposit);
-
-        const remapDeposit = dataDeposit.map((value: any) => {
-          // remap cost package
-          const totalDebetPackage = this.utils.sumNumbers(
-            value.package_ba?.total_ba_mlg,
-            value.package_ba?.total_ba_sby,
-            value.package_piutang?.total_piutang_mlg,
-            value.package_piutang?.total_piutang_sby
-          );
-          console.log('totalDebetPackage ', totalDebetPackage);
-
-          const totalKreditPackage = this.utils.sumNumbers(
-            value.package_commission?.total_commission_mlg,
-            // value.package_commission?.total_commission_sby,
-            value.cost?.cost?.parking_package
-          );
-          console.log('totalKreditPackage ', totalKreditPackage);
-
-          // remap cost passenger
-          const totalDebetPassenger = this.utils.sumNumbers(
-            value.passenger_commission?.total_tariff,
-            value.cost?.cost?.mandatory_deposit,
-            value.cost?.cost?.driver_deposit,
-            value.cost?.cost?.voluntary_deposit
-          );
-          console.log('totalDebetPassenger ', totalDebetPassenger);
-
-          const commissionToll = Number(value.cost?.cost?.toll_out) * 0.15;
-          console.log('commissionToll ', commissionToll);
-          const remapDataMalangAll = value.passenger_commission?.total_commission_mlg - commissionToll;
-          console.log('total_commission_mlg ', value.passenger_commission?.total_commission_mlg);
-          console.log('remapDataMalangAll ', remapDataMalangAll);
-
-          const totalCommissionPassengerKredit = value.city_id === 1 ? remapDataMalangAll : 0;
-          const totalKreditPassenger = this.utils.sumNumbers(
-            totalCommissionPassengerKredit,
-            value.cost?.cost?.bbm_cost,
-            value.cost?.cost?.parking_passenger,
-            value.cost?.cost?.toll_in,
-            value.cost?.cost?.toll_out,
-            value.cost?.cost?.overnight,
-            value.cost?.cost?.extra,
-            value.cost?.cost?.others
-          );
-          console.log('totalKreditPassenger ', totalKreditPassenger);
-
-          return {
-            ...value,
-            package: {
-              ...value.package,
-              new_total_cost: Number(totalDebetPackage || 0) - Number(totalKreditPackage || 0),
-            },
-            passenger: {
-              ...value.passenger,
-              new_total_cost: Number(totalDebetPassenger || 0) - Number(totalKreditPassenger || 0),
-            },
-          };
-        });
-        console.log('remapDeposit');
-        console.log(remapDeposit);
-        this.dataDeposit = remapDeposit;
-
-        this.totalDepositDriverPackage = this.utils.sumTotal(
-          this.dataDeposit?.map((data: any) => data?.package.new_total_cost)
-        );
-        this.totalDepositDriverPassenger = this.utils.sumTotal(
-          this.dataDeposit?.map((data: any) => data.passenger?.new_total_cost)
-        );
-
-        // this.totalDepositDriverPackage = this.utils.sumTotal(
-        //   this.dataDeposit?.map((data: any) => data.package?.total_cost)
-        // );
-        // this.totalDepositDriverPassenger = this.utils.sumTotal(
-        //   this.dataDeposit?.map((data: any) => data.passenger?.total_tariff)
-        // );
-
-        // this.totalPackagePaidMalang = data.reduce((acc: any, item: any) => acc + item.package_paid.total_lunas_mlg, 0);
-        // this.totalPackagePaidSurabaya = this.utils.sumTotal(data?.map((data: any) => data.package_paid?.total_lunas_sby));
+        // this.dataDeposit = [];
+        // this.totalDepositDriverPackage = 0;
+        // this.totalDepositDriverPassenger = 0;
 
         this.totalPassengerPaidMalang = this.utils.sumTotal(
           data?.map((data: any) => data.passenger_paid?.total_lunas_mlg)
@@ -823,7 +755,9 @@ export class DepositComponent implements OnInit, OnDestroy {
         // );
 
         // Check lunas transfer
-        const dataPaymentTransfer = Array.from(data.flatMap((item: any) => item?.standalone_transfer).values());
+        const dataPaymentTransfer = Array.from(
+          data.flatMap((item: any) => item?.standalone_commission ?? []).filter(Boolean)
+        );
         console.log(dataPaymentTransfer);
         // const dataPaymentTransfer = this.dataPackage?.filter(
         //   (data: PackageModel) => data?.status === 'Lunas (Transfer)'
@@ -856,24 +790,26 @@ export class DepositComponent implements OnInit, OnDestroy {
 
         this.totalDepositDaily = Number(this.totalDepositMalangDaily) + Number(this.totalDepositSurabayaDaily);
 
-        this.dataLunasMonthly = [...dataMonthly, ...dataPaymentTransfer];
+        const dataLunasMonthly = [...dataMonthly, ...dataPaymentTransfer];
 
-        this.dataLunasMonthly.sort((a: any, b: any) => {
-          if (dataMonthly.includes(a) && !dataMonthly.includes(b)) return -1;
-          if (!dataMonthly.includes(a) && dataMonthly.includes(b)) return 1;
-          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-        });
+        this.dataLunasMonthly = dataLunasMonthly
+          .filter((item: any) => item !== null)
+          .sort((a: any, b: any) => {
+            if (dataMonthly.includes(a) && !dataMonthly.includes(b)) return -1;
+            if (!dataMonthly.includes(a) && dataMonthly.includes(b)) return 1;
+            return new Date(a?.created_at).getTime() - new Date(b?.created_at).getTime();
+          });
         console.log(this.dataLunasMonthly);
 
         const dataLunasMonthlyPaid = this.dataLunasMonthly.filter(
-          (data: PackageModel) => data.payment !== null || data.payment !== 0
+          (data: PackageModel) => data?.payment !== null || data?.payment !== 0
         );
         this.totalDataLunasMonthlyPaid = this.utils.sumTotal(
           dataLunasMonthlyPaid?.map((data: PackageModel) => data?.payment)
         );
 
         const dataLunasMonthlyNotPaid = this.dataLunasMonthly.filter(
-          (data: PackageModel) => data.payment === null || data.payment === 0
+          (data: PackageModel) => data?.payment === null || data?.payment === 0
         );
         this.totalDataLunasMonthlyNotPaid = this.utils.sumTotal(
           dataLunasMonthlyNotPaid?.map((data: PackageModel) => data?.cost)
@@ -944,72 +880,25 @@ export class DepositComponent implements OnInit, OnDestroy {
       });
   }
 
-  private dataListPackage(): Observable<void> {
+  private dataListGosend(): Observable<void> {
     const params = {
-      limit: '',
-      page: '',
+      limit: 10000,
+      page: 1,
       search: '',
       startDate: this.startDate,
       endDate: this.endDate,
       city: '',
-      status: '',
-      username: '',
+      status: 'Done',
     };
 
-    return this.packageService.listCom(params).pipe(
+    return this.packageService.listSP(params).pipe(
       takeUntil(this.ngUnsubscribe),
       map((response: any) => {
-        let filterData;
-
-        filterData = response.data?.filter((data: PackageModel) => data.status_package !== 'Cancel');
-        console.log(filterData);
-
-        // const uniqueDrivers = Object?.values(
-        //   filterData
-        //     ?.filter((item: any) => item?.go_send)
-        //     .reduce((acc: any, item: any) => {
-        //       const { go_send_id, send_date, total_cost, total_packages, employee } = item?.go_send;
-        //       if (!acc[go_send_id]) {
-        //         acc[go_send_id] = { go_send_id, send_date, total_cost, total_packages, employee };
-        //       }
-        //       return acc;
-        //     }, {})
-        // );
-        // this.dataBsd = uniqueDrivers;
-        // console.log(uniqueDrivers);
-
-        this.totalPackagePaidMalang = this.utils.sumTotal(filterData?.map((data: PackageModel) => data.cost));
-        // this.totalCost = this.utils.sumTotal(this.dataBsd?.map((data: any) => data.total_cost));
-
-        // Check commission
-        const dataKomisiMlg = filterData?.filter((data: PackageModel) => data.check_sp === true && data.city_id === 1);
-        this.cashoutCourierMalang = this.utils.sumTotal(
-          dataKomisiMlg?.map((data: PackageModel) => data.agent_commission)
-        );
-        console.log(this.cashoutCourierMalang);
-        const dataKomisiSby = filterData?.filter((data: PackageModel) => data.check_sp === true && data.city_id === 2);
-        this.cashoutCourierSurabaya = this.utils.sumTotal(
-          dataKomisiSby?.map((data: PackageModel) => data.agent_commission)
-        );
-        console.log(this.cashoutCourierSurabaya);
-
-        // Check Ba
-        const dataBaMlg = filterData?.filter(
-          (data: PackageModel) =>
-            data.status === 'Bayar Tujuan (COD)' && data?.check_payment === true && data.city_id === 1
-        );
-        this.totalPackageCodMalang = this.utils.sumTotal(dataBaMlg?.map((data: PackageModel) => data.cost));
-        console.log(this.totalPackageCodMalang);
-        const dataBaSby = filterData?.filter(
-          (data: PackageModel) =>
-            data.status === 'Bayar Tujuan (COD)' && data?.check_payment === true && data.city_id === 2
-        );
-        this.totalPackageCodSurabaya = this.utils.sumTotal(dataBaSby?.map((data: PackageModel) => data.cost));
-        console.log(this.totalPackageCodSurabaya);
+        this.dataDeposit = response.data;
       }),
       catchError((err) => {
         console.error('Error in dataListPackage:', err);
-        return of(); // Emit an empty observable to prevent errors from propagating
+        return of();
       })
     );
   }
