@@ -822,10 +822,16 @@ export class DepositComponent implements OnInit, OnDestroy {
         //   0
         // );
 
-        const dataPaymentTransfer = this.dataPackage?.filter(
-          (data: PackageModel) => data?.status === 'Lunas (Transfer)'
+        // Check lunas transfer
+        const dataPaymentTransfer = Array.from(data.flatMap((item: any) => item?.standalone_transfer).values());
+        console.log(dataPaymentTransfer);
+        // const dataPaymentTransfer = this.dataPackage?.filter(
+        //   (data: PackageModel) => data?.status === 'Lunas (Transfer)'
+        // );
+        // this.totalReminderPaymentTransfer = this.utils.sumTotal(dataPaymentTransfer?.map((data: any) => data?.cost));
+        this.totalReminderPaymentTransfer = this.utils.sumTotal(
+          dataPaymentTransfer?.map((data: any) => data?.total_transfer)
         );
-        this.totalReminderPaymentTransfer = this.utils.sumTotal(dataPaymentTransfer?.map((data: any) => data?.cost));
         const dataMonthly = this.dataPackage?.filter((data: PackageModel) => data?.status === 'Customer (Bulanan)');
         this.totalPaymentMonthly = this.utils.sumTotal(dataMonthly?.map((data: any) => data?.cost));
 
