@@ -41,6 +41,7 @@ export class DepositComponent implements OnInit, OnDestroy {
   public dataPackageCommission: any[] = [];
   public dataPassenger: any[] = [];
   public dataLunasMonthly: any;
+  public dataPackagePaidFilter: any[] = [];
 
   public dataGarage: any;
 
@@ -634,8 +635,7 @@ export class DepositComponent implements OnInit, OnDestroy {
         const dataPackageCommission = Array.from(
           data.flatMap((item: any) => item?.standalone_commission ?? []).filter(Boolean)
         );
-        console.log(dataPackageCommission);
-        this.dataPackageCommission = dataPackageCommission?.filter((data: any) => data.go_send?.bsd == null);
+        this.dataPackageCommission = dataPackageCommission;
 
         const dataPackage = Array.from(
           data
@@ -648,7 +648,6 @@ export class DepositComponent implements OnInit, OnDestroy {
             }, new Map())
             .values()
         );
-        console.log(dataPackage);
         this.dataPackage = dataPackage;
 
         // const uniqueDrivers = Object?.values(
@@ -675,7 +674,6 @@ export class DepositComponent implements OnInit, OnDestroy {
             new Date(data?.created_at) >= startDateTime &&
             new Date(data?.created_at) <= endDateTime
         );
-        console.log(dataPackageMlg);
         this.totalPackagePaidMalang = this.utils.sumTotal(dataPackageMlg?.map((data: PackageModel) => data?.cost));
 
         const dataPackageSby = this.dataPackage?.filter(
@@ -697,7 +695,6 @@ export class DepositComponent implements OnInit, OnDestroy {
         this.cashoutCourierMalang = this.utils.sumTotal(
           this.dataPackageCommission?.map((data: any) => data?.total_commission_mlg)
         );
-        console.log(this.cashoutCourierMalang);
 
         // Check commission sby
         // const dataKomisiSby = this.dataPackage?.filter(
@@ -709,22 +706,32 @@ export class DepositComponent implements OnInit, OnDestroy {
         this.cashoutCourierSurabaya = this.utils.sumTotal(
           this.dataPackageCommission?.map((data: any) => data?.total_commission_sby)
         );
-        console.log(this.cashoutCourierSurabaya);
+
+        const dataPackagePaid = Array.from(
+          data
+            .flatMap((item: any) => item?.standalone_packages_paid)
+            .reduce((map: any, packageItem: PackageModel) => {
+              if (!map.has(packageItem?.package_id)) {
+                map.set(packageItem?.package_id, packageItem);
+              }
+              return map;
+            }, new Map())
+            .values()
+        );
+        this.dataPackagePaidFilter = dataPackagePaid;
 
         // Check Ba
-        const dataBaMlg = this.dataPackage?.filter(
+        const dataBaMlg = this.dataPackagePaidFilter?.filter(
           (data: PackageModel) =>
             data?.status === 'Bayar Tujuan (COD)' && data?.check_payment === true && data?.city_id === 1
         );
         this.totalPackageCodMalang = this.utils.sumTotal(dataBaMlg?.map((data: PackageModel) => data?.cost));
-        console.log(this.totalPackageCodMalang);
 
-        const dataBaSby = this.dataPackage?.filter(
+        const dataBaSby = this.dataPackagePaidFilter?.filter(
           (data: PackageModel) =>
             data?.status === 'Bayar Tujuan (COD)' && data?.check_payment === true && data?.city_id === 2
         );
         this.totalPackageCodSurabaya = this.utils.sumTotal(dataBaSby?.map((data: PackageModel) => data?.cost));
-        console.log(this.totalPackageCodSurabaya);
 
         // Deposit
         // deposit daily

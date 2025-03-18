@@ -249,10 +249,11 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
           .filter((data: any) => data.go_send?.bsd == null);
 
         const dataCash = response?.data?.filter((data: PackageModel) => data.status === 'Lunas (Kantor)');
-        const dataCommission = dataCash?.filter((data: PackageModel) => data.check_sp === true);
-        this.totalCommission = this.utils.sumTotal(
-          dataCommission?.map((data: PackageModel) => (data?.discount ? data.discount * 0.15 : data.agent_commission))
-        );
+        const dataCommission = dataCash
+          ?.filter((data: PackageModel) => data.check_sp === true)
+          .filter((data: any) => data.go_send?.bsd == null);
+        this.totalCommission = this.utils.sumTotal(dataCommission?.map((data: PackageModel) => data.agent_commission));
+        console.log(this.totalCommission);
 
         const dataCommissionNoClick = dataCash?.filter((data: PackageModel) => data.check_sp == null);
         this.totalCommissionNoClick = this.utils.sumTotal(
@@ -297,11 +298,11 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
 
         // Data Lunas (Transfer)
         const dataTransfer = response?.data?.filter((data: PackageModel) => data.status === 'Lunas (Transfer)');
-        const dataCommissionTransfer = dataTransfer?.filter((data: PackageModel) => data.check_sp === true);
+        const dataCommissionTransfer = dataTransfer
+          ?.filter((data: PackageModel) => data.check_sp === true)
+          .filter((data: any) => data.go_send?.bsd == null);
         this.totalCommissionTransfer = this.utils.sumTotal(
-          dataCommissionTransfer?.map((data: PackageModel) =>
-            data?.discount ? data.discount * 0.15 : data.agent_commission
-          )
+          dataCommissionTransfer?.map((data: PackageModel) => data.agent_commission)
         );
 
         const dataCommissionTransferNoClick = dataTransfer?.filter((data: PackageModel) => data.check_sp == null);
@@ -350,9 +351,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         this.dataPiutang = dataPiutang?.filter((data: PackageModel) => data.check_payment === true);
         const dataCommissionPiutang = dataPiutang?.filter((data: PackageModel) => data.check_sp === true);
         this.totalCommissionPiutang = this.utils.sumTotal(
-          dataCommissionPiutang?.map((data: PackageModel) =>
-            data?.discount ? data.discount * 0.15 : data.agent_commission
-          )
+          dataCommissionPiutang?.map((data: PackageModel) => data.agent_commission)
         );
 
         const dataCommissionPiutangNoClick = dataPiutang?.filter((data: PackageModel) => data.check_sp == null);
@@ -400,13 +399,11 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         const dataCustomerMonthly = response?.data?.filter(
           (data: PackageModel) => data.status === 'Customer (Bulanan)'
         );
-        const dataCommissionCustomerMonthly = dataCustomerMonthly?.filter(
-          (data: PackageModel) => data.check_sp === true
-        );
+        const dataCommissionCustomerMonthly = dataCustomerMonthly
+          ?.filter((data: PackageModel) => data.check_sp === true)
+          .filter((data: any) => data.go_send?.bsd == null);
         this.totalCommissionCustomerMonthly = this.utils.sumTotal(
-          dataCommissionCustomerMonthly?.map((data: PackageModel) =>
-            data?.discount ? data.discount * 0.15 : data.agent_commission
-          )
+          dataCommissionCustomerMonthly?.map((data: PackageModel) => data.agent_commission)
         );
 
         const dataCommissionCustomerMonthlyNoClick = dataCustomerMonthly?.filter(
@@ -454,9 +451,11 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
 
         // Data ba
         const dataBa = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
-        const dataCommissionBa = dataBa?.filter((data: PackageModel) => data.check_sp === true);
+        const dataCommissionBa = dataBa
+          ?.filter((data: PackageModel) => data.check_sp === true)
+          .filter((data: any) => data.go_send?.bsd == null);
         this.totalCommissionBa = this.utils.sumTotal(
-          dataCommissionBa?.map((data: PackageModel) => (data?.discount ? data.discount * 0.15 : data.agent_commission))
+          dataCommissionBa?.map((data: PackageModel) => data.agent_commission)
         );
 
         const dataCommissionBaNoClick = dataBa?.filter((data: PackageModel) => data.check_sp == null);
@@ -503,7 +502,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         // Data bulanan
         this.dataMonthly = response.data?.filter((data: PackageModel) => data.status === 'Customer (Bulanan)');
 
-        const dataMonthly = this.dataMonthly;
+        const dataMonthly = this.dataMonthly?.filter((data: any) => data.go_send?.bsd == null);
         this.totalMonthly = this.utils.sumTotal(dataMonthly?.map((data: PackageModel) => data.cost));
         this.totalKoliMonthly = this.dataMonthly?.length;
 
@@ -550,7 +549,9 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
       .subscribe((response: any) => {
         // Data ba
         const dataBa = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
-        this.dataBa = dataBa?.filter((data: PackageModel) => data.check_payment === true);
+        this.dataBa = dataBa
+          ?.filter((data: PackageModel) => data.check_payment === true)
+          .filter((data: any) => data.go_send?.bsd == null);
 
         // const dataCommissionBa = dataBa?.filter((data: PackageModel) => data.check_sp === true);
         // this.totalCommissionBa = this.utils.sumTotal(
@@ -559,7 +560,9 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         //   )
         // );
 
-        this.dataBaNoClick = dataBa?.filter((data: PackageModel) => data.check_payment == null);
+        this.dataBaNoClick = dataBa
+          ?.filter((data: PackageModel) => data.check_payment == null)
+          .filter((data: any) => data.go_send?.bsd == null);
 
         // const dataCommissionBaNoClick = dataBa?.filter((data: PackageModel) => data.check_sp == null);
         // this.totalCommissionBaNoClick = this.utils.sumTotal(
