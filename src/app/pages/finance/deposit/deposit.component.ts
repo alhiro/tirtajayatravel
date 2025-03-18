@@ -127,7 +127,7 @@ export class DepositComponent implements OnInit, OnDestroy {
   isLoading = false;
 
   public pagination = {
-    limit: 100,
+    limit: 1000,
     offset: 1,
     count: -1,
     search: '',
@@ -137,7 +137,7 @@ export class DepositComponent implements OnInit, OnDestroy {
     status: '',
   };
   public params = {
-    limit: 100,
+    limit: 1000,
     page: 1,
     search: '',
     startDate: '',

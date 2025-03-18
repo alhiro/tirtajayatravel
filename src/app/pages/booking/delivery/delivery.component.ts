@@ -96,7 +96,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
   public searchGlobal: any;
 
   public pagination = {
-    limit: 10,
+    limit: 25,
     offset: 1,
     count: -1,
     search: '',
@@ -106,7 +106,7 @@ export class DeliveryComponent implements OnInit, OnDestroy {
     status: 'delivery',
   };
   public params = {
-    limit: 10,
+    limit: 25,
     page: 1,
     search: '',
     startDate: '',
