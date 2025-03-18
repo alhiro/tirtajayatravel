@@ -743,7 +743,8 @@ export class DepositComponent implements OnInit, OnDestroy {
           this.totalPassengerPaidSurabaya = 0;
         }
 
-        this.piutangTransition = this.utils.sumTotal(data?.map((data: any) => data.package_piutang?.total_piutang_mlg));
+        // this.piutangTransition = this.utils.sumTotal(data?.map((data: any) => data.package_piutang?.total_piutang_mlg));
+        this.piutangTransition = 0;
 
         // this.cashoutCourierMalang = data.reduce(
         //   (acc: any, item: any) => acc + item.package_commission.total_commission_mlg,
@@ -756,7 +757,7 @@ export class DepositComponent implements OnInit, OnDestroy {
 
         // Check lunas transfer
         const dataPaymentTransfer = Array.from(
-          data.flatMap((item: any) => item?.standalone_commission ?? []).filter(Boolean)
+          data.flatMap((item: any) => item?.standalone_transfer ?? []).filter(Boolean)
         );
         console.log(dataPaymentTransfer);
         // const dataPaymentTransfer = this.dataPackage?.filter(
@@ -766,7 +767,12 @@ export class DepositComponent implements OnInit, OnDestroy {
         this.totalReminderPaymentTransfer = this.utils.sumTotal(
           dataPaymentTransfer?.map((data: any) => data?.total_transfer)
         );
-        const dataMonthly = this.dataPackage?.filter((data: PackageModel) => data?.status === 'Customer (Bulanan)');
+        const dataMonthly = this.dataPackage?.filter(
+          (data: PackageModel) =>
+            data?.status === 'Customer (Bulanan)' &&
+            new Date(data?.created_at) >= startDateTime &&
+            new Date(data?.created_at) <= endDateTime
+        );
         this.totalPaymentMonthly = this.utils.sumTotal(dataMonthly?.map((data: any) => data?.cost));
 
         this.totalCashInMalangDaily =
