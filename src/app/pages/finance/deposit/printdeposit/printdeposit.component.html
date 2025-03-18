@@ -247,7 +247,7 @@
                 <b>{{ totalPackagePaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
               </td>
             </tr>
-            @for (data of dataPackage; track data) { @if (data.city_id === 2 && data.package_paid.packages) {
+            @for (data of dataPackage; track data) { @if (data.city_id === 2 && data?.package_paid?.packages) {
             <tr>
               <td class="p-0" style="width: 70%">{{ data.package_paid?.driver }}</td>
               <td class="p-0">{{ data.package_paid?.total_lunas_sby | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>

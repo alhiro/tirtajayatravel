@@ -895,6 +895,13 @@ export class DepositComponent implements OnInit, OnDestroy {
       takeUntil(this.ngUnsubscribe),
       map((response: any) => {
         this.dataDeposit = response.data;
+
+        this.totalDepositDriverPackage = this.utils.sumTotal(
+          this.dataDeposit?.map((data: any) => data?.totalDepositDriverPackage)
+        );
+        this.totalDepositDriverPassenger = this.utils.sumTotal(
+          this.dataDeposit?.map((data: any) => data?.totalDepositDriverPassenger)
+        );
       }),
       catchError((err) => {
         console.error('Error in dataListPackage:', err);
