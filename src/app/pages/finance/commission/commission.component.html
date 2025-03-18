@@ -19,7 +19,7 @@
         {{ 'PACKAGE.LENGTH' | translate : { dataLength: dataLength | number } }}
       </span>
     </h3>
-    @if (levelrule === 8 || levelrule === 5 || levelrule === 2) {
+    @if (levelrule === 8 || levelrule === 5 || levelrule === 3 || levelrule === 2) {
     <div class="card-toolbar" [ngClass]="{ 'd-block py-5': isMobile }">
       <ul class="nav nav-pills nav-pills-sm nav-dark-75">
         <li class="nav-item" (click)="setCurrentTab('Malang')" [style.cursor]="'pointer'">

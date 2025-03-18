@@ -240,8 +240,13 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         // );
         // this.data = data;
 
-        this.data = response?.data?.filter((data: PackageModel) => data.check_sp == true);
-        this.dataNoClick = response?.data?.filter((data: PackageModel) => data.check_sp == null);
+        this.data = response?.data
+          ?.filter((data: PackageModel) => data.check_sp === true)
+          .filter((data: any) => data.go_send?.bsd == null);
+
+        this.dataNoClick = response?.data
+          ?.filter((data: PackageModel) => data.check_sp == null)
+          .filter((data: any) => data.go_send?.bsd == null);
 
         const dataCash = response?.data?.filter((data: PackageModel) => data.status === 'Lunas (Kantor)');
         const dataCommission = dataCash?.filter((data: PackageModel) => data.check_sp === true);
@@ -546,6 +551,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         // Data ba
         const dataBa = response.data?.filter((data: PackageModel) => data.status === 'Bayar Tujuan (COD)');
         this.dataBa = dataBa?.filter((data: PackageModel) => data.check_payment === true);
+
         // const dataCommissionBa = dataBa?.filter((data: PackageModel) => data.check_sp === true);
         // this.totalCommissionBa = this.utils.sumTotal(
         //   dataCommissionBa?.map((data: PackageModel) =>
@@ -554,6 +560,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
         // );
 
         this.dataBaNoClick = dataBa?.filter((data: PackageModel) => data.check_payment == null);
+
         // const dataCommissionBaNoClick = dataBa?.filter((data: PackageModel) => data.check_sp == null);
         // this.totalCommissionBaNoClick = this.utils.sumTotal(
         //   dataCommissionBaNoClick?.map((data: PackageModel) => data.agent_commission)

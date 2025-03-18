@@ -635,7 +635,7 @@ export class DepositComponent implements OnInit, OnDestroy {
           data.flatMap((item: any) => item?.standalone_commission ?? []).filter(Boolean)
         );
         console.log(dataPackageCommission);
-        this.dataPackageCommission = dataPackageCommission;
+        this.dataPackageCommission = dataPackageCommission?.filter((data: any) => data.go_send?.bsd == null);
 
         const dataPackage = Array.from(
           data
