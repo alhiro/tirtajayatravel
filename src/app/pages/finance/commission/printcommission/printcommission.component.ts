@@ -198,7 +198,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
       endDate: this.endDate,
       city: this.city,
       status: this.status,
-      username: this.username,
+      username: objDataDate.customer_id,
     };
     this.dataListFilter(params);
 
@@ -210,7 +210,7 @@ export class PrintcommissionComponent implements OnInit, OnDestroy {
       endDate: this.endDate,
       city: this.city,
       status: this.status,
-      username: this.username,
+      username: objDataDate.customer_id,
     };
     this.dataListFilterBa(paramsBa);
   }

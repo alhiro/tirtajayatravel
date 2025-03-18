@@ -258,6 +258,7 @@ export class CommissionComponent implements OnInit, OnDestroy {
       city: this.currentTab,
       status: 'Delivery',
       username: this.modelCustomer?.name,
+      customer_id: this.modelCustomer?.customer_id,
     };
     console.log(paramRange);
     sessionStorage.setItem('printlistdate', JSON.stringify(paramRange));
