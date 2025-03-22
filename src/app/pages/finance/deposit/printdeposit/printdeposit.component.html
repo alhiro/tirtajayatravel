@@ -24,17 +24,17 @@
                 </td>
                 <td>
                   <span class="text-gray-900 d-block">
-                    {{ row.package.bsd }}
+                    {{ row.bsd }}
                   </span>
                 </td>
                 <td>
                   <span class="text-gray-900 d-block">
-                    {{ row.package.driver }}
+                    {{ row.employee?.name }}
                   </span>
                 </td>
                 <td>
                   <span class="text-gray-900 d-block">
-                    {{ row.package.total_cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                    {{ row.totalDepositDriverPackage | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                   </span>
                 </td>
               </ng-template>
@@ -69,17 +69,17 @@
                 </td>
                 <td>
                   <span class="text-gray-900 d-block">
-                    {{ row.passenger.bsd }}
+                    {{ row.bsd }}
                   </span>
                 </td>
                 <td>
                   <span class="text-gray-900 d-block">
-                    {{ row.passenger.driver }}
+                    {{ row.employee?.name }}
                   </span>
                 </td>
                 <td>
                   <span class="text-gray-900 d-block">
-                    {{ row.passenger.total_tariff | currency : 'Rp ' : 'symbol' : '1.0-2' }}
+                    {{ row.totalDepositDriverPassenger | currency : 'Rp ' : 'symbol' : '1.0-2' }}
                   </span>
                 </td>
               </ng-template>
@@ -247,10 +247,10 @@
                 <b>{{ totalPackagePaidSurabaya | currency : 'Rp ' : 'symbol' : '1.0-2' }}</b>
               </td>
             </tr>
-            @for (data of dataPackage; track data) { @if (data.city_id === 2 && data?.package_paid?.packages) {
+            @for (data of dataPackage; track data) { @if (dataDate.city_id === 2) {
             <tr>
-              <td class="p-0" style="width: 70%">{{ data.package_paid?.driver }}</td>
-              <td class="p-0">{{ data.package_paid?.total_lunas_sby | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
+              <td class="p-0" style="width: 70%">{{ data?.driver }}</td>
+              <td class="p-0">{{ data?.total_lunas_sby | currency : 'Rp ' : 'symbol' : '1.0-2' }}</td>
             </tr>
             } }
           </tbody>

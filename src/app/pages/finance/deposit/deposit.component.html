@@ -734,13 +734,13 @@
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ row?.book_date | date : 'dd/MM/yyyy' : 'GMT' }}
+                          {{ row?.send_date | date : 'dd/MM/yyyy' : 'GMT' }}
                         </span>
                       </td>
                       <td>
                         <span class="text-gray-900 d-block">
-                          {{ row?.sender?.name }} <br />
-                          {{ row?.sender?.address }}
+                          {{ row?.sender_name }} <br />
+                          {{ row?.sender_address }}
                         </span>
                       </td>
                       <td>

@@ -167,6 +167,12 @@ export class PrintdepositComponent implements OnInit {
       safeNumber(this.totalPaymentMonthly);
   }
 
+  filterDataNull(data: any[]): any[] {
+    return data.filter(
+      (item) => (item.total_lunas_mlg > 0 || item.total_lunas_sby > 0) && item.driver !== null && item.driver !== ''
+    );
+  }
+
   getDataSby() {
     const getCashoutSby: any = sessionStorage.getItem('data-cashout-sby');
     const dataCashoutSby = JSON.parse(getCashoutSby);
@@ -176,29 +182,16 @@ export class PrintdepositComponent implements OnInit {
     this.dataDate = JSON.parse(getDataDate);
 
     // Check ba & commission
-    const detailDataPackage = Array.from(
-      dataComba?.data
-        .flatMap((item: any) => item?.standalone_packages)
-        .reduce((map: any, packageItem: PackageModel) => {
-          if (!map.has(packageItem?.package_id)) {
-            map.set(packageItem?.package_id, packageItem);
-          }
-          return map;
-        }, new Map())
-        .values()
-    );
-    console.log(detailDataPackage);
-    this.detailDataPackage = detailDataPackage;
+    this.dataPackageBaMlg = dataComba?.data?.packages_ba;
+    console.log(this.dataPackageBaMlg);
 
-    this.dataPackageMlg = this.detailDataPackage?.filter(
-      (data: PackageModel) => data?.check_sp === true && data?.city_id === 1
-    );
-    this.dataPackageBaMlg = this.detailDataPackage?.filter(
-      (data: PackageModel) =>
-        data?.status === 'Bayar Tujuan (COD)' && data.check_payment === true && data?.city_id === 1
-    );
+    const filteredDataNull = this.filterDataNull(dataComba?.dataPackages);
+    const filteredDataExists = filteredDataNull
+      .filter((item: any) => item.total_lunas_sby > 0)
+      .map(({ total_lunas_sby, driver }) => ({ total_lunas_sby, driver }));
 
-    this.dataPackage = dataComba?.data;
+    this.dataPackage = filteredDataExists;
+    console.log(this.dataPackage);
     this.dataCashout = dataComba?.datacashout;
 
     // cashout operational

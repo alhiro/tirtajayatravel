@@ -78,11 +78,6 @@
               }"
             >
               <span class="text-gray-900 d-block">
-                <!-- @if (row.discount) {
-                {{ row.discount | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                } @else {
-                {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                } -->
                 {{ row.cost | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
             </td>
@@ -94,11 +89,7 @@
             >
               @if (row.check_sp) {
               <span class="text-gray-900 d-block">
-                @if (row.discount) {
-                {{ row.discount * 0.15 | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                } @else {
                 {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                }
               </span>
               }
             </td>
@@ -306,11 +297,7 @@
             >
               @if (row.check_sp) {
               <span class="text-gray-900 d-block">
-                @if (row.discount) {
-                {{ row.discount * 0.15 | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                } @else {
-                {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
-                }
+                 {{ row.agent_commission | currency : 'Rp ' : 'symbol' : '1.0-2' }}
               </span>
               }
             </td> -->
